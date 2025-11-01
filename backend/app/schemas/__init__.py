@@ -4,90 +4,183 @@ Schemas Package
 Pydantic スキーマの集約
 """
 
-from .base import BaseSchema, TimestampMixin, ResponseBase
-
-from .masters import (
-    # Warehouse
-    WarehouseBase, WarehouseCreate, WarehouseUpdate, WarehouseResponse,
-    # Supplier
-    SupplierBase, SupplierCreate, SupplierUpdate, SupplierResponse,
-    # Customer
-    CustomerBase, CustomerCreate, CustomerUpdate, CustomerResponse,
-    # Product
-    ProductBase, ProductCreate, ProductUpdate, ProductResponse,
-    # ProductUomConversion
-    ProductUomConversionBase, ProductUomConversionCreate, 
-    ProductUomConversionUpdate, ProductUomConversionResponse,
+from .admin import (
+    FullSampleDataRequest,
 )
-
-from .inventory import (
-    # Lot
-    LotBase, LotCreate, LotUpdate, LotResponse,
-    # StockMovement
-    StockMovementBase, StockMovementCreate, StockMovementResponse,
-    # LotCurrentStock
-    LotCurrentStockResponse,
-    # Receipt
-    ReceiptHeaderBase, ReceiptHeaderCreate, ReceiptHeaderResponse,
-    ReceiptLineBase, ReceiptLineCreate, ReceiptLineResponse,
-    ReceiptCreateRequest, ReceiptResponse,
-    # ExpiryRule
-    ExpiryRuleBase, ExpiryRuleCreate, ExpiryRuleUpdate, ExpiryRuleResponse,
-)
-
-from .sales import (
-    # Order
-    OrderBase, OrderCreate, OrderUpdate, OrderResponse,
-    OrderWithLinesResponse,
-    # OrderLine
-    OrderLineBase, OrderLineCreate, OrderLineResponse,
-    # Allocation
-    AllocationBase, AllocationCreate, AllocationResponse,
-    DragAssignRequest, DragAssignResponse,
-    # Shipping
-    ShippingBase, ShippingCreate, ShippingUpdate, ShippingResponse,
-    # PurchaseRequest
-    PurchaseRequestBase, PurchaseRequestCreate, 
-    PurchaseRequestUpdate, PurchaseRequestResponse,
-)
-
+from .base import BaseSchema, ResponseBase, TimestampMixin
 from .integration import (
     # OCR
-    OcrOrderRecord, OcrSubmissionRequest, OcrSubmissionResponse,
+    OcrOrderRecord,
+    OcrSubmissionRequest,
+    OcrSubmissionResponse,
+    SapRegisterOptions,
+    SapRegisterRequest,
+    SapRegisterResponse,
     # SAP
-    SapRegisterTarget, SapRegisterOptions, SapRegisterRequest, 
-    SapRegisterResponse, SapSyncLogResponse,
+    SapRegisterTarget,
+    SapSyncLogResponse,
+)
+from .inventory import (
+    # ExpiryRule
+    ExpiryRuleBase,
+    ExpiryRuleCreate,
+    ExpiryRuleResponse,
+    ExpiryRuleUpdate,
+    # Lot
+    LotBase,
+    LotCreate,
+    # LotCurrentStock
+    LotCurrentStockResponse,
+    LotResponse,
+    LotUpdate,
+    ReceiptCreateRequest,
+    # Receipt
+    ReceiptHeaderBase,
+    ReceiptHeaderCreate,
+    ReceiptHeaderResponse,
+    ReceiptLineBase,
+    ReceiptLineCreate,
+    ReceiptLineResponse,
+    ReceiptResponse,
+    # StockMovement
+    StockMovementBase,
+    StockMovementCreate,
+    StockMovementResponse,
+)
+from .masters import (
+    # Customer
+    CustomerBase,
+    CustomerCreate,
+    CustomerResponse,
+    CustomerUpdate,
+    # Product
+    ProductBase,
+    ProductCreate,
+    ProductResponse,
+    # ProductUomConversion
+    ProductUomConversionBase,
+    ProductUomConversionCreate,
+    ProductUomConversionResponse,
+    ProductUomConversionUpdate,
+    ProductUpdate,
+    # Supplier
+    SupplierBase,
+    SupplierCreate,
+    SupplierResponse,
+    SupplierUpdate,
+    # Warehouse
+    WarehouseBase,
+    WarehouseCreate,
+    WarehouseResponse,
+    WarehouseUpdate,
+)
+from .sales import (
+    # Allocation
+    AllocationBase,
+    AllocationCreate,
+    AllocationResponse,
+    DragAssignRequest,
+    DragAssignResponse,
+    # Order
+    OrderBase,
+    OrderCreate,
+    # OrderLine
+    OrderLineBase,
+    OrderLineCreate,
+    OrderLineResponse,
+    OrderResponse,
+    OrderUpdate,
+    OrderWithLinesResponse,
+    # PurchaseRequest
+    PurchaseRequestBase,
+    PurchaseRequestCreate,
+    PurchaseRequestResponse,
+    PurchaseRequestUpdate,
+    # Shipping
+    ShippingBase,
+    ShippingCreate,
+    ShippingResponse,
+    ShippingUpdate,
 )
 
 __all__ = [
     # Base
-    "BaseSchema", "TimestampMixin", "ResponseBase",
+    "BaseSchema",
+    "TimestampMixin",
+    "ResponseBase",
     # Masters
-    "WarehouseBase", "WarehouseCreate", "WarehouseUpdate", "WarehouseResponse",
-    "SupplierBase", "SupplierCreate", "SupplierUpdate", "SupplierResponse",
-    "CustomerBase", "CustomerCreate", "CustomerUpdate", "CustomerResponse",
-    "ProductBase", "ProductCreate", "ProductUpdate", "ProductResponse",
-    "ProductUomConversionBase", "ProductUomConversionCreate", 
-    "ProductUomConversionUpdate", "ProductUomConversionResponse",
+    "WarehouseBase",
+    "WarehouseCreate",
+    "WarehouseUpdate",
+    "WarehouseResponse",
+    "SupplierBase",
+    "SupplierCreate",
+    "SupplierUpdate",
+    "SupplierResponse",
+    "CustomerBase",
+    "CustomerCreate",
+    "CustomerUpdate",
+    "CustomerResponse",
+    "ProductBase",
+    "ProductCreate",
+    "ProductUpdate",
+    "ProductResponse",
+    "ProductUomConversionBase",
+    "ProductUomConversionCreate",
+    "ProductUomConversionUpdate",
+    "ProductUomConversionResponse",
     # Inventory
-    "LotBase", "LotCreate", "LotUpdate", "LotResponse",
-    "StockMovementBase", "StockMovementCreate", "StockMovementResponse",
+    "LotBase",
+    "LotCreate",
+    "LotUpdate",
+    "LotResponse",
+    "StockMovementBase",
+    "StockMovementCreate",
+    "StockMovementResponse",
     "LotCurrentStockResponse",
-    "ReceiptHeaderBase", "ReceiptHeaderCreate", "ReceiptHeaderResponse",
-    "ReceiptLineBase", "ReceiptLineCreate", "ReceiptLineResponse",
-    "ReceiptCreateRequest", "ReceiptResponse",
-    "ExpiryRuleBase", "ExpiryRuleCreate", "ExpiryRuleUpdate", "ExpiryRuleResponse",
+    "ReceiptHeaderBase",
+    "ReceiptHeaderCreate",
+    "ReceiptHeaderResponse",
+    "ReceiptLineBase",
+    "ReceiptLineCreate",
+    "ReceiptLineResponse",
+    "ReceiptCreateRequest",
+    "ReceiptResponse",
+    "ExpiryRuleBase",
+    "ExpiryRuleCreate",
+    "ExpiryRuleUpdate",
+    "ExpiryRuleResponse",
     # Sales
-    "OrderBase", "OrderCreate", "OrderUpdate", "OrderResponse",
+    "OrderBase",
+    "OrderCreate",
+    "OrderUpdate",
+    "OrderResponse",
     "OrderWithLinesResponse",
-    "OrderLineBase", "OrderLineCreate", "OrderLineResponse",
-    "AllocationBase", "AllocationCreate", "AllocationResponse",
-    "DragAssignRequest", "DragAssignResponse",
-    "ShippingBase", "ShippingCreate", "ShippingUpdate", "ShippingResponse",
-    "PurchaseRequestBase", "PurchaseRequestCreate", 
-    "PurchaseRequestUpdate", "PurchaseRequestResponse",
+    "OrderLineBase",
+    "OrderLineCreate",
+    "OrderLineResponse",
+    "AllocationBase",
+    "AllocationCreate",
+    "AllocationResponse",
+    "DragAssignRequest",
+    "DragAssignResponse",
+    "ShippingBase",
+    "ShippingCreate",
+    "ShippingUpdate",
+    "ShippingResponse",
+    "PurchaseRequestBase",
+    "PurchaseRequestCreate",
+    "PurchaseRequestUpdate",
+    "PurchaseRequestResponse",
     # Integration
-    "OcrOrderRecord", "OcrSubmissionRequest", "OcrSubmissionResponse",
-    "SapRegisterTarget", "SapRegisterOptions", "SapRegisterRequest", 
-    "SapRegisterResponse", "SapSyncLogResponse",
+    "OcrOrderRecord",
+    "OcrSubmissionRequest",
+    "OcrSubmissionResponse",
+    "SapRegisterTarget",
+    "SapRegisterOptions",
+    "SapRegisterRequest",
+    "SapRegisterResponse",
+    "SapSyncLogResponse",
+    # Admin
+    "FullSampleDataRequest",
 ]

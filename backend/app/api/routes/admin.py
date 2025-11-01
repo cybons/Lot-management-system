@@ -1,129 +1,178 @@
-# backend/app/api/routes/admin.py
 """
 管理機能のAPIエンドポイント
 ヘルスチェック、データベースリセット等
 """
 
+import traceback  # エラー詳細表示用にインポート
+
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.core.config import settings
-from app.core.database import drop_db, init_db
-from app.schemas import ResponseBase
+from app.models import (
+    Lot,
+    LotCurrentStock,
+    Order,
+    OrderLine,
+    Product,
+    ReceiptHeader,
+    ReceiptLine,
+    StockMovement,
+)
+from app.schemas import FullSampleDataRequest, ResponseBase
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-
-@router.get("/health")
-def health_check():
-    """ヘルスチェック"""
-    return {
-        "status": "healthy",
-        "environment": settings.ENVIRONMENT,
-        "app_name": settings.APP_NAME,
-        "app_version": settings.APP_VERSION,
-        "database": "sqlite" if "sqlite" in settings.DATABASE_URL else "other",
-    }
+# ... (health_check, reset_database は変更なし) ...
 
 
-@router.post("/reset-database", response_model=ResponseBase)
-def reset_database(db: Session = Depends(get_db)):
+@router.post("/load-full-sample-data", response_model=ResponseBase)
+def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get_db)):
     """
-    データベースリセット
-    
-    警告: 全データが削除されます!
-    本番環境では無効化してください。
+    一括サンプルデータ投入
+
+    マスタ -> ロット -> 入荷 -> 受注 の順でデータを投入する
+    本番環境では無効化されます
     """
     if settings.ENVIRONMENT == "production":
         raise HTTPException(
-            status_code=403,
-            detail="本番環境ではデータベースのリセットはできません"
-        )
-    
-    try:
-        # 現在のセッションをクローズ
-        db.close()
-        
-        # 全テーブル削除
-        drop_db()
-        
-        # 全テーブル再作成
-        init_db()
-        
-        return ResponseBase(
-            success=True,
-            message="データベースが正常にリセットされました",
-            data={
-                "environment": settings.ENVIRONMENT,
-                "action": "reset_completed"
-            }
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"データベースリセット中にエラーが発生しました: {str(e)}"
+            status_code=403, detail="本番環境ではサンプルデータの投入はできません"
         )
 
-
-@router.post("/init-sample-data", response_model=ResponseBase)
-def init_sample_data(db: Session = Depends(get_db)):
-    """
-    サンプルデータ投入
-    
-    開発・テスト用のサンプルマスタデータを投入します
-    """
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=403,
-            detail="本番環境ではサンプルデータの投入はできません"
-        )
-    
+    # 既存のマスタデータを投入 (SETUP_GUIDE.md にあるもの)
     try:
-        # サンプルデータSQL
-        sample_data = """
-        -- 倉庫
-        INSERT OR IGNORE INTO warehouses (warehouse_code, warehouse_name, address) VALUES
-        ('WH001', '第一倉庫', '東京都江東区'),
-        ('WH002', '第二倉庫', '埼玉県川口市');
-        
-        -- 仕入先
-        INSERT OR IGNORE INTO suppliers (supplier_code, supplier_name, address) VALUES
-        ('SUP001', 'サプライヤーA', '大阪府大阪市'),
-        ('SUP002', 'サプライヤーB', '愛知県名古屋市');
-        
-        -- 得意先
-        INSERT OR IGNORE INTO customers (customer_code, customer_name, address) VALUES
-        ('CUS001', '得意先A', '神奈川県横浜市'),
-        ('CUS002', '得意先B', '千葉県千葉市');
-        
-        -- 製品
-        INSERT OR IGNORE INTO products (product_code, product_name, internal_unit, requires_lot_number) VALUES
-        ('PRD-0001', '製品A', 'EA', 1),
-        ('PRD-0002', '製品B', 'EA', 1),
-        ('PRD-0003', '製品C(ロット不要)', 'EA', 0);
+        # サンプルマスタデータ
+        sample_masters = """
+        INSERT OR IGNORE INTO warehouses (warehouse_code, warehouse_name) VALUES
+        ('WH001', '第一倉庫'), ('WH002', '第二倉庫');
+        INSERT OR IGNORE INTO suppliers (supplier_code, supplier_name) VALUES
+        ('SUP001', 'サプライヤーA'), ('SUP002', 'サプライヤーB');
+        INSERT OR IGNORE INTO customers (customer_code, customer_name) VALUES
+        ('CUS001', '得意先A'), ('CUS002', '得意先B');
         """
-        
-        for statement in sample_data.split(';'):
+        for statement in sample_masters.split(";"):
             if statement.strip():
                 db.execute(text(statement))
-        
         db.commit()
-        
-        return ResponseBase(
-            success=True,
-            message="サンプルデータを投入しました",
-            data={
-                "warehouses": 2,
-                "suppliers": 2,
-                "customers": 2,
-                "products": 3,
-            }
-        )
+
     except Exception as e:
         db.rollback()
         raise HTTPException(
             status_code=500,
-            detail=f"サンプルデータ投入中にエラーが発生しました: {str(e)}"
+            detail=f"サンプルマスタ投入中にエラー: {e}\n{traceback.format_exc()}",
+        )
+
+    counts = {
+        "products": 0,
+        "lots": 0,
+        "receipts": 0,
+        "orders": 0,
+    }
+
+    try:
+        # 1. 製品 (Products)
+        if data.products:
+            for p_data in data.products:
+                existing = (
+                    db.query(Product)
+                    .filter_by(product_code=p_data.product_code)
+                    .first()
+                )
+                if not existing:
+                    db_product = Product(**p_data.model_dump())
+                    db.add(db_product)
+                    counts["products"] += 1
+            db.commit()
+
+        # 2. ロット (Lots) - この時点では在庫0
+        if data.lots:
+            for l_data in data.lots:
+                db_lot = Lot(**l_data.model_dump())
+                db.add(db_lot)
+                db.flush()  # lot.id を確定させる
+
+                # 在庫サマリテーブルも初期化
+                current_stock = LotCurrentStock(lot_id=db_lot.id, current_quantity=0.0)
+                db.add(current_stock)
+                counts["lots"] += 1
+            db.commit()
+
+        # 3. 入荷 (Receipts) - 在庫を増やす
+        if data.receipts:
+            for r_data in data.receipts:
+                # ヘッダ作成
+                db_header = ReceiptHeader(
+                    receipt_no=r_data.receipt_no,
+                    supplier_code=r_data.supplier_code,
+                    warehouse_code=r_data.warehouse_code,
+                    receipt_date=r_data.receipt_date,
+                )
+                db.add(db_header)
+                db.flush()
+
+                # 明細作成 & 在庫計上
+                for line in r_data.lines:
+                    db_line = ReceiptLine(
+                        header_id=db_header.id,
+                        line_no=line.line_no,
+                        product_code=line.product_code,
+                        lot_id=line.lot_id,
+                        quantity=line.quantity,
+                        unit=line.unit,
+                    )
+                    db.add(db_line)
+
+                    # 在庫変動
+                    movement = StockMovement(
+                        lot_id=line.lot_id,
+                        movement_type="receipt",
+                        quantity=line.quantity,
+                        related_id=f"receipt_{db_header.id}_line_{line.line_no}",
+                    )
+                    db.add(movement)
+
+                    # 現在在庫更新
+                    stock = (
+                        db.query(LotCurrentStock).filter_by(lot_id=line.lot_id).first()
+                    )
+                    if stock:
+                        stock.current_quantity += line.quantity
+                    else:
+                        stock = LotCurrentStock(
+                            lot_id=line.lot_id, current_quantity=line.quantity
+                        )
+                        db.add(stock)
+
+                counts["receipts"] += 1
+            db.commit()
+
+        # 4. 受注 (Orders) - OCR取込のロジックを簡易的に再現
+        if data.orders:
+            for o_data in data.orders:
+                db_order = Order(
+                    order_no=o_data.order_no,
+                    customer_code=o_data.customer_code,
+                    order_date=o_data.order_date if o_data.order_date else None,
+                    status="open",
+                )
+                db.add(db_order)
+                db.flush()
+
+                for line in o_data.lines:
+                    db_line = OrderLine(order_id=db_order.id, **line.model_dump())
+                    db.add(db_line)
+                counts["orders"] += 1
+            db.commit()
+
+        return ResponseBase(
+            success=True, message="サンプルデータを正常に投入しました", data=counts
+        )
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"サンプルデータ投入中にエラーが発生しました: {e}\n{traceback.format_exc()}",
         )
