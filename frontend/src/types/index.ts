@@ -182,3 +182,88 @@ export interface ApiResponse<T> {
   message?: string;
   data?: T;
 }
+// 既存のtypes/index.tsに追加する型定義
+
+// ===== 倉庫配分 =====
+export interface WarehouseAllocation {
+  warehouse_code: string;
+  warehouse_name?: string;
+  allocated_quantity: number;
+  unit: string;
+}
+
+// ===== 拡張された受注明細（倉庫配分情報付き） =====
+export interface OrderLineWithAllocations extends OrderLine {
+  warehouse_allocations?: WarehouseAllocation[];
+}
+
+// ===== 拡張された受注（倉庫配分情報付き） =====
+export interface OrderWithAllocations extends Order {
+  lines: OrderLineWithAllocations[];
+}
+
+// ===== Forecast一覧表示用 =====
+export interface ForecastListItem {
+  id: number;
+  product_code: string;
+  product_name?: string;
+  client_code: string;
+  client_name?: string;
+  supplier_code?: string;
+  supplier_name?: string;
+  granularity: "daily" | "dekad" | "monthly";
+  version_no: string;
+  is_active: boolean;
+  updated_at: string;
+  // 日別データ（最大31日分）
+  daily_data?: { [day: number]: number };
+  // 旬別データ
+  dekad_data?: {
+    early: number; // 上旬
+    middle: number; // 中旬
+    late: number; // 下旬
+  };
+  // 月別データ（最大12ヶ月分）
+  monthly_data?: { [month: string]: number };
+}
+
+// ===== Forecast一覧のフィルターパラメータ =====
+export interface ForecastListParams {
+  product_code?: string;
+  product_name?: string;
+  client_code?: string;
+  supplier_code?: string;
+  version_no?: string;
+  is_active?: boolean;
+  skip?: number;
+  limit?: number;
+}
+
+// ===== Forecast詳細（展開時） =====
+export interface ForecastDetail extends ForecastListItem {
+  version_history?: Array<{
+    version_no: string;
+    updated_at: string;
+  }>;
+}
+
+// ===== 倉庫マスタ =====
+export interface Warehouse {
+  warehouse_code: string;
+  warehouse_name: string;
+  location?: string;
+  is_active: number; // 1: 有効, 0: 無効
+}
+
+// ===== ロット情報（受注カード用） =====
+export interface LotForOrder {
+  id: number;
+  lot_number: string;
+  supplier_code: string;
+  supplier_name?: string;
+  product_code: string;
+  expiry_date: string | null;
+  available_quantity: number;
+  unit: string;
+  warehouse_code: string;
+}

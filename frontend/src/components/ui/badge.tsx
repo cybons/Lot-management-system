@@ -1,55 +1,36 @@
-// frontend/src/components/ui/badge.tsx
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 
-type BadgeVariant =
-  | "default"
-  | "secondary"
-  | "destructive"
-  | "outline"
-  // 必要なら拡張用（任意）
-  | "success"
-  | "warning"
-  | "info";
+import { cn } from "@/lib/utils"
 
-type BadgeSize = "sm" | "md";
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: BadgeVariant;
-  size?: BadgeSize;
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
+
+function Badge({ className, variant, ...props }: BadgeProps) {
+  return (
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
 }
 
-const variantClasses: Record<BadgeVariant, string> = {
-  default: "bg-primary text-primary-foreground",
-  secondary: "bg-secondary text-secondary-foreground",
-  destructive: "bg-destructive text-destructive-foreground",
-  outline: "border border-input text-foreground bg-transparent",
-  // 拡張用（任意）
-  success: "bg-emerald-500 text-white",
-  warning: "bg-amber-500 text-white",
-  info: "bg-sky-500 text-white",
-};
-
-const sizeClasses: Record<BadgeSize, string> = {
-  sm: "px-2 py-0.5 text-xs rounded",
-  md: "px-2.5 py-0.5 text-sm rounded-md",
-};
-
-const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant = "default", size = "sm", ...props }, ref) => {
-    return (
-      <span
-        ref={ref}
-        className={cn(
-          "inline-flex items-center gap-1 font-medium whitespace-nowrap select-none",
-          variantClasses[variant],
-          sizeClasses[size],
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
-Badge.displayName = "Badge";
-export { Badge };
+export { Badge, badgeVariants }

@@ -1,13 +1,15 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/lib/query-client';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/query-client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Pages
-import DashboardPage from '@/pages/DashboardPage';
-import InventoryPage from '@/pages/InventoryPage';
-import OrdersListPage from '@/pages/OrdersListPage';
-import ForecastImportPage from '@/pages/ForecastImportPage';
-import AdminPage from '@/pages/AdminPage';
+import DashboardPage from "@/pages/DashboardPage";
+import InventoryPage from "@/pages/InventoryPage";
+import OrdersListPage from "@/pages/OrdersListPage";
+import ForecastImportPage from "@/pages/ForecastImportPage";
+import AdminPage from "@/pages/AdminPage";
+import OrderCardPage from "./pages/OrderCardPage";
+import ForecastListPage from "./pages/ForecastListPage";
 
 function AppTabs() {
   return (
@@ -25,12 +27,21 @@ function AppTabs() {
               <TabsTrigger value="dashboard">ダッシュボード</TabsTrigger>
               <TabsTrigger value="inventory">在庫管理</TabsTrigger>
               <TabsTrigger value="orders">受注管理</TabsTrigger>
+              <TabsTrigger value="orders-card">受注管理（カード）</TabsTrigger>
+              <TabsTrigger value="forecast-list">Forecast一覧</TabsTrigger>
+
               <TabsTrigger value="forecast">Forecast</TabsTrigger>
               <TabsTrigger value="admin" className="text-destructive">
                 管理
               </TabsTrigger>
             </TabsList>
 
+            <TabsContent value="orders-card">
+              <OrderCardPage />
+            </TabsContent>
+            <TabsContent value="forecast-list">
+              <ForecastListPage />
+            </TabsContent>
             <TabsContent value="dashboard" className="space-y-4">
               <DashboardPage />
             </TabsContent>
