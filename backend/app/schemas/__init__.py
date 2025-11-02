@@ -9,6 +9,23 @@ from .admin import (
     FullSampleDataRequest,
 )
 from .base import BaseSchema, ResponseBase, TimestampMixin
+
+# 🔽 [追加] Forecastスキーマのインポート
+from .forecast import (
+    ForecastActivateRequest,
+    ForecastActivateResponse,
+    ForecastBase,
+    ForecastBulkImportRequest,
+    ForecastBulkImportResponse,
+    ForecastCreate,
+    ForecastMatchRequest,
+    ForecastMatchResponse,
+    ForecastMatchResult,
+    ForecastResponse,
+    ForecastUpdate,
+    ForecastVersionInfo,
+    ForecastVersionListResponse,
+)
 from .integration import (
     # OCR
     OcrOrderRecord,
@@ -75,7 +92,7 @@ from .masters import (
     WarehouseResponse,
     WarehouseUpdate,
 )
-from .sales import (
+from .orders import (
     # Allocation
     AllocationBase,
     AllocationCreate,
@@ -185,4 +202,18 @@ __all__ = [
     # Admin
     "FullSampleDataRequest",
     "DashboardStatsResponse",
+    # 🔽 [追加] Forecastスキーマ
+    "ForecastBase",
+    "ForecastCreate",
+    "ForecastUpdate",
+    "ForecastResponse",
+    "ForecastBulkImportRequest",
+    "ForecastBulkImportResponse",
+    "ForecastMatchRequest",
+    "ForecastMatchResponse",
+    "ForecastMatchResult",
+    "ForecastVersionInfo",
+    "ForecastVersionListResponse",
+    "ForecastActivateRequest",
+    "ForecastActivateResponse",
 ]

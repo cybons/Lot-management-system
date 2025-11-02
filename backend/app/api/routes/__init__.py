@@ -4,12 +4,13 @@ API Routes Package
 全ルーターのエクスポート
 """
 
-from .masters import router as masters_router
-from .lots import router as lots_router
-from .receipts import router as receipts_router
-from .orders import router as orders_router
-from .integration import router as integration_router
 from .admin import router as admin_router
+from .forecast import router as forecast_router  # 🔽 [追加]
+from .integration import router as integration_router
+from .lots import router as lots_router
+from .masters import router as masters_router
+from .orders import router as orders_router
+from .receipts import router as receipts_router
 
 __all__ = [
     "masters_router",
@@ -18,4 +19,5 @@ __all__ = [
     "orders_router",
     "integration_router",
     "admin_router",
+    "forecast_router",  # 🔽 [追加]
 ]

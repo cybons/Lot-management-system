@@ -11,36 +11,36 @@ Models Package
 
 # 1. 共通のBaseをインポートする
 from .base_model import Base
-
-# 2. 各ドメインのモデルをすべてインポートする
-from .masters import (
-    Warehouse,
-    Supplier,
-    Customer,
-    Product,
-    ProductUomConversion,
+from .forecast import (
+    Forecast,
 )
-
 from .inventory import (
+    ExpiryRule,
     Lot,
-    StockMovement,
     LotCurrentStock,
     ReceiptHeader,
     ReceiptLine,
-    ExpiryRule,
+    StockMovement,
 )
-
-from .sales import (
-    Order,
-    OrderLine,
-    Allocation,
-    Shipping,
-    PurchaseRequest,
-)
-
 from .logs import (
     OcrSubmission,
     SapSyncLog,
+)
+
+# 2. 各ドメインのモデルをすべてインポートする
+from .masters import (
+    Customer,
+    Product,
+    ProductUomConversion,
+    Supplier,
+    Warehouse,
+)
+from .orders import (
+    Allocation,
+    Order,
+    OrderLine,
+    PurchaseRequest,
+    Shipping,
 )
 
 # 3. 外部に公開するモデルを明示
@@ -68,4 +68,6 @@ __all__ = [
     # Logs
     "OcrSubmission",
     "SapSyncLog",
+    # Forecast
+    "Forecast",
 ]
