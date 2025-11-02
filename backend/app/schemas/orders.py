@@ -167,3 +167,33 @@ class PurchaseRequestResponse(PurchaseRequestBase, TimestampMixin):
     id: int
     requested_date: date
     sap_po_id: Optional[str] = None
+
+
+class WarehouseAllocIn(BaseSchema):
+    warehouse_code: str = Field(..., max_length=32)
+    quantity: float
+
+
+class WarehouseAllocOut(BaseSchema):
+    warehouse_code: str
+    quantity: float
+
+
+class OrderLineOut(BaseSchema):
+    id: int
+    product_code: str
+    product_name: str
+    customer_code: str
+    supplier_code: str
+    quantity: float
+    unit: str
+    warehouse_allocations: list[WarehouseAllocOut] = []
+    related_lots: list[dict] = []  # 仕様未定なら空配列で
+
+
+class OrdersWithAllocResponse(BaseSchema):
+    items: list[OrderLineOut]
+
+
+class SaveAllocationsRequest(BaseSchema):
+    allocations: list[WarehouseAllocIn]
