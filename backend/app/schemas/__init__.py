@@ -9,6 +9,9 @@ from .admin import (
     FullSampleDataRequest,
 )
 from .base import BaseSchema, ResponseBase, TimestampMixin
+from .forecast import (
+    ForecastBase,
+)
 from .integration import (
     # OCR
     OcrOrderRecord,
@@ -182,6 +185,9 @@ __all__ = [
     "SapRegisterRequest",
     "SapRegisterResponse",
     "SapSyncLogResponse",
+    # Forecast
+    "ForecastBase",
+    # "ForecastCreate", --- IGNORE ---
     # Admin
     "FullSampleDataRequest",
     "DashboardStatsResponse",

@@ -4,20 +4,22 @@ FastAPI メインアプリケーション
 ロット管理システム v2.0
 """
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.api import (
+    admin_router,
+    forecast_router,
+    integration_router,
+    lots_router,
+    masters_router,
+    orders_router,
+    receipts_router,
+)
 from app.core.config import settings
 from app.core.database import init_db
-from app.api import (
-    masters_router,
-    lots_router,
-    receipts_router,
-    orders_router,
-    integration_router,
-    admin_router,
-)
 
 
 @asynccontextmanager
@@ -27,12 +29,12 @@ async def lifespan(app: FastAPI):
     print(f"🚀 {settings.APP_NAME} v{settings.APP_VERSION} を起動しています...")
     print(f"📦 環境: {settings.ENVIRONMENT}")
     print(f"💾 データベース: {settings.DATABASE_URL}")
-    
+
     # データベース初期化
     init_db()
-    
+
     yield
-    
+
     # 終了時
     print("👋 アプリケーションを終了しています...")
 
@@ -62,6 +64,7 @@ app.include_router(receipts_router, prefix=settings.API_PREFIX)
 app.include_router(orders_router, prefix=settings.API_PREFIX)
 app.include_router(integration_router, prefix=settings.API_PREFIX)
 app.include_router(admin_router, prefix=settings.API_PREFIX)
+app.include_router(forecast_router, prefix=settings.API_PREFIX)
 
 
 # ルートエンドポイント
@@ -79,9 +82,10 @@ def root():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
         port=8000,
-        reload=settings.ENVIRONMENT == "development"
+        reload=settings.ENVIRONMENT == "development",
     )

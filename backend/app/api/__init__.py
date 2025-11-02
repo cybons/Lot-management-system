@@ -5,12 +5,13 @@ APIルーティングの集約
 """
 
 from .routes import (
-    masters_router,
-    lots_router,
-    receipts_router,
-    orders_router,
-    integration_router,
     admin_router,
+    forecast_router,
+    integration_router,
+    lots_router,
+    masters_router,
+    orders_router,
+    receipts_router,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "orders_router",
     "integration_router",
     "admin_router",
+    "forecast_router",
 ]
