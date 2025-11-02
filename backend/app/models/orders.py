@@ -16,9 +16,10 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from .base_model import Base
+from .warehouse import OrderLineWarehouseAllocation
 
 
 class Order(Base):
@@ -82,6 +83,13 @@ class OrderLine(Base):
 
     # --- 🔽 [変更] Forecast へのリレーションを追加 🔽 ---
     forecast = relationship("Forecast")
+
+    allocations: Mapped[list[OrderLineWarehouseAllocation]] = relationship(
+        "OrderLineWarehouseAllocation",
+        backref="order_line",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
 
     __table_args__ = (UniqueConstraint("order_id", "line_no", name="uq_order_line"),)
 

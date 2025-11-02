@@ -7,8 +7,12 @@ from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
-from sqlalchemy.orm import Session
+
+# 🔽 [追加] select, delete
+from sqlalchemy import delete, func, select
+
+# 🔽 [追加] joinedload, selectinload
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.api.deps import get_db
 from app.models import (
@@ -18,8 +22,11 @@ from app.models import (
     LotCurrentStock,
     Order,
     OrderLine,
-    StockMovement,
+    StockMovement,  # 🔽 [追加]
 )
+
+# 🔽 [追加] 新しいモデル
+from app.models.warehouse import OrderLineWarehouseAllocation, Warehouse
 from app.schemas import (
     DragAssignRequest,
     DragAssignResponse,
@@ -28,6 +35,15 @@ from app.schemas import (
     OrderResponse,
     OrderUpdate,
     OrderWithLinesResponse,
+)
+from app.schemas.base import ResponseBase
+
+# 🔽 [追加] 新しいスキーマ
+from app.schemas.orders import (
+    OrderLineOut,
+    OrdersWithAllocResponse,
+    SaveAllocationsRequest,
+    WarehouseAllocOut,
 )
 
 # フォーキャストマッチング機能（オプション）
@@ -339,3 +355,133 @@ def cancel_allocation(allocation_id: int, db: Session = Depends(get_db)):
     db.delete(allocation)
     db.commit()
     return None
+
+
+# 🔽 [ここから追加] 倉庫配分(Warehouse Allocation) 関連 🔽
+
+
+@router.get("/orders-with-allocations", response_model=OrdersWithAllocResponse)
+def get_orders_with_allocations(db: Session = Depends(get_db)):
+    """
+    倉庫配分情報を含む受注明細一覧を取得
+    (N+1クエリ回避のため selectinload/joinedload を使用)
+    """
+    # OrderLine をベースに、必要な関連データをEager Loading
+    query = (
+        db.query(OrderLine)
+        .options(
+            # 配分先倉庫 (OrderLine -> Allocations -> Warehouse)
+            selectinload(OrderLine.allocations).joinedload(
+                OrderLineWarehouseAllocation.warehouse
+            ),
+            # 受注ヘッダ (OrderLine -> Order)
+            joinedload(OrderLine.order),
+            # 製品マスタ (OrderLine -> Product)
+            joinedload(OrderLine.product),
+            # 紐づくフォーキャスト (OrderLine -> Forecast)
+            joinedload(OrderLine.forecast),
+        )
+        .order_by(OrderLine.id)  # 順序を安定させる
+    )
+
+    lines: List[OrderLine] = query.all()
+
+    items: List[OrderLineOut] = []
+    for line in lines:
+        # 1. 倉庫配分情報を構築
+        allocs: List[WarehouseAllocOut] = []
+        if line.allocations:
+            for a in line.allocations:
+                if a.warehouse:  # 念のため
+                    allocs.append(
+                        WarehouseAllocOut(
+                            warehouse_code=a.warehouse.warehouse_code,
+                            quantity=a.quantity,
+                        )
+                    )
+
+        # 2. OrderLineOut スキーマに必要な情報を集める
+        product_name = line.product.product_name if line.product else "N/A"
+        customer_code = line.order.customer_code if line.order else "N/A"
+
+        # supplier_code は Forecast 由来と仮定
+        supplier_code = None
+        if line.forecast:
+            # forecast.py モデルの supplier_id を参照
+            supplier_code = line.forecast.supplier_id
+
+        # 3. OrderLineOut オブジェクトを作成
+        items.append(
+            OrderLineOut(
+                id=line.id,
+                product_code=line.product_code,
+                product_name=product_name,
+                customer_code=customer_code,
+                supplier_code=supplier_code,  # None の可能性あり
+                quantity=line.quantity,
+                unit=line.unit or "EA",
+                warehouse_allocations=allocs,
+                related_lots=[],  # TODO: ロット引当実装時にここも更新
+            )
+        )
+
+    return OrdersWithAllocResponse(items=items)
+
+
+@router.post("/{order_line_id}/warehouse-allocations", response_model=ResponseBase)
+def save_warehouse_allocations(
+    order_line_id: int, req: SaveAllocationsRequest, db: Session = Depends(get_db)
+):
+    """
+    受注明細に対する倉庫配分を保存 (全置換)
+    """
+    # 1. 受注明細の存在チェック
+    line = db.get(OrderLine, order_line_id)
+    if not line:
+        raise HTTPException(status_code=404, detail="OrderLine not found")
+
+    # 2. リクエストされた倉庫コードをまとめて検証
+    codes = [a.warehouse_code for a in req.allocations]
+    wh_map = {}
+    if codes:
+        # 新しい Warehouse テーブル (id, warehouse_code) を参照
+        stmt = select(Warehouse).where(Warehouse.warehouse_code.in_(codes))
+        warehouses = db.execute(stmt).scalars().all()
+        wh_map = {w.warehouse_code: w for w in warehouses}
+
+        # 不明な倉庫コードがないかチェック
+        for code in codes:
+            if code not in wh_map:
+                raise HTTPException(
+                    status_code=400, detail=f"Warehouse code not found: {code}"
+                )
+
+    try:
+        # 3. 既存の配分を全削除
+        db.execute(
+            delete(OrderLineWarehouseAllocation).where(
+                OrderLineWarehouseAllocation.order_line_id == order_line_id
+            )
+        )
+
+        # 4. 新しい配分を全挿入
+        for alloc_in in req.allocations:
+            wh = wh_map[alloc_in.warehouse_code]
+
+            new_alloc = OrderLineWarehouseAllocation(
+                order_line_id=order_line_id,
+                warehouse_id=wh.id,  # warehouse.id を参照
+                quantity=alloc_in.quantity,
+            )
+            db.add(new_alloc)
+
+        db.commit()
+
+        return ResponseBase(success=True, message="配分を保存しました")
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"保存に失敗しました: {str(e)}")
+
+
+# 🔼 [追加ここまで] 🔼

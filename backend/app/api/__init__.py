@@ -12,6 +12,7 @@ from .routes import (
     masters_router,
     orders_router,
     receipts_router,
+    warehouse_alloc_router,  # ⬅️ [修正] 不足していたルータを追加
 )
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "integration_router",
     "admin_router",
     "forecast_router",
+    "warehouse_alloc_router",  # ⬅️ [修正] __all__ にも追加
 ]
