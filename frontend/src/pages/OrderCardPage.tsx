@@ -1,5 +1,5 @@
-// src/pages/OrderCardPage.tsx
-import { useState } from "react";
+// src/pages/OrderCardPage.tsx - Priority 1 完全実装版
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -23,14 +23,18 @@ import {
   Loader2,
   Trash2,
   AlertCircle,
+  Check,
+  TrendingUp,
+  TrendingDown,
+  Minus,
 } from "lucide-react";
-import type {
-  WarehouseAlloc,
-  Warehouse,
-  LotCandidate,
-  AllocatedLot,
+import type { 
+  WarehouseAlloc, 
+  Warehouse, 
+  LotCandidate, 
+  AllocatedLot, 
   LotSelection,
-  OrderLineWithAlloc,
+  OrderLineWithAlloc 
 } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
@@ -155,6 +159,96 @@ export default function OrderCardPage() {
   );
 }
 
+// ===== Forecastマッチング表示コンポーネント =====
+interface ForecastMatchBadgeProps {
+  forecastMatched: boolean;
+  forecastQty?: number;
+  orderQty: number;
+  unit: string;
+}
+
+function ForecastMatchBadge({
+  forecastMatched,
+  forecastQty,
+  orderQty,
+  unit,
+}: ForecastMatchBadgeProps) {
+  if (!forecastMatched || !forecastQty) {
+    return null;
+  }
+
+  const diff = orderQty - forecastQty;
+  const diffPercent = (diff / forecastQty) * 100;
+
+  // 色分けロジック
+  let bgColor = "bg-green-50";
+  let borderColor = "border-green-200";
+  let textColor = "text-green-900";
+  let icon = <Check className="h-4 w-4 text-green-600" />;
+  let label = "Forecast 一致";
+  let statusIcon = <Minus className="h-4 w-4 text-green-600" />;
+
+  if (Math.abs(diffPercent) < 5) {
+    // ±5%以内: 一致
+    label = "Forecast 一致";
+  } else if (diff < 0) {
+    // 受注 < 予測: 過少
+    if (Math.abs(diffPercent) >= 10) {
+      bgColor = "bg-yellow-50";
+      borderColor = "border-yellow-200";
+      textColor = "text-yellow-900";
+      icon = <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+      label = "Forecast 過少";
+      statusIcon = <TrendingDown className="h-4 w-4 text-yellow-600" />;
+    }
+  } else {
+    // 受注 > 予測: 過剰
+    if (diffPercent >= 10) {
+      bgColor = "bg-orange-50";
+      borderColor = "border-orange-200";
+      textColor = "text-orange-900";
+      icon = <AlertTriangle className="h-4 w-4 text-orange-600" />;
+      label = "Forecast 過剰";
+      statusIcon = <TrendingUp className="h-4 w-4 text-orange-600" />;
+    }
+  }
+
+  return (
+    <div className={`rounded-lg ${bgColor} p-3 border ${borderColor}`}>
+      <div className="flex items-center gap-2 mb-2">
+        {icon}
+        <span className={`text-sm font-medium ${textColor}`}>{label}</span>
+      </div>
+      <div className={`text-sm ${textColor} space-y-1`}>
+        <div className="flex items-center justify-between">
+          <span>予測数量:</span>
+          <span className="font-semibold">
+            {forecastQty} {unit}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>受注数量:</span>
+          <span className="font-semibold">
+            {orderQty} {unit}
+          </span>
+        </div>
+        {Math.abs(diff) > 0 && (
+          <div className="flex items-center justify-between pt-1 border-t">
+            <span className="flex items-center gap-1">
+              {statusIcon}
+              差異:
+            </span>
+            <span className="font-bold">
+              {diff > 0 ? "+" : ""}
+              {diff} {unit} ({diffPercent.toFixed(1)}%)
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ===== ロット引当パネル =====
 interface LotAllocationPanelProps {
   orderLineId: number;
@@ -162,6 +256,8 @@ interface LotAllocationPanelProps {
   totalQuantity: number;
   unit: string;
   allocatedLots: AllocatedLot[];
+  status?: string;
+  onStatusConfirmed?: () => void;
 }
 
 function LotAllocationPanel({
@@ -170,13 +266,18 @@ function LotAllocationPanel({
   totalQuantity,
   unit,
   allocatedLots,
+  status,
+  onStatusConfirmed,
 }: LotAllocationPanelProps) {
   const [selections, setSelections] = useState<LotSelection[]>([]);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   // ロット候補を取得
-  const { data: candidatesData, isLoading: isLoadingCandidates } = useQuery({
+  const {
+    data: candidatesData,
+    isLoading: isLoadingCandidates,
+  } = useQuery({
     queryKey: ["candidate-lots", orderLineId],
     queryFn: () => api.getCandidateLots(orderLineId),
     enabled: !!orderLineId,
@@ -184,14 +285,50 @@ function LotAllocationPanel({
 
   const candidates = candidatesData?.items || [];
 
+  // ===== 🔥 新機能1: ロット1個の場合の自動全量入力 =====
+  useEffect(() => {
+    if (
+      candidates.length === 1 &&
+      selections.length === 0 &&
+      allocatedLots.length === 0
+    ) {
+      const singleLot = candidates[0];
+      const totalAllocated = allocatedLots.reduce(
+        (sum, a) => sum + a.allocated_qty,
+        0
+      );
+      const remaining = totalQuantity - totalAllocated;
+
+      // 在庫が十分にある場合のみ自動選択
+      if (singleLot.available_qty >= remaining) {
+        setSelections([
+          {
+            lot_id: singleLot.lot_id,
+            lot_code: singleLot.lot_code,
+            available_qty: singleLot.available_qty,
+            requested_qty: remaining,
+            unit: singleLot.unit,
+            warehouse_code: singleLot.warehouse_code,
+            expiry_date: singleLot.expiry_date,
+          },
+        ]);
+
+        toast({
+          title: "自動選択",
+          description: `ロットが1つのため、全量（${remaining} ${unit}）を自動入力しました。`,
+        });
+      }
+    }
+  }, [candidates, selections.length, allocatedLots, totalQuantity, unit, toast]);
+
   // ロット引当実行
   const allocateMutation = useMutation({
-    mutationFn: (data: {
-      orderLineId: number;
-      allocations: Array<{ lot_id: number; qty: number }>;
+    mutationFn: (data: { 
+      orderLineId: number; 
+      allocations: Array<{ lot_id: number; qty: number }> 
     }) =>
-      api.createLotAllocations(data.orderLineId, {
-        allocations: data.allocations,
+      api.createLotAllocations(data.orderLineId, { 
+        allocations: data.allocations 
       }),
     onSuccess: () => {
       toast({
@@ -200,9 +337,7 @@ function LotAllocationPanel({
       });
       setSelections([]);
       queryClient.invalidateQueries({ queryKey: ["orders-with-allocations"] });
-      queryClient.invalidateQueries({
-        queryKey: ["candidate-lots", orderLineId],
-      });
+      queryClient.invalidateQueries({ queryKey: ["candidate-lots", orderLineId] });
     },
     onError: (error: any) => {
       toast({
@@ -216,8 +351,8 @@ function LotAllocationPanel({
   // ロット引当取消
   const cancelMutation = useMutation({
     mutationFn: (data: { orderLineId: number; allocationId: number }) =>
-      api.cancelLotAllocations(data.orderLineId, {
-        allocation_id: data.allocationId,
+      api.cancelLotAllocations(data.orderLineId, { 
+        allocation_id: data.allocationId 
       }),
     onSuccess: () => {
       toast({
@@ -225,13 +360,39 @@ function LotAllocationPanel({
         description: "引当を取消しました",
       });
       queryClient.invalidateQueries({ queryKey: ["orders-with-allocations"] });
-      queryClient.invalidateQueries({
-        queryKey: ["candidate-lots", orderLineId],
-      });
+      queryClient.invalidateQueries({ queryKey: ["candidate-lots", orderLineId] });
     },
     onError: (error: any) => {
       toast({
         title: "取消失敗",
+        description: error.message || "エラーが発生しました",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // ===== 🔥 新機能2: ステータス確定 =====
+  const confirmStatusMutation = useMutation({
+    mutationFn: (orderLineId: number) =>
+      fetch(`http://localhost:8000/api/orders/${orderLineId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ new_status: "allocated" }),
+      }).then((res) => {
+        if (!res.ok) throw new Error("ステータス更新失敗");
+        return res.json();
+      }),
+    onSuccess: () => {
+      toast({
+        title: "確定完了",
+        description: "引当が確定されました",
+      });
+      queryClient.invalidateQueries({ queryKey: ["orders-with-allocations"] });
+      onStatusConfirmed?.();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "確定失敗",
         description: error.message || "エラーが発生しました",
         variant: "destructive",
       });
@@ -250,13 +411,23 @@ function LotAllocationPanel({
       return;
     }
 
+    const totalAllocated = allocatedLots.reduce(
+      (sum, a) => sum + a.allocated_qty,
+      0
+    );
+    const totalSelected = selections.reduce((sum, s) => sum + s.requested_qty, 0);
+    const remaining = totalQuantity - totalAllocated - totalSelected;
+
+    // 残りの数量を自動入力（ただし在庫数を超えない）
+    const suggestedQty = Math.min(remaining, lot.available_qty);
+
     setSelections([
       ...selections,
       {
         lot_id: lot.lot_id,
         lot_code: lot.lot_code,
         available_qty: lot.available_qty,
-        requested_qty: 0,
+        requested_qty: suggestedQty,
         unit: lot.unit,
         warehouse_code: lot.warehouse_code,
         expiry_date: lot.expiry_date,
@@ -291,9 +462,7 @@ function LotAllocationPanel({
       return;
     }
 
-    const hasExceeded = selections.some(
-      (s) => s.requested_qty > s.available_qty
-    );
+    const hasExceeded = selections.some((s) => s.requested_qty > s.available_qty);
     if (hasExceeded) {
       toast({
         title: "在庫エラー",
@@ -320,12 +489,12 @@ function LotAllocationPanel({
     }
   };
 
+  // ===== 🔥 新機能3: 確定ボタンの表示判定 =====
   const totalSelected = selections.reduce((sum, s) => sum + s.requested_qty, 0);
-  const totalAllocated = allocatedLots.reduce(
-    (sum, a) => sum + a.allocated_qty,
-    0
-  );
+  const totalAllocated = allocatedLots.reduce((sum, a) => sum + a.allocated_qty, 0);
   const remaining = totalQuantity - totalAllocated - totalSelected;
+  const isFullyAllocated = remaining === 0 && totalAllocated > 0;
+  const isAlreadyConfirmed = status === "allocated";
 
   return (
     <div className="space-y-4">
@@ -340,7 +509,8 @@ function LotAllocationPanel({
             {allocatedLots.map((alloc) => (
               <div
                 key={alloc.allocation_id}
-                className="flex items-center justify-between p-2 bg-white rounded border">
+                className="flex items-center justify-between p-2 bg-white rounded border"
+              >
                 <div className="flex-1">
                   <div className="text-sm font-medium">{alloc.lot_code}</div>
                   <div className="text-xs text-muted-foreground">
@@ -348,13 +518,16 @@ function LotAllocationPanel({
                     {alloc.expiry_date && ` / 期限: ${alloc.expiry_date}`}
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleCancelAllocation(alloc.allocation_id)}
-                  disabled={cancelMutation.isPending}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
+                {!isAlreadyConfirmed && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCancelAllocation(alloc.allocation_id)}
+                    disabled={cancelMutation.isPending}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                )}
               </div>
             ))}
           </div>
@@ -364,15 +537,21 @@ function LotAllocationPanel({
       {/* 進捗バー */}
       <div className="border rounded-lg p-4">
         <div className="flex justify-between text-sm mb-2">
-          <span>引当進捗</span>
-          <span className={remaining < 0 ? "text-destructive" : ""}>
+          <span className="font-medium">引当進捗</span>
+          <span className={remaining < 0 ? "text-destructive font-semibold" : "font-semibold"}>
             {totalAllocated + totalSelected} / {totalQuantity} {unit}
           </span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all ${
-              remaining < 0 ? "bg-destructive" : "bg-green-500"
+              remaining < 0
+                ? "bg-red-500"
+                : remaining === 0
+                ? "bg-green-500"
+                : totalAllocated + totalSelected > totalQuantity * 0.5
+                ? "bg-yellow-500"
+                : "bg-blue-500"
             }`}
             style={{
               width: `${Math.min(
@@ -382,10 +561,67 @@ function LotAllocationPanel({
             }}
           />
         </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          残り: {remaining} {unit}
+        <div className="text-xs text-muted-foreground mt-1 flex justify-between">
+          <span>
+            残り: {remaining} {unit}
+          </span>
+          {isFullyAllocated && !isAlreadyConfirmed && (
+            <span className="text-green-600 font-semibold flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" />
+              引当完了
+            </span>
+          )}
         </div>
       </div>
+
+      {/* ===== 🔥 新機能: 確定ボタン ===== */}
+      {isFullyAllocated && !isAlreadyConfirmed && (
+        <div className="border-2 border-green-500 rounded-lg p-4 bg-green-50">
+          <div className="flex items-center gap-3 mb-3">
+            <CheckCircle2 className="h-6 w-6 text-green-600" />
+            <div>
+              <div className="font-semibold text-green-900">
+                引当が完了しました
+              </div>
+              <div className="text-sm text-green-700">
+                確定ボタンを押すと、ステータスが「引当済み」になります
+              </div>
+            </div>
+          </div>
+          <Button
+            className="w-full bg-green-600 hover:bg-green-700"
+            size="lg"
+            onClick={() => confirmStatusMutation.mutate(orderLineId)}
+            disabled={confirmStatusMutation.isPending}
+          >
+            {confirmStatusMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                確定中...
+              </>
+            ) : (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                確定して次へ
+              </>
+            )}
+          </Button>
+        </div>
+      )}
+
+      {isAlreadyConfirmed && (
+        <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
+          <div className="flex items-center gap-3">
+            <CheckCircle2 className="h-6 w-6 text-gray-600" />
+            <div>
+              <div className="font-semibold text-gray-900">確定済み</div>
+              <div className="text-sm text-gray-600">
+                この受注明細は既に確定されています
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 選択中のロット */}
       {selections.length > 0 && (
@@ -395,14 +631,12 @@ function LotAllocationPanel({
             {selections.map((selection) => (
               <div
                 key={selection.lot_id}
-                className="flex items-center gap-2 p-2 bg-blue-50 rounded border">
+                className="flex items-center gap-2 p-2 bg-blue-50 rounded border"
+              >
                 <div className="flex-1">
-                  <div className="text-sm font-medium">
-                    {selection.lot_code}
-                  </div>
+                  <div className="text-sm font-medium">{selection.lot_code}</div>
                   <div className="text-xs text-muted-foreground">
-                    在庫: {selection.available_qty} {unit} /{" "}
-                    {selection.warehouse_code}
+                    在庫: {selection.available_qty} {unit} / {selection.warehouse_code}
                   </div>
                 </div>
                 <Input
@@ -422,7 +656,8 @@ function LotAllocationPanel({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleRemoveSelection(selection.lot_id)}>
+                  onClick={() => handleRemoveSelection(selection.lot_id)}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -431,7 +666,8 @@ function LotAllocationPanel({
           <Button
             className="w-full mt-2"
             onClick={handleAllocate}
-            disabled={allocateMutation.isPending || selections.length === 0}>
+            disabled={allocateMutation.isPending || selections.length === 0}
+          >
             {allocateMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -445,41 +681,51 @@ function LotAllocationPanel({
       )}
 
       {/* 引当可能ロット一覧 */}
-      <div className="border rounded-lg p-4">
-        <h4 className="text-sm font-semibold mb-2">引当可能ロット</h4>
-        {isLoadingCandidates ? (
-          <div className="flex justify-center p-4">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-          </div>
-        ) : candidates.length === 0 ? (
-          <div className="text-center p-4 text-muted-foreground text-sm">
-            <AlertCircle className="h-8 w-8 mx-auto mb-2" />
-            引当可能なロットがありません
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {candidates.map((lot) => (
-              <div
-                key={lot.lot_id}
-                className="flex items-center justify-between p-3 border rounded hover:bg-gray-50 cursor-pointer"
-                onClick={() => handleSelectLot(lot)}>
-                <div className="flex-1">
-                  <div className="text-sm font-medium">{lot.lot_code}</div>
-                  <div className="text-xs text-muted-foreground">
-                    在庫: {lot.available_qty} {lot.unit} / {lot.warehouse_code}
-                  </div>
-                  {lot.expiry_date && (
-                    <div className="text-xs text-muted-foreground">
-                      期限: {lot.expiry_date}
+      {!isAlreadyConfirmed && (
+        <div className="border rounded-lg p-4">
+          <h4 className="text-sm font-semibold mb-2">引当可能ロット</h4>
+          {isLoadingCandidates ? (
+            <div className="flex justify-center p-4">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : candidates.length === 0 ? (
+            <div className="text-center p-4 text-muted-foreground text-sm">
+              <AlertCircle className="h-8 w-8 mx-auto mb-2" />
+              引当可能なロットがありません
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {candidates.map((lot, index) => (
+                <div
+                  key={lot.lot_id}
+                  className="flex items-center justify-between p-3 border rounded hover:bg-gray-50 cursor-pointer"
+                  onClick={() => handleSelectLot(lot)}
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <div className="text-sm font-medium">{lot.lot_code}</div>
+                      {index === 0 && (
+                        <Badge variant="outline" className="text-xs">
+                          推奨（FIFO）
+                        </Badge>
+                      )}
                     </div>
-                  )}
+                    <div className="text-xs text-muted-foreground">
+                      在庫: {lot.available_qty} {lot.unit} / {lot.warehouse_code}
+                    </div>
+                    {lot.expiry_date && (
+                      <div className="text-xs text-muted-foreground">
+                        期限: {lot.expiry_date}
+                      </div>
+                    )}
+                  </div>
+                  <Package className="h-5 w-5 text-muted-foreground" />
                 </div>
-                <Package className="h-5 w-5 text-muted-foreground" />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -506,7 +752,8 @@ function OrderCard({
     <div className="rounded-lg border bg-card shadow-sm">
       {/* カードヘッダー */}
       <div
-        className={`flex items-center justify-between border-b p-4 ${status.color} bg-opacity-10`}>
+        className={`flex items-center justify-between border-b p-4 ${status.color} bg-opacity-10`}
+      >
         <div className="flex items-center gap-3">
           <StatusIcon
             className={`h-5 w-5 ${status.color.replace("bg-", "text-")}`}
@@ -544,19 +791,14 @@ function OrderCard({
               <InfoRow label="受注番号" value={order.order_no || "-"} />
             </div>
 
-            {/* Forecast情報 */}
+            {/* ===== 🔥 新機能: Forecast情報の強化 ===== */}
             {order.forecast_matched && (
-              <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-900">
-                    Forecast マッチ済
-                  </span>
-                </div>
-                <div className="text-sm text-blue-700">
-                  予測数量: {order.forecast_qty || order.quantity} {order.unit}
-                </div>
-              </div>
+              <ForecastMatchBadge
+                forecastMatched={order.forecast_matched}
+                forecastQty={order.forecast_qty}
+                orderQty={order.quantity}
+                unit={order.unit}
+              />
             )}
 
             {/* 倉庫配分 */}
@@ -597,6 +839,7 @@ function OrderCard({
               totalQuantity={order.quantity}
               unit={order.unit}
               allocatedLots={order.allocated_lots || []}
+              status={order.status}
             />
           </div>
         </div>

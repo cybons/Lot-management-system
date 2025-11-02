@@ -225,6 +225,20 @@ export const api = {
   // ===== ロット引当関連のエンドポイント =====
 
   /**
+   * 受注明細のステータスを更新
+   */
+  updateOrderLineStatus: (orderLineId: number, newStatus: string) =>
+    fetchApi<{
+      success: boolean;
+      message: string;
+      order_line_id: number;
+      new_status: string;
+    }>(`/orders/${orderLineId}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ new_status: newStatus }),
+    }),
+
+  /**
    * 受注明細に対する引当候補ロットを取得
    */
   getCandidateLots: (orderLineId: number) =>

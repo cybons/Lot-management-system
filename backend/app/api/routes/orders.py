@@ -7,7 +7,7 @@ from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import delete, select
+from sqlalchemy import and_, delete, func, select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.api.deps import get_db
@@ -676,3 +676,64 @@ def cancel_lot_allocations(
     except Exception:
         db.rollback()
         raise
+
+
+@router.patch("/{order_line_id}/status")
+def update_order_line_status(
+    order_line_id: int, new_status: str, db: Session = Depends(get_db)
+):
+    """
+    受注明細のステータスを更新
+
+    - 引当完了時に "allocated" に変更
+    - 出荷時に "shipped" に変更
+    """
+    # 受注明細を取得
+    stmt = select(OrderLine).where(OrderLine.id == order_line_id)
+    order_line = db.execute(stmt).scalar_one_or_none()
+
+    if not order_line:
+        raise HTTPException(
+            status_code=404, detail=f"OrderLine {order_line_id} not found"
+        )
+
+    # ステータスの検証
+    valid_statuses = [
+        "open",
+        "allocated",
+        "partially_allocated",
+        "shipped",
+        "completed",
+    ]
+    if new_status not in valid_statuses:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}",
+        )
+
+    # "allocated" に変更する場合、引当数量をチェック
+    if new_status == "allocated":
+        # 引当済み数量を計算
+        stmt_alloc = select(func.sum(Allocation.allocated_quantity)).where(
+            Allocation.order_line_id == order_line_id
+        )
+        total_allocated = db.execute(stmt_alloc).scalar() or 0.0
+
+        # 必要数量と比較
+        if total_allocated < order_line.quantity:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Cannot set status to 'allocated': allocated quantity ({total_allocated}) is less than required quantity ({order_line.quantity})",
+            )
+
+    # ステータスを更新
+    order_line.status = new_status
+    db.commit()
+    db.refresh(order_line)
+
+    return {
+        "success": True,
+        "message": f"Order line status updated to '{new_status}'",
+        "order_line_id": order_line_id,
+        "new_status": new_status,
+    }
