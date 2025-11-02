@@ -92,7 +92,7 @@ from .masters import (
     WarehouseResponse,
     WarehouseUpdate,
 )
-from .sales import (
+from .orders import (
     # Allocation
     AllocationBase,
     AllocationCreate,

@@ -8,7 +8,7 @@ from pydantic import Field
 from typing import Optional, Any
 from datetime import datetime
 from .base import BaseSchema
-from .sales import OrderLineCreate
+from .orders import OrderLineCreate
 
 
 # --- OCR Submission ---

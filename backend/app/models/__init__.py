@@ -35,7 +35,7 @@ from .masters import (
     Supplier,
     Warehouse,
 )
-from .sales import (
+from .orders import (
     Allocation,
     Order,
     OrderLine,
