@@ -3,15 +3,7 @@
 import React from "react";
 import OrderFilters from "@/features/orders/components/OrderFilters";
 import OrderLineCard from "@/features/orders/components/OrderLineCard";
-import LotAllocationPanel from "@/features/orders/components/LotAllocationPanel";
 import { useOrdersWithAllocations } from "@/features/orders/hooks/useOrders";
-import {
-  useCandidateLots,
-  useCreateAllocations,
-  useCancelAllocations,
-  useSaveWarehouseAllocations,
-  useReMatchOrder,
-} from "@/features/orders/hooks/useAllocations";
 import type { OrdersListParams } from "@/types";
 
 const DEFAULT_PARAMS: OrdersListParams = { skip: 0, limit: 50 };
@@ -20,15 +12,6 @@ const norm = (s?: string) => (s ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 export default function OrderCardPage() {
   const [params, setParams] = React.useState<OrdersListParams>(DEFAULT_PARAMS);
   const { data, isLoading, refetch } = useOrdersWithAllocations();
-
-  const [activeOrderId, setActiveOrderId] = React.useState<number | null>(null); // 再マッチ用（任意）
-  const [activeLineId, setActiveLineId] = React.useState<number | null>(null);
-
-  const { data: candidates } = useCandidateLots(activeLineId ?? undefined);
-  const createAlloc = useCreateAllocations(activeLineId ?? 0, params);
-  const cancelAlloc = useCancelAllocations(activeLineId ?? 0);
-  const saveWareAlloc = useSaveWarehouseAllocations(activeLineId ?? 0);
-  const reMatchOrder = useReMatchOrder(activeOrderId ?? undefined);
 
   const handleReset = () => setParams(DEFAULT_PARAMS);
   const handleSearch = () => refetch();
@@ -79,26 +62,11 @@ export default function OrderCardPage() {
             // このAPIは「行」しか返さないため order は省略
             line={ln}
             onOpenAllocation={() => {
-              setActiveOrderId(null); // 行APIなので受注ID不明、必要なければnullで
-              setActiveLineId(ln.id);
-            }}
-            onRematch={() => {
-              // 受注単位の再マッチが必要なら、lineに order_id が来るようにAPI側拡張が必要
-              // ここでは一旦無効化 or null のまま
-              if (activeOrderId != null) reMatchOrder.mutate();
+              /* no-op：カード内インライン編集に移行 */
             }}
           />
         ))}
       </div>
-      <LotAllocationPanel
-        open={activeLineId != null}
-        onClose={() => setActiveLineId(null)}
-        orderLineId={activeLineId}
-        candidates={candidates?.items ?? []}
-        onAllocate={(payload) => createAlloc.mutate(payload)}
-        onCancelAllocations={(payload) => cancelAlloc.mutate(payload)}
-        onSaveWarehouseAllocations={(allocs) => saveWareAlloc.mutate(allocs)}
-      />
     </div>
   );
 }

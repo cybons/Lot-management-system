@@ -1,4 +1,4 @@
-import React from "react";
+// frontend/src/features/orders/components/OrderCard.tsx
 import type { OrderWithLinesResponse } from "@/types";
 
 type Props = {
