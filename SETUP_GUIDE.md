@@ -6,7 +6,7 @@
 2. [システム要件](#システム要件)
 3. [セットアップ手順](#セットアップ手順)
 4. [動作確認](#動作確認)
-5. [API使用例](#api使用例)
+5. [API 使用例](#api使用例)
 6. [トラブルシューティング](#トラブルシューティング)
 
 ---
@@ -18,6 +18,7 @@
 ### 主な改善点
 
 ✅ **モデルの分割構造**
+
 - `models/base_model.py` - 基底クラス
 - `models/masters.py` - マスタテーブル
 - `models/inventory.py` - 在庫管理
@@ -25,16 +26,19 @@
 - `models/logs.py` - ログ管理
 
 ✅ **日付型の適切な使用**
-- TEXT型 → Date/DateTime型に変更
+
+- TEXT 型 → Date/DateTime 型に変更
 - FEFO(先入先出)の正確な実装
 
 ✅ **パフォーマンス最適化**
+
 - `lot_current_stock`サマリテーブル追加
 - 在庫参照の高速化
 
 ✅ **単位換算対応**
+
 - `product_uom_conversions`テーブル追加
-- ケース→個などの換算に対応
+- ケース → 個などの換算に対応
 
 ---
 
@@ -48,8 +52,8 @@
 
 ### 推奨環境
 
-- **メモリ**: 4GB以上
-- **ディスク**: 1GB以上の空き容量
+- **メモリ**: 4GB 以上
+- **ディスク**: 1GB 以上の空き容量
 
 ---
 
@@ -121,6 +125,7 @@ pip install -r requirements.txt
 ```
 
 **requirements.txt の内容:**
+
 ```
 fastapi==0.115.5
 uvicorn[standard]==0.32.0
@@ -143,6 +148,7 @@ cp .env.example .env
 ```
 
 **.env の例:**
+
 ```env
 ENVIRONMENT=development
 # DATABASE_URL=sqlite:///./lot_management.db
@@ -159,6 +165,7 @@ python -m app.main
 ```
 
 **起動成功時の出力例:**
+
 ```
 🚀 ロット管理システム v2.0.0 を起動しています...
 📦 環境: development
@@ -177,13 +184,14 @@ INFO:     Application startup complete.
 
 ### 1. ヘルスチェック
 
-ブラウザまたはcurlで確認:
+ブラウザまたは curl で確認:
 
 ```bash
 curl http://localhost:8000/api/admin/health
 ```
 
 **期待される出力:**
+
 ```json
 {
   "status": "healthy",
@@ -208,6 +216,7 @@ curl -X POST http://localhost:8000/api/admin/init-sample-data
 ```
 
 **期待される出力:**
+
 ```json
 {
   "success": true,
@@ -230,7 +239,7 @@ curl http://localhost:8000/api/masters/products
 
 ---
 
-## API使用例
+## API 使用例
 
 ### 1. ロット登録
 
@@ -239,7 +248,7 @@ curl -X POST "http://localhost:8000/api/lots" \
   -H "Content-Type: application/json" \
   -d '{
     "supplier_code": "SUP001",
-    "product_code": "PRD-0001",
+    "product_code": "PRD-001",
     "lot_number": "LOT-2024-1101",
     "receipt_date": "2024-11-01",
     "expiry_date": "2025-11-01",
@@ -266,7 +275,7 @@ curl -X POST "http://localhost:8000/api/lots/movements" \
 curl "http://localhost:8000/api/lots?with_stock=true"
 ```
 
-### 4. 受注登録(OCR取込シミュレーション)
+### 4. 受注登録(OCR 取込シミュレーション)
 
 ```bash
 curl -X POST "http://localhost:8000/api/integration/ai-ocr/submit" \
@@ -283,7 +292,7 @@ curl -X POST "http://localhost:8000/api/integration/ai-ocr/submit" \
         "lines": [
           {
             "line_no": 1,
-            "product_code": "PRD-0001",
+            "product_code": "PRD-001",
             "quantity": 50.0,
             "unit": "EA",
             "due_date": "2024-11-15"
@@ -306,7 +315,7 @@ curl -X POST "http://localhost:8000/api/orders/allocations/drag-assign" \
   }'
 ```
 
-### 6. SAP送信(モック)
+### 6. SAP 送信(モック)
 
 ```bash
 curl -X POST "http://localhost:8000/api/integration/sap/register" \
@@ -329,9 +338,10 @@ curl -X POST "http://localhost:8000/api/integration/sap/register" \
 
 ### エラー: ModuleNotFoundError
 
-**原因:** Pythonパスが正しく設定されていない
+**原因:** Python パスが正しく設定されていない
 
 **解決方法:**
+
 ```bash
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 # または
@@ -340,9 +350,10 @@ pip install -e .
 
 ### エラー: database is locked
 
-**原因:** SQLiteファイルが他のプロセスで使用中
+**原因:** SQLite ファイルが他のプロセスで使用中
 
 **解決方法:**
+
 ```bash
 # データベースファイルを削除
 rm lot_management.db
@@ -350,11 +361,12 @@ rm lot_management.db
 # アプリを再起動すると自動で再作成されます
 ```
 
-### エラー: pydantic_core._pydantic_core.ValidationError
+### エラー: pydantic_core.\_pydantic_core.ValidationError
 
 **原因:** スキーマ定義とデータ型の不一致
 
 **解決方法:**
+
 - リクエストボディのフォーマットを確認
 - 日付は `YYYY-MM-DD` 形式
 - 数値は float 型
@@ -364,6 +376,7 @@ rm lot_management.db
 **エラー:** `Address already in use`
 
 **解決方法:**
+
 ```bash
 # 別のポートで起動
 uvicorn app.main:app --reload --port 8001
@@ -393,17 +406,20 @@ curl -X POST http://localhost:8000/api/admin/reset-database
 次に実施すべきこと:
 
 1. **フロントエンド連携**
+
    - React フロントエンドを起動
-   - API接続の確認
+   - API 接続の確認
 
 2. **実データ投入**
+
    - マスタデータの登録
    - 実際のロット・受注データの投入
 
 3. **本番環境準備**
-   - PostgreSQL/MySQLへの移行
+
+   - PostgreSQL/MySQL への移行
    - 環境変数の本番設定
-   - Docker化
+   - Docker 化
 
 4. **監視・ログ**
    - 構造化ログの設定
@@ -416,10 +432,10 @@ curl -X POST http://localhost:8000/api/admin/reset-database
 問題が発生した場合:
 
 1. ログを確認: アプリケーションのコンソール出力
-2. データベースの状態確認: SQLiteファイルを直接確認
+2. データベースの状態確認: SQLite ファイルを直接確認
 3. API ドキュメント参照: http://localhost:8000/api/docs
 
 ---
 
-**作成日**: 2024年11月1日
+**作成日**: 2024 年 11 月 1 日
 **バージョン**: 2.0.0

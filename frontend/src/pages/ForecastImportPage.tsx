@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Upload, CheckCircle2, XCircle, AlertCircle, Code } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Upload, CheckCircle2, XCircle, AlertCircle, Code } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ForecastImportPage() {
-  const [jsonInput, setJsonInput] = useState('');
+  const [jsonInput, setJsonInput] = useState("");
   const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
 
@@ -18,22 +18,22 @@ export default function ForecastImportPage() {
       setResult(response);
       if (response.success) {
         toast({
-          title: 'インポート成功',
+          title: "インポート成功",
           description: `${response.imported_count}件のForecastをインポートしました`,
         });
       } else {
         toast({
-          title: 'インポート失敗',
-          description: response.message || 'インポート処理に失敗しました',
-          variant: 'destructive',
+          title: "インポート失敗",
+          description: response.message || "インポート処理に失敗しました",
+          variant: "destructive",
         });
       }
     },
     onError: (error: any) => {
       toast({
-        title: 'エラー',
-        description: error.message || '通信エラーが発生しました',
-        variant: 'destructive',
+        title: "エラー",
+        description: error.message || "通信エラーが発生しました",
+        variant: "destructive",
       });
       setResult({
         success: false,
@@ -48,7 +48,7 @@ export default function ForecastImportPage() {
   const handleSubmit = () => {
     try {
       const parsed = JSON.parse(jsonInput);
-      
+
       // 簡易バリデーション
       if (!parsed.forecasts || !Array.isArray(parsed.forecasts)) {
         throw new Error('JSONフォーマットエラー: "forecasts" 配列が必要です');
@@ -57,9 +57,9 @@ export default function ForecastImportPage() {
       importMutation.mutate(parsed);
     } catch (error: any) {
       toast({
-        title: 'JSONパースエラー',
+        title: "JSONパースエラー",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -68,20 +68,20 @@ export default function ForecastImportPage() {
     const sample = {
       forecasts: [
         {
-          product_code: 'PRD-0001',
-          client_code: 'CUS001',
-          granularity: 'daily',
-          date_day: '2025-11-15',
+          product_code: "PRD-001",
+          client_code: "CUS001",
+          granularity: "daily",
+          date_day: "2025-11-15",
           forecast_qty: 100.0,
-          version_no: 'v1.0',
+          version_no: "v1.0",
         },
         {
-          product_code: 'PRD-0002',
-          client_code: 'CUS001',
-          granularity: 'monthly',
-          year_month: '2025-11',
+          product_code: "PRD-0002",
+          client_code: "CUS001",
+          granularity: "monthly",
+          year_month: "2025-11",
           forecast_qty: 500.0,
-          version_no: 'v1.0',
+          version_no: "v1.0",
         },
       ],
     };
@@ -92,7 +92,9 @@ export default function ForecastImportPage() {
     <div className="space-y-6">
       {/* ヘッダー */}
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Forecastインポート</h2>
+        <h2 className="text-2xl font-bold tracking-tight">
+          Forecastインポート
+        </h2>
         <p className="text-muted-foreground">
           JSON形式でForecastデータを一括インポートできます
         </p>
@@ -122,10 +124,9 @@ export default function ForecastImportPage() {
             </p>
             <Button
               onClick={handleSubmit}
-              disabled={!jsonInput || importMutation.isPending}
-            >
+              disabled={!jsonInput || importMutation.isPending}>
               <Upload className="mr-2 h-4 w-4" />
-              {importMutation.isPending ? 'インポート中...' : 'インポート'}
+              {importMutation.isPending ? "インポート中..." : "インポート"}
             </Button>
           </div>
         </div>
@@ -135,7 +136,7 @@ export default function ForecastImportPage() {
       {result && (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">インポート結果</h3>
-          
+
           {/* サマリーカード */}
           <div className="grid gap-4 md:grid-cols-3">
             <ResultCard
@@ -163,10 +164,9 @@ export default function ForecastImportPage() {
             <div
               className={`rounded-lg border p-4 ${
                 result.success
-                  ? 'border-green-200 bg-green-50 text-green-800'
-                  : 'border-red-200 bg-red-50 text-red-800'
-              }`}
-            >
+                  ? "border-green-200 bg-green-50 text-green-800"
+                  : "border-red-200 bg-red-50 text-red-800"
+              }`}>
               <p className="text-sm font-medium">{result.message}</p>
             </div>
           )}
@@ -174,13 +174,15 @@ export default function ForecastImportPage() {
           {/* エラー詳細 */}
           {result.errors && result.errors.length > 0 && (
             <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
-              <h4 className="mb-2 font-semibold text-destructive">エラー詳細</h4>
+              <h4 className="mb-2 font-semibold text-destructive">
+                エラー詳細
+              </h4>
               <div className="space-y-2">
                 {result.errors.map((error: any, index: number) => (
                   <div key={index} className="text-sm text-destructive">
                     <span className="font-medium">
                       行{error.index + 1} ({error.product_code}):
-                    </span>{' '}
+                    </span>{" "}
                     {error.error}
                   </div>
                 ))}
@@ -194,10 +196,10 @@ export default function ForecastImportPage() {
       <div className="rounded-lg border bg-muted/50 p-6">
         <h3 className="mb-3 text-lg font-semibold">JSONフォーマット</h3>
         <pre className="overflow-x-auto rounded bg-background p-4 text-sm">
-{`{
+          {`{
   "forecasts": [
     {
-      "product_code": "PRD-0001",
+      "product_code": "PRD-001",
       "client_code": "CUS001",
       "granularity": "daily",        // "daily" | "dekad" | "monthly"
       "date_day": "2025-11-15",      // daily の場合
