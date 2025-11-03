@@ -1,6 +1,5 @@
-# backend/app/api/routes/admin.py（修正部分）
 """
-管理機能のAPIエンドポイント - サンプルデータ投入修正版
+管理機能のAPIエンドポイント - サンプルデータ投入修正版（パッチ適用済）
 """
 
 import logging
@@ -28,7 +27,7 @@ from app.models import (
     StockMovement,
     StockMovementReason,
     Supplier,
-    Warehouse,  # 🔽 統合された新Warehouse
+    Warehouse,  # 統合された新Warehouse
 )
 from app.schemas import (
     DashboardStatsResponse,
@@ -45,8 +44,9 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     """ダッシュボード用の統計情報を返す"""
 
     total_stock = (
-        db.query(func.coalesce(func.sum(LotCurrentStock.current_quantity), 0.0))
-        .scalar()
+        db.query(
+            func.coalesce(func.sum(LotCurrentStock.current_quantity), 0.0)
+        ).scalar()
         or 0.0
     )
 
@@ -64,7 +64,8 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     )
 
     unallocated_orders = (
-        db.query(func.count(func.distinct(unallocated_subquery.c.order_id))).scalar() or 0
+        db.query(func.count(func.distinct(unallocated_subquery.c.order_id))).scalar()
+        or 0
     )
 
     return DashboardStatsResponse(
@@ -89,25 +90,12 @@ def reset_database(db: Session = Depends(get_db)):
         drop_db()
         init_db()
 
-        # 🔽 [修正] 新warehouseテーブルへのマスタ投入
-        # ORM経由で投入することで、AuditMixinの自動設定が有効になる
-        
-        # 1. 倉庫マスタ
+        # [修正] 新warehouseテーブルへのマスタ投入（ORM経由でAuditMixinの自動設定を有効にする）
         warehouses = [
+            Warehouse(warehouse_code="WH001", warehouse_name="第一倉庫", is_active=1),
+            Warehouse(warehouse_code="WH002", warehouse_name="第二倉庫", is_active=1),
             Warehouse(
-                warehouse_code="WH001",
-                warehouse_name="第一倉庫",
-                is_active=1,
-            ),
-            Warehouse(
-                warehouse_code="WH002",
-                warehouse_name="第二倉庫",
-                is_active=1,
-            ),
-            Warehouse(
-                warehouse_code="WH003",
-                warehouse_name="第三倉庫（予備）",
-                is_active=1,
+                warehouse_code="WH003", warehouse_name="第三倉庫（予備）", is_active=1
             ),
         ]
 
@@ -124,7 +112,6 @@ def reset_database(db: Session = Depends(get_db)):
         ]
 
         db.add_all([*warehouses, *suppliers, *customers])
-
         db.commit()
 
         return ResponseBase(
@@ -143,7 +130,7 @@ def reset_database(db: Session = Depends(get_db)):
 def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get_db)):
     """
     一括サンプルデータ投入（新スキーマ対応版）
-    
+
     処理順序:
     1. 製品マスタ
     2. ロット登録
@@ -168,9 +155,9 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
         # ==== 1. 製品マスタ ====
         if data.products:
             for p in data.products:
-                existing_product = db.query(Product).filter_by(
-                    product_code=p.product_code
-                ).first()
+                existing_product = (
+                    db.query(Product).filter_by(product_code=p.product_code).first()
+                )
                 if existing_product:
                     continue
 
@@ -188,11 +175,35 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
 
         # ==== 2. ロット登録 ====
         if data.lots:
+            # 【追加】必要なサプライヤーマスタを自動作成
+            supplier_codes_needed = {lot_data.supplier_code for lot_data in data.lots}
+            if supplier_codes_needed:
+                existing_suppliers = (
+                    db.query(Supplier)
+                    .filter(Supplier.supplier_code.in_(supplier_codes_needed))
+                    .all()
+                )
+                existing_supplier_codes = {s.supplier_code for s in existing_suppliers}
+                for supplier_code in supplier_codes_needed:
+                    if supplier_code not in existing_supplier_codes:
+                        new_supplier = Supplier(
+                            supplier_code=supplier_code,
+                            supplier_name=f"サプライヤー_{supplier_code}（自動作成）",
+                        )
+                        db.add(new_supplier)
+                        validation_warnings.append(
+                            f"サプライヤーマスタ '{supplier_code}' が存在しないため自動作成しました"
+                        )
+                db.commit()
+
+            # 既存のロット登録処理
             for lot_data in data.lots:
                 # warehouse_codeからwarehouse_idを取得
-                warehouse = db.query(Warehouse).filter_by(
-                    warehouse_code=lot_data.warehouse_code
-                ).first()
+                warehouse = (
+                    db.query(Warehouse)
+                    .filter_by(warehouse_code=lot_data.warehouse_code)
+                    .first()
+                )
 
                 if not warehouse:
                     validation_warnings.append(
@@ -200,11 +211,15 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     )
                     continue
 
-                existing_lot = db.query(Lot).filter_by(
-                    supplier_code=lot_data.supplier_code,
-                    product_code=lot_data.product_code,
-                    lot_number=lot_data.lot_number,
-                ).first()
+                existing_lot = (
+                    db.query(Lot)
+                    .filter_by(
+                        supplier_code=lot_data.supplier_code,
+                        product_code=lot_data.product_code,
+                        lot_number=lot_data.lot_number,
+                    )
+                    .first()
+                )
 
                 if existing_lot:
                     continue
@@ -213,9 +228,15 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 receipt_date_obj = _parse_iso_date(
                     lot_data.receipt_date, f"lot {lot_data.lot_number}", "receipt_date"
                 )
-                expiry_date_obj = _parse_iso_date(
-                    lot_data.expiry_date, f"lot {lot_data.lot_number}", "expiry_date"
-                ) if hasattr(lot_data, "expiry_date") else None
+                expiry_date_obj = (
+                    _parse_iso_date(
+                        lot_data.expiry_date,
+                        f"lot {lot_data.lot_number}",
+                        "expiry_date",
+                    )
+                    if hasattr(lot_data, "expiry_date")
+                    else None
+                )
 
                 db_lot = Lot(
                     supplier_code=lot_data.supplier_code,
@@ -223,7 +244,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     lot_number=lot_data.lot_number,
                     receipt_date=receipt_date_obj or date.today(),
                     expiry_date=expiry_date_obj,
-                    warehouse_id=warehouse.id,  # 🔽 修正: IDを使用
+                    warehouse_id=warehouse.id,  # IDを使用
                     lot_unit=getattr(lot_data, "lot_unit", "EA"),
                 )
                 db.add(db_lot)
@@ -244,9 +265,11 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
         if data.receipts:
             for receipt_data in data.receipts:
                 # warehouse_codeからwarehouse_idを取得
-                warehouse = db.query(Warehouse).filter_by(
-                    warehouse_code=receipt_data.warehouse_code
-                ).first()
+                warehouse = (
+                    db.query(Warehouse)
+                    .filter_by(warehouse_code=receipt_data.warehouse_code)
+                    .first()
+                )
 
                 if not warehouse:
                     validation_warnings.append(
@@ -254,9 +277,11 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     )
                     continue
 
-                existing_receipt = db.query(ReceiptHeader).filter_by(
-                    receipt_no=receipt_data.receipt_no
-                ).first()
+                existing_receipt = (
+                    db.query(ReceiptHeader)
+                    .filter_by(receipt_no=receipt_data.receipt_no)
+                    .first()
+                )
 
                 if existing_receipt:
                     continue
@@ -270,7 +295,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 db_receipt = ReceiptHeader(
                     receipt_no=receipt_data.receipt_no,
                     supplier_code=receipt_data.supplier_code,
-                    warehouse_id=warehouse.id,  # 🔽 修正: IDを使用
+                    warehouse_id=warehouse.id,  # IDを使用
                     receipt_date=receipt_date_obj or date.today(),
                     notes=getattr(receipt_data, "notes", None),
                 )
@@ -292,7 +317,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     # 在庫変動記録
                     db_movement = StockMovement(
                         lot_id=line_data.lot_id,
-                        warehouse_id=warehouse.id,  # 🔽 修正: IDを使用
+                        warehouse_id=warehouse.id,  # IDを使用
                         movement_type=StockMovementReason.RECEIPT,
                         quantity=line_data.quantity,
                         related_id=receipt_data.receipt_no,
@@ -300,9 +325,11 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     db.add(db_movement)
 
                     # 現在在庫更新
-                    current_stock = db.query(LotCurrentStock).filter_by(
-                        lot_id=line_data.lot_id
-                    ).first()
+                    current_stock = (
+                        db.query(LotCurrentStock)
+                        .filter_by(lot_id=line_data.lot_id)
+                        .first()
+                    )
                     if current_stock:
                         current_stock.current_quantity += line_data.quantity
 
@@ -312,17 +339,47 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
 
         # ==== 4. 受注登録 ====
         if data.orders:
+            # 【追加】受注データに必要な顧客マスタを自動作成
+            customer_codes_needed = {
+                order_data.customer_code for order_data in data.orders
+            }
+            if customer_codes_needed:
+                existing_customers = (
+                    db.query(Customer)
+                    .filter(Customer.customer_code.in_(customer_codes_needed))
+                    .all()
+                )
+                existing_customer_codes = {c.customer_code for c in existing_customers}
+                for customer_code in customer_codes_needed:
+                    if customer_code not in existing_customer_codes:
+                        new_customer = Customer(
+                            customer_code=customer_code,
+                            customer_name=f"顧客_{customer_code}（自動作成）",
+                        )
+                        db.add(new_customer)
+                        validation_warnings.append(
+                            f"顧客マスタ '{customer_code}' が存在しないため自動作成しました"
+                        )
+                db.commit()
+
+            # 既存の受注投入処理
             for order_data in data.orders:
-                existing_order = db.query(Order).filter_by(
-                    order_no=order_data.order_no
-                ).first()
+                existing_order = (
+                    db.query(Order).filter_by(order_no=order_data.order_no).first()
+                )
 
                 if existing_order:
                     continue
 
-                order_date_obj = _parse_iso_date(
-                    order_data.order_date, f"order {order_data.order_no}", "order_date"
-                ) if hasattr(order_data, "order_date") else date.today()
+                order_date_obj = (
+                    _parse_iso_date(
+                        order_data.order_date,
+                        f"order {order_data.order_no}",
+                        "order_date",
+                    )
+                    if hasattr(order_data, "order_date")
+                    else date.today()
+                )
 
                 db_order = Order(
                     order_no=order_data.order_no,
@@ -334,11 +391,15 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 db.flush()
 
                 for line_data in order_data.lines:
-                    due_date_obj = _parse_iso_date(
-                        line_data.due_date,
-                        f"order {order_data.order_no} line {line_data.line_no}",
-                        "due_date",
-                    ) if hasattr(line_data, "due_date") else None
+                    due_date_obj = (
+                        _parse_iso_date(
+                            line_data.due_date,
+                            f"order {order_data.order_no} line {line_data.line_no}",
+                            "due_date",
+                        )
+                        if hasattr(line_data, "due_date")
+                        else None
+                    )
 
                     db_line = OrderLine(
                         order_id=db_order.id,

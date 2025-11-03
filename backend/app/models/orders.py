@@ -4,6 +4,10 @@
 受注、受注明細、引当、出荷、倉庫配分
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from sqlalchemy import (
     Column,
     Date,
@@ -19,6 +23,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import AuditMixin, Base
+
+# 🔧 修正: 型チェック時のみインポート（循環インポートを回避）
+if TYPE_CHECKING:
+    from .masters import Warehouse
 
 
 class Order(AuditMixin, Base):
@@ -61,6 +69,10 @@ class OrderLine(AuditMixin, Base):
 
     # フォーキャスト連携メタデータ
     forecast_id = Column(Integer, ForeignKey("forecasts.id"), nullable=True)
+    forecast_granularity = Column(Text, nullable=True)
+    forecast_match_status = Column(Text, nullable=True)
+    forecast_qty = Column(Float, nullable=True)
+    forecast_version_no = Column(Integer, nullable=True)
     forecast_matched_at = Column(DateTime, nullable=True)
     forecast_version = Column(Integer, nullable=True)
 
