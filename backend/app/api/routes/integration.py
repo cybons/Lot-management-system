@@ -128,7 +128,7 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
                         forecast_matcher.apply_forecast_to_order_line(
                             order_line=db_line,
                             product_code=line.product_code,
-                            client_code=record.customer_code,
+                            customer_code=record.customer_code,
                             order_date=db_order.order_date,
                         )
                     except Exception as e:

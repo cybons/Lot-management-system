@@ -1,17 +1,16 @@
-from datetime import datetime, timezone
+from sqlalchemy import Boolean, CheckConstraint, Column, Date, DateTime, Index, Integer, String
 
-from sqlalchemy import Boolean, CheckConstraint, Column, Date, DateTime, Integer, String
-
-from .base_model import Base
+from .base_model import AuditMixin, Base
 
 
-class Forecast(Base):
-    __tablename__ = "forecast"  # FK の参照名と完全一致
-    id = Column(Integer, primary_key=True)  # 主キー必須
+class Forecast(AuditMixin, Base):
+    __tablename__ = "forecasts"
+
+    id = Column(Integer, primary_key=True)
 
     forecast_id = Column(String(36), nullable=False, unique=True)
     product_id = Column(String(64), nullable=False)
-    client_id = Column(String(64), nullable=False)
+    customer_id = Column(String(64), nullable=False)
     supplier_id = Column(String(64), nullable=False)
 
     granularity = Column(String(16), nullable=False)  # 'daily'|'dekad'|'monthly'
@@ -26,23 +25,9 @@ class Forecast(Base):
     source_system = Column(String(32), nullable=False, default="external")
     is_active = Column(Boolean, nullable=False, default=True)
 
-    created_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),  # ← Python側デフォルト
-    )
-
-    updated_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),  # ← 生成時
-    )
-
-    onupdate = (lambda: datetime.now(timezone.utc),)  # ← UPDATE時に自動更新
-
     __table_args__ = (
         CheckConstraint(
-            "("
+            "(" 
             " (granularity='daily'   AND date_day IS NOT NULL     AND date_dekad_start IS NULL AND year_month IS NULL)"
             " OR "
             " (granularity='dekad'   AND date_dekad_start IS NOT NULL AND date_day IS NULL     AND year_month IS NULL)"
@@ -55,4 +40,5 @@ class Forecast(Base):
             "granularity in ('daily','dekad','monthly')", name="ck_forecast_granularity"
         ),
         CheckConstraint("qty_forecast >= 0", name="ck_forecast_qty_nonneg"),
+        Index("idx_customer_product", "customer_id", "product_id"),
     )

@@ -18,6 +18,8 @@ class LotBase(BaseSchema):
     mfg_date: Optional[date] = None
     expiry_date: Optional[date] = None
     warehouse_code: Optional[str] = None
+    warehouse_id: Optional[str] = None
+    lot_unit: Optional[str] = None
     kanban_class: Optional[str] = None
     sales_unit: Optional[str] = None
     inventory_unit: Optional[str] = None
@@ -35,6 +37,8 @@ class LotUpdate(BaseSchema):
     mfg_date: Optional[date] = None
     expiry_date: Optional[date] = None
     warehouse_code: Optional[str] = None
+    warehouse_id: Optional[str] = None
+    lot_unit: Optional[str] = None
     qc_certificate_status: Optional[str] = None
     qc_certificate_file: Optional[str] = None
 
@@ -47,17 +51,22 @@ class LotResponse(LotBase, TimestampMixin):
 
 # --- StockMovement ---
 class StockMovementBase(BaseSchema):
-    lot_id: int
-    movement_type: str  # receipt, allocate, ship, adjust, transfer_in, transfer_out
-    quantity: float
-    related_id: Optional[str] = None
+    product_id: str
+    warehouse_id: str
+    lot_id: Optional[int] = None
+    quantity_delta: float
+    reason: str
+    source_table: Optional[str] = None
+    source_id: Optional[int] = None
+    batch_id: Optional[str] = None
+    created_by: str = "system"
 
 
 class StockMovementCreate(StockMovementBase):
     pass
 
 
-class StockMovementResponse(StockMovementBase):
+class StockMovementResponse(StockMovementBase, TimestampMixin):
     id: int
     occurred_at: datetime
 

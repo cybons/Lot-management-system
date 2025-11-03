@@ -25,6 +25,7 @@ from app.models import (
     ReceiptHeader,
     ReceiptLine,
     StockMovement,
+    StockMovementReason,
 )
 
 # 🔽 [追加] 新しい Warehouse モデルもインポート
@@ -319,7 +320,9 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 if existing_lot:
                     continue
 
-                db_lot = Lot(**l_data.model_dump())
+                lot_payload = l_data.model_dump()
+                lot_payload.setdefault("warehouse_id", lot_payload.get("warehouse_code"))
+                db_lot = Lot(**lot_payload)
                 db.add(db_lot)
                 db.flush()
 
@@ -345,6 +348,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     supplier_code=r_data.supplier_code,
                     warehouse_code=r_data.warehouse_code,
                     receipt_date=r_data.receipt_date,  # Pydanticが 'date' に変換済み
+                    created_by="system",
                 )
                 db.add(db_header)
                 db.flush()
@@ -360,11 +364,19 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     )
                     db.add(db_line)
 
+                    lot = db.query(Lot).filter(Lot.id == line.lot_id).first()
                     movement = StockMovement(
+                        product_id=line.product_code,
+                        warehouse_id=(
+                            lot.warehouse_id if lot else r_data.warehouse_code
+                        ),
                         lot_id=line.lot_id,
-                        movement_type="receipt",
-                        quantity=line.quantity,
-                        related_id=f"receipt_{db_header.id}_line_{line.line_no}",
+                        quantity_delta=line.quantity,
+                        reason=StockMovementReason.RECEIPT,
+                        source_table="receipt_lines",
+                        source_id=db_line.id,
+                        batch_id=f"receipt_{db_header.id}",
+                        created_by=db_header.created_by or "system",
                     )
                     db.add(movement)
 

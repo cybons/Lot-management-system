@@ -4,12 +4,12 @@
 OCR取込ログ、SAP連携ログ
 """
 
-from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime, func
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Text, func
 from sqlalchemy.orm import relationship
-from .base_model import Base
+from .base_model import AuditMixin, Base
 
 
-class OcrSubmission(Base):
+class OcrSubmission(AuditMixin, Base):
     """OCR取込ログ"""
     __tablename__ = "ocr_submissions"
     
@@ -27,10 +27,9 @@ class OcrSubmission(Base):
     failed_records = Column(Integer)
     skipped_records = Column(Integer)
     error_details = Column(Text)
-    created_at = Column(DateTime, default=func.now())
 
 
-class SapSyncLog(Base):
+class SapSyncLog(AuditMixin, Base):
     """SAP連携ログ"""
     __tablename__ = "sap_sync_logs"
     

@@ -18,11 +18,11 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, relationship
 
-from .base_model import Base
+from .base_model import AuditMixin, Base
 from .warehouse import OrderLineWarehouseAllocation
 
 
-class Order(Base):
+class Order(AuditMixin, Base):
     """受注ヘッダ"""
 
     __tablename__ = "orders"
@@ -36,8 +36,6 @@ class Order(Base):
     sap_status = Column(Text)
     sap_sent_at = Column(DateTime)
     sap_error_msg = Column(Text)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # リレーション
     customer = relationship("Customer", back_populates="orders")
@@ -47,7 +45,7 @@ class Order(Base):
     sap_sync_logs = relationship("SapSyncLog", back_populates="order")
 
 
-class OrderLine(Base):
+class OrderLine(AuditMixin, Base):
     """受注明細"""
 
     __tablename__ = "order_lines"
@@ -61,10 +59,9 @@ class OrderLine(Base):
     quantity = Column(Float, nullable=False)
     unit = Column(Text)
     due_date = Column(Date)
-    created_at = Column(DateTime, default=func.now())
 
     # --- 🔽 [変更] フォーキャスト連携メタデータを追加 🔽 ---
-    forecast_id = Column(Integer, ForeignKey("forecast.id"), nullable=True)
+    forecast_id = Column(Integer, ForeignKey("forecasts.id"), nullable=True)
     forecast_granularity = Column(Text, nullable=True)  # 'daily', 'dekad', 'monthly'
     forecast_match_status = Column(
         Text, nullable=True
@@ -100,7 +97,7 @@ class OrderLine(Base):
     __table_args__ = (UniqueConstraint("order_id", "line_no", name="uq_order_line"),)
 
 
-class Allocation(Base):
+class Allocation(AuditMixin, Base):
     """引当(受注明細とロットの紐付け)"""
 
     __tablename__ = "allocations"
@@ -123,7 +120,7 @@ class Allocation(Base):
     )
 
 
-class Shipping(Base):
+class Shipping(AuditMixin, Base):
     """出荷記録"""
 
     __tablename__ = "shipping"
@@ -143,15 +140,13 @@ class Shipping(Base):
     carrier = Column(Text)
     carrier_service = Column(Text)
     notes = Column(Text)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # リレーション
     lot = relationship("Lot", back_populates="shippings")
     order_line = relationship("OrderLine", back_populates="shippings")
 
 
-class PurchaseRequest(Base):
+class PurchaseRequest(AuditMixin, Base):
     """仮発注(在庫不足時)"""
 
     __tablename__ = "purchase_requests"
@@ -170,8 +165,6 @@ class PurchaseRequest(Base):
     )  # draft, submitted, ordered, received, cancelled
     sap_po_id = Column(Text)
     notes = Column(Text)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # リレーション
     supplier = relationship("Supplier", back_populates="purchase_requests")

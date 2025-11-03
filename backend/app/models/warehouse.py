@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING  # 🔽 [追加]
 from sqlalchemy import Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base_model import Base
+from .base_model import AuditMixin, Base
 
 if TYPE_CHECKING:
     from .orders import OrderLine  # 🔽 [追加] 型チェック用にインポート
 
 
-class Warehouse(Base):
+class Warehouse(AuditMixin, Base):
     __tablename__ = "warehouse"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -27,7 +27,7 @@ class Warehouse(Base):
     )
 
 
-class OrderLineWarehouseAllocation(Base):
+class OrderLineWarehouseAllocation(AuditMixin, Base):
     __tablename__ = "order_line_warehouse_allocation"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

@@ -77,6 +77,7 @@ class ProductBase(BaseSchema):
     customer_part_no: Optional[str] = None
     maker_part_no: Optional[str] = None
     internal_unit: str = "EA"
+    base_unit: str = "EA"
     packaging: Optional[str] = None
     assemble_div: Optional[str] = None
     next_div: Optional[str] = None
@@ -93,6 +94,7 @@ class ProductUpdate(BaseSchema):
     customer_part_no: Optional[str] = None
     maker_part_no: Optional[str] = None
     internal_unit: Optional[str] = None
+    base_unit: Optional[str] = None
     packaging: Optional[str] = None
     assemble_div: Optional[str] = None
     next_div: Optional[str] = None

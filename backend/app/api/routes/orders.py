@@ -21,6 +21,7 @@ from app.models import (
     OrderLine,
     Product,
     StockMovement,
+    StockMovementReason,
 )
 from app.models.warehouse import OrderLineWarehouseAllocation, Warehouse
 from app.schemas import (
@@ -224,7 +225,7 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db)):
                     forecast_matcher.apply_forecast_to_order_line(
                         order_line=db_line,
                         product_code=line_data.product_code,
-                        client_code=order.customer_code,
+                        customer_code=order.customer_code,
                         order_date=db_order.order_date,
                     )
                 except Exception as e:
@@ -283,7 +284,7 @@ def rematch_order_forecast(order_id: int, db: Session = Depends(get_db)):
             success = forecast_matcher.apply_forecast_to_order_line(
                 order_line=line,
                 product_code=line.product_code,
-                client_code=order.customer_code,
+                customer_code=order.customer_code,
                 order_date=order.order_date,
             )
             if success:
@@ -360,10 +361,15 @@ def drag_assign_allocation(request: DragAssignRequest, db: Session = Depends(get
     db.flush()
 
     movement = StockMovement(
+        product_id=lot.product_code,
+        warehouse_id=lot.warehouse_id or lot.warehouse_code,
         lot_id=request.lot_id,
-        movement_type="allocate",
-        quantity=-request.allocate_qty,
-        related_id=f"allocation_{allocation.id}",
+        quantity_delta=-request.allocate_qty,
+        reason=StockMovementReason.ALLOCATION_HOLD,
+        source_table="allocations",
+        source_id=allocation.id,
+        batch_id=f"allocation_{allocation.id}",
+        created_by="system",
     )
     db.add(movement)
 
@@ -386,15 +392,34 @@ def cancel_allocation(allocation_id: int, db: Session = Depends(get_db)):
     """
     引当取消 (ロット引当)
     """
-    allocation = db.query(Allocation).filter(Allocation.id == allocation_id).first()
+    allocation = (
+        db.query(Allocation)
+        .options(selectinload(Allocation.lot))
+        .filter(Allocation.id == allocation_id)
+        .first()
+    )
     if not allocation:
         raise HTTPException(status_code=404, detail="引当が見つかりません")
 
+    lot = allocation.lot
+    warehouse_id = lot.warehouse_id if lot else None
+    if warehouse_id is None and lot:
+        warehouse_id = lot.warehouse_code
+    if warehouse_id is None:
+        fallback_warehouse = db.query(Warehouse).first()
+        warehouse_id = (
+            fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
+        )
     movement = StockMovement(
+        product_id=lot.product_code if lot else order_line.product_code,
+        warehouse_id=warehouse_id,
         lot_id=allocation.lot_id,
-        movement_type="adjust",
-        quantity=allocation.allocated_qty,
-        related_id=f"cancel_allocation_{allocation_id}",
+        quantity_delta=allocation.allocated_qty,
+        reason=StockMovementReason.ALLOCATION_RELEASE,
+        source_table="allocations",
+        source_id=allocation.id,
+        batch_id=f"cancel_allocation_{allocation_id}",
+        created_by="system",
     )
     db.add(movement)
 
@@ -536,7 +561,7 @@ def get_candidate_lots_for_allocation(
         )
         return LotCandidateListResponse(warnings=warnings)
 
-    base_unit = product.internal_unit or order_line.unit or "EA"
+    base_unit = product.base_unit or product.internal_unit or order_line.unit or "EA"
 
     normalized_customer_code = (customer_code or "").strip()
     if not normalized_customer_code and order_line.order:
@@ -574,7 +599,7 @@ def get_candidate_lots_for_allocation(
 
     for lot in stocked_lots:
         current_stock = lot.current_stock.current_quantity if lot.current_stock else 0.0
-        lot_unit = lot.inventory_unit or base_unit
+        lot_unit = lot.lot_unit or lot.inventory_unit or base_unit
 
         conversion_factor: Optional[float] = 1.0
         lot_unit_qty = current_stock
@@ -676,7 +701,7 @@ def create_lot_allocations(
                 )
 
             # 単位チェック
-            lot_unit = lot.inventory_unit or "EA"
+            lot_unit = lot.lot_unit or lot.inventory_unit or "EA"
             order_unit = order_line.unit or "EA"
             if lot_unit != order_unit:
                 raise HTTPException(
@@ -707,10 +732,15 @@ def create_lot_allocations(
 
             # 在庫変動記録
             movement = StockMovement(
+                product_id=lot.product_code,
+                warehouse_id=lot.warehouse_id or lot.warehouse_code,
                 lot_id=lot_id,
-                movement_type="allocate",
-                quantity=-qty,
-                related_id=f"allocation_{allocation.id}",
+                quantity_delta=-qty,
+                reason=StockMovementReason.ALLOCATION_HOLD,
+                source_table="allocations",
+                source_id=allocation.id,
+                batch_id=f"allocation_{allocation.id}",
+                created_by="system",
             )
             db.add(movement)
 
@@ -758,12 +788,16 @@ def cancel_lot_allocations(
         if cancel_all:
             allocations = (
                 db.query(Allocation)
+                .options(selectinload(Allocation.lot))
                 .filter(Allocation.order_line_id == order_line_id)
                 .all()
             )
         elif allocation_id:
             allocation = (
-                db.query(Allocation).filter(Allocation.id == allocation_id).first()
+                db.query(Allocation)
+                .options(selectinload(Allocation.lot))
+                .filter(Allocation.id == allocation_id)
+                .first()
             )
             if not allocation:
                 raise HTTPException(
@@ -778,11 +812,27 @@ def cancel_lot_allocations(
 
         for alloc in allocations:
             # 在庫変動記録（戻し）
+            lot = alloc.lot
+            warehouse_id = lot.warehouse_id if lot else None
+            if warehouse_id is None and lot:
+                warehouse_id = lot.warehouse_code
+            if warehouse_id is None:
+                fallback_warehouse = db.query(Warehouse).first()
+                warehouse_id = (
+                    fallback_warehouse.warehouse_code
+                    if fallback_warehouse
+                    else "WH-DEFAULT"
+                )
             movement = StockMovement(
+                product_id=lot.product_code if lot else order_line.product_code,
+                warehouse_id=warehouse_id,
                 lot_id=alloc.lot_id,
-                movement_type="allocate_cancel",
-                quantity=alloc.allocated_qty,
-                related_id=f"cancel_allocation_{alloc.id}",
+                quantity_delta=alloc.allocated_qty,
+                reason=StockMovementReason.ALLOCATION_RELEASE,
+                source_table="allocations",
+                source_id=alloc.id,
+                batch_id=f"cancel_allocation_{alloc.id}",
+                created_by="system",
             )
             db.add(movement)
 

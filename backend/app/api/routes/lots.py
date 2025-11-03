@@ -11,7 +11,15 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session, joinedload
 
 from app.api.deps import get_db
-from app.models import Lot, LotCurrentStock, Product, StockMovement, Supplier, Warehouse
+from app.models import (
+    Lot,
+    LotCurrentStock,
+    Product,
+    StockMovement,
+    StockMovementReason,
+    Supplier,
+    Warehouse,
+)
 from app.schemas import (
     LotCreate,
     LotResponse,
@@ -86,6 +94,8 @@ def list_lots(
             "mfg_date": lot.mfg_date,
             "expiry_date": lot.expiry_date,
             "warehouse_code": lot.warehouse_code,
+            "warehouse_id": lot.warehouse_id,
+            "lot_unit": lot.lot_unit,
             "kanban_class": lot.kanban_class,
             "sales_unit": lot.sales_unit,
             "inventory_unit": lot.inventory_unit,
@@ -167,7 +177,9 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
             )
 
     # ロット作成
-    db_lot = Lot(**lot.model_dump())
+    lot_payload = lot.model_dump()
+    lot_payload.setdefault("warehouse_id", lot_payload.get("warehouse_code"))
+    db_lot = Lot(**lot_payload)
     db.add(db_lot)
     db.flush()
 
@@ -206,7 +218,10 @@ def update_lot(lot_id: int, lot: LotUpdate, db: Session = Depends(get_db)):
     if not db_lot:
         raise HTTPException(status_code=404, detail="ロットが見つかりません")
 
-    for key, value in lot.model_dump(exclude_unset=True).items():
+    updates = lot.model_dump(exclude_unset=True)
+    if "warehouse_code" in updates and "warehouse_id" not in updates:
+        updates["warehouse_id"] = updates["warehouse_code"]
+    for key, value in updates.items():
         setattr(db_lot, key, value)
 
     db_lot.updated_at = datetime.now()
@@ -252,13 +267,37 @@ def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(g
     - 在庫変動履歴追加
     - 現在在庫更新
     """
-    # ロット存在チェック
-    lot = db.query(Lot).filter(Lot.id == movement.lot_id).first()
-    if not lot:
-        raise HTTPException(status_code=404, detail="ロットが見つかりません")
+    lot = None
+    if movement.lot_id is not None:
+        lot = db.query(Lot).filter(Lot.id == movement.lot_id).first()
+        if not lot:
+            raise HTTPException(status_code=404, detail="ロットが見つかりません")
 
-    # 在庫変動記録
-    db_movement = StockMovement(**movement.model_dump())
+    product_id = movement.product_id or (lot.product_code if lot else None)
+    warehouse_id = movement.warehouse_id or (lot.warehouse_id if lot else None)
+    if not product_id or not warehouse_id:
+        raise HTTPException(
+            status_code=400,
+            detail="product_id と warehouse_id は必須です",
+        )
+
+    reason = movement.reason
+    try:
+        reason_enum = StockMovementReason(reason)
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"無効な理由: {reason}")
+
+    db_movement = StockMovement(
+        product_id=product_id,
+        warehouse_id=warehouse_id,
+        lot_id=movement.lot_id,
+        quantity_delta=movement.quantity_delta,
+        reason=reason_enum,
+        source_table=movement.source_table,
+        source_id=movement.source_id,
+        batch_id=movement.batch_id,
+        created_by=movement.created_by,
+    )
     db.add(db_movement)
 
     # 現在在庫更新
@@ -269,11 +308,11 @@ def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(g
     )
 
     if current_stock:
-        current_stock.current_quantity += movement.quantity
+        current_stock.current_quantity += movement.quantity_delta
         current_stock.last_updated = datetime.now()
     else:
         current_stock = LotCurrentStock(
-            lot_id=movement.lot_id, current_quantity=movement.quantity
+            lot_id=movement.lot_id, current_quantity=movement.quantity_delta
         )
         db.add(current_stock)
 
@@ -282,7 +321,11 @@ def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(g
         db.rollback()
         raise HTTPException(
             status_code=400,
-            detail=f"在庫不足: 現在在庫 {current_stock.current_quantity + movement.quantity}, 要求 {abs(movement.quantity)}",
+            detail=(
+                "在庫不足: 現在在庫 "
+                f"{current_stock.current_quantity + movement.quantity_delta}, "
+                f"要求 {abs(movement.quantity_delta)}"
+            ),
         )
 
     db.commit()

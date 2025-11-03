@@ -1,8 +1,7 @@
 # backend/app/models/inventory.py
-"""
-在庫関連のモデル定義
-ロット、在庫変動、現在在庫、入荷伝票
-"""
+"""在庫関連のモデル定義."""
+
+from enum import Enum as PyEnum
 
 from sqlalchemy import (
     Column,
@@ -12,16 +11,27 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    Numeric,
+    Enum,
+    String,
     Text,
     UniqueConstraint,
     func,
 )
 from sqlalchemy.orm import relationship
 
-from .base_model import Base
+from .base_model import AuditMixin, Base
 
 
-class Lot(Base):
+class StockMovementReason(PyEnum):
+    RECEIPT = "RECEIPT"
+    SHIPMENT = "SHIPMENT"
+    ALLOCATION_HOLD = "ALLOCATION_HOLD"
+    ALLOCATION_RELEASE = "ALLOCATION_RELEASE"
+    ADJUSTMENT = "ADJUSTMENT"
+
+
+class Lot(AuditMixin, Base):
     """ロットマスタ"""
 
     __tablename__ = "lots"
@@ -34,6 +44,8 @@ class Lot(Base):
     mfg_date = Column(Date)
     expiry_date = Column(Date)
     warehouse_code = Column(Text, ForeignKey("warehouses.warehouse_code"))
+    warehouse_id = Column(String(50), ForeignKey("warehouses.warehouse_code"), nullable=False)
+    lot_unit = Column(String(10), nullable=True)
     kanban_class = Column(Text)
     sales_unit = Column(Text)
     inventory_unit = Column(Text)
@@ -41,17 +53,19 @@ class Lot(Base):
     source_doc = Column(Text)
     qc_certificate_status = Column(Text)
     qc_certificate_file = Column(Text)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # リレーション
     supplier = relationship("Supplier", back_populates="lots")
     product = relationship("Product", back_populates="lots")
 
     # 🔽 [修正] 参照先をフルパスで明記
-    warehouse = relationship("app.models.masters.Warehouse", back_populates="lots")
+    warehouse = relationship(
+        "app.models.masters.Warehouse",
+        back_populates="lots",
+        foreign_keys=[warehouse_id],
+    )
 
-    movements = relationship(
+    stock_movements = relationship(
         "StockMovement", back_populates="lot", cascade="all, delete-orphan"
     )
     current_stock = relationship(
@@ -74,27 +88,42 @@ class Lot(Base):
     )
 
 
-class StockMovement(Base):
+class StockMovement(AuditMixin, Base):
     """在庫変動履歴(イベントソーシング)"""
 
     __tablename__ = "stock_movements"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    lot_id = Column(Integer, ForeignKey("lots.id", ondelete="CASCADE"), nullable=False)
-    movement_type = Column(
-        Text, nullable=False
-    )  # receipt, allocate, ship, adjust, transfer_in, transfer_out
-    quantity = Column(Float, nullable=False)  # +: 入荷/調整増, -: 引当/出荷/調整減
-    related_id = Column(Text)  # 関連する伝票ID
-    occurred_at = Column(DateTime, default=func.now())
+    occurred_at = Column(DateTime, nullable=False, default=func.now())
+    product_id = Column(
+        Text, ForeignKey("products.product_code"), nullable=False
+    )
+    warehouse_id = Column(
+        Text, ForeignKey("warehouses.warehouse_code"), nullable=False
+    )
+    lot_id = Column(Integer, ForeignKey("lots.id"), nullable=True)
+    quantity_delta = Column(Numeric(15, 4), nullable=False)
+    reason = Column(Enum(StockMovementReason), nullable=False)
+    source_table = Column(String(50), nullable=True)
+    source_id = Column(Integer, nullable=True)
+    batch_id = Column(String(100), nullable=True)
+    created_by = Column(String(50), nullable=False, default="system")
 
-    # リレーション
-    lot = relationship("Lot", back_populates="movements")
+    lot = relationship("Lot", back_populates="stock_movements")
+    product = relationship("Product", back_populates="stock_movements")
+    warehouse = relationship(
+        "app.models.masters.Warehouse",
+        back_populates="stock_movements",
+        foreign_keys=[warehouse_id],
+    )
 
-    __table_args__ = (Index("ix_stock_movements_lot", "lot_id"),)
+    __table_args__ = (
+        Index("idx_stock_movements_product_warehouse", "product_id", "warehouse_id"),
+        Index("idx_stock_movements_occurred_at", "occurred_at"),
+    )
 
 
-class LotCurrentStock(Base):
+class LotCurrentStock(AuditMixin, Base):
     """ロット現在在庫(パフォーマンス最適化用サマリテーブル)"""
 
     __tablename__ = "lot_current_stock"
@@ -109,7 +138,7 @@ class LotCurrentStock(Base):
     lot = relationship("Lot", back_populates="current_stock")
 
 
-class ReceiptHeader(Base):
+class ReceiptHeader(AuditMixin, Base):
     """入荷伝票ヘッダ"""
 
     __tablename__ = "receipt_headers"
@@ -121,9 +150,7 @@ class ReceiptHeader(Base):
         Text, ForeignKey("warehouses.warehouse_code"), nullable=False
     )
     receipt_date = Column(Date, nullable=False)
-    created_by = Column(Text)
     notes = Column(Text)
-    created_at = Column(DateTime, default=func.now())
 
     # リレーション
     lines = relationship(
@@ -131,7 +158,7 @@ class ReceiptHeader(Base):
     )
 
 
-class ReceiptLine(Base):
+class ReceiptLine(AuditMixin, Base):
     """入荷伝票明細"""
 
     __tablename__ = "receipt_lines"
@@ -146,7 +173,6 @@ class ReceiptLine(Base):
     quantity = Column(Float, nullable=False)
     unit = Column(Text)
     notes = Column(Text)
-    created_at = Column(DateTime, default=func.now())
 
     # リレーション
     header = relationship("ReceiptHeader", back_populates="lines")
@@ -158,7 +184,7 @@ class ReceiptLine(Base):
     )
 
 
-class ExpiryRule(Base):
+class ExpiryRule(AuditMixin, Base):
     """消費期限計算ルール"""
 
     __tablename__ = "expiry_rules"

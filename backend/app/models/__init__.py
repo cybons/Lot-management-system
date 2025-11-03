@@ -21,6 +21,7 @@ from .inventory import (
     ReceiptHeader,
     ReceiptLine,
     StockMovement,
+    StockMovementReason,
 )
 from .logs import (
     OcrSubmission,
@@ -33,6 +34,7 @@ from .masters import (
     Product,
     ProductUomConversion,
     Supplier,
+    UnitConversion,
     Warehouse,
 )
 from .orders import (
@@ -52,9 +54,11 @@ __all__ = [
     "Customer",
     "Product",
     "ProductUomConversion",
+    "UnitConversion",
     # Inventory
     "Lot",
     "StockMovement",
+    "StockMovementReason",
     "LotCurrentStock",
     "ReceiptHeader",
     "ReceiptLine",

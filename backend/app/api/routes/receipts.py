@@ -10,8 +10,15 @@ from datetime import datetime
 
 from app.api.deps import get_db
 from app.models import (
-    ReceiptHeader, ReceiptLine, Lot, StockMovement, LotCurrentStock,
-    Product, Supplier, Warehouse
+    ReceiptHeader,
+    ReceiptLine,
+    Lot,
+    LotCurrentStock,
+    Product,
+    StockMovement,
+    StockMovementReason,
+    Supplier,
+    Warehouse,
 )
 from app.schemas import (
     ReceiptCreateRequest, ReceiptResponse, ReceiptHeaderResponse,
@@ -129,11 +136,22 @@ def create_receipt(
         db.flush()
         
         # 在庫変動記録(受入)
+        warehouse_id = lot.warehouse_id or lot.warehouse_code
+        if not warehouse_id:
+            fallback_warehouse = db.query(Warehouse).first()
+            warehouse_id = (
+                fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
+            )
         movement = StockMovement(
+            product_id=line.product_code,
+            warehouse_id=warehouse_id,
             lot_id=line.lot_id,
-            movement_type="receipt",
-            quantity=line.quantity,  # +数量
-            related_id=f"receipt_{db_header.id}_line_{line.line_no}",
+            quantity_delta=line.quantity,
+            reason=StockMovementReason.RECEIPT,
+            source_table="receipt_lines",
+            source_id=db_line.id,
+            batch_id=f"receipt_{db_header.id}",
+            created_by=db_header.created_by or "system",
         )
         db.add(movement)
         
@@ -176,11 +194,25 @@ def delete_receipt(
     # 実運用では在庫変動を取り消す処理が必要
     for line in receipt.lines:
         # 在庫変動取消(マイナス)
+        lot_obj = line.lot if hasattr(line, "lot") else None
+        warehouse_id = (
+            lot_obj.warehouse_id if lot_obj else receipt.warehouse_code
+        )
+        if not warehouse_id:
+            fallback_warehouse = db.query(Warehouse).first()
+            warehouse_id = (
+                fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
+            )
         movement = StockMovement(
+            product_id=line.product_code,
+            warehouse_id=warehouse_id,
             lot_id=line.lot_id,
-            movement_type="adjust",
-            quantity=-line.quantity,  # マイナス数量
-            related_id=f"cancel_receipt_{receipt_id}_line_{line.line_no}",
+            quantity_delta=-line.quantity,
+            reason=StockMovementReason.ADJUSTMENT,
+            source_table="receipt_lines",
+            source_id=line.id,
+            batch_id=f"cancel_receipt_{receipt_id}",
+            created_by=receipt.created_by or "system",
         )
         db.add(movement)
         
