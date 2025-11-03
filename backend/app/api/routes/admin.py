@@ -9,13 +9,15 @@ from datetime import date
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func, text
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.core.config import settings
 from app.core.database import drop_db, init_db
 from app.models import (
+    Allocation,
+    Customer,
     Lot,
     LotCurrentStock,
     Order,
@@ -25,6 +27,7 @@ from app.models import (
     ReceiptLine,
     StockMovement,
     StockMovementReason,
+    Supplier,
     Warehouse,  # 🔽 統合された新Warehouse
 )
 from app.schemas import (
@@ -35,6 +38,40 @@ from app.schemas import (
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 logger = logging.getLogger(__name__)
+
+
+@router.get("/stats", response_model=DashboardStatsResponse)
+def get_dashboard_stats(db: Session = Depends(get_db)):
+    """ダッシュボード用の統計情報を返す"""
+
+    total_stock = (
+        db.query(func.coalesce(func.sum(LotCurrentStock.current_quantity), 0.0))
+        .scalar()
+        or 0.0
+    )
+
+    total_orders = db.query(func.count(Order.id)).scalar() or 0
+
+    unallocated_subquery = (
+        db.query(OrderLine.order_id)
+        .outerjoin(Allocation, Allocation.order_line_id == OrderLine.id)
+        .group_by(OrderLine.id, OrderLine.order_id, OrderLine.quantity)
+        .having(
+            func.coalesce(func.sum(Allocation.allocated_qty), 0)
+            < func.coalesce(OrderLine.quantity, 0)
+        )
+        .subquery()
+    )
+
+    unallocated_orders = (
+        db.query(func.count(func.distinct(unallocated_subquery.c.order_id))).scalar() or 0
+    )
+
+    return DashboardStatsResponse(
+        total_stock=float(total_stock),
+        total_orders=int(total_orders),
+        unallocated_orders=int(unallocated_orders),
+    )
 
 
 @router.post("/reset-database", response_model=ResponseBase)
@@ -73,25 +110,20 @@ def reset_database(db: Session = Depends(get_db)):
                 is_active=1,
             ),
         ]
-        db.add_all(warehouses)
 
-        # 2. 仕入先マスタ
-        sample_suppliers = """
-        INSERT OR IGNORE INTO suppliers (supplier_code, supplier_name) VALUES
-        ('SUP001', 'サプライヤーA'),
-        ('SUP002', 'サプライヤーB'),
-        ('SUP003', 'サプライヤーC');
-        """
-        db.execute(text(sample_suppliers))
+        suppliers = [
+            Supplier(supplier_code="SUP001", supplier_name="サプライヤーA"),
+            Supplier(supplier_code="SUP002", supplier_name="サプライヤーB"),
+            Supplier(supplier_code="SUP003", supplier_name="サプライヤーC"),
+        ]
 
-        # 3. 得意先マスタ
-        sample_customers = """
-        INSERT OR IGNORE INTO customers (customer_code, customer_name) VALUES
-        ('CUS001', '得意先A'),
-        ('CUS002', '得意先B'),
-        ('CUS003', '得意先C');
-        """
-        db.execute(text(sample_customers))
+        customers = [
+            Customer(customer_code="CUS001", customer_name="得意先A"),
+            Customer(customer_code="CUS002", customer_name="得意先B"),
+            Customer(customer_code="CUS003", customer_name="得意先C"),
+        ]
+
+        db.add_all([*warehouses, *suppliers, *customers])
 
         db.commit()
 
