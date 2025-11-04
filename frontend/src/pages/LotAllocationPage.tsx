@@ -4,12 +4,12 @@
  * 設計書V2に基づく3ペイン構成のロット引当ページ
  *
  * 構成:
- * - 左ペイン: 受注一覧（優先度バー、KPIバッジ付き）
+ * - 左ペイン: 受注一覧(優先度バー、KPIバッジ付き)
  * - 中央ペイン: 選択した受注の明細一覧
  * - 右ペイン: 候補ロット一覧と倉庫別配分入力
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -58,9 +58,6 @@ interface OrderCardData extends Order {
 function calculatePriority(order: Order): PriorityLevel {
   const lines = order.lines || [];
 
-  // 必須フィールド欠落チェック
-  const hasMissingFields = !order.ship_to || lines.some((l) => !l.quantity || l.quantity === 0);
-
   // 発注待ちステータス
   if (order.status === "PENDING_PROCUREMENT") {
     return "inactive";
@@ -71,14 +68,14 @@ function calculatePriority(order: Order): PriorityLevel {
     return "inactive";
   }
 
-  // 未引当数量の計算（allocated_lotsを使用）
+  // 未引当数量の計算(allocated_lotsを使用)
   const unallocatedQty = lines.reduce((sum, line) => {
     const allocated =
       line.allocated_lots?.reduce((a, alloc) => a + (alloc.allocated_qty || 0), 0) || 0;
     return sum + (line.quantity - allocated);
   }, 0);
 
-  // 引当済み（未引当なし）
+  // 引当済み(未引当なし)
   if (unallocatedQty <= 0) {
     return "allocated";
   }
@@ -99,11 +96,11 @@ function calculatePriority(order: Order): PriorityLevel {
   if (daysTodue < 0) {
     return "urgent"; // 納期遅延
   } else if (daysTodue <= 1) {
-    return "urgent"; // 緊急（D-1以内）
+    return "urgent"; // 緊急(D-1以内)
   } else if (daysTodue <= 3) {
-    return "warning"; // 要対応（D-3以内）
+    return "warning"; // 要対応(D-3以内)
   } else if (daysTodue <= 7) {
-    return "attention"; // 注意（D-7以内）
+    return "attention"; // 注意(D-7以内)
   }
 
   return "allocated"; // それ以外
@@ -116,7 +113,7 @@ function createOrderCardData(order: Order): OrderCardData {
   const lines = order.lines || [];
   const priority = calculatePriority(order);
 
-  // 未引当数量（allocated_lotsを使用）
+  // 未引当数量(allocated_lotsを使用)
   const unallocatedQty = lines.reduce((sum, line) => {
     const allocated =
       line.allocated_lots?.reduce((a, alloc) => a + (alloc.allocated_qty || 0), 0) || 0;
@@ -133,8 +130,8 @@ function createOrderCardData(order: Order): OrderCardData {
     daysTodue = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   }
 
-  // 必須フィールド欠落チェック
-  const hasMissingFields = !order.ship_to || lines.some((l) => !l.quantity || l.quantity === 0);
+  // 必須フィールド欠落チェック(緩和版: 明細に製品コードと数量があればOK)
+  const hasMissingFields = lines.length === 0 || lines.every((l) => !l.product_code || !l.quantity || l.quantity === 0);
 
   return {
     ...order,
@@ -192,6 +189,9 @@ export default function LotAllocationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const orderListRef = useRef<HTMLDivElement | null>(null);
   const [orderListScrollTop, setOrderListScrollTop] = useState(0);
+  
+  // 初回マウント時のフラグ
+  const isInitialMount = useRef(true);
 
   // URL状態管理
   const selectedOrderId = searchParams.get("selected")
@@ -205,12 +205,19 @@ export default function LotAllocationPage() {
     queryFn: () => getOrders({ status: "open" }),
   });
 
+  // 受注カードデータを作成(フィルタリングとソート)
   const orderCards = useMemo(() => {
     if (!ordersQuery.data) return [];
 
     return ordersQuery.data
       .map(createOrderCardData)
-      .filter((order) => (order.lines?.length ?? 0) > 0 && !order.hasMissingFields)
+      .filter((order) => {
+        // 明細がある受注のみ表示
+        if ((order.lines?.length ?? 0) === 0) return false;
+        // 必須欠落は除外
+        if (order.hasMissingFields) return false;
+        return true;
+      })
       .sort((a, b) => {
         const priorityOrder: Record<PriorityLevel, number> = {
           urgent: 0,
@@ -232,27 +239,6 @@ export default function LotAllocationPage() {
       });
   }, [ordersQuery.data]);
 
-  useEffect(() => {
-    if (!selectedOrderId) {
-      return;
-    }
-
-    const existsInList = orderCards.some((order) => order.id === selectedOrderId);
-    if (!existsInList) {
-      setSearchParams((prev) => {
-        const next = new URLSearchParams(prev);
-        if (orderCards.length > 0) {
-          next.set("selected", String(orderCards[0].id));
-          next.delete("line");
-        } else {
-          next.delete("selected");
-          next.delete("line");
-        }
-        return next;
-      });
-    }
-  }, [orderCards, selectedOrderId, setSearchParams]);
-
   // 選択された受注の詳細を取得
   const orderDetailQuery = useQuery({
     queryKey: ["order-detail", selectedOrderId],
@@ -273,6 +259,8 @@ export default function LotAllocationPage() {
     message: string;
     variant?: "success" | "error";
   } | null>(null);
+
+  // 前回選択された明細IDを保持(useEffect無限ループ防止用)
   const lastSelectedLineIdRef = useRef<number | null>(null);
 
   type WarehouseSummary = {
@@ -302,6 +290,7 @@ export default function LotAllocationPage() {
     return Array.from(map.values());
   }, [candidateLots]);
 
+  // 倉庫配分の初期化(明細が変わったときのみリセット)
   useEffect(() => {
     if (warehouseSummaries.length === 0) {
       setWarehouseAllocations({});
@@ -309,11 +298,13 @@ export default function LotAllocationPage() {
       return;
     }
 
+    // 明細が変わった場合のみリセット
+    const shouldReset = lastSelectedLineIdRef.current !== (selectedLineId ?? null);
+    
     setWarehouseAllocations((prev) => {
-      const shouldReset = lastSelectedLineIdRef.current !== (selectedLineId ?? null);
       const next: Record<string, number> = {};
       warehouseSummaries.forEach((warehouse) => {
-        next[warehouse.key] = shouldReset ? 0 : prev[warehouse.key] ?? 0;
+        next[warehouse.key] = shouldReset ? 0 : (prev[warehouse.key] ?? 0);
       });
       return next;
     });
@@ -321,6 +312,7 @@ export default function LotAllocationPage() {
     lastSelectedLineIdRef.current = selectedLineId ?? null;
   }, [warehouseSummaries, selectedLineId]);
 
+  // スクロール位置の保存
   useEffect(() => {
     const el = orderListRef.current;
     if (!el) return;
@@ -335,12 +327,7 @@ export default function LotAllocationPage() {
     };
   }, []);
 
-  useEffect(() => {
-    const el = orderListRef.current;
-    if (!el) return;
-    el.scrollTop = orderListScrollTop;
-  }, [orderCards, orderListScrollTop]);
-
+  // Snackbarの自動非表示
   useEffect(() => {
     if (!snackbar) return;
     const timer = setTimeout(() => {
@@ -349,6 +336,7 @@ export default function LotAllocationPage() {
     return () => clearTimeout(timer);
   }, [snackbar]);
 
+  // 配分リスト(保存用)
   const allocationList = useMemo(() => {
     return warehouseSummaries
       .map((warehouse) => ({
@@ -359,6 +347,7 @@ export default function LotAllocationPage() {
       .filter((item) => item.quantity > 0);
   }, [warehouseSummaries, warehouseAllocations]);
 
+  // 配分合計
   const allocationTotalAll = useMemo(() => {
     return warehouseSummaries.reduce(
       (sum, warehouse) => sum + Number(warehouseAllocations[warehouse.key] ?? 0),
@@ -366,6 +355,7 @@ export default function LotAllocationPage() {
     );
   }, [warehouseSummaries, warehouseAllocations]);
 
+  // 引当保存のMutation
   const createAllocationMutation = useMutation({
     mutationFn: (payload: CreateAllocationPayload) => createAllocations(payload),
     onSuccess: () => {
@@ -379,7 +369,7 @@ export default function LotAllocationPage() {
     },
   });
 
-  const handleSaveAllocations = () => {
+  const handleSaveAllocations = useCallback(() => {
     if (!selectedLineId || !selectedLine?.product_code) return;
     if (allocationList.length === 0) return;
 
@@ -390,21 +380,22 @@ export default function LotAllocationPage() {
     };
 
     createAllocationMutation.mutate(payload);
-  };
+  }, [selectedLineId, selectedLine, allocationList, createAllocationMutation]);
 
   const canSave = allocationList.length > 0 && !createAllocationMutation.isPending;
 
-  // ハンドラー
-  const handleSelectOrder = (orderId: number) => {
+  // 受注一覧から受注を選択したときのハンドラー
+  const handleSelectOrder = useCallback((orderId: number) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.set("selected", String(orderId));
-      next.delete("line");
+      next.delete("line"); // 明細選択をクリア
       return next;
     });
-  };
+  }, [setSearchParams]);
 
-  const handleSelectLine = (lineId: number) => {
+  // 明細一覧から明細を選択したときのハンドラー
+  const handleSelectLine = useCallback((lineId: number) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (selectedOrderId) {
@@ -413,22 +404,52 @@ export default function LotAllocationPage() {
       next.set("line", String(lineId));
       return next;
     });
-  };
+  }, [setSearchParams, selectedOrderId]);
 
+  // 初回マウント時または受注一覧が変更されたときの自動選択
   useEffect(() => {
-    const orderData = orderDetailQuery.data;
-    if (!orderData) return;
-    const lines = orderData.lines ?? [];
+    // 初回マウント時のみ実行
+    if (!isInitialMount.current) return;
+    if (orderCards.length === 0) return;
+    
+    // 受注が選択されていない場合、最初の受注を選択
+    if (!selectedOrderId) {
+      isInitialMount.current = false;
+      setSearchParams({ selected: String(orderCards[0].id) });
+      return;
+    }
+    
+    // 選択中の受注がリストに存在するかチェック
+    const existsInList = orderCards.some((order) => order.id === selectedOrderId);
+    if (!existsInList) {
+      isInitialMount.current = false;
+      setSearchParams({ selected: String(orderCards[0].id) });
+    } else {
+      isInitialMount.current = false;
+    }
+  }, [orderCards, selectedOrderId, setSearchParams]);
+
+  // 受注詳細が読み込まれたとき、有効な明細が選択されていない場合は最初の有効な明細を選択
+  useEffect(() => {
+    if (!orderDetailQuery.data) return;
+    
+    const lines = orderDetailQuery.data.lines ?? [];
     if (lines.length === 0) return;
 
+    // 現在選択中の明細が有効かチェック
     const hasSelected = lines.some((line) => line.id === selectedLineId);
     if (!hasSelected) {
+      // 有効な明細を選択: 製品コードがあり、数量が0より大きい明細を優先
       const fallbackLine =
-        lines.find((line) => line.quantity > 0) ?? lines.find((line) => !!line.product_code) ?? lines[0];
+        lines.find((line) => line.product_code && line.quantity > 0) ??
+        lines.find((line) => !!line.product_code) ??
+        lines[0];
+
       if (!fallbackLine) return;
+
       setSearchParams((prev) => {
         const next = new URLSearchParams(prev);
-        next.set("selected", String(orderData.id));
+        next.set("selected", String(orderDetailQuery.data.id));
         next.set("line", String(fallbackLine.id));
         return next;
       });
@@ -451,6 +472,15 @@ export default function LotAllocationPage() {
 
           {ordersQuery.isError && (
             <div className="p-4 text-center text-red-500">エラーが発生しました</div>
+          )}
+
+          {orderCards.length === 0 && !ordersQuery.isLoading && !ordersQuery.isError && (
+            <div className="p-4 text-center text-gray-500">
+              表示可能な受注がありません
+              <div className="text-xs mt-2 text-gray-400">
+                ※製品コードと数量が入力されている明細を持つ受注のみ表示されます
+              </div>
+            </div>
           )}
 
           {orderCards.map((order) => (
@@ -560,35 +590,22 @@ export default function LotAllocationPage() {
               ) : (
                 <div className="max-h-56 overflow-y-auto">
                   <table className="w-full text-xs">
-                    <thead>
-                      <tr className="text-left text-gray-500">
-                        <th className="py-1 pr-2">ロット番号</th>
-                        <th className="py-1 pr-2">倉庫</th>
-                        <th className="py-1 pr-2 text-right">在庫数</th>
-                        <th className="py-1 pr-2 text-right">賞味期限</th>
+                    <thead className="bg-gray-50 sticky top-0">
+                      <tr>
+                        <th className="px-2 py-1 text-left font-medium">ロット番号</th>
+                        <th className="px-2 py-1 text-left font-medium">倉庫</th>
+                        <th className="px-2 py-1 text-right font-medium">在庫数</th>
                       </tr>
                     </thead>
                     <tbody>
                       {candidateLots.map((lot) => (
                         <tr key={lot.id} className="border-t">
-                          <td className="py-1 pr-2">
-                            {lot.lot_number && lot.lot_number.trim() !== ""
-                              ? lot.lot_number
-                              : `#${lot.id}`}
+                          <td className="px-2 py-1">{lot.lot_number}</td>
+                          <td className="px-2 py-1 text-gray-600">
+                            {lot.warehouse_name || lot.warehouse_code || "―"}
                           </td>
-                          <td className="py-1 pr-2">
-                            {formatCodeAndName(
-                              lot.warehouse_code ?? "",
-                              lot.warehouse_name ?? undefined
-                            ) || "—"}
-                          </td>
-                          <td className="py-1 pr-2 text-right">
+                          <td className="px-2 py-1 text-right">
                             {(lot.current_stock?.current_quantity ?? 0).toLocaleString()}
-                          </td>
-                          <td className="py-1 pr-2 text-right">
-                            {lot.expiry_date
-                              ? format(new Date(lot.expiry_date), "yyyy/MM/dd", { locale: ja })
-                              : "—"}
                           </td>
                         </tr>
                       ))}
@@ -598,67 +615,63 @@ export default function LotAllocationPage() {
               )}
             </div>
 
-            <div className="rounded-lg border p-3 space-y-4">
-              <div>
-                <h4 className="text-sm font-medium">倉庫別配分</h4>
-                <p className="mt-1 text-xs text-gray-500">
-                  倉庫ごとの在庫に対して配分数量を入力してください。
-                </p>
-              </div>
-
+            {/* 倉庫別配分入力 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">倉庫別配分</h3>
               {warehouseSummaries.length === 0 ? (
-                <div className="py-6 text-center text-sm text-gray-500">
-                  倉庫情報がありません
-                </div>
+                <div className="text-sm text-gray-500 py-4">配分可能な倉庫がありません</div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {warehouseSummaries.map((warehouse) => {
-                    const currentValue = Number(warehouseAllocations[warehouse.key] ?? 0);
-                    const maxQty = Math.max(0, Math.floor(warehouse.totalStock));
-                    const warehouseLabel =
-                      formatCodeAndName(
-                        warehouse.warehouseCode ?? "",
-                        warehouse.warehouseName ?? undefined
-                      ) || "倉庫";
+                    const currentValue = warehouseAllocations[warehouse.key] ?? 0;
+                    const warehouseName = formatCodeAndName(
+                      warehouse.warehouseCode,
+                      warehouse.warehouseName
+                    );
 
                     return (
-                      <div key={warehouse.key} className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="font-medium">{warehouseLabel}</span>
-                          <span className="text-xs text-gray-500">
-                            在庫: {maxQty.toLocaleString()}
-                          </span>
+                      <div
+                        key={warehouse.key}
+                        className="rounded-lg border p-3 hover:border-gray-300 transition"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-sm font-medium">{warehouseName}</div>
+                          <div className="text-xs text-gray-500">
+                            在庫: {warehouse.totalStock.toLocaleString()}
+                          </div>
                         </div>
-                        <input
-                          type="range"
-                          min={0}
-                          max={maxQty}
-                          value={currentValue}
-                          onChange={(e) => {
-                            const next = Math.min(maxQty, Math.max(0, Number(e.target.value)));
-                            setWarehouseAllocations((prev) => ({
-                              ...prev,
-                              [warehouse.key]: next,
-                            }));
-                          }}
-                          className="w-full"
-                        />
+
                         <div className="flex items-center gap-2">
                           <input
                             type="number"
-                            min={0}
-                            max={maxQty}
+                            min="0"
+                            max={warehouse.totalStock}
                             value={currentValue}
                             onChange={(e) => {
-                              const next = Math.min(maxQty, Math.max(0, Number(e.target.value)));
+                              const value = Math.max(
+                                0,
+                                Math.min(warehouse.totalStock, Number(e.target.value) || 0)
+                              );
                               setWarehouseAllocations((prev) => ({
                                 ...prev,
-                                [warehouse.key]: next,
+                                [warehouse.key]: value,
                               }));
                             }}
-                            className="w-24 rounded border px-2 py-1 text-sm"
+                            className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           />
-                          <span className="text-xs text-gray-500">/ {maxQty.toLocaleString()}</span>
+                          <button
+                            className="rounded bg-gray-100 px-3 py-2 text-xs font-medium hover:bg-gray-200 transition"
+                            onClick={() => {
+                              const remaining = selectedLine.quantity - allocationTotalAll;
+                              const allocatable = Math.min(remaining + currentValue, warehouse.totalStock);
+                              setWarehouseAllocations((prev) => ({
+                                ...prev,
+                                [warehouse.key]: allocatable,
+                              }));
+                            }}
+                          >
+                            最大
+                          </button>
                         </div>
                       </div>
                     );
@@ -666,12 +679,12 @@ export default function LotAllocationPage() {
                 </div>
               )}
 
-              <div className="text-xs text-gray-600">
+              <div className="text-xs text-gray-600 mt-4">
                 配分合計: <span className="font-semibold">{allocationTotalAll.toLocaleString()}</span>
               </div>
 
               <button
-                className="w-full rounded bg-black py-2 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded bg-black py-2 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 mt-4"
                 onClick={handleSaveAllocations}
                 disabled={!canSave}
               >
@@ -685,6 +698,8 @@ export default function LotAllocationPage() {
           </div>
         )}
       </div>
+
+      {/* Snackbar通知 */}
       {snackbar && (
         <div
           className={`fixed bottom-6 right-6 rounded-lg px-4 py-3 text-sm shadow-lg transition-opacity ${
@@ -761,7 +776,9 @@ function OrderCard({ order, isSelected, onClick }: OrderCardProps) {
             {order.daysTodue !== null && (
               <span
                 className={`px-2 py-0.5 text-xs font-medium border rounded ${
-                  order.daysTodue < 0 ? "text-red-700 bg-red-100 border-red-300" : badgeColor
+                  order.daysTodue < 0
+                    ? "text-red-700 bg-red-100 border-red-300"
+                    : badgeColor
                 }`}
               >
                 {order.daysTodue < 0 ? `D+${Math.abs(order.daysTodue)}` : `D-${order.daysTodue}`}
@@ -806,10 +823,11 @@ interface OrderLineCardProps {
 }
 
 function OrderLineCard({ line, isSelected, onClick, pendingAllocatedQty = 0 }: OrderLineCardProps) {
-  // 引当済み数量を計算（allocated_lotsまたはallocationsから）
+  // 引当済み数量を計算(allocated_lotsまたはallocationsから)
   const allocatedQty = line.allocated_lots
     ? line.allocated_lots.reduce((sum, alloc) => sum + (alloc.allocated_qty || 0), 0)
     : 0;
+
   const totalQuantity = line.quantity > 0 ? line.quantity : 0;
   const effectivePending = isSelected ? Math.max(0, pendingAllocatedQty) : 0;
   const displayedAllocated = Math.min(totalQuantity, allocatedQty + effectivePending);
@@ -862,7 +880,7 @@ function OrderLineCard({ line, isSelected, onClick, pendingAllocatedQty = 0 }: O
         )}
       </div>
 
-      {/* 引当詳細（あれば表示） */}
+      {/* 引当詳細(あれば表示) */}
       {line.allocated_lots && line.allocated_lots.length > 0 && (
         <div className="mt-2 pt-2 border-t border-gray-200">
           <div className="text-xs text-gray-600">引当数: {line.allocated_lots.length} 件</div>
