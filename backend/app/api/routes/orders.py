@@ -128,9 +128,7 @@ def get_orders_with_allocations(db: Session = Depends(get_db)):
                         )
                     )
 
-        product_name = (
-            line.product.product_name if line.product else "(製品マスタ未登録)"
-        )
+        product_name = line.product.product_name if line.product else "(製品マスタ未登録)"
         customer_code = line.order.customer_code if line.order else "(受注ヘッダなし)"
         supplier_code = line.forecast.supplier_id if line.forecast else ""
 
@@ -201,17 +199,13 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     受注登録
     """
     if order.customer_order_no and len(order.customer_order_no) < 6:
-        raise HTTPException(
-            status_code=400, detail="customer_order_noは6桁以上で入力してください"
-        )
+        raise HTTPException(status_code=400, detail="customer_order_noは6桁以上で入力してください")
 
     existing = db.query(Order).filter(Order.order_no == order.order_no).first()
     if existing:
         raise HTTPException(status_code=400, detail="受注番号が既に存在します")
 
-    customer = (
-        db.query(Customer).filter(Customer.customer_code == order.customer_code).first()
-    )
+    customer = db.query(Customer).filter(Customer.customer_code == order.customer_code).first()
     if not customer:
         raise HTTPException(status_code=404, detail="得意先が見つかりません")
 
@@ -228,9 +222,7 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     if hasattr(order, "lines") and order.lines:
         for line_data in order.lines:
             product = (
-                db.query(Product)
-                .filter(Product.product_code == line_data.product_code)
-                .first()
+                db.query(Product).filter(Product.product_code == line_data.product_code).first()
             )
             if not product:
                 raise HTTPException(
@@ -267,9 +259,7 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db)):
                         order_date=db_order.order_date,
                     )
                 except Exception as e:
-                    print(
-                        f"⚠️  Forecast matching failed for order {order.order_no}: {e}"
-                    )
+                    print(f"⚠️  Forecast matching failed for order {order.order_no}: {e}")
 
     db.commit()
     db.refresh(db_order)
@@ -368,9 +358,7 @@ def drag_assign_allocation(request: DragAssignRequest, db: Session = Depends(get
     """
     ドラッグ引当 (ロット引当)
     """
-    order_line = (
-        db.query(OrderLine).filter(OrderLine.id == request.order_line_id).first()
-    )
+    order_line = db.query(OrderLine).filter(OrderLine.id == request.order_line_id).first()
     if not order_line:
         raise HTTPException(status_code=404, detail="受注明細が見つかりません")
 
@@ -379,9 +367,7 @@ def drag_assign_allocation(request: DragAssignRequest, db: Session = Depends(get
         raise HTTPException(status_code=404, detail="ロットが見つかりません")
 
     current_stock = (
-        db.query(LotCurrentStock)
-        .filter(LotCurrentStock.lot_id == request.lot_id)
-        .first()
+        db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == request.lot_id).first()
     )
 
     if not current_stock or current_stock.current_quantity < request.allocate_qty:
@@ -445,9 +431,7 @@ def cancel_allocation(allocation_id: int, db: Session = Depends(get_db)):
         warehouse_id = lot.warehouse_code
     if warehouse_id is None:
         fallback_warehouse = db.query(Warehouse).first()
-        warehouse_id = (
-            fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
-        )
+        warehouse_id = fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
     movement = StockMovement(
         product_id=lot.product_code if lot else order_line.product_code,
         warehouse_id=warehouse_id,
@@ -462,9 +446,7 @@ def cancel_allocation(allocation_id: int, db: Session = Depends(get_db)):
     db.add(movement)
 
     current_stock = (
-        db.query(LotCurrentStock)
-        .filter(LotCurrentStock.lot_id == allocation.lot_id)
-        .first()
+        db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == allocation.lot_id).first()
     )
     if current_stock:
         current_stock.current_quantity += allocation.allocated_qty
@@ -498,9 +480,7 @@ def save_warehouse_allocations(
 
         for code in codes:
             if code not in wh_map:
-                raise HTTPException(
-                    status_code=400, detail=f"Warehouse code not found: {code}"
-                )
+                raise HTTPException(status_code=400, detail=f"Warehouse code not found: {code}")
 
     try:
         db.execute(
@@ -554,9 +534,7 @@ def get_candidate_lots_for_allocation(
         raise HTTPException(status_code=404, detail="受注明細が見つかりません")
 
     requested_product_code = (product_code or "").strip()
-    order_line_product_code = (
-        order_line.product_code.strip() if order_line.product_code else ""
-    )
+    order_line_product_code = order_line.product_code.strip() if order_line.product_code else ""
 
     if (
         requested_product_code
@@ -610,9 +588,7 @@ def get_candidate_lots_for_allocation(
     conversion_map: dict[str, float] = {}
     for conv in product.conversions:
         if conv.source_unit and conv.source_value and conv.internal_unit_value:
-            conversion_map[conv.source_unit] = (
-                conv.internal_unit_value / conv.source_value
-            )
+            conversion_map[conv.source_unit] = conv.internal_unit_value / conv.source_value
 
     stocked_lots: list[Lot] = (
         db.query(Lot)
@@ -661,7 +637,7 @@ def get_candidate_lots_for_allocation(
                 lot_code=f"{lot.supplier_code}-{lot.product_code}-{lot.lot_number}",
                 lot_number=lot.lot_number,
                 product_code=lot.product_code,
-                warehouse_code=lot.warehouse_code or "",
+                warehouse_code=lot.warehouse.warehouse_code if lot.warehouse else "",
                 available_qty=available_qty,
                 base_unit=base_unit,
                 lot_unit_qty=lot_unit_qty if lot_unit else None,
@@ -709,9 +685,7 @@ def get_candidate_lots_for_allocation(
 
 # ===== ロット引当実行 =====
 @router.post("/{order_line_id}/allocations")
-def create_lot_allocations(
-    order_line_id: int, request: dict, db: Session = Depends(get_db)
-):
+def create_lot_allocations(order_line_id: int, request: dict, db: Session = Depends(get_db)):
     """ロット引当を実行（複数ロット対応）"""
     order_line = db.query(OrderLine).filter(OrderLine.id == order_line_id).first()
     if not order_line:
@@ -719,9 +693,7 @@ def create_lot_allocations(
 
     allocations_data = request.get("allocations", [])
     if not allocations_data:
-        raise HTTPException(
-            status_code=422, detail="VALIDATION_ERROR: allocations が空です"
-        )
+        raise HTTPException(status_code=422, detail="VALIDATION_ERROR: allocations が空です")
 
     applied = []
 
@@ -738,9 +710,7 @@ def create_lot_allocations(
 
             lot = db.query(Lot).filter(Lot.id == lot_id).first()
             if not lot:
-                raise HTTPException(
-                    status_code=404, detail=f"ロットID {lot_id} が見つかりません"
-                )
+                raise HTTPException(status_code=404, detail=f"ロットID {lot_id} が見つかりません")
 
             # 単位チェック
             lot_unit = lot.lot_unit or lot.inventory_unit or "EA"
@@ -753,9 +723,7 @@ def create_lot_allocations(
 
             # 在庫チェック
             current_stock = (
-                db.query(LotCurrentStock)
-                .filter(LotCurrentStock.lot_id == lot_id)
-                .first()
+                db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == lot_id).first()
             )
 
             if not current_stock or current_stock.current_quantity < qty:
@@ -766,9 +734,7 @@ def create_lot_allocations(
                 )
 
             # 引当レコード作成
-            allocation = Allocation(
-                order_line_id=order_line_id, lot_id=lot_id, allocated_qty=qty
-            )
+            allocation = Allocation(order_line_id=order_line_id, lot_id=lot_id, allocated_qty=qty)
             db.add(allocation)
             db.flush()
 
@@ -789,9 +755,7 @@ def create_lot_allocations(
             # 現在在庫更新
             current_stock.current_quantity -= qty
 
-            applied.append(
-                {"lot_id": lot_id, "qty": qty, "allocation_id": allocation.id}
-            )
+            applied.append({"lot_id": lot_id, "qty": qty, "allocation_id": allocation.id})
 
         db.commit()
         db.refresh(order_line)
@@ -815,9 +779,7 @@ def create_lot_allocations(
 
 # ===== 引当取消 =====
 @router.post("/{order_line_id}/allocations/cancel")
-def cancel_lot_allocations(
-    order_line_id: int, request: dict, db: Session = Depends(get_db)
-):
+def cancel_lot_allocations(order_line_id: int, request: dict, db: Session = Depends(get_db)):
     """ロット引当を取消"""
     order_line = db.query(OrderLine).filter(OrderLine.id == order_line_id).first()
     if not order_line:
@@ -842,9 +804,7 @@ def cancel_lot_allocations(
                 .first()
             )
             if not allocation:
-                raise HTTPException(
-                    status_code=404, detail="引当レコードが見つかりません"
-                )
+                raise HTTPException(status_code=404, detail="引当レコードが見つかりません")
             allocations = [allocation]
         else:
             raise HTTPException(
@@ -861,9 +821,7 @@ def cancel_lot_allocations(
             if warehouse_id is None:
                 fallback_warehouse = db.query(Warehouse).first()
                 warehouse_id = (
-                    fallback_warehouse.warehouse_code
-                    if fallback_warehouse
-                    else "WH-DEFAULT"
+                    fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
                 )
             movement = StockMovement(
                 product_id=lot.product_code if lot else order_line.product_code,
@@ -880,9 +838,7 @@ def cancel_lot_allocations(
 
             # 現在在庫更新
             current_stock = (
-                db.query(LotCurrentStock)
-                .filter(LotCurrentStock.lot_id == alloc.lot_id)
-                .first()
+                db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == alloc.lot_id).first()
             )
             if current_stock:
                 current_stock.current_quantity += alloc.allocated_qty
@@ -925,9 +881,7 @@ def update_order_line_status(
     order_line = db.execute(stmt).scalar_one_or_none()
 
     if not order_line:
-        raise HTTPException(
-            status_code=404, detail=f"OrderLine {order_line_id} not found"
-        )
+        raise HTTPException(status_code=404, detail=f"OrderLine {order_line_id} not found")
 
     # ステータスの検証
     valid_statuses = [

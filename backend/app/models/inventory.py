@@ -91,10 +91,9 @@ class Lot(AuditMixin, Base):
         uselist=False,
         cascade="all, delete-orphan",
     )
-    allocations = relationship(
-        "Allocation", back_populates="lot", cascade="all, delete-orphan"
-    )
+    allocations = relationship("Allocation", back_populates="lot", cascade="all, delete-orphan")
     receipt_lines = relationship("ReceiptLine", back_populates="lot")
+    warehouse = relationship("Warehouse", back_populates="lots")
 
 
 class StockMovement(AuditMixin, Base):
@@ -108,9 +107,7 @@ class StockMovement(AuditMixin, Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     lot_id = Column(Integer, ForeignKey("lots.id"), nullable=False)
     warehouse_id = Column(Integer, ForeignKey("warehouse.id"), nullable=False)
-    movement_type = Column(
-        Enum(StockMovementReason), nullable=False
-    )  # receipt, shipment, etc.
+    movement_type = Column(Enum(StockMovementReason), nullable=False)  # receipt, shipment, etc.
     quantity = Column(Float, nullable=False)  # 正: 入庫, 負: 出庫
     related_id = Column(Text, nullable=True)  # 関連伝票番号
     notes = Column(Text, nullable=True)
@@ -131,9 +128,7 @@ class LotCurrentStock(AuditMixin, Base):
 
     __tablename__ = "lot_current_stock"
 
-    lot_id = Column(
-        Integer, ForeignKey("lots.id", ondelete="CASCADE"), primary_key=True
-    )
+    lot_id = Column(Integer, ForeignKey("lots.id", ondelete="CASCADE"), primary_key=True)
     current_quantity = Column(Float, nullable=False, default=0.0)
     last_updated = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
@@ -159,9 +154,7 @@ class ReceiptHeader(AuditMixin, Base):
 
     # リレーション
     warehouse = relationship("Warehouse", back_populates="receipt_headers")
-    lines = relationship(
-        "ReceiptLine", back_populates="header", cascade="all, delete-orphan"
-    )
+    lines = relationship("ReceiptLine", back_populates="header", cascade="all, delete-orphan")
 
 
 class ReceiptLine(AuditMixin, Base):
@@ -180,9 +173,7 @@ class ReceiptLine(AuditMixin, Base):
     unit = Column(Text)
     notes = Column(Text)
 
-    __table_args__ = (
-        UniqueConstraint("header_id", "line_no", name="uq_receipt_line"),
-    )
+    __table_args__ = (UniqueConstraint("header_id", "line_no", name="uq_receipt_line"),)
 
     # リレーション
     header = relationship("ReceiptHeader", back_populates="lines")

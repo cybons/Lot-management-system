@@ -72,9 +72,7 @@ def list_lots(
 
     # 在庫ありのみ
     if with_stock:
-        query = query.join(Lot.current_stock).filter(
-            LotCurrentStock.current_quantity > 0
-        )
+        query = query.join(Lot.current_stock).filter(LotCurrentStock.current_quantity > 0)
 
     # FEFO(先入先出): 有効期限昇順
     query = query.order_by(Lot.expiry_date.asc().nullslast())
@@ -93,7 +91,7 @@ def list_lots(
             "receipt_date": lot.receipt_date,
             "mfg_date": lot.mfg_date,
             "expiry_date": lot.expiry_date,
-            "warehouse_code": lot.warehouse_code,
+            "warehouse_code": lot.warehouse.warehouse_code if lot.warehouse else None,
             "warehouse_id": lot.warehouse_id,
             "lot_unit": lot.lot_unit,
             "kanban_class": lot.kanban_class,
@@ -155,9 +153,7 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
             status_code=404, detail=f"製品コード '{lot.product_code}' が見つかりません"
         )
 
-    supplier = (
-        db.query(Supplier).filter(Supplier.supplier_code == lot.supplier_code).first()
-    )
+    supplier = db.query(Supplier).filter(Supplier.supplier_code == lot.supplier_code).first()
     if not supplier:
         raise HTTPException(
             status_code=404,
@@ -166,9 +162,7 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
 
     if lot.warehouse_code:
         warehouse = (
-            db.query(Warehouse)
-            .filter(Warehouse.warehouse_code == lot.warehouse_code)
-            .first()
+            db.query(Warehouse).filter(Warehouse.warehouse_code == lot.warehouse_code).first()
         )
         if not warehouse:
             raise HTTPException(
@@ -302,9 +296,7 @@ def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(g
 
     # 現在在庫更新
     current_stock = (
-        db.query(LotCurrentStock)
-        .filter(LotCurrentStock.lot_id == movement.lot_id)
-        .first()
+        db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == movement.lot_id).first()
     )
 
     if current_stock:
