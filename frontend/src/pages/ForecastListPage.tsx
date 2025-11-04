@@ -44,10 +44,10 @@ export default function ForecastListPage() {
   });
 
   const forecastsQuery = useQuery({
-    queryKey: ["forecast-list", filters],
+    queryKey: ["forecast-list"],
     queryFn: () =>
       getForecastList({
-        product_code: filters.product_code || undefined,
+        product_code: undefined,
         supplier_code: undefined,
       }),
   });
@@ -77,16 +77,32 @@ export default function ForecastListPage() {
       map.set(key, existing);
     });
 
-    const result = Array.from(map.values());
-    if (filters.customer_code) {
-      const keyword = filters.customer_code.toLowerCase();
-      return result.filter((group) =>
-        group.customerCode.toLowerCase().includes(keyword)
-      );
+    let result = Array.from(map.values());
+
+    const productKeyword = filters.product_code.trim().toLowerCase();
+    if (productKeyword) {
+      result = result.filter((group) => {
+        const name = group.productName?.toLowerCase() ?? "";
+        return (
+          group.productCode.toLowerCase().includes(productKeyword) ||
+          name.includes(productKeyword)
+        );
+      });
+    }
+
+    const customerKeyword = filters.customer_code.trim().toLowerCase();
+    if (customerKeyword) {
+      result = result.filter((group) => {
+        const name = group.customerName?.toLowerCase() ?? "";
+        return (
+          group.customerCode.toLowerCase().includes(customerKeyword) ||
+          name.includes(customerKeyword)
+        );
+      });
     }
 
     return result;
-  }, [forecastsQuery.data, filters.customer_code]);
+  }, [forecastsQuery.data, filters.product_code, filters.customer_code]);
 
   return (
     <div className="space-y-6">
@@ -104,22 +120,22 @@ export default function ForecastListPage() {
       <div className="rounded-lg border bg-card p-4">
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label className="text-sm font-medium mb-2 block">製品コード</Label>
+            <Label className="text-sm font-medium mb-2 block">製品コード / 商品名</Label>
             <Input
               type="text"
               value={filters.product_code}
               onChange={(e) => setFilters({ ...filters, product_code: e.target.value })}
-              placeholder="製品コードで絞り込み"
+              placeholder="製品コードまたは商品名で絞り込み"
               className="w-full px-3 py-2 text-sm"
             />
           </div>
           <div>
-            <Label className="text-sm font-medium mb-2 block">顧客コード</Label>
+            <Label className="text-sm font-medium mb-2 block">顧客コード / 得意先名</Label>
             <Input
               type="text"
               value={filters.customer_code}
               onChange={(e) => setFilters({ ...filters, customer_code: e.target.value })}
-              placeholder="顧客コードで絞り込み"
+              placeholder="顧客コードまたは得意先名で絞り込み"
               className="w-full px-3 py-2 text-sm"
             />
           </div>

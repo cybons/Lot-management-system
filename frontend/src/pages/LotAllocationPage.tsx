@@ -9,7 +9,7 @@
  * - 右ペイン: 候補ロット一覧と倉庫別配分入力
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -190,6 +190,8 @@ function getBadgeColor(priority: PriorityLevel): string {
 export default function LotAllocationPage() {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const orderListRef = useRef<HTMLDivElement | null>(null);
+  const [orderListScrollTop, setOrderListScrollTop] = useState(0);
 
   // URL状態管理
   const selectedOrderId = searchParams.get("selected")
@@ -202,6 +204,54 @@ export default function LotAllocationPage() {
     queryKey: ["orders", { status: "open" }],
     queryFn: () => getOrders({ status: "open" }),
   });
+
+  const orderCards = useMemo(() => {
+    if (!ordersQuery.data) return [];
+
+    return ordersQuery.data
+      .map(createOrderCardData)
+      .filter((order) => (order.lines?.length ?? 0) > 0 && !order.hasMissingFields)
+      .sort((a, b) => {
+        const priorityOrder: Record<PriorityLevel, number> = {
+          urgent: 0,
+          warning: 1,
+          attention: 2,
+          allocated: 3,
+          inactive: 4,
+        };
+
+        const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+        if (priorityDiff !== 0) return priorityDiff;
+
+        if (a.daysTodue !== null && b.daysTodue !== null) {
+          const dueDiff = a.daysTodue - b.daysTodue;
+          if (dueDiff !== 0) return dueDiff;
+        }
+
+        return new Date(b.order_date).getTime() - new Date(a.order_date).getTime();
+      });
+  }, [ordersQuery.data]);
+
+  useEffect(() => {
+    if (!selectedOrderId) {
+      return;
+    }
+
+    const existsInList = orderCards.some((order) => order.id === selectedOrderId);
+    if (!existsInList) {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        if (orderCards.length > 0) {
+          next.set("selected", String(orderCards[0].id));
+          next.delete("line");
+        } else {
+          next.delete("selected");
+          next.delete("line");
+        }
+        return next;
+      });
+    }
+  }, [orderCards, selectedOrderId, setSearchParams]);
 
   // 選択された受注の詳細を取得
   const orderDetailQuery = useQuery({
@@ -219,6 +269,11 @@ export default function LotAllocationPage() {
 
   // 倉庫別配分入力の状態
   const [warehouseAllocations, setWarehouseAllocations] = useState<Record<string, number>>({});
+  const [snackbar, setSnackbar] = useState<{
+    message: string;
+    variant?: "success" | "error";
+  } | null>(null);
+  const lastSelectedLineIdRef = useRef<number | null>(null);
 
   type WarehouseSummary = {
     key: string;
@@ -250,17 +305,49 @@ export default function LotAllocationPage() {
   useEffect(() => {
     if (warehouseSummaries.length === 0) {
       setWarehouseAllocations({});
+      lastSelectedLineIdRef.current = selectedLineId ?? null;
       return;
     }
 
     setWarehouseAllocations((prev) => {
+      const shouldReset = lastSelectedLineIdRef.current !== (selectedLineId ?? null);
       const next: Record<string, number> = {};
       warehouseSummaries.forEach((warehouse) => {
-        next[warehouse.key] = prev[warehouse.key] ?? 0;
+        next[warehouse.key] = shouldReset ? 0 : prev[warehouse.key] ?? 0;
       });
       return next;
     });
-  }, [warehouseSummaries]);
+
+    lastSelectedLineIdRef.current = selectedLineId ?? null;
+  }, [warehouseSummaries, selectedLineId]);
+
+  useEffect(() => {
+    const el = orderListRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      setOrderListScrollTop(el.scrollTop);
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => {
+      el.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = orderListRef.current;
+    if (!el) return;
+    el.scrollTop = orderListScrollTop;
+  }, [orderCards, orderListScrollTop]);
+
+  useEffect(() => {
+    if (!snackbar) return;
+    const timer = setTimeout(() => {
+      setSnackbar(null);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [snackbar]);
 
   const allocationList = useMemo(() => {
     return warehouseSummaries
@@ -284,7 +371,11 @@ export default function LotAllocationPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["order-detail", selectedOrderId] });
       queryClient.invalidateQueries({ queryKey: ["orders"] });
-      console.log("引当データを保存しました");
+      setSnackbar({ message: "保存しました", variant: "success" });
+    },
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : "保存に失敗しました";
+      setSnackbar({ message, variant: "error" });
     },
   });
 
@@ -303,53 +394,57 @@ export default function LotAllocationPage() {
 
   const canSave = allocationList.length > 0 && !createAllocationMutation.isPending;
 
-  // 受注カードデータを作成
-  const orderCards = useMemo(() => {
-    if (!ordersQuery.data) return [];
-
-    return ordersQuery.data.map(createOrderCardData).sort((a, b) => {
-      // 優先度順
-      const priorityOrder: Record<PriorityLevel, number> = {
-        urgent: 0,
-        warning: 1,
-        attention: 2,
-        allocated: 3,
-        inactive: 4,
-      };
-
-      const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
-      if (priorityDiff !== 0) return priorityDiff;
-
-      // 納期が近い順
-      if (a.daysTodue !== null && b.daysTodue !== null) {
-        const dueDiff = a.daysTodue - b.daysTodue;
-        if (dueDiff !== 0) return dueDiff;
-      }
-
-      // 受注日が新しい順
-      return new Date(b.order_date).getTime() - new Date(a.order_date).getTime();
-    });
-  }, [ordersQuery.data]);
-
   // ハンドラー
   const handleSelectOrder = (orderId: number) => {
-    setSearchParams({ selected: String(orderId) });
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("selected", String(orderId));
+      next.delete("line");
+      return next;
+    });
   };
 
   const handleSelectLine = (lineId: number) => {
-    setSearchParams({ selected: String(selectedOrderId), line: String(lineId) });
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (selectedOrderId) {
+        next.set("selected", String(selectedOrderId));
+      }
+      next.set("line", String(lineId));
+      return next;
+    });
   };
+
+  useEffect(() => {
+    const orderData = orderDetailQuery.data;
+    if (!orderData) return;
+    const lines = orderData.lines ?? [];
+    if (lines.length === 0) return;
+
+    const hasSelected = lines.some((line) => line.id === selectedLineId);
+    if (!hasSelected) {
+      const fallbackLine =
+        lines.find((line) => line.quantity > 0) ?? lines.find((line) => !!line.product_code) ?? lines[0];
+      if (!fallbackLine) return;
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.set("selected", String(orderData.id));
+        next.set("line", String(fallbackLine.id));
+        return next;
+      });
+    }
+  }, [orderDetailQuery.data, selectedLineId, setSearchParams]);
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* 左ペイン: 受注一覧 */}
-      <div className="w-80 border-r bg-white overflow-y-auto">
+      <div className="w-80 border-r bg-white overflow-y-auto" ref={orderListRef}>
         <div className="p-4 border-b bg-gray-50">
           <h2 className="text-lg font-semibold">受注一覧</h2>
           <p className="text-xs text-gray-600 mt-1">{orderCards.length}件の受注</p>
         </div>
 
-        <div className="divide-y">
+        <div className="space-y-2 px-2 py-2">
           {ordersQuery.isLoading && (
             <div className="p-4 text-center text-gray-500">読み込み中...</div>
           )}
@@ -370,7 +465,7 @@ export default function LotAllocationPage() {
       </div>
 
       {/* 中央ペイン: 明細一覧 */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-[1.35] flex flex-col overflow-hidden">
         {selectedOrderId ? (
           <>
             {/* ヘッダー */}
@@ -420,6 +515,7 @@ export default function LotAllocationPage() {
                       line={line}
                       isSelected={line.id === selectedLineId}
                       onClick={() => handleSelectLine(line.id)}
+                      pendingAllocatedQty={line.id === selectedLineId ? allocationTotalAll : 0}
                     />
                   ))}
                 </div>
@@ -438,7 +534,7 @@ export default function LotAllocationPage() {
       </div>
 
       {/* 右ペイン: 候補ロット & 倉庫別配分 */}
-      <div className="w-96 border-l bg-white overflow-y-auto">
+      <div className="w-[420px] border-l bg-white overflow-y-auto">
         {selectedLineId && selectedLine ? (
           <div className="p-4 space-y-6">
             <div>
@@ -589,6 +685,17 @@ export default function LotAllocationPage() {
           </div>
         )}
       </div>
+      {snackbar && (
+        <div
+          className={`fixed bottom-6 right-6 rounded-lg px-4 py-3 text-sm shadow-lg transition-opacity ${
+            snackbar.variant === "error"
+              ? "bg-red-600 text-white"
+              : "bg-slate-900 text-white"
+          }`}
+        >
+          {snackbar.message}
+        </div>
+      )}
     </div>
   );
 }
@@ -620,10 +727,13 @@ function OrderCard({ order, isSelected, onClick }: OrderCardProps) {
 
   return (
     <div
-      className={`p-3 cursor-pointer transition-colors hover:bg-gray-50 ${
-        isSelected ? "bg-blue-50 border-l-4 border-blue-500" : ""
+      className={`relative w-full rounded-md border p-3 cursor-pointer transition-all ${
+        isSelected
+          ? "border-blue-400 bg-blue-50 shadow-sm ring-2 ring-blue-200"
+          : "border-transparent hover:bg-gray-50"
       }`}
       onClick={onClick}
+      aria-selected={isSelected}
     >
       <div className="flex items-start gap-2">
         {/* 優先度インジケータ */}
@@ -692,16 +802,20 @@ interface OrderLineCardProps {
   line: OrderLine;
   isSelected: boolean;
   onClick: () => void;
+  pendingAllocatedQty?: number;
 }
 
-function OrderLineCard({ line, isSelected, onClick }: OrderLineCardProps) {
+function OrderLineCard({ line, isSelected, onClick, pendingAllocatedQty = 0 }: OrderLineCardProps) {
   // 引当済み数量を計算（allocated_lotsまたはallocationsから）
   const allocatedQty = line.allocated_lots
     ? line.allocated_lots.reduce((sum, alloc) => sum + (alloc.allocated_qty || 0), 0)
     : 0;
-
-  const remainingQty = line.quantity - allocatedQty;
-  const progress = (allocatedQty / line.quantity) * 100;
+  const totalQuantity = line.quantity > 0 ? line.quantity : 0;
+  const effectivePending = isSelected ? Math.max(0, pendingAllocatedQty) : 0;
+  const displayedAllocated = Math.min(totalQuantity, allocatedQty + effectivePending);
+  const pendingApplied = Math.max(0, displayedAllocated - allocatedQty);
+  const remainingQty = Math.max(0, totalQuantity - displayedAllocated);
+  const progress = totalQuantity > 0 ? (displayedAllocated / totalQuantity) * 100 : 0;
 
   return (
     <div
@@ -720,9 +834,14 @@ function OrderLineCard({ line, isSelected, onClick }: OrderLineCardProps) {
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold">
-            {allocatedQty.toLocaleString()} / {line.quantity.toLocaleString()}
+            {displayedAllocated.toLocaleString()} / {totalQuantity.toLocaleString()}
           </div>
           <div className="text-xs text-gray-500">{line.unit}</div>
+          {pendingApplied > 0 && (
+            <div className="text-[11px] text-blue-600">
+              確定 {allocatedQty.toLocaleString()} + 配分 {pendingApplied.toLocaleString()}
+            </div>
+          )}
         </div>
       </div>
 
