@@ -8,8 +8,8 @@ import InventoryPage from "@/pages/InventoryPage";
 import OrdersListPage from "@/pages/OrdersListPage";
 import ForecastImportPage from "@/pages/ForecastImportPage";
 import AdminPage from "@/pages/AdminPage";
-import OrderCardPage from "./pages/OrderCardPage";
-import ForecastListPage from "./pages/ForecastListPage";
+import ForecastListPage from "@/pages/ForecastListPage";
+import LotAllocationPage from "@/pages/LotAllocationPage";
 
 function AppTabs() {
   return (
@@ -26,7 +26,7 @@ function AppTabs() {
             <TabsList>
               <TabsTrigger value="dashboard">ダッシュボード</TabsTrigger>
               <TabsTrigger value="inventory">在庫管理</TabsTrigger>
-              <TabsTrigger value="orders">受注管理</TabsTrigger>
+              {/* <TabsTrigger value="orders">受注管理</TabsTrigger> */}
               <TabsTrigger value="orders-card">ロット引当処理</TabsTrigger>
               <TabsTrigger value="forecast-list">Forecast一覧</TabsTrigger>
 
@@ -37,7 +37,7 @@ function AppTabs() {
             </TabsList>
 
             <TabsContent value="orders-card">
-              <OrderCardPage />
+              <LotAllocationPage />
             </TabsContent>
             <TabsContent value="forecast-list">
               <ForecastListPage />
