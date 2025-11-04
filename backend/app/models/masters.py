@@ -110,7 +110,6 @@ class Product(AuditMixin, Base):
         "UnitConversion", back_populates="product", cascade="all, delete-orphan"
     )
     order_lines = relationship("OrderLine", back_populates="product")
-    forecasts = relationship("Forecast", back_populates="product")
 
 
 class ProductUomConversion(AuditMixin, Base):

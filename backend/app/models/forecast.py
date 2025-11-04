@@ -1,7 +1,8 @@
 # backend/app/models/forecast.py
 """
-フォーキャストモデル（修正版）
-Product との外部キー制約を追加
+フォーキャストモデル
+
+製品コードはマスタ未登録の値も許容するため、外部キー制約を持たない。
 """
 
 from sqlalchemy import (
@@ -10,7 +11,6 @@ from sqlalchemy import (
     Column,
     Date,
     DateTime,
-    ForeignKey,
     Index,
     Integer,
     String,
@@ -27,17 +27,12 @@ class Forecast(AuditMixin, Base):
 
     id = Column(Integer, primary_key=True)
 
-    forecast_id = Column(String(36), nullable=False, unique=True)
-    
-    # 🔧 修正: ForeignKey制約を追加
-    product_id = Column(
-        String(64), 
-        ForeignKey("products.product_code"), 
-        nullable=False
-    )
+    forecast_id = Column(Integer, nullable=True, unique=True)
+
+    product_id = Column(String(64), nullable=False)
     
     customer_id = Column(String(64), nullable=False)
-    supplier_id = Column(String(64), nullable=False)
+    supplier_id = Column(String(64), nullable=True)
 
     granularity = Column(String(16), nullable=False)  # 'daily'|'dekad'|'monthly'
     date_day = Column(Date)
@@ -51,9 +46,6 @@ class Forecast(AuditMixin, Base):
     source_system = Column(String(32), nullable=False, default="external")
     is_active = Column(Boolean, nullable=False, default=True)
 
-    # 🔧 修正: Productへのリレーションシップを追加
-    product = relationship("Product", back_populates="forecasts")
-    
     # 🔧 修正: OrderLineへのリレーションシップを追加
     order_lines = relationship("OrderLine", back_populates="forecast")
 

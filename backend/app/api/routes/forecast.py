@@ -27,7 +27,10 @@ from app.schemas.forecast import (
     ForecastVersionInfo,
     ForecastVersionListResponse,
 )
-from app.services.forecast import ForecastMatcher
+from app.services.forecast import (
+    ForecastMatcher,
+    assign_auto_forecast_identifier,
+)
 
 router = APIRouter(prefix="/forecast", tags=["forecast"])
 
@@ -73,12 +76,14 @@ def list_forecast_summary(
 
     items: List[ForecastItemOut] = []
     for forecast, product_name in results:
+        supplier_code = forecast.supplier_id or ""
+
         item = ForecastItemOut(
             id=forecast.id,
             product_code=forecast.product_id,
             product_name=product_name or " (製品マスタ未登録)",
             customer_code=forecast.customer_id,
-            supplier_code=forecast.supplier_id,
+            supplier_code=supplier_code or None,
             granularity=forecast.granularity,
             version_no=str(forecast.version_no),
             updated_at=forecast.updated_at,
@@ -91,7 +96,7 @@ def list_forecast_summary(
             else None,
             dekad_summary=dekad_summary,
             customer_name=f"{forecast.customer_id} (ダミー)",
-            supplier_name=f"{forecast.supplier_id} (ダミー)",
+            supplier_name=f"{supplier_code or '未設定'} (ダミー)",
             unit="EA",
             version_history=version_history,
         )
@@ -167,17 +172,11 @@ def create_forecast(forecast: ForecastCreate, db: Session = Depends(get_db)):
     """
     フォーキャスト単一登録
     """
-    existing = (
-        db.query(Forecast).filter(Forecast.forecast_id == forecast.forecast_id).first()
-    )
-    if existing:
-        raise HTTPException(
-            status_code=400,
-            detail=f"forecast_id '{forecast.forecast_id}' は既に存在します",
-        )
     _validate_granularity_fields(forecast)
     db_forecast = Forecast(**forecast.model_dump())
     db.add(db_forecast)
+    db.flush()
+    assign_auto_forecast_identifier(db_forecast)
     db.commit()
     db.refresh(db_forecast)
     return db_forecast
@@ -239,20 +238,8 @@ def bulk_import_forecasts(
             Forecast.version_no < request.version_no, Forecast.is_active == True
         ).update({"is_active": False})
 
-    for forecast_data in request.forecasts:
+    for index, forecast_data in enumerate(request.forecasts, start=1):
         try:
-            existing = (
-                db.query(Forecast)
-                .filter(Forecast.forecast_id == forecast_data.forecast_id)
-                .first()
-            )
-            if existing:
-                skipped_count += 1
-                error_details.append(
-                    f"forecast_id '{forecast_data.forecast_id}' は既に存在します（スキップ）"
-                )
-                continue
-
             _validate_granularity_fields(forecast_data)
 
             forecast_dict = forecast_data.model_dump()
@@ -262,13 +249,20 @@ def bulk_import_forecasts(
 
             db_forecast = Forecast(**forecast_dict)
             db.add(db_forecast)
+            db.flush()
+            assign_auto_forecast_identifier(db_forecast)
             imported_count += 1
+
+            db.commit()
 
         except Exception as e:
             error_count += 1
-            error_details.append(f"forecast_id '{forecast_data.forecast_id}': {str(e)}")
+            db.rollback()
+            error_details.append(f"record #{index}: {str(e)}")
 
-    db.commit()
+    if skipped_count == 0 and imported_count == 0 and request.deactivate_old_version:
+        # deactivateのみ実行された場合は、前段のupdateを反映させる
+        db.commit()
 
     status = (
         "success" if error_count == 0 else "partial" if imported_count > 0 else "failed"

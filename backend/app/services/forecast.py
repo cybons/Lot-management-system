@@ -184,3 +184,10 @@ class ForecastMatcher:
         # マッチしない場合は明示的にNONEを設定
         order_line.forecast_match_status = "NONE"
         return False
+
+
+def assign_auto_forecast_identifier(forecast: Forecast) -> None:
+    """ID採番後に forecast_id を自動設定するユーティリティ"""
+
+    if forecast.forecast_id is None:
+        forecast.forecast_id = forecast.id
