@@ -11,12 +11,10 @@ from .base import BaseSchema, TimestampMixin
 
 # --- Forecast Basic ---
 class ForecastBase(BaseSchema):
-    """フォーキャスト基本スキーマ"""
+    """フォーキャスト基本スキーマ (共通項目)"""
 
-    forecast_id: str  # UUID等の一意識別子
     product_id: str
     customer_id: str
-    supplier_id: str
     granularity: Literal["daily", "dekad", "monthly"]
     qty_forecast: int
     version_no: int = 1
@@ -29,24 +27,10 @@ class ForecastBase(BaseSchema):
     year_month: Optional[str] = None  # 'YYYY-MM'
 
 
-class ForecastCreate(BaseSchema):
+class ForecastCreate(ForecastBase):
     """フォーキャスト作成リクエスト"""
 
-    forecast_id: str
-    product_id: str
-    customer_id: str
-    supplier_id: str
-    granularity: Literal["daily", "dekad", "monthly"]
-    qty_forecast: int
-    version_no: int = 1
     version_issued_at: datetime
-    source_system: str = "external"
-    is_active: bool = True
-
-    # 粒度別の期間フィールド
-    date_day: Optional[date] = None
-    date_dekad_start: Optional[date] = None
-    year_month: Optional[str] = None
 
 
 class ForecastUpdate(BaseSchema):
@@ -60,6 +44,8 @@ class ForecastResponse(ForecastBase, TimestampMixin):
     """フォーキャストレスポンス"""
 
     id: int
+    forecast_id: Optional[int] = None
+    supplier_id: Optional[str] = None
     version_issued_at: datetime
 
 
@@ -167,7 +153,7 @@ class ForecastItemOut(BaseSchema):
     product_code: str
     product_name: str
     customer_code: str
-    supplier_code: str
+    supplier_code: Optional[str] = None
     granularity: str
     version_no: int
     updated_at: datetime  # 変更検知のため
