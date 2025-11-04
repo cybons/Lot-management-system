@@ -246,3 +246,54 @@ rm lot_management.db
 ## ライセンス
 
 MIT License
+
+
+
+---
+
+## アーキテクチャ概要
+
+本バックエンドは、**3層構造（API層 / Service層 / Model層）**で責務分離されています。  
+API（FastAPIルーター）はI/O整形と例外ハンドリング、ServiceはユースケースとTx境界管理、ModelはSQLAlchemy ORMを担います。
+
+```
+API Layer (FastAPI Routers)
+     ↓
+Service Layer (Business Logic)
+     ↓
+Model Layer (SQLAlchemy ORM)
+```
+
+## 依存関係マップ（Mermaid）
+
+下記は主要ルーターとサービス・モデルの依存関係を示す概要図です。  
+完全版は [`docs/architecture/api_service_model.mmd`](docs/architecture/api_service_model.mmd) を参照してください。
+
+```mermaid
+graph TD
+    A3[allocations.py] --> S2[AllocationService]
+    S2 --> M2[Allocation]
+    S2 --> M3[Lot]
+    S2 --> M4[LotCurrentStock]
+    S2 --> M6[OrderLine]
+
+    A8[orders_refactored.py] --> S6[OrderService]
+    S6 --> M5[Order]
+    S6 --> M6[OrderLine]
+    S6 --> M9[Product]
+```
+
+> ルーターの統一（prefix/tags整備）、ordersの一本化、allocationsのURL整合修正は、**既存API仕様を変更せず**に実施しています。
+
+## テスト状況
+
+- ✅ `pytest`：**25件 PASS**（既存API入出力・丸め・状態遷移の回帰確認を含む）
+- ⚠️ 警告（将来のメンテ性向上のため任意対応）
+  - `declarative_base()` → `sqlalchemy.orm.declarative_base()` 置換
+  - Pydantic v2: `class Config` → `model_config = ConfigDict(...)`
+  - `transaction already deassociated...`：fixture内 `rollback()` 順序の見直し（挙動への影響なし）
+
+## 今後のドキュメント整備（TODO）
+- ER図（`docs/architecture/er_model.mmd`）
+- シーケンス図（例：受注→引当→出荷）
+- ロギングポリシーとルーター命名規約
