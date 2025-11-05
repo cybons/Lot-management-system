@@ -3,11 +3,11 @@
  * 受注関連のAPI通信関数
  */
 
-import { http } from '@/services/http';
-import type { OrderResponse, OrderWithLinesResponse } from '@/types';
-import type { OrderCreateInput, OrderStatusUpdate, OrderSearchParams } from '@/utils/validators';
+import { http } from "@/services/http";
+import type { OrderResponse, OrderWithLinesResponse } from "@/types";
+import type { OrderCreateInput, OrderStatusUpdate, OrderSearchParams } from "@/utils/validators";
 
-const BASE_PATH = '/orders';
+const BASE_PATH = "/orders";
 
 /**
  * 受注一覧を取得
@@ -38,11 +38,11 @@ export async function createOrder(data: OrderCreateInput): Promise<OrderWithLine
  */
 export async function updateOrderStatus(
   id: number,
-  data: OrderStatusUpdate
+  data: OrderStatusUpdate,
 ): Promise<{ success: boolean; order: OrderWithLinesResponse }> {
   const response = await http.patch<{ success: boolean; order: OrderWithLinesResponse }>(
     `${BASE_PATH}/${id}/status`,
-    data
+    data,
   );
   return response.data;
 }
@@ -65,21 +65,21 @@ export async function listOrdersByStatus(status: string): Promise<OrderResponse[
  * 保留中の受注を取得
  */
 export async function listPendingOrders(): Promise<OrderResponse[]> {
-  return listOrdersByStatus('pending');
+  return listOrdersByStatus("pending");
 }
 
 /**
  * 引当済みの受注を取得
  */
 export async function listAllocatedOrders(): Promise<OrderResponse[]> {
-  return listOrdersByStatus('allocated');
+  return listOrdersByStatus("allocated");
 }
 
 /**
  * 出荷済みの受注を取得
  */
 export async function listShippedOrders(): Promise<OrderResponse[]> {
-  return listOrdersByStatus('shipped');
+  return listOrdersByStatus("shipped");
 }
 
 /**
@@ -87,4 +87,13 @@ export async function listShippedOrders(): Promise<OrderResponse[]> {
  */
 export async function listOrdersByCustomer(customerCode: string): Promise<OrderResponse[]> {
   return listOrders({ customer_code: customerCode });
+}
+export async function getOrderDetail(orderId: number) {
+  const response = await http.get(`/orders/${orderId}`);
+  return response.data;
+}
+
+export async function updateOrder(orderId: number, data: any) {
+  const response = await http.put(`/orders/${orderId}`, data);
+  return response.data;
 }
