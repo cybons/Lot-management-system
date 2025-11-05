@@ -8,10 +8,11 @@ import os
 from pathlib import Path
 from typing import Generator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.models import Base
+from app.models.base_model import Base, set_sqlite_pragma
 
 from .config import settings
 
@@ -23,6 +24,8 @@ engine = create_engine(
     connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {},
     echo=settings.ENVIRONMENT == "development",  # 開発環境ではSQLログを出力
 )
+if engine.dialect.name == "sqlite":
+    event.listen(engine, "connect", set_sqlite_pragma)
 
 # セッションファクトリの作成
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

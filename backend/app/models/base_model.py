@@ -4,17 +4,25 @@ SQLAlchemy Base Model
 共通のベースクラスと外部キー制約の設定
 """
 
+import sqlite3
+
 from sqlalchemy import Column, DateTime, Integer, String, event, func
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine import Engine
+from sqlalchemy.ext.declarative import declarative_base
+
 
 # SQLiteで外部キー制約を有効化
 @event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_conn, connection_record):
-    """SQLite接続時にPRAGMA foreign_keys=ONを実行"""
-    cursor = dbapi_conn.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    # SQLite 接続のときだけ有効化
+    if not isinstance(dbapi_connection, sqlite3.Connection):
+        return
+    cursor = dbapi_connection.cursor()
+    try:
+        cursor.execute("PRAGMA foreign_keys=ON")
+    finally:
+        cursor.close()
+
 
 # 全てのモデルの基底クラス
 Base = declarative_base()
@@ -24,9 +32,7 @@ class AuditMixin:
     """共通の監査カラムを提供するミックスイン"""
 
     created_at = Column(DateTime, nullable=False, server_default=func.now())
-    updated_at = Column(
-        DateTime, nullable=False, server_default=func.now(), onupdate=func.now()
-    )
+    updated_at = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)
     deleted_at = Column(DateTime, nullable=True)

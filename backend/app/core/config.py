@@ -6,8 +6,9 @@
 
 import os
 from pathlib import Path
+from typing import Union
 
-from pydantic import AliasChoices, Field
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,8 +20,8 @@ class Settings(BaseSettings):
         case_sensitive=False,
         extra="ignore",
     )
-    # ==== ここが今回のエラーの直接原因 ====
-    # .env の大文字キーでも、小文字フィールドでも受け付けられるように alias を設定
+
+    # JWT設定
     secret_key: str = Field(
         default="dev-secret-key-change-in-production",
         validation_alias=AliasChoices("SECRET_KEY", "secret_key"),
@@ -33,6 +34,7 @@ class Settings(BaseSettings):
         default=30,
         validation_alias=AliasChoices("ACCESS_TOKEN_EXPIRE_MINUTES", "access_token_expire_minutes"),
     )
+
     # アプリケーション基本設定
     APP_NAME: str = "ロット管理システム"
     APP_VERSION: str = "2.0.0"
@@ -43,13 +45,35 @@ class Settings(BaseSettings):
         "DATABASE_URL", f"sqlite:///{Path(__file__).parent.parent.parent / 'lot_management.db'}"
     )
 
-    # CORS設定
-    CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",  # Vite default port
-        "http://localhost:3000",  # React default port
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-    ]
+    # CORS設定 - 修正版
+    # 環境変数が設定されていない場合はデフォルト値を使用
+    # 環境変数がある場合はカンマ区切り文字列として受け取る
+    CORS_ORIGINS: Union[list[str], str] = Field(
+        default=[
+            "http://localhost:5173",  # Vite default port
+            "http://localhost:3000",  # React default port
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:3000",
+        ]
+    )
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """CORS_ORIGINSを適切にパース"""
+        if isinstance(v, str):
+            # カンマ区切り文字列の場合
+            if v.strip():
+                return [origin.strip() for origin in v.split(",")]
+            # 空文字列の場合はデフォルト値を返す
+            return [
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "http://127.0.0.1:5173",
+                "http://127.0.0.1:3000",
+            ]
+        # リストの場合はそのまま返す
+        return v
 
     # API設定
     API_PREFIX: str = "/api"
@@ -65,10 +89,6 @@ class Settings(BaseSettings):
     # ファイルアップロード設定
     UPLOAD_DIR: Path = Path(__file__).parent.parent.parent / "uploads"
     MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
-
-    # class Config:
-    #     case_sensitive = True
-    #     env_file = ".env"
 
 
 # グローバル設定インスタンス

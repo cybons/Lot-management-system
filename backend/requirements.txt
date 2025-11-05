@@ -16,3 +16,4 @@ pydantic-settings==2.6.1
 # Utilities
 python-multipart==0.0.17
 python-dateutil==2.9.0
+psycopg2-binary==2.9.10
