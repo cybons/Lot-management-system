@@ -1,6 +1,41 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+/**
+ * OrdersListPage.tsx (リファクタリング版)
+ * 
+ * 受注一覧画面
+ * - 新しいフック・コンポーネントを使用
+ * - データ取得: useOrdersQuery
+ * - UI状態管理: useDialog, useToast, useTable, useFilters
+ * - 共通コンポーネント: PageHeader, Section, DataTable, etc.
+ */
+
+import { useMemo } from 'react';
+import { format } from 'date-fns';
+import { Plus, RefreshCw, ExternalLink } from 'lucide-react';
+
+// バッチ3で作成したフック
+import { useOrdersQuery, calculateOrderStats, calculateLineAllocationStatus } from '@/hooks/api';
+import { useCreateOrder } from '@/hooks/mutations';
+import { useDialog, useToast, useTable, useFilters } from '@/hooks/ui';
+
+// バッチ3で作成した共通コンポーネント
+import {
+  PageHeader,
+  PageContainer,
+  Section,
+} from '@/components/shared/layout';
+import {
+  DataTable,
+  TablePagination,
+  SearchBar,
+  FilterPanel,
+  FilterField,
+  OrderStatusBadge,
+  type Column,
+} from '@/components/shared/data';
+import { FormDialog } from '@/components/shared/form';
+
+// 既存の型とコンポーネント
+import type { Order } from '@/utils/validators/order-schemas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,240 +46,433 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Download, Search, ExternalLink } from 'lucide-react';
-import { format } from 'date-fns';
-import { formatCodeAndName } from '@/lib/utils';
 
+/**
+ * メインコンポーネント
+ */
 export default function OrdersListPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [status, setStatus] = useState<string>('all');
-  const [customerCode, setCustomerCode] = useState('');
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
-
-  const { data: orders, isLoading, error } = useQuery({
-    queryKey: ['orders', { searchQuery, status, customerCode, page, pageSize }],
-    queryFn: () =>
-      api.getOrders({
-        skip: (page - 1) * pageSize,
-        limit: pageSize,
-        status: status !== 'all' ? status : undefined,
-        customer_code: customerCode || undefined,
-      }),
+  // UI状態管理
+  const createDialog = useDialog();
+  const toast = useToast();
+  const table = useTable({
+    initialPageSize: 25,
+    initialSort: { column: 'due_date', direction: 'asc' },
   });
-
-  const handleSearch = () => {
-    setPage(1); // 検索時は1ページ目に戻る
-  };
-
-  const handleExportCSV = () => {
-    if (!orders || orders.length === 0) {
-      alert('エクスポートするデータがありません');
-      return;
-    }
-
-    const csvData = orders.map((order) => ({
-      受注番号: order.order_no,
-      得意先: formatCodeAndName(order.customer_code, order.customer_name),
-      受注日: order.order_date,
-      納期: order.due_date || '',
-      ステータス: order.status,
-      備考: order.remarks || '',
-    }));
-
-    api.exportToCSV(csvData, `orders_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`);
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* ヘッダー */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">受注一覧</h2>
-          <p className="text-muted-foreground">受注情報を検索・管理できます</p>
-        </div>
-        <Button onClick={handleExportCSV} variant="outline" disabled={!orders || orders.length === 0}>
-          <Download className="mr-2 h-4 w-4" />
-          CSV出力
-        </Button>
-      </div>
-
-      {/* 検索フィルター */}
-      <div className="rounded-lg border bg-card p-4">
-        <div className="grid gap-4 md:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="search">受注番号 / 得意先</Label>
-            <Input
-              id="search"
-              placeholder="検索..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            />
+  
+  // フィルター状態管理
+  const filters = useFilters({
+    search: '',
+    customerCode: '',
+    status: 'all',
+    unallocatedOnly: false,
+  });
+  
+  // データ取得
+  const {
+    data: allOrders = [],
+    isLoading,
+    error,
+    refetch,
+  } = useOrdersQuery({
+    customerCode: filters.values.customerCode || undefined,
+    status: filters.values.status !== 'all' ? filters.values.status : undefined,
+    search: filters.values.search || undefined,
+    unallocatedOnly: filters.values.unallocatedOnly,
+  });
+  
+  // 受注作成Mutation
+  const createOrderMutation = useCreateOrder({
+    onSuccess: () => {
+      toast.success('受注を作成しました');
+      createDialog.close();
+    },
+    onError: (error) => {
+      toast.error(`作成に失敗しました: ${error.message}`);
+    },
+  });
+  
+  // テーブルカラム定義
+  const columns: Column<Order>[] = useMemo(
+    () => [
+      {
+        id: 'order_no',
+        header: '受注番号',
+        cell: (order) => (
+          <span className="font-medium">{order.order_no}</span>
+        ),
+        sortable: true,
+      },
+      {
+        id: 'customer_code',
+        header: '得意先',
+        cell: (order) => (
+          <div>
+            <div className="font-medium">{order.customer_code}</div>
+            {order.customer_name && (
+              <div className="text-xs text-gray-600">{order.customer_name}</div>
+            )}
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="status">ステータス</Label>
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger id="status">
-                <SelectValue placeholder="すべて" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">すべて</SelectItem>
-                <SelectItem value="open">未処理</SelectItem>
-                <SelectItem value="allocated">引当済</SelectItem>
-                <SelectItem value="shipped">出荷済</SelectItem>
-                <SelectItem value="completed">完了</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="customer">得意先コード</Label>
-            <Input
-              id="customer"
-              placeholder="CUS001"
-              value={customerCode}
-              onChange={(e) => setCustomerCode(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-end space-x-2">
-            <Button onClick={handleSearch} className="flex-1">
-              <Search className="mr-2 h-4 w-4" />
-              検索
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* テーブル */}
-      {isLoading ? (
-        <TableSkeleton />
-      ) : error ? (
-        <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
-          <p className="text-destructive">受注情報の取得に失敗しました</p>
-        </div>
-      ) : orders && orders.length > 0 ? (
-        <>
-          <div className="rounded-lg border">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="border-b bg-muted/50">
-                  <tr>
-                    <th className="p-3 text-left text-sm font-medium">受注番号</th>
-                    <th className="p-3 text-left text-sm font-medium">得意先</th>
-                    <th className="p-3 text-left text-sm font-medium">受注日</th>
-                    <th className="p-3 text-left text-sm font-medium">納期</th>
-                    <th className="p-3 text-left text-sm font-medium">ステータス</th>
-                    <th className="p-3 text-right text-sm font-medium">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order.id} className="border-b hover:bg-muted/50">
-                      <td className="p-3 text-sm font-medium">{order.order_no}</td>
-                      <td className="p-3 text-sm">
-                        {formatCodeAndName(order.customer_code, order.customer_name)}
-                      </td>
-                      <td className="p-3 text-sm">
-                        {order.order_date ? format(new Date(order.order_date), 'yyyy-MM-dd') : '-'}
-                      </td>
-                      <td className="p-3 text-sm">
-                        {order.due_date ? format(new Date(order.due_date), 'yyyy-MM-dd') : '-'}
-                      </td>
-                      <td className="p-3">
-                        <StatusBadge status={order.status} />
-                      </td>
-                      <td className="p-3 text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => (window.location.href = `/orders/${order.id}`)}
-                        >
-                          <ExternalLink className="mr-2 h-4 w-4" />
-                          詳細
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* ページネーション */}
-          <div className="flex items-center justify-between">
+        ),
+        sortable: true,
+      },
+      {
+        id: 'order_date',
+        header: '受注日',
+        cell: (order) =>
+          format(new Date(order.order_date), 'yyyy/MM/dd'),
+        sortable: true,
+      },
+      {
+        id: 'due_date',
+        header: '納期',
+        cell: (order) =>
+          order.due_date
+            ? format(new Date(order.due_date), 'yyyy/MM/dd')
+            : '-',
+        sortable: true,
+      },
+      {
+        id: 'lines_count',
+        header: '明細数',
+        cell: (order) => (
+          <span className="text-center">
+            {order.lines?.length || 0}
+          </span>
+        ),
+        align: 'center',
+      },
+      {
+        id: 'allocation_status',
+        header: '引当状況',
+        cell: (order) => {
+          const lines = order.lines || [];
+          const totalQty = lines.reduce((sum, line) => sum + line.quantity, 0);
+          const allocatedQty = lines.reduce((sum, line) => {
+            const allocated = line.allocated_lots?.reduce(
+              (a, alloc) => a + (alloc.allocated_qty || 0),
+              0
+            ) || 0;
+            return sum + allocated;
+          }, 0);
+          
+          const rate = totalQty > 0 ? (allocatedQty / totalQty) * 100 : 0;
+          
+          return (
             <div className="flex items-center space-x-2">
-              <Label>表示件数:</Label>
-              <Select value={pageSize.toString()} onValueChange={(v) => setPageSize(Number(v))}>
-                <SelectTrigger className="w-20">
+              <div className="h-2 w-24 rounded-full bg-gray-200">
+                <div
+                  className={`h-full rounded-full ${
+                    rate === 100 ? 'bg-green-500' :
+                    rate > 0 ? 'bg-blue-500' :
+                    'bg-gray-300'
+                  }`}
+                  style={{ width: `${rate}%` }}
+                />
+              </div>
+              <span className="text-xs text-gray-600">
+                {rate.toFixed(0)}%
+              </span>
+            </div>
+          );
+        },
+      },
+      {
+        id: 'status',
+        header: 'ステータス',
+        cell: (order) => <OrderStatusBadge status={order.status} />,
+        sortable: true,
+        align: 'center',
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: (order) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              // 引当画面へ遷移するロジック
+              window.location.href = `/allocation?selected=${order.id}`;
+            }}
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        ),
+        width: '60px',
+      },
+    ],
+    []
+  );
+  
+  // データの加工
+  const sortedOrders = table.sortData(allOrders);
+  const paginatedOrders = table.paginateData(sortedOrders);
+  const pagination = table.calculatePagination(sortedOrders.length);
+  
+  // 統計情報
+  const stats = useMemo(() => calculateOrderStats(allOrders), [allOrders]);
+  
+  return (
+    <PageContainer>
+      <PageHeader
+        title="受注管理"
+        subtitle="受注一覧と引当状況"
+        actions={
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isLoading}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              更新
+            </Button>
+            <Button
+              size="sm"
+              onClick={createDialog.open}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              新規登録
+            </Button>
+          </>
+        }
+      />
+      
+      {/* 統計情報 */}
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">総受注数</div>
+          <div className="mt-1 text-2xl font-bold">{stats.totalOrders}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">未処理</div>
+          <div className="mt-1 text-2xl font-bold text-yellow-600">
+            {stats.openOrders}
+          </div>
+        </div>
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">引当済</div>
+          <div className="mt-1 text-2xl font-bold text-blue-600">
+            {stats.allocatedOrders}
+          </div>
+        </div>
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">引当率</div>
+          <div className="mt-1 text-2xl font-bold text-green-600">
+            {stats.allocationRate.toFixed(1)}%
+          </div>
+        </div>
+      </div>
+      
+      {/* フィルター */}
+      <Section className="mb-6">
+        <FilterPanel
+          title="検索・フィルター"
+          activeCount={filters.activeCount}
+          onReset={filters.reset}
+        >
+          <SearchBar
+            value={filters.values.search}
+            onChange={(value) => filters.set('search', value)}
+            placeholder="受注番号、得意先コード、得意先名で検索..."
+          />
+          
+          <div className="grid grid-cols-2 gap-3">
+            <FilterField label="得意先コード">
+              <Input
+                value={filters.values.customerCode}
+                onChange={(e) => filters.set('customerCode', e.target.value)}
+                placeholder="例: C001"
+              />
+            </FilterField>
+            
+            <FilterField label="ステータス">
+              <Select
+                value={filters.values.status}
+                onValueChange={(value) => filters.set('status', value)}
+              >
+                <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="25">25</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                  <SelectItem value="100">100</SelectItem>
+                  <SelectItem value="all">すべて</SelectItem>
+                  <SelectItem value="open">未処理</SelectItem>
+                  <SelectItem value="allocated">引当済</SelectItem>
+                  <SelectItem value="shipped">出荷済</SelectItem>
+                  <SelectItem value="closed">完了</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                前へ
-              </Button>
-              <span className="text-sm">
-                ページ {page}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage((p) => p + 1)}
-                disabled={!orders || orders.length < pageSize}
-              >
-                次へ
-              </Button>
-            </div>
+            </FilterField>
           </div>
-        </>
-      ) : (
-        <div className="rounded-lg border bg-card p-8 text-center">
-          <p className="text-muted-foreground">受注データがありません</p>
+          
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="unallocatedOnly"
+              checked={filters.values.unallocatedOnly}
+              onChange={(e) => filters.set('unallocatedOnly', e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <label htmlFor="unallocatedOnly" className="text-sm text-gray-700">
+              未引当のみ表示
+            </label>
+          </div>
+        </FilterPanel>
+      </Section>
+      
+      {/* テーブル */}
+      <Section>
+        <DataTable
+          data={paginatedOrders}
+          columns={columns}
+          getRowKey={(order) => order.id}
+          sort={table.sort}
+          onSort={table.handleSort}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="受注がありません"
+        />
+        
+        {!isLoading && !error && sortedOrders.length > 0 && (
+          <TablePagination
+            page={pagination.page}
+            pageSize={pagination.pageSize}
+            totalItems={pagination.totalItems}
+            totalPages={pagination.totalPages}
+            onPageChange={table.setPage}
+            onPageSizeChange={table.setPageSize}
+          />
+        )}
+      </Section>
+      
+      {/* 新規登録ダイアログ */}
+      <FormDialog
+        isOpen={createDialog.isOpen}
+        onClose={createDialog.close}
+        title="受注新規登録"
+        size="lg"
+      >
+        <OrderCreateForm
+          onSubmit={async (data) => {
+            await createOrderMutation.mutateAsync(data);
+          }}
+          onCancel={createDialog.close}
+          isSubmitting={createOrderMutation.isPending}
+        />
+      </FormDialog>
+      
+      {/* トースト表示 */}
+      {toast.toasts.map((t) => (
+        <div
+          key={t.id}
+          className={`fixed bottom-6 right-6 rounded-lg px-4 py-3 text-sm shadow-lg ${
+            t.variant === 'success'
+              ? 'bg-green-600 text-white'
+              : t.variant === 'error'
+              ? 'bg-red-600 text-white'
+              : 'bg-slate-900 text-white'
+          }`}
+        >
+          {t.message}
         </div>
-      )}
-    </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const variants: Record<string, { label: string; class: string }> = {
-    open: { label: '未処理', class: 'bg-yellow-100 text-yellow-800' },
-    allocated: { label: '引当済', class: 'bg-blue-100 text-blue-800' },
-    shipped: { label: '出荷済', class: 'bg-green-100 text-green-800' },
-    completed: { label: '完了', class: 'bg-gray-100 text-gray-800' },
-  };
-
-  const variant = variants[status] || { label: status, class: 'bg-gray-100 text-gray-800' };
-
-  return (
-    <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${variant.class}`}>
-      {variant.label}
-    </span>
-  );
-}
-
-function TableSkeleton() {
-  return (
-    <div className="space-y-3">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="h-12 animate-pulse rounded bg-muted" />
       ))}
-    </div>
+    </PageContainer>
+  );
+}
+
+/**
+ * 受注作成フォームコンポーネント
+ */
+interface OrderCreateFormProps {
+  onSubmit: (data: any) => Promise<void>;
+  onCancel: () => void;
+  isSubmitting: boolean;
+}
+
+function OrderCreateForm({ onSubmit, onCancel, isSubmitting }: OrderCreateFormProps) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const data = {
+      order_no: formData.get('order_no') as string,
+      customer_code: formData.get('customer_code') as string,
+      order_date: formData.get('order_date') as string,
+      due_date: formData.get('due_date') as string || undefined,
+      ship_to: formData.get('ship_to') as string || undefined,
+      status: 'open',
+      lines: [], // 明細は後で追加
+    };
+    
+    await onSubmit(data);
+  };
+  
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="col-span-2">
+          <Label htmlFor="order_no">受注番号 *</Label>
+          <Input
+            id="order_no"
+            name="order_no"
+            required
+            placeholder="例: ORD-2024-001"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="customer_code">得意先コード *</Label>
+          <Input
+            id="customer_code"
+            name="customer_code"
+            required
+            placeholder="例: C001"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="order_date">受注日 *</Label>
+          <Input
+            id="order_date"
+            name="order_date"
+            type="date"
+            required
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="due_date">納期</Label>
+          <Input
+            id="due_date"
+            name="due_date"
+            type="date"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="ship_to">出荷先</Label>
+          <Input
+            id="ship_to"
+            name="ship_to"
+            placeholder="例: 東京営業所"
+          />
+        </div>
+      </div>
+      
+      <div className="flex justify-end space-x-2 pt-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          キャンセル
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? '作成中...' : '作成'}
+        </Button>
+      </div>
+    </form>
   );
 }

@@ -1,440 +1,477 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format, parseISO, formatISO } from "date-fns";
-import { Plus, Search } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+/**
+ * InventoryPage.tsx (リファクタリング版)
+ * 
+ * ロット管理画面
+ * - 新しいフック・コンポーネントを使用
+ * - データ取得: useLotsQuery
+ * - UI状態管理: useDialog, useToast, useTable, useFilters
+ * - 共通コンポーネント: PageHeader, Section, DataTable, etc.
+ */
 
-import { api } from "@/lib/api-client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useMemo } from 'react';
+import { format } from 'date-fns';
+import { Plus, RefreshCw } from 'lucide-react';
+
+// バッチ3で作成したフック
+import { useLotsQuery } from '@/hooks/api';
+import { useCreateLot } from '@/hooks/mutations';
+import { useDialog, useToast, useTable, useFilters } from '@/hooks/ui';
+
+// バッチ3で作成した共通コンポーネント
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  PageHeader,
+  PageContainer,
+  Section,
+} from '@/components/shared/layout';
+import {
+  DataTable,
+  TablePagination,
+  SearchBar,
+  FilterPanel,
+  FilterField,
+  StatusBadge,
+  LotStatusBadge,
+  type Column,
+} from '@/components/shared/data';
+import { FormDialog } from '@/components/shared/form';
+
+// 既存の型とコンポーネント
+import type { LotWithStock } from '@/utils/validators/lot-schemas';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import type {
-  LotResponse,
-  LotCreate,
-  Product,
-  Supplier,
-  Warehouse,
-} from "@/types";
+} from '@/components/ui/select';
 
-// v2.0 LotCreate スキーマに合わせたZodスキーマ
-const lotCreateSchema = z.object({
-  product_code: z.string().min(1, "製品は必須です").optional(), // ⬅️ .optional() を追加
-  supplier_code: z.string().min(1, "仕入先は必須です").optional(), // ⬅️ .optional() を追加
-  lot_number: z.string().min(1, "ロット番号は必須です"),
-  receipt_date: z.string().min(1, "入荷日は必須です"),
-  expiry_date: z.string().optional().nullable(),
-  warehouse_code: z.string().optional().nullable(),
-});
-type LotCreateFormInput = z.infer<typeof lotCreateSchema>;
-
-// フォームのデフォルト値
-const defaultValues: LotCreateFormInput = {
-  product_code: undefined, // ⬅️ 修正
-  supplier_code: undefined, // ⬅️ 修正
-  lot_number: "",
-  receipt_date: formatISO(new Date(), { representation: "date" }),
-  expiry_date: "",
-  warehouse_code: undefined, // ⬅️ 修正
-};
-
+/**
+ * メインコンポーネント
+ */
 export default function InventoryPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
-
-  // React Hook Form の初期化
+  // UI状態管理
+  const createDialog = useDialog();
+  const toast = useToast();
+  const table = useTable({
+    initialPageSize: 25,
+    initialSort: { column: 'receipt_date', direction: 'desc' },
+  });
+  
+  // フィルター状態管理
+  const filters = useFilters({
+    search: '',
+    productCode: '',
+    warehouseCode: '',
+    status: 'all',
+    hasStock: false,
+  });
+  
+  // データ取得
   const {
-    control,
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm<LotCreateFormInput>({
-    resolver: zodResolver(lotCreateSchema),
-    defaultValues,
+    data: allLots = [],
+    isLoading,
+    error,
+    refetch,
+  } = useLotsQuery({
+    productCode: filters.values.productCode || undefined,
+    warehouseCode: filters.values.warehouseCode || undefined,
+    status: filters.values.status !== 'all' ? filters.values.status : undefined,
+    search: filters.values.search || undefined,
+    hasStock: filters.values.hasStock,
   });
-
-  // --- データフェッチ ---
-
-  // 在庫一覧
-  const { data: lots = [], isLoading: isLoadingLots } = useQuery({
-    queryKey: ["lots"],
-    queryFn: api.getLots,
-  });
-
-  // 製品マスタ
-  const { data: products = [], isLoading: isLoadingProducts } = useQuery({
-    queryKey: ["products"],
-    queryFn: api.getProducts,
-  });
-
-  // 仕入先マスタ
-  const { data: suppliers = [], isLoading: isLoadingSuppliers } = useQuery({
-    queryKey: ["suppliers"],
-    queryFn: api.getSuppliers,
-  });
-
-  // 倉庫マスタ
-  const { data: warehouses = [], isLoading: isLoadingWarehouses } = useQuery({
-    queryKey: ["warehouses"],
-    queryFn: api.getWarehouses,
-  });
-
-  // --- ミューテーション ---
-
-  // ロット作成 (v2.0)
-  const createLotMutation = useMutation({
-    mutationFn: (data: LotCreate) => api.createLot(data),
+  
+  // ロット作成Mutation
+  const createLotMutation = useCreateLot({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lots"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
-      setIsAddDialogOpen(false);
-      reset(defaultValues);
+      toast.success('ロットを作成しました');
+      createDialog.close();
     },
     onError: (error) => {
-      console.error(error);
-      alert(`登録失敗: ${error.message}`);
+      toast.error(`作成に失敗しました: ${error.message}`);
     },
   });
-
-  // --- イベントハンドラ ---
-
-  // フォーム送信
-  const onSubmit = (data: LotCreateFormInput) => {
-    const input: LotCreate = {
-      ...data,
-      expiry_date: data.expiry_date || undefined,
-      warehouse_code: data.warehouse_code || undefined,
-    };
-    createLotMutation.mutate(input);
-  };
-
-  // ダイアログ開閉
-  const onOpenChange = (open: boolean) => {
-    setIsAddDialogOpen(open);
-    if (!open) {
-      reset(defaultValues); // 閉じたらフォームリセット
-    }
-  };
-
-  // --- フィルタリングと表示ロジック ---
-
-  // Filter lots (v2.0)
-  const filteredLots = lots.filter(
-    (lot) =>
-      lot.lot_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (lot.product_name &&
-        lot.product_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      lot.product_code.toLowerCase().includes(searchQuery.toLowerCase())
+  
+  // テーブルカラム定義
+  const columns: Column<LotWithStock>[] = useMemo(
+    () => [
+      {
+        id: 'lot_no',
+        header: 'ロット番号',
+        cell: (lot) => (
+          <span className="font-medium">{lot.lot_no}</span>
+        ),
+        sortable: true,
+      },
+      {
+        id: 'product_code',
+        header: '製品コード',
+        cell: (lot) => lot.product_code,
+        sortable: true,
+      },
+      {
+        id: 'product_name',
+        header: '製品名',
+        cell: (lot) => lot.product_name || '-',
+      },
+      {
+        id: 'warehouse_code',
+        header: '倉庫',
+        cell: (lot) => lot.warehouse_name || lot.warehouse_code,
+        sortable: true,
+      },
+      {
+        id: 'current_quantity',
+        header: '現在在庫',
+        cell: (lot) => (
+          <span className={lot.current_quantity > 0 ? 'font-semibold' : 'text-gray-400'}>
+            {lot.current_quantity.toLocaleString()}
+          </span>
+        ),
+        sortable: true,
+        align: 'right',
+      },
+      {
+        id: 'unit',
+        header: '単位',
+        cell: (lot) => lot.unit || 'EA',
+        align: 'center',
+      },
+      {
+        id: 'receipt_date',
+        header: '入荷日',
+        cell: (lot) =>
+          lot.receipt_date
+            ? format(new Date(lot.receipt_date), 'yyyy/MM/dd')
+            : '-',
+        sortable: true,
+      },
+      {
+        id: 'expiry_date',
+        header: '有効期限',
+        cell: (lot) =>
+          lot.expiry_date
+            ? format(new Date(lot.expiry_date), 'yyyy/MM/dd')
+            : '-',
+        sortable: true,
+      },
+      {
+        id: 'status',
+        header: 'ステータス',
+        cell: (lot) => <LotStatusBadge status={lot.status} />,
+        sortable: true,
+        align: 'center',
+      },
+    ],
+    []
   );
-
-  // Get status badge color (v2.0)
-  const getExpiryStatusColor = (expiryDate: string | undefined | null) => {
-    if (!expiryDate) return "bg-gray-100 text-gray-800";
-    const daysLeft =
-      (parseISO(expiryDate).getTime() - new Date().getTime()) /
-      (1000 * 60 * 60 * 24);
-
-    if (daysLeft <= 0) return "bg-red-100 text-red-800";
-    if (daysLeft <= 30) return "bg-yellow-100 text-yellow-800";
-    return "bg-green-100 text-green-800";
-  };
-
+  
+  // データの加工
+  const sortedLots = table.sortData(allLots);
+  const paginatedLots = table.paginateData(sortedLots);
+  const pagination = table.calculatePagination(sortedLots.length);
+  
+  // 統計情報
+  const stats = useMemo(() => {
+    const totalLots = allLots.length;
+    const activeLots = allLots.filter((lot) => lot.status === 'active').length;
+    const totalQuantity = allLots.reduce(
+      (sum, lot) => sum + (lot.current_quantity || 0),
+      0
+    );
+    
+    return { totalLots, activeLots, totalQuantity };
+  }, [allLots]);
+  
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">在庫一覧</h2>
-          <p className="text-muted-foreground">
-            現在庫のあるロット情報をFEFO（有効期限順）で表示します
-          </p>
-        </div>
-
-        <Dialog open={isAddDialogOpen} onOpenChange={onOpenChange}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              新規ロット登録
+    <PageContainer>
+      <PageHeader
+        title="ロット管理"
+        subtitle="在庫ロットの一覧と登録"
+        actions={
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isLoading}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              更新
             </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <DialogHeader>
-                <DialogTitle>新規ロット登録</DialogTitle>
-                <DialogDescription>
-                  新しいロット情報を入力してください
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="grid gap-4 py-4">
-                {/* 製品 (Select) */}
-                <div className="grid gap-2">
-                  <Label htmlFor="product_code">製品 *</Label>
-                  <Controller
-                    name="product_code"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        disabled={isLoadingProducts}>
-                        <SelectTrigger id="product_code">
-                          <SelectValue placeholder="製品を選択..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {/* 🔽 修正: value="" の Item を削除 */}
-                          {products.map((p) => (
-                            <SelectItem
-                              key={p.product_code}
-                              value={p.product_code}>
-                              {p.product_code} - {p.product_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.product_code && (
-                    <p className="text-sm text-destructive">
-                      {errors.product_code.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* 仕入先 (Select) */}
-                <div className="grid gap-2">
-                  <Label htmlFor="supplier_code">仕入先 *</Label>
-                  <Controller
-                    name="supplier_code"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        disabled={isLoadingSuppliers}>
-                        <SelectTrigger id="supplier_code">
-                          <SelectValue placeholder="仕入先を選択..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {/* 🔽 修正: value="" の Item を削除 */}
-                          {suppliers.map((s) => (
-                            <SelectItem
-                              key={s.supplier_code}
-                              value={s.supplier_code}>
-                              {s.supplier_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.supplier_code && (
-                    <p className="text-sm text-destructive">
-                      {errors.supplier_code.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* ロット番号 (Input) */}
-                <div className="grid gap-2">
-                  <Label htmlFor="lot_number">ロット番号 *</Label>
-                  <Input id="lot_number" {...register("lot_number")} />
-                  {errors.lot_number && (
-                    <p className="text-sm text-destructive">
-                      {errors.lot_number.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* 入荷日 (Input type="date") */}
-                <div className="grid gap-2">
-                  <Label htmlFor="receipt_date">入荷日 *</Label>
-                  <Input
-                    id="receipt_date"
-                    type="date"
-                    {...register("receipt_date")}
-                  />
-                  {errors.receipt_date && (
-                    <p className="text-sm text-destructive">
-                      {errors.receipt_date.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* 有効期限 (Input type="date") */}
-                <div className="grid gap-2">
-                  <Label htmlFor="expiry_date">有効期限</Label>
-                  <Input
-                    id="expiry_date"
-                    type="date"
-                    {...register("expiry_date")}
-                  />
-                </div>
-
-                {/* 倉庫 (Select) */}
-                <div className="grid gap-2">
-                  <Label htmlFor="warehouse_code">倉庫</Label>
-                  <Controller
-                    name="warehouse_code"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        disabled={isLoadingWarehouses}>
-                        <SelectTrigger id="warehouse_code">
-                          <SelectValue placeholder="倉庫を選択..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {/* ⬆️ value="" の SelectItem を削除しました */}
-                          {warehouses.map((w) => (
-                            <SelectItem
-                              key={w.warehouse_code}
-                              value={w.warehouse_code}>
-                              {w.warehouse_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}>
-                  キャンセル
-                </Button>
-                <Button type="submit" disabled={createLotMutation.isPending}>
-                  {createLotMutation.isPending ? "登録中..." : "登録"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+            <Button
+              size="sm"
+              onClick={createDialog.open}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              新規登録
+            </Button>
+          </>
+        }
+      />
+      
+      {/* 統計情報 */}
+      <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">総ロット数</div>
+          <div className="mt-1 text-2xl font-bold">{stats.totalLots}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">有効ロット数</div>
+          <div className="mt-1 text-2xl font-bold">{stats.activeLots}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-4">
+          <div className="text-sm text-gray-600">総在庫数</div>
+          <div className="mt-1 text-2xl font-bold">
+            {stats.totalQuantity.toLocaleString()}
+          </div>
+        </div>
       </div>
+      
+      {/* フィルター */}
+      <Section className="mb-6">
+        <FilterPanel
+          title="検索・フィルター"
+          activeCount={filters.activeCount}
+          onReset={filters.reset}
+        >
+          <SearchBar
+            value={filters.values.search}
+            onChange={(value) => filters.set('search', value)}
+            placeholder="ロット番号、製品コード、製品名で検索..."
+          />
+          
+          <div className="grid grid-cols-3 gap-3">
+            <FilterField label="製品コード">
+              <Input
+                value={filters.values.productCode}
+                onChange={(e) => filters.set('productCode', e.target.value)}
+                placeholder="例: P001"
+              />
+            </FilterField>
+            
+            <FilterField label="倉庫コード">
+              <Input
+                value={filters.values.warehouseCode}
+                onChange={(e) => filters.set('warehouseCode', e.target.value)}
+                placeholder="例: W01"
+              />
+            </FilterField>
+            
+            <FilterField label="ステータス">
+              <Select
+                value={filters.values.status}
+                onValueChange={(value) => filters.set('status', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">すべて</SelectItem>
+                  <SelectItem value="active">有効</SelectItem>
+                  <SelectItem value="allocated">引当済</SelectItem>
+                  <SelectItem value="shipped">出荷済</SelectItem>
+                  <SelectItem value="inactive">無効</SelectItem>
+                </SelectContent>
+              </Select>
+            </FilterField>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="hasStock"
+              checked={filters.values.hasStock}
+              onChange={(e) => filters.set('hasStock', e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <label htmlFor="hasStock" className="text-sm text-gray-700">
+              在庫ありのみ表示
+            </label>
+          </div>
+        </FilterPanel>
+      </Section>
+      
+      {/* テーブル */}
+      <Section>
+        <DataTable
+          data={paginatedLots}
+          columns={columns}
+          getRowKey={(lot) => lot.id}
+          sort={table.sort}
+          onSort={table.handleSort}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="ロットがありません"
+        />
+        
+        {!isLoading && !error && sortedLots.length > 0 && (
+          <TablePagination
+            page={pagination.page}
+            pageSize={pagination.pageSize}
+            totalItems={pagination.totalItems}
+            totalPages={pagination.totalPages}
+            onPageChange={table.setPage}
+            onPageSizeChange={table.setPageSize}
+          />
+        )}
+      </Section>
+      
+      {/* 新規登録ダイアログ */}
+      <FormDialog
+        isOpen={createDialog.isOpen}
+        onClose={createDialog.close}
+        title="ロット新規登録"
+        size="lg"
+      >
+        <LotCreateForm
+          onSubmit={async (data) => {
+            await createLotMutation.mutateAsync(data);
+          }}
+          onCancel={createDialog.close}
+          isSubmitting={createLotMutation.isPending}
+        />
+      </FormDialog>
+      
+      {/* トースト表示 */}
+      {toast.toasts.map((t) => (
+        <div
+          key={t.id}
+          className={`fixed bottom-6 right-6 rounded-lg px-4 py-3 text-sm shadow-lg ${
+            t.variant === 'success'
+              ? 'bg-green-600 text-white'
+              : t.variant === 'error'
+              ? 'bg-red-600 text-white'
+              : 'bg-slate-900 text-white'
+          }`}
+        >
+          {t.message}
+        </div>
+      ))}
+    </PageContainer>
+  );
+}
 
-      {/* Search */}
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+/**
+ * ロット作成フォームコンポーネント
+ */
+interface LotCreateFormProps {
+  onSubmit: (data: any) => Promise<void>;
+  onCancel: () => void;
+  isSubmitting: boolean;
+}
+
+function LotCreateForm({ onSubmit, onCancel, isSubmitting }: LotCreateFormProps) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const data = {
+      lot_no: formData.get('lot_no') as string,
+      product_code: formData.get('product_code') as string,
+      warehouse_code: formData.get('warehouse_code') as string,
+      quantity: Number(formData.get('quantity')),
+      unit: formData.get('unit') as string,
+      receipt_date: formData.get('receipt_date') as string,
+      expiry_date: formData.get('expiry_date') as string || undefined,
+      status: 'active',
+    };
+    
+    await onSubmit(data);
+  };
+  
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="lot_no">ロット番号 *</Label>
           <Input
-            placeholder="ロット番号、製品名、製品コードで検索..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8"
+            id="lot_no"
+            name="lot_no"
+            required
+            placeholder="例: LOT-2024-001"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="product_code">製品コード *</Label>
+          <Input
+            id="product_code"
+            name="product_code"
+            required
+            placeholder="例: P001"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="warehouse_code">倉庫コード *</Label>
+          <Input
+            id="warehouse_code"
+            name="warehouse_code"
+            required
+            placeholder="例: W01"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="quantity">数量 *</Label>
+          <Input
+            id="quantity"
+            name="quantity"
+            type="number"
+            required
+            min="0"
+            step="0.01"
+            placeholder="例: 1000"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="unit">単位 *</Label>
+          <Input
+            id="unit"
+            name="unit"
+            required
+            placeholder="例: EA"
+            defaultValue="EA"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="receipt_date">入荷日 *</Label>
+          <Input
+            id="receipt_date"
+            name="receipt_date"
+            type="date"
+            required
+          />
+        </div>
+        
+        <div className="col-span-2">
+          <Label htmlFor="expiry_date">有効期限</Label>
+          <Input
+            id="expiry_date"
+            name="expiry_date"
+            type="date"
           />
         </div>
       </div>
-
-      {/* Table (v2.0) */}
-      <div className="rounded-md border">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              {/* (テーブルヘッダは変更なし) */}
-              <tr className="border-b bg-muted/50">
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  ロット番号
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  製品名
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  現在在庫
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  入荷日
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  有効期限
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  倉庫
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  仕入先
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoadingLots ? (
-                <tr>
-                  <td colSpan={7} className="h-24 text-center">
-                    読み込み中...
-                  </td>
-                </tr>
-              ) : filteredLots.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="h-24 text-center">
-                    データがありません
-                  </td>
-                </tr>
-              ) : (
-                filteredLots.map((lot) => (
-                  <tr key={lot.id} className="border-b">
-                    <td className="p-4 align-middle font-medium">
-                      {lot.lot_number}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {lot.product_name || (
-                        <span className="text-muted-foreground italic">
-                          {lot.product_code}
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 align-middle font-semibold">
-                      {lot.current_stock ?? 0}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {format(parseISO(lot.receipt_date), "yyyy/MM/dd")}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {lot.expiry_date ? (
-                        <span
-                          className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getExpiryStatusColor(
-                            lot.expiry_date
-                          )}`}>
-                          {format(parseISO(lot.expiry_date), "yyyy/MM/dd")}
-                        </span>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {lot.warehouse_code || "-"}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {lot.supplier_code || "-"}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+      
+      <div className="flex justify-end space-x-2 pt-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          キャンセル
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? '作成中...' : '作成'}
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }
