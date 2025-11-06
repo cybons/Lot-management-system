@@ -1,7 +1,7 @@
-# backend/app/repositories/lot_repository.py
+# backend/app/services/lot_service.py
 """
-ロットリポジトリ
-DBアクセスのみを責務とする
+ロットリポジトリとサービス
+DBアクセスとFEFOロジックの実装
 """
 
 from datetime import date
@@ -97,8 +97,8 @@ from app.domain.lot import (
     LotNotFoundError,
     StockValidator,
 )
-from app.models import Lot
-from app.repositories.lot_repository import LotRepository
+from app.models import Lot, LotCurrentStock
+# LotRepositoryは同じファイル内で定義されているのでインポート不要
 
 
 class LotService:
