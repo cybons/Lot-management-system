@@ -1,31 +1,24 @@
 # backend/app/api/routes/orders_refactored.py
 """
-受注エンドポイント
-I/O整形とHTTP例外変換のみを責務とする
+受注エンドポイント（全修正版）
+I/O整形のみを責務とし、例外変換はグローバルハンドラに委譲
 """
 
 from datetime import date
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.domain.order import (
-    DuplicateOrderError,
-    InvalidOrderStatusError,
-    OrderDomainError,
-    OrderLineNotFoundError,
-    OrderNotFoundError,
-    OrderValidationError,
-)
+from app.api.deps import get_db, get_uow
 from app.schemas import (
     OrderCreate,
     OrderResponse,
-    OrderUpdate,
+    OrderStatusUpdate,
     OrderWithLinesResponse,
 )
 from app.services.order_service import OrderService
+from app.services.uow import UnitOfWork
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -40,25 +33,24 @@ def list_orders(
     date_to: Optional[date] = None,
     db: Session = Depends(get_db)
 ):
-    """受注一覧取得"""
+    """
+    受注一覧取得（読み取り専用）
+    
+    トランザクション不要のため、通常のSessionを使用
+    
+    Note:
+        例外はグローバルハンドラで処理されるため、
+        ここではHTTPExceptionを投げない
+    """
     service = OrderService(db)
-    
-    try:
-        orders = service.get_orders(
-            skip=skip,
-            limit=limit,
-            status=status,
-            customer_code=customer_code,
-            date_from=date_from,
-            date_to=date_to
-        )
-        return orders
-    
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+    return service.get_orders(
+        skip=skip,
+        limit=limit,
+        status=status,
+        customer_code=customer_code,
+        date_from=date_from,
+        date_to=date_to
+    )
 
 
 @router.get("/{order_id}", response_model=OrderWithLinesResponse)
@@ -66,162 +58,95 @@ def get_order(
     order_id: int,
     db: Session = Depends(get_db)
 ):
-    """受注詳細取得(明細含む)"""
+    """
+    受注詳細取得（読み取り専用、明細含む）
+    
+    トランザクション不要のため、通常のSessionを使用
+    
+    Note:
+        - OrderNotFoundError → 404はグローバルハンドラが処理
+    """
     service = OrderService(db)
-    
-    try:
-        order = service.get_order_detail(order_id)
-        return order
-    
-    except OrderNotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=e.message
-        )
-    
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+    return service.get_order_detail(order_id)
 
 
-@router.post("", response_model=OrderWithLinesResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=OrderWithLinesResponse, status_code=201)
 def create_order(
     order: OrderCreate,
-    db: Session = Depends(get_db)
+    uow: UnitOfWork = Depends(get_uow)
 ):
-    """受注作成"""
-    service = OrderService(db)
+    """
+    受注作成
     
-    try:
-        new_order = service.create_order(order)
-        
-        db.commit()
-        
-        return new_order
+    【修正#5】UnitOfWorkを依存注入で取得（SessionLocal直参照を回避）
     
-    except DuplicateOrderError as e:
-        db.rollback()
-        # ✅ 409 Conflictを返す
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=e.message
-        )
+    トランザクション管理:
+        - 成功時: UnitOfWorkが自動commit
+        - 例外発生時: UnitOfWorkが自動rollback
     
-    except OrderValidationError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=e.message
-        )
-    
-    except OrderDomainError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=e.message
-        )
-    
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+    例外処理:
+        - DuplicateOrderError → 409 Conflict
+        - OrderValidationError → 422 Unprocessable Entity
+        - ProductNotFoundError → 404 Not Found
+        - OrderDomainError → 400 Bad Request
+        上記はすべてグローバルハンドラで変換される
+    """
+    service = OrderService(uow.session)
+    return service.create_order(order)
 
 
 @router.patch("/{order_id}/status", response_model=OrderResponse)
 def update_order_status(
     order_id: int,
-    request: dict,
-    db: Session = Depends(get_db)
+    body: OrderStatusUpdate,
+    uow: UnitOfWork = Depends(get_uow)
 ):
-    """受注ステータス更新"""
-    service = OrderService(db)
+    """
+    受注ステータス更新
     
-    try:
-        new_status = request.get("status")
-        if not new_status:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="status フィールドは必須です"
-            )
-        
-        updated_order = service.update_order_status(order_id, new_status)
-        
-        db.commit()
-        
-        return updated_order
+    【修正#2】dict入力を廃止し、OrderStatusUpdateスキーマを使用
+    【修正#5】UnitOfWorkを依存注入で取得
     
-    except OrderNotFoundError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=e.message
-        )
+    Args:
+        order_id: 受注ID
+        body: ステータス更新データ（Schema検証済み）
+        uow: UnitOfWork（依存注入）
     
-    except InvalidOrderStatusError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=e.message
-        )
+    トランザクション管理:
+        - 成功時: UnitOfWorkが自動commit
+        - 例外発生時: UnitOfWorkが自動rollback
     
-    except OrderDomainError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=e.message
-        )
-    
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+    例外処理:
+        - OrderNotFoundError → 404 Not Found
+        - InvalidOrderStatusError → 400 Bad Request
+        上記はグローバルハンドラで変換される
+    """
+    service = OrderService(uow.session)
+    return service.update_order_status(order_id, body.status)
 
 
-@router.delete("/{order_id}/cancel", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{order_id}/cancel", status_code=204)
 def cancel_order(
     order_id: int,
-    db: Session = Depends(get_db)
+    uow: UnitOfWork = Depends(get_uow)
 ):
-    """受注キャンセル"""
-    service = OrderService(db)
+    """
+    受注キャンセル
     
-    try:
-        service.cancel_order(order_id)
-        
-        db.commit()
-        
-        return None
+    【修正#5】UnitOfWorkを依存注入で取得
     
-    except OrderNotFoundError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=e.message
-        )
+    トランザクション管理:
+        - 成功時: UnitOfWorkが自動commit
+        - 例外発生時: UnitOfWorkが自動rollback
     
-    except InvalidOrderStatusError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=e.message
-        )
+    例外処理:
+        - OrderNotFoundError → 404 Not Found
+        - InvalidOrderStatusError → 400 Bad Request
+        上記はグローバルハンドラで変換される
     
-    except OrderDomainError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=e.message
-        )
-    
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+    Returns:
+        None (204 No Content)
+    """
+    service = OrderService(uow.session)
+    service.cancel_order(order_id)
+    return None

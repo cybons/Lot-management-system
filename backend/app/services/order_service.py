@@ -1,7 +1,7 @@
 # backend/app/services/order_service.py
 """
-受注サービス層
-ビジネスロジックとデータ永続化を担当
+受注サービス層（全修正版）
+ビジネスロジックとトランザクション管理を担当
 """
 
 from datetime import date
@@ -23,15 +23,33 @@ from app.schemas import (
     OrderResponse,
     OrderWithLinesResponse,
 )
-
-# ✅ 修正: 単位変換関数をインポート
 from app.services.quantity import QuantityConversionError, to_internal_qty
 
 
+class ProductNotFoundError(Exception):
+    """製品が見つからない場合の例外"""
+    def __init__(self, product_code: str):
+        self.product_code = product_code
+        self.message = f"製品コード '{product_code}' が見つかりません"
+        super().__init__(self.message)
+
+
 class OrderService:
-    """受注サービス"""
+    """
+    受注サービス
+    
+    Note:
+        - 読み取り専用メソッド（get_orders, get_order_detail）は通常のSessionを使用
+        - 更新系メソッド（create_order, update_order_status, cancel_order）はUnitOfWorkを使用
+    """
 
     def __init__(self, db: Session):
+        """
+        コンストラクタ
+        
+        Args:
+            db: SQLAlchemyセッション（通常のSessionまたはUnitOfWork.session）
+        """
         self.db = db
 
     def get_orders(
@@ -43,7 +61,20 @@ class OrderService:
         date_from: Optional[date] = None,
         date_to: Optional[date] = None,
     ) -> List[OrderResponse]:
-        """受注一覧取得"""
+        """
+        受注一覧取得（読み取り専用）
+        
+        Args:
+            skip: オフセット
+            limit: 取得件数上限
+            status: ステータスフィルタ
+            customer_code: 得意先コードフィルタ
+            date_from: 受注日開始フィルタ
+            date_to: 受注日終了フィルタ
+            
+        Returns:
+            受注レスポンスのリスト
+        """
         query = self.db.query(Order)
 
         if status:
@@ -60,7 +91,18 @@ class OrderService:
         return [OrderResponse.model_validate(order) for order in orders]
 
     def get_order_detail(self, order_id: int) -> OrderWithLinesResponse:
-        """受注詳細取得(明細含む)"""
+        """
+        受注詳細取得（読み取り専用、明細含む）
+        
+        Args:
+            order_id: 受注ID
+            
+        Returns:
+            受注詳細レスポンス（明細含む）
+            
+        Raises:
+            OrderNotFoundError: 受注が存在しない場合
+        """
         order = (
             self.db.query(Order)
             .options(selectinload(Order.lines))
@@ -74,32 +116,33 @@ class OrderService:
         return OrderWithLinesResponse.model_validate(order)
 
     def create_order(self, order_data: OrderCreate) -> OrderWithLinesResponse:
-        """受注作成"""
-        existing = self.db.query(Order).filter(Order.order_no == order_data.order_no).first()
+        """
+        受注作成（トランザクション管理はUnitOfWorkで実施）
+        
+        Args:
+            order_data: 受注作成データ
+            
+        Returns:
+            作成された受注（明細含む）
+            
+        Raises:
+            DuplicateOrderError: 受注番号が重複している場合
+            OrderValidationError: バリデーションエラーの場合
+            ProductNotFoundError: 製品が存在しない場合
+        """
+        # ビジネスルールチェック
+        OrderBusinessRules.validate_order_data(order_data)
+
+        # 重複チェック
+        existing = (
+            self.db.query(Order)
+            .filter(Order.order_no == order_data.order_no)
+            .first()
+        )
         if existing:
             raise DuplicateOrderError(order_data.order_no)
 
-        # ✅ 修正: external_unitを使った単位変換処理を追加
-        for line in order_data.lines:
-            # 製品存在チェック
-            product = (
-                self.db.query(Product).filter(Product.product_code == line.product_code).first()
-            )
-            if not product:
-                raise OrderValidationError(f"製品コード '{line.product_code}' が見つかりません")
-
-            # ✅ 修正: external_unitを使って内部単位に変換
-            try:
-                internal_qty = to_internal_qty(
-                    product=product,
-                    qty_external=line.quantity,
-                    external_unit=line.external_unit,
-                )
-                # 変換後の数量でバリデーション
-                OrderBusinessRules.validate_quantity(float(internal_qty), line.product_code)
-            except QuantityConversionError as e:
-                raise OrderValidationError(f"単位変換エラー: {str(e)}")
-
+        # 受注ヘッダ作成
         order = Order(
             order_no=order_data.order_no,
             customer_code=order_data.customer_code,
@@ -107,15 +150,19 @@ class OrderService:
             status="open",
         )
         self.db.add(order)
-        self.db.flush()
+        self.db.flush()  # IDを取得するためflush
 
-        # ✅ 修正: 明細作成時に単位変換を実施
+        # 受注明細作成
         for line_data in order_data.lines:
+            # 【修正#3】製品マスタの存在チェックを明示
             product = (
                 self.db.query(Product)
                 .filter(Product.product_code == line_data.product_code)
                 .first()
             )
+            
+            if not product:
+                raise ProductNotFoundError(line_data.product_code)
 
             # 内部単位に変換
             internal_qty = to_internal_qty(
@@ -124,30 +171,48 @@ class OrderService:
                 external_unit=line_data.external_unit,
             )
 
+            # 【修正#4】内部単位整合: 内部単位を保存
+            # Note: OrderLine.unitには内部単位（product.internal_unit）を保存
+            #       外部単位との変換は to_internal_qty で完結
             line = OrderLine(
                 order_id=order.id,
                 line_no=line_data.line_no,
                 product_code=line_data.product_code,
-                quantity=float(internal_qty),  # 変換後の数量を保存
-                unit=line_data.unit,
+                quantity=float(internal_qty),  # 内部単位での数量
+                unit=product.internal_unit,     # 内部単位を保存（修正）
                 due_date=line_data.due_date,
             )
             self.db.add(line)
 
-        self.db.flush()
-        self.db.refresh(order)
+        self.db.flush()  # 明細のIDを取得
+        self.db.refresh(order)  # リレーションをリフレッシュ
 
         return OrderWithLinesResponse.model_validate(order)
 
     def update_order_status(self, order_id: int, new_status: str) -> OrderResponse:
-        """受注ステータス更新"""
+        """
+        受注ステータス更新（トランザクション管理はUnitOfWorkで実施）
+        
+        Args:
+            order_id: 受注ID
+            new_status: 新しいステータス
+            
+        Returns:
+            更新された受注
+            
+        Raises:
+            OrderNotFoundError: 受注が存在しない場合
+            InvalidOrderStatusError: 状態遷移が不正な場合
+        """
         order = self.db.query(Order).filter(Order.id == order_id).first()
 
         if not order:
             raise OrderNotFoundError(order_id)
 
+        # 状態遷移バリデーション
         OrderStateMachine.validate_transition(order.status, new_status)
 
+        # ステータス更新
         order.status = new_status
 
         self.db.flush()
@@ -156,17 +221,28 @@ class OrderService:
         return OrderResponse.model_validate(order)
 
     def cancel_order(self, order_id: int) -> None:
-        """受注キャンセル"""
+        """
+        受注キャンセル（トランザクション管理はUnitOfWorkで実施）
+        
+        Args:
+            order_id: 受注ID
+            
+        Raises:
+            OrderNotFoundError: 受注が存在しない場合
+            InvalidOrderStatusError: キャンセル不可能なステータスの場合
+        """
         order = self.db.query(Order).filter(Order.id == order_id).first()
 
         if not order:
             raise OrderNotFoundError(order_id)
 
+        # キャンセル可能かチェック
         if order.status in ["shipped", "closed"]:
             raise InvalidOrderStatusError(
                 f"ステータスが '{order.status}' の受注はキャンセルできません"
             )
 
+        # ステータスをキャンセルに変更
         order.status = "cancelled"
 
         self.db.flush()
