@@ -65,7 +65,7 @@ def list_lots(
     if supplier_code:
         query = query.filter(Lot.supplier_code == supplier_code)
     if warehouse_code:
-        query = query.filter(Lot.warehouse_code == warehouse_code)
+        query = query.join(Lot.warehouse).filter(Warehouse.warehouse_code == warehouse_code)
     if expiry_from:
         query = query.filter(Lot.expiry_date >= expiry_from)
     if expiry_to:

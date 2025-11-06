@@ -30,7 +30,7 @@ from .base_model import AuditMixin, Base
 
 # 型チェック時のみインポート（循環インポート回避）
 if TYPE_CHECKING:
-    from .masters import Warehouse
+    from .masters import Product, Supplier, Warehouse
 
 
 class StockMovementReason(PyEnum):
@@ -107,6 +107,12 @@ class Lot(AuditMixin, Base):
     allocations = relationship("Allocation", back_populates="lot", cascade="all, delete-orphan")
     receipt_lines = relationship("ReceiptLine", back_populates="lot")
 
+    @property
+    def warehouse_code(self) -> str | None:  # pragma: no cover - simple delegation
+        if self.warehouse:
+            return self.warehouse.warehouse_code
+        return None
+
 
 class StockMovement(AuditMixin, Base):
     """
@@ -177,6 +183,12 @@ class ReceiptHeader(AuditMixin, Base):
     )
     lines = relationship("ReceiptLine", back_populates="header", cascade="all, delete-orphan")
 
+    @property
+    def warehouse_code(self) -> str | None:  # pragma: no cover - simple delegation
+        if self.warehouse:
+            return self.warehouse.warehouse_code
+        return None
+
 
 class ReceiptLine(AuditMixin, Base):
     """入荷伝票明細"""
@@ -214,3 +226,7 @@ class ExpiryRule(AuditMixin, Base):
     fixed_date = Column(Date)  # 固定日付
     is_active = Column(Integer, default=1)
     priority = Column(Integer, nullable=False, default=10)
+
+    # リレーション
+    product = relationship("Product", back_populates="expiry_rules")
+    supplier = relationship("Supplier", back_populates="expiry_rules")

@@ -47,14 +47,15 @@ class LotRepository:
         stmt = (
             select(Lot, LotCurrentStock)
             .join(LotCurrentStock, Lot.id == LotCurrentStock.lot_id)
+            .join(Warehouse, Lot.warehouse_id == Warehouse.id, isouter=True)
             .where(
                 Lot.product_code == product_code,
                 LotCurrentStock.current_quantity > min_quantity
             )
         )
-        
+
         if warehouse_code:
-            stmt = stmt.where(Lot.warehouse_code == warehouse_code)
+            stmt = stmt.where(Warehouse.warehouse_code == warehouse_code)
         
         results = self.db.execute(stmt).all()
         return [(lot, stock) for lot, stock in results]
@@ -64,7 +65,7 @@ class LotRepository:
         supplier_code: str,
         product_code: str,
         lot_number: str,
-        warehouse_code: str,
+        warehouse_id: int,
         receipt_date: Optional[date] = None,
         expiry_date: Optional[date] = None
     ) -> Lot:
@@ -74,7 +75,7 @@ class LotRepository:
             supplier_code=supplier_code,
             product_code=product_code,
             lot_number=lot_number,
-            warehouse_code=warehouse_code,
+            warehouse_id=warehouse_id,
             receipt_date=receipt_date or date.today(),
             expiry_date=expiry_date
         )

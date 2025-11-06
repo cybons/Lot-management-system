@@ -54,7 +54,7 @@ class LotResponse(LotBase, TimestampMixin):
 # --- StockMovement ---
 class StockMovementBase(BaseSchema):
     product_id: str
-    warehouse_id: str
+    warehouse_id: Optional[int] = None
     lot_id: Optional[int] = None
     quantity_delta: float
     reason: str

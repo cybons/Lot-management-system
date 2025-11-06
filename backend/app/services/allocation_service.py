@@ -15,7 +15,7 @@ from app.domain.allocation import (
     NotFoundError,
     RoundingPolicy,
 )
-from app.models import Allocation, StockMovement, StockMovementReason
+from app.models import Allocation, StockMovement, StockMovementReason, Warehouse
 from app.repositories.allocation_repository import AllocationRepository
 
 
@@ -25,6 +25,19 @@ class AllocationService:
     def __init__(self, db: Session):
         self.db = db
         self.repository = AllocationRepository(db)
+
+    def _resolve_warehouse_id(self, lot) -> int:
+        if lot:
+            if getattr(lot, "warehouse_id", None) is not None:
+                return lot.warehouse_id
+            warehouse = getattr(lot, "warehouse", None)
+            if warehouse:
+                return warehouse.id
+
+        fallback = self.db.query(Warehouse).first()
+        if not fallback:
+            raise NotFoundError("Warehouse", "default")
+        return fallback.id
     
     def allocate_lot(
         self,
@@ -73,12 +86,13 @@ class AllocationService:
             self.db.flush()  # IDを取得するためflush
             
             # 2. 在庫変動記録
+            lot_ref = current_stock.lot if hasattr(current_stock, "lot") else None
             movement = StockMovement(
-                product_id=current_stock.lot.product_code if hasattr(current_stock, 'lot') else None,
-                warehouse_id=current_stock.lot.warehouse_code if hasattr(current_stock, 'lot') else None,
+                product_id=lot_ref.product_code if lot_ref else None,
+                warehouse_id=self._resolve_warehouse_id(lot_ref),
                 lot_id=lot_id,
                 quantity_delta=-allocate_qty,
-                reason=StockMovementReason.ALLOCATION,
+                reason=StockMovementReason.ALLOCATION_HOLD,
                 source_table="allocations",
                 source_id=allocation.id,
                 batch_id=f"allocate_{allocation.id}",
@@ -116,9 +130,10 @@ class AllocationService:
         # トランザクション開始
         with self.db.begin_nested():
             # 1. 在庫変動記録（引当数量を戻す）
+            lot_ref = allocation.lot
             movement = StockMovement(
-                product_id=allocation.lot.product_code if allocation.lot else None,
-                warehouse_id=allocation.lot.warehouse_code if allocation.lot else None,
+                product_id=lot_ref.product_code if lot_ref else None,
+                warehouse_id=self._resolve_warehouse_id(lot_ref),
                 lot_id=allocation.lot_id,
                 quantity_delta=allocation.allocated_qty,
                 reason=StockMovementReason.ALLOCATION_RELEASE,

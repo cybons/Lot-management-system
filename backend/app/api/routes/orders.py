@@ -58,6 +58,20 @@ except ImportError:
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
+def _resolve_lot_warehouse_id(db: Session, lot: Optional[Lot]) -> int:
+    """ロットに紐付く倉庫IDを取得"""
+
+    if lot and lot.warehouse_id is not None:
+        return lot.warehouse_id
+    if lot and lot.warehouse:
+        return lot.warehouse.id
+
+    fallback_warehouse = db.query(Warehouse).first()
+    if not fallback_warehouse:
+        raise HTTPException(status_code=400, detail="倉庫情報が不足しています")
+    return fallback_warehouse.id
+
+
 # ===== リクエストスキーマ =====
 class StatusUpdateRequest(BaseModel):
     """ステータス更新用のリクエストボディ"""
@@ -386,7 +400,7 @@ def drag_assign_allocation(request: DragAssignRequest, db: Session = Depends(get
 
     movement = StockMovement(
         product_id=lot.product_code,
-        warehouse_id=lot.warehouse_id or lot.warehouse_code,
+        warehouse_id=_resolve_lot_warehouse_id(db, lot),
         lot_id=request.lot_id,
         quantity_delta=-request.allocate_qty,
         reason=StockMovementReason.ALLOCATION_HOLD,
@@ -426,14 +440,9 @@ def cancel_allocation(allocation_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="引当が見つかりません")
 
     lot = allocation.lot
-    warehouse_id = lot.warehouse_id if lot else None
-    if warehouse_id is None and lot:
-        warehouse_id = lot.warehouse_code
-    if warehouse_id is None:
-        fallback_warehouse = db.query(Warehouse).first()
-        warehouse_id = fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
+    warehouse_id = _resolve_lot_warehouse_id(db, lot)
     movement = StockMovement(
-        product_id=lot.product_code if lot else order_line.product_code,
+        product_id=lot.product_code if lot else None,
         warehouse_id=warehouse_id,
         lot_id=allocation.lot_id,
         quantity_delta=allocation.allocated_qty,
@@ -741,7 +750,7 @@ def create_lot_allocations(order_line_id: int, request: dict, db: Session = Depe
             # 在庫変動記録
             movement = StockMovement(
                 product_id=lot.product_code,
-                warehouse_id=lot.warehouse_id or lot.warehouse_code,
+                warehouse_id=_resolve_lot_warehouse_id(db, lot),
                 lot_id=lot_id,
                 quantity_delta=-qty,
                 reason=StockMovementReason.ALLOCATION_HOLD,
@@ -815,14 +824,7 @@ def cancel_lot_allocations(order_line_id: int, request: dict, db: Session = Depe
         for alloc in allocations:
             # 在庫変動記録（戻し）
             lot = alloc.lot
-            warehouse_id = lot.warehouse_id if lot else None
-            if warehouse_id is None and lot:
-                warehouse_id = lot.warehouse_code
-            if warehouse_id is None:
-                fallback_warehouse = db.query(Warehouse).first()
-                warehouse_id = (
-                    fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
-                )
+            warehouse_id = _resolve_lot_warehouse_id(db, lot)
             movement = StockMovement(
                 product_id=lot.product_code if lot else order_line.product_code,
                 warehouse_id=warehouse_id,

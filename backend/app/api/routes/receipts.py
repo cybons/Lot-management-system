@@ -87,12 +87,12 @@ def create_receipt(
     ).first()
     if not warehouse:
         raise HTTPException(status_code=404, detail="倉庫が見つかりません")
-    
+
     # ヘッダ作成
     db_header = ReceiptHeader(
         receipt_no=receipt.receipt_no,
         supplier_code=receipt.supplier_code,
-        warehouse_code=receipt.warehouse_code,
+        warehouse_id=warehouse.id,
         receipt_date=receipt.receipt_date,
         created_by=receipt.created_by,
         notes=receipt.notes,
@@ -158,12 +158,15 @@ def create_receipt(
         db.flush()
 
         # 在庫変動記録(受入)
-        warehouse_id = lot.warehouse_id or lot.warehouse_code
+        warehouse_id = lot.warehouse_id
+        if not warehouse_id and lot.warehouse:
+            warehouse_id = lot.warehouse.id
         if not warehouse_id:
             fallback_warehouse = db.query(Warehouse).first()
-            warehouse_id = (
-                fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
-            )
+            if not fallback_warehouse:
+                db.rollback()
+                raise HTTPException(status_code=400, detail="倉庫情報が不足しています")
+            warehouse_id = fallback_warehouse.id
         movement = StockMovement(
             product_id=line.product_code,
             warehouse_id=warehouse_id,
@@ -217,14 +220,15 @@ def delete_receipt(
     for line in receipt.lines:
         # 在庫変動取消(マイナス)
         lot_obj = line.lot if hasattr(line, "lot") else None
-        warehouse_id = (
-            lot_obj.warehouse_id if lot_obj else receipt.warehouse_code
-        )
+        warehouse_id = lot_obj.warehouse_id if lot_obj else receipt.warehouse_id
+        if not warehouse_id and lot_obj and lot_obj.warehouse:
+            warehouse_id = lot_obj.warehouse.id
         if not warehouse_id:
             fallback_warehouse = db.query(Warehouse).first()
-            warehouse_id = (
-                fallback_warehouse.warehouse_code if fallback_warehouse else "WH-DEFAULT"
-            )
+            if not fallback_warehouse:
+                db.rollback()
+                raise HTTPException(status_code=400, detail="倉庫情報が不足しています")
+            warehouse_id = fallback_warehouse.id
         movement = StockMovement(
             product_id=line.product_code,
             warehouse_id=warehouse_id,
