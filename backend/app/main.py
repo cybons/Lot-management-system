@@ -14,6 +14,7 @@ from app.api.routes import (
     admin_router,
     allocations_router,
     forecast_router,
+    health,
     integration_router,
     lots_router,
     masters_router,
@@ -68,6 +69,8 @@ app.include_router(admin_presets_router, prefix=settings.API_PREFIX)
 app.include_router(forecast_router, prefix=settings.API_PREFIX)
 app.include_router(warehouse_alloc_router, prefix=settings.API_PREFIX)
 app.include_router(allocations_router, prefix=settings.API_PREFIX)
+
+app.include_router(health.router, tags=["ops"])
 
 
 @app.get("/")
