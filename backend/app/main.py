@@ -26,6 +26,10 @@ from app.core.config import settings
 from app.core.database import init_db
 
 logger = logging.getLogger(__name__)
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from app.core import errors
 from app.core.logging import setup_json_logging
 
 setup_json_logging()
@@ -54,6 +58,10 @@ app = FastAPI(
 )
 
 from app.middleware.request_id import RequestIdMiddleware
+
+app.add_exception_handler(StarletteHTTPException, errors.http_exception_handler)
+app.add_exception_handler(RequestValidationError, errors.validation_exception_handler)
+app.add_exception_handler(Exception, errors.generic_exception_handler)
 app.add_middleware(RequestIdMiddleware)
 app.add_middleware(
     CORSMiddleware,
