@@ -21,14 +21,22 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
+    """テスト用データベースのセットアップ"""
     if TEST_DB_PATH.exists():
         TEST_DB_PATH.unlink()
-    # Base.metadata.create_all(bind=engine)
-    logger.info("ℹ️ Skipped create_all; schema is managed by Alembic.")
+    
+    # テスト環境では全テーブルを作成
+    from app.models import Base
+    Base.metadata.create_all(bind=engine)
+    logger.info("✅ テスト用データベーステーブルを作成しました")
+    
     yield
+    
+    # クリーンアップ
     engine.dispose()
     if TEST_DB_PATH.exists():
         TEST_DB_PATH.unlink()
+    logger.info("🧹 テスト用データベースをクリーンアップしました")
 
 
 @pytest.fixture()
