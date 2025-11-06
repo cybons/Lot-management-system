@@ -26,6 +26,9 @@ from app.core.config import settings
 from app.core.database import init_db
 
 logger = logging.getLogger(__name__)
+from app.core.logging import setup_json_logging
+
+setup_json_logging()
 
 
 @asynccontextmanager
@@ -50,6 +53,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+from app.middleware.request_id import RequestIdMiddleware
+app.add_middleware(RequestIdMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
