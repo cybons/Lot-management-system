@@ -2,17 +2,18 @@
 """
 Models Package
 
-この__init__.pyは、app.modelsパッケージの「窓口」として機能します。
-各ファイルで定義されたモデルクラスをインポートし、
-他のモジュール(APIルートなど)が
-`from app.models import Lot, Order, Product`
-のように簡単にアクセスできるようにします。
+このパッケージは、アプリケーションのすべてのSQLAlchemyモデルクラスをエクスポートします。
+各ファイルで定義されたモデルクラスを一箇所にまとめ、
+他のモジュール（APIルート、サービス層等）から簡潔にインポート可能にします。
+
+Usage:
+    from app.models import Lot, Order, Product
 """
 
-# 1. 共通のBaseをインポートする
+# 1. 共通のBaseをインポート
 from .base_model import Base
 
-# 2. 各ドメインのモデルをすべてインポートする
+# 2. 各ドメインのモデルをすべてインポート
 from .masters import (
     Customer,
     DeliveryPlace,
@@ -20,7 +21,7 @@ from .masters import (
     ProductUomConversion,
     Supplier,
     UnitConversion,
-    Warehouse,  # 統合された新Warehouse
+    Warehouse,  # 統合された新Warehouse（ID主キー）
 )
 from .inventory import (
     ExpiryRule,
@@ -35,7 +36,7 @@ from .orders import (
     Allocation,
     Order,
     OrderLine,
-    OrderLineWarehouseAllocation,  # orders.pyから直接インポート
+    OrderLineWarehouseAllocation,
     NextDivMap,
     PurchaseRequest,
     Shipping,
@@ -47,6 +48,7 @@ from .forecast import (
 
 # 3. 外部に公開するモデルを明示
 __all__ = [
+    # Base
     "Base",
     # Masters
     "Warehouse",
