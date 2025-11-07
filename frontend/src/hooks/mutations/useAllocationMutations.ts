@@ -5,12 +5,12 @@
  */
 
 import { useMutation, useQueryClient, type UseMutationResult } from '@tanstack/react-query';
-import { 
-  createAllocations, 
+import {
+  createAllocations,
   cancelAllocation,
   type CreateAllocationPayload,
   type AllocationResult
-} from '@/services/api/allocation-service';
+} from '@/features/allocations/api';
 import { QUERY_KEYS } from '@/services/api/query-keys';
 
 /**
