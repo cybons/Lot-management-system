@@ -179,6 +179,8 @@ class DeliveryPlace(AuditMixin, Base):
     )
 
 
+# backend/app/models/masters.py
+
 class Product(AuditMixin, Base):
     """
     製品マスタ
@@ -217,7 +219,7 @@ class Product(AuditMixin, Base):
     customer_part_no = Column(Text, nullable=True)  # 顧客品番
     maker_item_code = Column(Text, nullable=True)  # メーカー品番
     supplier_item_code = Column(Text, nullable=True)  # 仕入先品番
-    packaging = Column(Text, nullable=True)  # 包装形態
+    # packaging カラムは削除（構造化フィールドに置き換え済み）
     assemble_div = Column(Text, nullable=True)  # 組立区分
     next_div = Column(Text, nullable=True)  # 次工程区分
     ji_ku_text = Column(Text, nullable=True)  # 自工区テキスト
@@ -256,7 +258,6 @@ class Product(AuditMixin, Base):
         back_populates="product",
         lazy="noload",  # 受注明細は必要時のみ明示的に取得
     )
-
 
 class ProductUomConversion(AuditMixin, Base):
     """
