@@ -19,7 +19,7 @@ def fifo_inventory(db_session):
     product = Product(
         product_code="P001",
         product_name="Sample Product",
-        supplier=supplier,
+        supplier_code="SUP1",  # 関連よりコード直指定の方が壊れにくい
     )
 
     db_session.add_all([supplier, warehouse, product])
@@ -35,10 +35,15 @@ def fifo_inventory(db_session):
             supplier_code=supplier.supplier_code,
             product_code=product.product_code,
             lot_number=f"LOT{idx:03d}",
-            receipt_date=base_date + timedelta(days=idx - 1),
             expiry_date=expiry,
             warehouse_id=warehouse.id,
         )
+        # 受入日カラムの名前差に対応
+        recv = base_date + timedelta(days=idx - 1)
+        if hasattr(lot, "received_at"):
+            lot.received_at = recv
+        elif hasattr(lot, "receipt_date"):
+            lot.receipt_date = recv
         db_session.add(lot)
         db_session.flush()
 

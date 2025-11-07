@@ -15,6 +15,7 @@ from .masters import router as masters_router
 from .orders import router as orders_router
 from .receipts import router as receipts_router
 from .warehouse_alloc import router as warehouse_alloc_router
+from .orders_validate import router as orders_validate_router
 
 __all__ = [
     "masters_router",
@@ -28,4 +29,5 @@ __all__ = [
     "forecast_router",
     "warehouse_alloc_router",
     "health_router",
+    "orders_validate_router",
 ]

@@ -116,6 +116,7 @@ from .orders import (
     OrderResponse,
     OrderStatusUpdate,
     OrderUpdate,
+    OrderValidationDetails,  # ← 追加
     OrderValidationErrorData,
     OrderValidationLotAvailability,
     OrderValidationRequest,
@@ -190,6 +191,7 @@ __all__ = [
     "OrderResponse",
     "OrderStatusUpdate",
     "OrderUpdate",
+    "OrderValidationDetails",  # ← 追加
     "OrderValidationErrorData",
     "OrderValidationLotAvailability",
     "OrderValidationRequest",

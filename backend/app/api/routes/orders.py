@@ -15,8 +15,8 @@ from app.schemas import (
 )
 from app.services.orders.validation import OrderLineDemand, OrderValidationService
 
-from .orders_refactored import router as router
-
+from fastapi import APIRouter
+router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post("/validate", response_model=OrderValidationResponse, summary="受注在庫検証")
 def validate_order_stock(

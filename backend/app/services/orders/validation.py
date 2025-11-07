@@ -27,12 +27,63 @@ class OrderLineDemand:
         object.__setattr__(self, "quantity", int(self.quantity))
 
 
+@dataclass(frozen=True)
+class ValidationResult:
+    """Result of order validation."""
+
+    ok: bool
+    message: str
+    error_data: dict | None = None
+
+
 class OrderValidationService:
     """Service coordinating stock validation for order requests."""
 
     def __init__(self, db: Session, stock_repository: StockRepository | None = None):
         self._db = db
         self._stock_repo = stock_repository or StockRepository(db)
+
+    @classmethod
+    def validate(
+        cls,
+        db: Session,
+        demands: Iterable[OrderLineDemand],
+        date: date | None = None,
+    ) -> ValidationResult:
+        """
+        Validate order demands against available stock (facade method).
+
+        Args:
+            db: Database session.
+            demands: Iterable of order line demands.
+            date: Ship date for expiry filtering.
+
+        Returns:
+            ValidationResult with ok=True if all lines valid,
+            ok=False with error details if insufficient stock.
+        """
+        service = cls(db)
+        try:
+            service.validate_lines(lines=demands, ship_date=date, lock=False)
+            return ValidationResult(
+                ok=True,
+                message="すべての受注明細が在庫充足可能です。",
+                error_data=None,
+            )
+        except InsufficientStockError as e:
+            # Return domain error details as plain dict
+            details_raw = e.details or {}
+            
+            return ValidationResult(
+                ok=False,
+                message=f"在庫不足: {e.product_code}",
+                error_data={
+                    "product_code": e.product_code,
+                    "required": e.required,
+                    "available": e.available,
+                    "details": details_raw,
+                },
+            )
 
     def validate_lines(
         self,
