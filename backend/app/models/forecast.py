@@ -47,7 +47,7 @@ class Forecast(AuditMixin, Base):
     is_active = Column(Boolean, nullable=False, default=True)
 
     # 🔧 修正: OrderLineへのリレーションシップを追加
-    order_lines = relationship("OrderLine", back_populates="forecast")
+    order_lines = relationship("OrderLine", back_populates="forecast", lazy="noload")
 
     __table_args__ = (
         CheckConstraint(

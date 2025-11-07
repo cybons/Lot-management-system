@@ -42,7 +42,7 @@ class SapSyncLog(AuditMixin, Base):
     executed_at = Column(DateTime, default=func.now())
     
     # リレーション
-    order = relationship("Order", back_populates="sap_sync_logs")
+    order = relationship("Order", back_populates="sap_sync_logs", lazy="noload")
 
 
 # 後方互換用エイリアス（フェーズ2での削除を想定）

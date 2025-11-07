@@ -52,9 +52,9 @@ class Order(AuditMixin, Base):
     delivery_mode = Column(Text)
 
     # リレーション
-    customer = relationship("Customer", back_populates="orders")
-    lines = relationship("OrderLine", back_populates="order", cascade="all, delete-orphan")
-    sap_sync_logs = relationship("SapSyncLog", back_populates="order")
+    customer = relationship("Customer", back_populates="orders", lazy="joined")
+    lines = relationship("OrderLine", back_populates="order", cascade="all, delete-orphan", lazy="selectin")
+    sap_sync_logs = relationship("SapSyncLog", back_populates="order", lazy="noload")
 
 
 class OrderLine(AuditMixin, Base):
@@ -79,15 +79,16 @@ class OrderLine(AuditMixin, Base):
     )
 
     # リレーション
-    order = relationship("Order", back_populates="lines")
-    product = relationship("Product", back_populates="order_lines")
-    allocations = relationship("Allocation", back_populates="order_line", cascade="all, delete-orphan")
+    order = relationship("Order", back_populates="lines", lazy="joined")
+    product = relationship("Product", back_populates="order_lines", lazy="joined")
+    allocations = relationship("Allocation", back_populates="order_line", cascade="all, delete-orphan", lazy="selectin")
     warehouse_allocations = relationship(
         "OrderLineWarehouseAllocation",
         back_populates="order_line",
         cascade="all, delete-orphan",
+        lazy="selectin",
     )
-    forecast = relationship("Forecast", back_populates="order_lines")
+    forecast = relationship("Forecast", back_populates="order_lines", lazy="noload")
 
 
 class OrderLineWarehouseAllocation(AuditMixin, Base):
@@ -113,10 +114,10 @@ class OrderLineWarehouseAllocation(AuditMixin, Base):
 
     # リレーション
     order_line: Mapped["OrderLine"] = relationship(
-        "OrderLine", back_populates="warehouse_allocations"
+        "OrderLine", back_populates="warehouse_allocations", lazy="joined"
     )
     warehouse: Mapped["Warehouse"] = relationship(
-        "Warehouse", back_populates="warehouse_allocations"
+        "Warehouse", back_populates="warehouse_allocations", lazy="joined"
     )
 
 
@@ -140,9 +141,9 @@ class Allocation(AuditMixin, Base):
     )
 
     # リレーション
-    order_line: Mapped["OrderLine"] = relationship("OrderLine", back_populates="allocations")
-    lot: Mapped["Lot"] = relationship("Lot", back_populates="allocations")
-    destination = relationship("DeliveryPlace", back_populates="allocations")
+    order_line: Mapped["OrderLine"] = relationship("OrderLine", back_populates="allocations", lazy="joined")
+    lot: Mapped["Lot"] = relationship("Lot", back_populates="allocations", lazy="joined")
+    destination = relationship("DeliveryPlace", back_populates="allocations", lazy="noload")
 
 
 class Shipping(AuditMixin, Base):

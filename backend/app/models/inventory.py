@@ -88,14 +88,14 @@ class Lot(AuditMixin, Base):
     )
 
     # リレーション
-    supplier = relationship("Supplier", back_populates="lots")
-    product = relationship("Product", back_populates="lots")
+    supplier = relationship("Supplier", back_populates="lots", lazy="joined")
+    product = relationship("Product", back_populates="lots", lazy="joined")
     # FKカラムを明示しておくと安全
     warehouse: Mapped["Warehouse"] = relationship(
-        "Warehouse", back_populates="lots", foreign_keys=[warehouse_id]
+        "Warehouse", back_populates="lots", foreign_keys=[warehouse_id], lazy="joined"
     )
     stock_movements: Mapped[list["StockMovement"]] = relationship(
-        "StockMovement", back_populates="lot", cascade="all, delete-orphan"
+        "StockMovement", back_populates="lot", cascade="all, delete-orphan", lazy="noload"
     )
     # 1対1（uselist=False）の場合は Optional が自然
     current_stock: Mapped["LotCurrentStock | None"] = relationship(
@@ -103,9 +103,10 @@ class Lot(AuditMixin, Base):
         back_populates="lot",
         uselist=False,
         cascade="all, delete-orphan",
+        lazy="joined",
     )
-    allocations = relationship("Allocation", back_populates="lot", cascade="all, delete-orphan")
-    receipt_lines = relationship("ReceiptLine", back_populates="lot")
+    allocations = relationship("Allocation", back_populates="lot", cascade="all, delete-orphan", lazy="selectin")
+    receipt_lines = relationship("ReceiptLine", back_populates="lot", lazy="noload")
 
     @property
     def warehouse_code(self) -> str | None:  # pragma: no cover - simple delegation
@@ -139,9 +140,9 @@ class StockMovement(AuditMixin, Base):
     __table_args__ = (Index("ix_stock_movements_lot", "lot_id"),)
 
     # リレーション
-    lot = relationship("Lot", back_populates="stock_movements")
+    lot = relationship("Lot", back_populates="stock_movements", lazy="joined")
     warehouse: Mapped["Warehouse"] = relationship(
-        "Warehouse", back_populates="stock_movements", foreign_keys=[warehouse_id]
+        "Warehouse", back_populates="stock_movements", foreign_keys=[warehouse_id], lazy="joined"
     )
 
 
@@ -158,7 +159,7 @@ class LotCurrentStock(AuditMixin, Base):
     last_updated = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     # リレーション
-    lot: Mapped["Lot"] = relationship("Lot", back_populates="current_stock")
+    lot: Mapped["Lot"] = relationship("Lot", back_populates="current_stock", lazy="joined")
 
 
 class ReceiptHeader(AuditMixin, Base):
@@ -179,9 +180,9 @@ class ReceiptHeader(AuditMixin, Base):
 
     # リレーション
     warehouse: Mapped["Warehouse"] = relationship(
-        "Warehouse", back_populates="receipt_headers", foreign_keys=[warehouse_id]
+        "Warehouse", back_populates="receipt_headers", foreign_keys=[warehouse_id], lazy="joined"
     )
-    lines = relationship("ReceiptLine", back_populates="header", cascade="all, delete-orphan")
+    lines = relationship("ReceiptLine", back_populates="header", cascade="all, delete-orphan", lazy="selectin")
 
     @property
     def warehouse_code(self) -> str | None:  # pragma: no cover - simple delegation
@@ -209,8 +210,8 @@ class ReceiptLine(AuditMixin, Base):
     __table_args__ = (UniqueConstraint("header_id", "line_no", name="uq_receipt_line"),)
 
     # リレーション
-    header: Mapped["ReceiptHeader"] = relationship("ReceiptHeader", back_populates="lines")
-    lot: Mapped["Lot"] = relationship("Lot", back_populates="receipt_lines")
+    header: Mapped["ReceiptHeader"] = relationship("ReceiptHeader", back_populates="lines", lazy="joined")
+    lot: Mapped["Lot"] = relationship("Lot", back_populates="receipt_lines", lazy="joined")
 
 
 class ExpiryRule(AuditMixin, Base):
@@ -228,5 +229,5 @@ class ExpiryRule(AuditMixin, Base):
     priority = Column(Integer, nullable=False, default=10)
 
     # リレーション
-    product = relationship("Product", back_populates="expiry_rules")
-    supplier = relationship("Supplier", back_populates="expiry_rules")
+    product = relationship("Product", back_populates="expiry_rules", lazy="joined")
+    supplier = relationship("Supplier", back_populates="expiry_rules", lazy="joined")

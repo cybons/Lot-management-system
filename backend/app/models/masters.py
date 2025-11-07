@@ -51,20 +51,24 @@ class Warehouse(AuditMixin, Base):
         "StockMovement",
         back_populates="warehouse",
         foreign_keys="StockMovement.warehouse_id",
+        lazy="noload",
     )
     receipt_headers: Mapped[list["ReceiptHeader"]] = relationship(
         "ReceiptHeader",
         back_populates="warehouse",
         foreign_keys="ReceiptHeader.warehouse_id",
+        lazy="noload",
     )
     warehouse_allocations: Mapped[list["OrderLineWarehouseAllocation"]] = relationship(
         "OrderLineWarehouseAllocation",
         back_populates="warehouse",
+        lazy="noload",
     )
     lots: Mapped[list["Lot"]] = relationship(
         "Lot",
         back_populates="warehouse",
         foreign_keys="Lot.warehouse_id",
+        lazy="noload",
     )
 
 
@@ -78,9 +82,9 @@ class Supplier(AuditMixin, Base):
     address = Column(Text, nullable=True)
 
     # リレーション
-    lots = relationship("Lot", back_populates="supplier")
-    products = relationship("Product", back_populates="supplier")
-    expiry_rules = relationship("ExpiryRule", back_populates="supplier")
+    lots = relationship("Lot", back_populates="supplier", lazy="noload")
+    products = relationship("Product", back_populates="supplier", lazy="selectin")
+    expiry_rules = relationship("ExpiryRule", back_populates="supplier", lazy="selectin")
 
 
 class Customer(AuditMixin, Base):
@@ -93,7 +97,7 @@ class Customer(AuditMixin, Base):
     address = Column(Text, nullable=True)
 
     # リレーション
-    orders = relationship("Order", back_populates="customer")
+    orders = relationship("Order", back_populates="customer", lazy="noload")
 
 
 class DeliveryPlace(AuditMixin, Base):
@@ -108,7 +112,7 @@ class DeliveryPlace(AuditMixin, Base):
     is_active = Column(Integer, nullable=False, default=1)
 
     # リレーション
-    allocations = relationship("Allocation", back_populates="destination")
+    allocations = relationship("Allocation", back_populates="destination", lazy="noload")
 
 
 class Product(AuditMixin, Base):
@@ -144,11 +148,11 @@ class Product(AuditMixin, Base):
     shipping_warehouse_name = Column(Text, nullable=True)
 
     # リレーション
-    supplier = relationship("Supplier", back_populates="products")
-    lots = relationship("Lot", back_populates="product")
-    uom_conversions = relationship("ProductUomConversion", back_populates="product")
-    expiry_rules = relationship("ExpiryRule", back_populates="product")
-    order_lines = relationship("OrderLine", back_populates="product")
+    supplier = relationship("Supplier", back_populates="products", lazy="joined")
+    lots = relationship("Lot", back_populates="product", lazy="noload")
+    uom_conversions = relationship("ProductUomConversion", back_populates="product", lazy="selectin")
+    expiry_rules = relationship("ExpiryRule", back_populates="product", lazy="selectin")
+    order_lines = relationship("OrderLine", back_populates="product", lazy="noload")
 
 
 class ProductUomConversion(AuditMixin, Base):
@@ -168,7 +172,7 @@ class ProductUomConversion(AuditMixin, Base):
     )
 
     # リレーション
-    product = relationship("Product", back_populates="uom_conversions")
+    product = relationship("Product", back_populates="uom_conversions", lazy="joined")
 
 
 class UnitConversion(AuditMixin, Base):
