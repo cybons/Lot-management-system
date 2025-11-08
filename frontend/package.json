@@ -10,7 +10,8 @@
     "lint": "eslint . --max-warnings=0",
     "format:check": "prettier --check .",
     "typegen": "openapi-typescript openapi.json -o src/types/api.d.ts",
-    "typegen:curl": "curl -s http://localhost:8000/api/openapi.json -o openapi.json && pnpm typegen"
+    "typegen:curl": "curl -s http://localhost:8000/api/openapi.json -o openapi.json && pnpm typegen",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
