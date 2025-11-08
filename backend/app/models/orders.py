@@ -1,341 +1,244 @@
-# backend/app/models/orders.py
-"""
-販売関連のモデル定義
-
-受注、受注明細、引当、出荷、倉庫配分を管理。
-
-- Order: 受注ヘッダ
-- OrderLine: 受注明細
-- OrderLineWarehouseAllocation: 受注明細の倉庫別配分
-- Allocation: ロット引当
-- Shipping: 出荷実績
-- PurchaseRequest: 発注依頼
-- NextDivMap: 次工程区分マッピング
-"""
+"""Order management models aligned with the PostgreSQL schema."""
 
 from __future__ import annotations
 
+from datetime import date, datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
-    
     CheckConstraint,
-    Column,
+    Computed,
     Date,
     DateTime,
     Float,
     ForeignKey,
     Index,
     Integer,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import foreign
 
-from .base_model import AuditMixin, Base
+from .base_model import Base
 
-# 型チェック時のみインポート（循環インポート回避）
-if TYPE_CHECKING:
-    from .inventory import Lot, StockMovement
-    from .masters import Warehouse
+if TYPE_CHECKING:  # pragma: no cover - for type checkers only
+    from .inventory import Lot
+    from .logs import SapSyncLog
+    from .masters import Customer, DeliveryPlace, Product, Supplier, Warehouse
 
 
-class Order(AuditMixin, Base):
-    """
-    受注ヘッダ
-    
-    顧客からの受注を表現。複数の受注明細（OrderLine）を持つ。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        order_no: 受注番号（ユニーク）
-        customer_code: 得意先コード（FK）
-        order_date: 受注日
-        status: ステータス（open, allocated, shipped, closed, cancelled）
-        sap_order_id: SAP連携用受注ID
-        sap_status: SAP連携ステータス
-        customer_order_no: 顧客発注番号
-        delivery_mode: 納入形態
-    """
+class Order(Base):
+    """Order headers."""
 
     __tablename__ = "orders"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    order_no = Column(Text, unique=True, nullable=False)  # 受注番号
-    customer_code = Column(Text, ForeignKey("customers.customer_code"), nullable=False)  # 得意先コード
-    order_date = Column(Date)  # 受注日
-    status = Column(Text, default="open")  # ステータス
-    sap_order_id = Column(Text)  # SAP連携用受注ID
-    sap_status = Column(Text)  # SAP連携ステータス
-    sap_sent_at = Column(DateTime)  # SAP送信日時
-    sap_error_msg = Column(Text)  # SAPエラーメッセージ
-    customer_order_no = Column(Text)  # 顧客発注番号
-    customer_order_no_last6 = Column(String(6))  # 顧客発注番号（下6桁）
-    delivery_mode = Column(Text)  # 納入形態
-
-    # リレーション
-    customer: Mapped["Customer"] = relationship(
-        "Customer",
-        back_populates="orders",
-        lazy="joined",  # 得意先情報は常に一緒に取得（頻繁にアクセス）
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    order_no: Mapped[str] = mapped_column(Text, nullable=False)
+    order_date: Mapped[date] = mapped_column(Date, nullable=False)
+    status: Mapped[str] = mapped_column(Text, nullable=False)
+    sap_order_id: Mapped[str | None] = mapped_column(Text)
+    sap_status: Mapped[str | None] = mapped_column(Text)
+    sap_sent_at: Mapped[datetime | None] = mapped_column(DateTime)
+    sap_error_msg: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime | None] = mapped_column(DateTime)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime)
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    customer_order_no: Mapped[str | None] = mapped_column(Text)
+    delivery_mode: Mapped[str | None] = mapped_column(Text)
+    customer_id: Mapped[int | None] = mapped_column(
+        ForeignKey("customers.id", ondelete="RESTRICT"), nullable=True
     )
-    lines: Mapped[list["OrderLine"]] = relationship(
-        "OrderLine",
-        back_populates="order",
-        cascade="all, delete-orphan",
-        lazy="selectin",  # 明細は常に一緒に取得（N+1回避）
-    )
-    sap_sync_logs: Mapped[list["SapSyncLog"]] = relationship(
-        "SapSyncLog",
-        back_populates="order",
-        lazy="noload",  # SAP連携ログは必要時のみ明示的に取得
+    customer_order_no_last6: Mapped[str | None] = mapped_column(
+        String(6), Computed("right(customer_order_no, 6)", persisted=True)
     )
 
+    __table_args__ = (
+        UniqueConstraint("order_no", name="orders_order_no_key"),
+        CheckConstraint(
+            "status IN ('draft','confirmed','shipped','closed')",
+            name="ck_orders_status",
+        ),
+        CheckConstraint(
+            "delivery_mode IS NULL OR delivery_mode IN ('normal','express','pickup')",
+            name="ck_orders_delivery_mode",
+        ),
+        Index("ix_orders_customer_id_order_date", "customer_id", "order_date"),
+        Index(
+            "uq_orders_customer_order_no_per_customer",
+            "customer_id",
+            "customer_order_no",
+            unique=True,
+            postgresql_where=text("customer_order_no IS NOT NULL"),
+        ),
+    )
 
-class OrderLine(AuditMixin, Base):
-    """
-    受注明細
-    
-    受注ヘッダに紐づく個別製品の受注情報。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        order_id: 受注ヘッダID（FK）
-        line_no: 明細行番号
-        product_code: 製品コード（FK）
-        quantity: 受注数量
-        unit: 単位
-        status: ステータス（open, allocated, shipped, closed）
-        delivery_date: 納期
-        forecast_id: フォーキャストID（FK）
-    """
+    customer: Mapped[Customer | None] = relationship("Customer", back_populates="orders")
+    order_lines: Mapped[list["OrderLine"]] = relationship(
+        "OrderLine", back_populates="order", cascade="all, delete-orphan"
+    )
+    sap_sync_logs: Mapped[list[SapSyncLog]] = relationship(
+        "SapSyncLog", back_populates="order"
+    )
+
+
+class OrderLine(Base):
+    """Order detail lines."""
 
     __tablename__ = "order_lines"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)  # 受注ヘッダID
-    line_no = Column(Integer, nullable=False)  # 明細行番号
-    product_code = Column(Text, ForeignKey("products.product_code"), nullable=False)  # 製品コード
-    quantity = Column(Float, nullable=False)  # 受注数量
-    unit = Column(Text, nullable=True)  # 単位
-    status = Column(Text, default="open")  # ステータス
-    delivery_date = Column(Date, nullable=True)  # 納期
-    forecast_id = Column(Integer, ForeignKey("forecasts.id"), nullable=True)  # フォーキャストID
-
-    __table_args__ = (
-        UniqueConstraint("order_id", "line_no", name="uq_order_line"),
-        Index("ix_order_lines_order_id", "order_id"),
-        Index("ix_order_lines_product_code", "product_code"),
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    order_id: Mapped[int] = mapped_column(
+        ForeignKey("orders.id", ondelete="CASCADE"), nullable=False
+    )
+    line_no: Mapped[int] = mapped_column(Integer, nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False)
+    unit: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime | None] = mapped_column(DateTime)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    product_id: Mapped[int | None] = mapped_column(
+        ForeignKey("products.id", ondelete="RESTRICT"), nullable=True
     )
 
-    # リレーション
-    order: Mapped["Order"] = relationship(
-        "Order",
-        back_populates="lines",
-        lazy="joined",  # 受注ヘッダ情報は常に一緒に取得
-    )
-    product: Mapped["Product"] = relationship(
-        "Product",
-        back_populates="order_lines",
-        lazy="joined",  # 製品情報は常に一緒に取得（頻繁にアクセス）
-    )
+    __table_args__ = (UniqueConstraint("order_id", "line_no", name="uq_order_line"),)
+
+    order: Mapped[Order] = relationship("Order", back_populates="order_lines")
+    product: Mapped[Product | None] = relationship("Product", back_populates="order_lines")
     allocations: Mapped[list["Allocation"]] = relationship(
-        "Allocation",
-        back_populates="order_line",
-        cascade="all, delete-orphan",
-        lazy="selectin",  # 引当情報は常に一緒に取得（N+1回避）
+        "Allocation", back_populates="order_line"
     )
     warehouse_allocations: Mapped[list["OrderLineWarehouseAllocation"]] = relationship(
-        "OrderLineWarehouseAllocation",
-        back_populates="order_line",
-        cascade="all, delete-orphan",
-        lazy="selectin",  # 倉庫配分は常に一緒に取得（N+1回避）
+        "OrderLineWarehouseAllocation", back_populates="order_line"
     )
-    forecast: Mapped["Forecast"] = relationship(
-        "Forecast",
-        back_populates="order_lines",
-        lazy="noload",  # フォーキャストは必要時のみ明示的に取得
+    purchase_requests: Mapped[list["PurchaseRequest"]] = relationship(
+        "PurchaseRequest", back_populates="order_line"
     )
 
 
-class OrderLineWarehouseAllocation(AuditMixin, Base):
-    """
-    受注明細の倉庫別配分
-    
-    受注明細を複数の倉庫に配分する際の配分数量を管理。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        order_line_id: 受注明細ID（FK）
-        warehouse_id: 倉庫ID（FK、Integer）
-        quantity: 配分数量
-    """
+class OrderLineWarehouseAllocation(Base):
+    """Warehouse-level allocations for an order line."""
 
     __tablename__ = "order_line_warehouse_allocation"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)  # 内部ID
-    order_line_id: Mapped[int] = mapped_column(ForeignKey("order_lines.id"), nullable=False)  # 受注明細ID
-    warehouse_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("warehouses.id"),
-        nullable=False,
-    )  # 倉庫ID
-    quantity: Mapped[float] = mapped_column(Float, nullable=False)  # 配分数量
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    order_line_id: Mapped[int] = mapped_column(
+        ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
+    )
+    warehouse_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
 
     __table_args__ = (
-        UniqueConstraint("order_line_id", "warehouse_id", name="uq_orderline_warehouse"),
-        Index("ix_olwa_order_line_id", "order_line_id"),
-        Index("ix_olwa_warehouse_id", "warehouse_id"),
+        UniqueConstraint("order_line_id", "warehouse_id", name="uq_order_line_warehouse"),
         CheckConstraint("quantity > 0", name="ck_olwa_quantity_positive"),
     )
 
-    # リレーション
-    order_line: Mapped["OrderLine"] = relationship(
-        "OrderLine",
-        back_populates="warehouse_allocations",
-        lazy="joined",  # 受注明細は常に一緒に取得
+    order_line: Mapped[OrderLine] = relationship(
+        "OrderLine", back_populates="warehouse_allocations"
     )
-    warehouse: Mapped["Warehouse"] = relationship(
+    warehouse: Mapped[Warehouse | None] = relationship(
         "Warehouse",
-        back_populates="warehouse_allocations",
-        lazy="joined",  # 倉庫情報は常に一緒に取得
+        primaryjoin=lambda: Warehouse.id == foreign(OrderLineWarehouseAllocation.warehouse_id),
+        viewonly=True,
     )
 
 
-class Allocation(AuditMixin, Base):
-    """
-    ロット引当
-    
-    受注明細に対するロットの引当情報を管理。
-    FEFO（先に期限が切れるものから）原則に基づく引当を実現。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        order_line_id: 受注明細ID（FK）
-        lot_id: ロットID（FK）
-        allocated_qty: 引当数量
-        destination_id: 納入場所ID（FK）
-        allocation_date: 引当日時
-    """
+class Allocation(Base):
+    """Lot allocations for order lines."""
 
     __tablename__ = "allocations"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    order_line_id = Column(
-        Integer, ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
-    )  # 受注明細ID
-    lot_id = Column(Integer, ForeignKey("lots.id"), nullable=False)  # ロットID
-    allocated_qty = Column(Float, nullable=False)  # 引当数量
-    destination_id = Column(Integer, ForeignKey("delivery_places.id"), nullable=True)  # 納入場所ID
-    allocation_date = Column(DateTime, server_default=func.now())  # 引当日時
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    order_line_id: Mapped[int] = mapped_column(
+        ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
+    )
+    lot_id: Mapped[int] = mapped_column(
+        ForeignKey("lots.id", ondelete="CASCADE"), nullable=False
+    )
+    allocated_qty: Mapped[float] = mapped_column(Float, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    destination_id: Mapped[int | None] = mapped_column(
+        ForeignKey("delivery_places.id"), nullable=True
+    )
 
     __table_args__ = (
-        Index("ix_allocations_order_line", "order_line_id"),
-        Index("ix_allocations_lot", "lot_id"),
+        Index("ix_alloc_ol", "order_line_id"),
+        Index("ix_alloc_lot", "lot_id"),
     )
 
-    # リレーション
-    order_line: Mapped["OrderLine"] = relationship(
-        "OrderLine",
-        back_populates="allocations",
-        lazy="joined",  # 受注明細は常に一緒に取得
-    )
-    lot: Mapped["Lot"] = relationship(
-        "Lot",
-        back_populates="allocations",
-        lazy="joined",  # ロット情報は常に一緒に取得
-    )
-    destination: Mapped["DeliveryPlace"] = relationship(
-        "DeliveryPlace",
-        back_populates="allocations",
-        lazy="noload",  # 納入場所は必要時のみ明示的に取得
+    order_line: Mapped[OrderLine] = relationship("OrderLine", back_populates="allocations")
+    lot: Mapped[Lot] = relationship("Lot", back_populates="allocations")
+    destination: Mapped[DeliveryPlace | None] = relationship(
+        "DeliveryPlace", back_populates="allocations"
     )
 
 
-class Shipping(AuditMixin, Base):
-    """
-    出荷実績
-    
-    ロット単位での出荷実績を記録。配送先情報と追跡情報を保持。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        lot_id: ロットID（FK）
-        order_line_id: 受注明細ID（FK、任意）
-        shipped_quantity: 出荷数量
-        shipping_date: 出荷日
-        destination_code: 配送先コード
-        destination_name: 配送先名称
-        tracking_number: 追跡番号
-        carrier: 運送業者
-    """
-
-    __tablename__ = "shipping"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    lot_id = Column(Integer, ForeignKey("lots.id"), nullable=False)  # ロットID
-    order_line_id = Column(Integer, ForeignKey("order_lines.id"), nullable=True)  # 受注明細ID
-    shipped_quantity = Column(Float, nullable=False)  # 出荷数量
-    shipping_date = Column(Date, nullable=False)  # 出荷日
-    destination_code = Column(Text, nullable=True)  # 配送先コード
-    destination_name = Column(Text, nullable=True)  # 配送先名称
-    destination_address = Column(Text, nullable=True)  # 配送先住所
-    contact_person = Column(Text, nullable=True)  # 担当者名
-    contact_phone = Column(Text, nullable=True)  # 担当者電話番号
-    delivery_time_slot = Column(Text, nullable=True)  # 配達時間帯
-    tracking_number = Column(Text, nullable=True)  # 追跡番号
-    carrier = Column(Text, nullable=True)  # 運送業者
-    carrier_service = Column(Text, nullable=True)  # 運送サービス
-    notes = Column(Text, nullable=True)  # 備考
-
-
-class PurchaseRequest(AuditMixin, Base):
-    """
-    発注依頼
-    
-    在庫不足時の発注依頼を記録。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        product_code: 製品コード（FK）
-        supplier_code: 仕入先コード（FK）
-        requested_qty: 発注依頼数量
-        requested_date: 発注依頼日
-        status: ステータス（pending, ordered, cancelled）
-    """
+class PurchaseRequest(Base):
+    """Purchase request records."""
 
     __tablename__ = "purchase_requests"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    product_code = Column(Text, ForeignKey("products.product_code"), nullable=False)  # 製品コード
-    supplier_code = Column(Text, ForeignKey("suppliers.supplier_code"), nullable=False)  # 仕入先コード
-    requested_qty = Column(Float, nullable=False)  # 発注依頼数量
-    requested_date = Column(Date, nullable=False)  # 発注依頼日
-    status = Column(Text, default="pending")  # ステータス
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    requested_qty: Mapped[float] = mapped_column(Float, nullable=False)
+    unit: Mapped[str | None] = mapped_column(Text)
+    reason_code: Mapped[str] = mapped_column(Text, nullable=False)
+    src_order_line_id: Mapped[int | None] = mapped_column(
+        ForeignKey("order_lines.id"), nullable=True
+    )
+    requested_date: Mapped[date | None] = mapped_column(Date)
+    desired_receipt_date: Mapped[date | None] = mapped_column(Date)
+    status: Mapped[str | None] = mapped_column(Text)
+    sap_po_id: Mapped[str | None] = mapped_column(Text)
+    notes: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime | None] = mapped_column(DateTime)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime)
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    product_id: Mapped[int | None] = mapped_column(
+        ForeignKey("products.id", ondelete="RESTRICT"), nullable=True
+    )
+    supplier_id: Mapped[int | None] = mapped_column(
+        ForeignKey("suppliers.id", ondelete="RESTRICT"), nullable=True
+    )
 
-
-class NextDivMap(AuditMixin, Base):
-    """
-    次工程区分マッピング
-    
-    顧客の次工程区分から仕入先へのマッピングルールを管理。
-    
-    Attributes:
-        id: 内部ID（主キー）
-        from_customer: 発注元顧客
-        from_next_div: 次工程区分
-        target_supplier: 対象仕入先
-    """
-
-    __tablename__ = "next_div_map"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 内部ID
-    from_customer = Column(Text, nullable=False)  # 発注元顧客
-    from_next_div = Column(Text, nullable=False)  # 次工程区分
-    target_supplier = Column(Text, nullable=False)  # 対象仕入先
-
-    __table_args__ = (
-        UniqueConstraint("from_customer", "from_next_div", name="uq_next_div_map"),
+    order_line: Mapped[OrderLine | None] = relationship(
+        "OrderLine", back_populates="purchase_requests"
+    )
+    product: Mapped[Product | None] = relationship("Product", back_populates="purchase_requests")
+    supplier: Mapped[Supplier | None] = relationship(
+        "Supplier", back_populates="purchase_requests"
     )
