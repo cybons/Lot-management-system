@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum as PyEnum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import (
     Boolean,
@@ -83,15 +83,21 @@ class Lot(Base):
     product: Mapped[Product | None] = relationship("Product", back_populates="lots")
     supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="lots")
     stock_movements: Mapped[list["StockMovement"]] = relationship(
-        "StockMovement", back_populates="lot"
+        "StockMovement",
+        back_populates="lot",
+        cascade="all, delete-orphan",
     )
-    allocations: Mapped[list[Allocation]] = relationship(
-        "Allocation", back_populates="lot"
+    allocations: Mapped[list["Allocation"]] = relationship(
+        "Allocation",
+        back_populates="lot",
+        cascade="all, delete-orphan",
     )
-    current_stock: Mapped["LotCurrentStock" | None] = relationship(
-        "LotCurrentStock", back_populates="lot", uselist=False
+    current_stock: Mapped[Optional["LotCurrentStock"]] = relationship(
+        "LotCurrentStock",
+        back_populates="lot",
+        uselist=False,
+        cascade="all, delete-orphan",
     )
-
 
 class LotCurrentStock(Base):
     """Current stock aggregated per lot."""
@@ -99,8 +105,10 @@ class LotCurrentStock(Base):
     __tablename__ = "lot_current_stock"
 
     lot_id: Mapped[int] = mapped_column(
-        ForeignKey("lots.id", ondelete="CASCADE"), primary_key=True
+        ForeignKey("lots.id", ondelete="CASCADE"),
+        primary_key=True,
     )
+
     current_quantity: Mapped[float] = mapped_column(Float, nullable=False)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime)
     created_at: Mapped[datetime] = mapped_column(
@@ -114,7 +122,10 @@ class LotCurrentStock(Base):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
     revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
 
-    lot: Mapped[Lot] = relationship("Lot", back_populates="current_stock")
+    lot: Mapped["Lot"] = relationship(
+        "Lot",
+        back_populates="current_stock",
+    )
 
 
 class StockMovement(Base):
