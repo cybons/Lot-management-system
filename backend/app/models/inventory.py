@@ -76,8 +76,16 @@ class Lot(Base):
     supplier_id: Mapped[int | None] = mapped_column(
         ForeignKey("suppliers.id", ondelete="RESTRICT"), nullable=True
     )
+    product_code: Mapped[str | None] = mapped_column(Text)
+    supplier_code: Mapped[str | None] = mapped_column(Text)
+    warehouse_code: Mapped[str | None] = mapped_column(Text)
 
-    __table_args__ = (Index("ix_lots_warehouse_id", "warehouse_id"),)
+    __table_args__ = (
+        Index("ix_lots_warehouse_id", "warehouse_id"),
+        Index("ix_lots_product_code", "product_code"),
+        Index("ix_lots_supplier_code", "supplier_code"),
+        Index("ix_lots_warehouse_code", "warehouse_code"),
+    )
 
     warehouse: Mapped[Warehouse | None] = relationship("Warehouse", back_populates="lots")
     product: Mapped[Product | None] = relationship("Product", back_populates="lots")

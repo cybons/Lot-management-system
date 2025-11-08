@@ -56,6 +56,7 @@ class Order(Base):
     customer_id: Mapped[int | None] = mapped_column(
         ForeignKey("customers.id", ondelete="RESTRICT"), nullable=True
     )
+    customer_code: Mapped[str | None] = mapped_column(Text)
     customer_order_no_last6: Mapped[str | None] = mapped_column(
         String(6), Computed("right(customer_order_no, 6)", persisted=True)
     )
@@ -71,6 +72,7 @@ class Order(Base):
             name="ck_orders_delivery_mode",
         ),
         Index("ix_orders_customer_id_order_date", "customer_id", "order_date"),
+        Index("ix_orders_customer_code", "customer_code"),
         Index(
             "uq_orders_customer_order_no_per_customer",
             "customer_id",
@@ -112,8 +114,12 @@ class OrderLine(Base):
     product_id: Mapped[int | None] = mapped_column(
         ForeignKey("products.id", ondelete="RESTRICT"), nullable=True
     )
+    product_code: Mapped[str | None] = mapped_column(Text)
 
-    __table_args__ = (UniqueConstraint("order_id", "line_no", name="uq_order_line"),)
+    __table_args__ = (
+        UniqueConstraint("order_id", "line_no", name="uq_order_line"),
+        Index("ix_order_lines_product_code", "product_code"),
+    )
 
     order: Mapped[Order] = relationship("Order", back_populates="order_lines")
     product: Mapped[Product | None] = relationship("Product", back_populates="order_lines")

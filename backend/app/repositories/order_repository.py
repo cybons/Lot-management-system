@@ -33,7 +33,7 @@ class OrderRepository:
         stmt = select(Order).where(Order.id == order_id)
         
         if with_lines:
-            stmt = stmt.options(selectinload(Order.lines))
+            stmt = stmt.options(selectinload(Order.order_lines))
         
         return self.db.execute(stmt).scalar_one_or_none()
     

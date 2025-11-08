@@ -7,9 +7,10 @@
 from datetime import date
 from typing import Optional
 
+from sqlalchemy import Select, select
 from sqlalchemy.orm import Session
 
-from app.models import Forecast, OrderLine
+from app.models import Customer, Forecast, OrderLine, Product
 
 
 class ForecastMatcher:
@@ -93,18 +94,20 @@ class ForecastMatcher:
         self, product_code: str, customer_code: str, target_date: date
     ) -> Optional[Forecast]:
         """日次フォーキャストを検索"""
-        return (
-            self.db.query(Forecast)
-            .filter(
-                Forecast.product_id == product_code,
-                Forecast.customer_id == customer_code,
+        stmt: Select[Forecast] = (
+            select(Forecast)
+            .join(Product)
+            .join(Customer)
+            .where(
+                Product.product_code == product_code,
+                Customer.customer_code == customer_code,
                 Forecast.granularity == "daily",
                 Forecast.date_day == target_date,
-                Forecast.is_active == True,
+                Forecast.is_active.is_(True),
             )
             .order_by(Forecast.version_no.desc())
-            .first()
         )
+        return self.db.execute(stmt).scalars().first()
 
     def _find_dekad_forecast(
         self, product_code: str, customer_code: str, target_date: date
@@ -118,18 +121,20 @@ class ForecastMatcher:
         else:
             dekad_start = date(target_date.year, target_date.month, 21)
 
-        return (
-            self.db.query(Forecast)
-            .filter(
-                Forecast.product_id == product_code,
-                Forecast.customer_id == customer_code,
+        stmt: Select[Forecast] = (
+            select(Forecast)
+            .join(Product)
+            .join(Customer)
+            .where(
+                Product.product_code == product_code,
+                Customer.customer_code == customer_code,
                 Forecast.granularity == "dekad",
                 Forecast.date_dekad_start == dekad_start,
-                Forecast.is_active == True,
+                Forecast.is_active.is_(True),
             )
             .order_by(Forecast.version_no.desc())
-            .first()
         )
+        return self.db.execute(stmt).scalars().first()
 
     def _find_monthly_forecast(
         self, product_code: str, customer_code: str, target_date: date
@@ -137,18 +142,20 @@ class ForecastMatcher:
         """月次フォーキャストを検索"""
         year_month = target_date.strftime("%Y-%m")
 
-        return (
-            self.db.query(Forecast)
-            .filter(
-                Forecast.product_id == product_code,
-                Forecast.customer_id == customer_code,
+        stmt: Select[Forecast] = (
+            select(Forecast)
+            .join(Product)
+            .join(Customer)
+            .where(
+                Product.product_code == product_code,
+                Customer.customer_code == customer_code,
                 Forecast.granularity == "monthly",
                 Forecast.year_month == year_month,
-                Forecast.is_active == True,
+                Forecast.is_active.is_(True),
             )
             .order_by(Forecast.version_no.desc())
-            .first()
         )
+        return self.db.execute(stmt).scalars().first()
 
     def apply_forecast_to_order_line(
         self,

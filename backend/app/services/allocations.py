@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from typing import Dict, List, Tuple
 
-from sqlalchemy import func, nulls_last
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import Select, func, nulls_last, select
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.models import (
     Allocation,
@@ -68,17 +70,17 @@ class AllocationNotFoundError(Exception):
 
 
 def _load_order(db: Session, order_id: int) -> Order:
-    order = (
-        db.query(Order)
+    stmt: Select[Order] = (
+        select(Order)
         .options(
-            joinedload(Order.lines)
+            selectinload(Order.order_lines)
             .joinedload(OrderLine.allocations)
             .joinedload(Allocation.lot),
-            joinedload(Order.lines).joinedload(OrderLine.product),
+            selectinload(Order.order_lines).joinedload(OrderLine.product),
         )
-        .filter(Order.id == order_id)
-        .first()
+        .where(Order.id == order_id)
     )
+    order = db.execute(stmt).scalar_one_or_none()
     if not order:
         raise ValueError("Order not found")
     return order
@@ -95,15 +97,13 @@ def _existing_allocated_qty(line: OrderLine) -> float:
 def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> Tuple[str | None, str | None]:
     product = getattr(line, "product", None)
     if product is None and getattr(line, "product_id", None):
-        product = db.query(Product).filter(Product.id == line.product_id).first()
+        stmt = select(Product).where(Product.id == line.product_id)
+        product = db.execute(stmt).scalar_one_or_none()
     if product is None:
         product_code = getattr(line, "product_code", None)
         if product_code:
-            product = (
-                db.query(Product)
-                .filter(Product.product_code == product_code)
-                .first()
-            )
+            stmt = select(Product).where(Product.product_code == product_code)
+            product = db.execute(stmt).scalar_one_or_none()
     if product and product.next_div:
         return product.next_div, None
 
@@ -118,10 +118,10 @@ def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> Tuple[str |
 
 
 def _lot_candidates(db: Session, product_code: str) -> List[Tuple[Lot, float]]:
-    query = (
-        db.query(Lot, LotCurrentStock.current_quantity)
+    stmt: Select[tuple[Lot, float]] = (
+        select(Lot, LotCurrentStock.current_quantity)
         .join(LotCurrentStock, LotCurrentStock.lot_id == Lot.id)
-        .filter(
+        .where(
             Lot.product_code == product_code,
             LotCurrentStock.current_quantity > 0,
             Lot.is_locked.is_(False),
@@ -132,7 +132,7 @@ def _lot_candidates(db: Session, product_code: str) -> List[Tuple[Lot, float]]:
             Lot.id.asc(),
         )
     )
-    return query.all()
+    return db.execute(stmt).all()
 
 
 def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
@@ -145,7 +145,7 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
     preview_lines: List[FefoLinePlan] = []
     warnings: List[str] = []
 
-    sorted_lines = sorted(order.lines, key=lambda l: (l.line_no, l.id))
+    sorted_lines = sorted(order.order_lines, key=lambda l: (l.line_no, l.id))
     for line in sorted_lines:
         required_qty = float(line.quantity or 0.0)
         already_allocated = _existing_allocated_qty(line)
@@ -227,12 +227,12 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
             if not line_plan.allocations:
                 continue
 
-            line = (
-                db.query(OrderLine)
+            line_stmt = (
+                select(OrderLine)
                 .options(joinedload(OrderLine.allocations))
-                .filter(OrderLine.id == line_plan.order_line_id)
-                .first()
+                .where(OrderLine.id == line_plan.order_line_id)
             )
+            line = db.execute(line_stmt).scalar_one_or_none()
             if not line:
                 raise AllocationCommitError(f"OrderLine {line_plan.order_line_id} not found")
 
@@ -240,7 +240,8 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 setattr(line, "next_div", line_plan.next_div)
 
             for alloc_plan in line_plan.allocations:
-                lot = db.query(Lot).filter(Lot.id == alloc_plan.lot_id).first()
+                lot_stmt = select(Lot).where(Lot.id == alloc_plan.lot_id)
+                lot = db.execute(lot_stmt).scalar_one_or_none()
                 if not lot:
                     raise AllocationCommitError(f"Lot {alloc_plan.lot_id} not found")
                 if lot.is_locked:
@@ -248,12 +249,12 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                         f"Lot {alloc_plan.lot_id} is locked and cannot be allocated"
                     )
 
-                current_stock = (
-                    db.query(LotCurrentStock)
-                    .filter(LotCurrentStock.lot_id == lot.id)
+                stock_stmt = (
+                    select(LotCurrentStock)
+                    .where(LotCurrentStock.lot_id == lot.id)
                     .with_for_update()
-                    .first()
                 )
+                current_stock = db.execute(stock_stmt).scalar_one_or_none()
                 if not current_stock:
                     raise AllocationCommitError(
                         f"Current stock not found for lot {lot.id}"
@@ -276,17 +277,17 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 db.add(allocation)
                 created.append(allocation)
 
-        totals = (
-            db.query(
+        totals_stmt = (
+            select(
                 OrderLine.id,
                 func.coalesce(func.sum(Allocation.allocated_qty), 0.0),
                 OrderLine.quantity,
             )
             .outerjoin(Allocation, Allocation.order_line_id == OrderLine.id)
-            .filter(OrderLine.order_id == order_id)
+            .where(OrderLine.order_id == order_id)
             .group_by(OrderLine.id, OrderLine.quantity)
-            .all()
         )
+        totals = db.execute(totals_stmt).all()
         fully_allocated = True
         any_allocated = False
         for _, allocated_total, required_qty in totals:
@@ -295,7 +296,7 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
             if allocated_total + EPSILON < float(required_qty or 0.0):
                 fully_allocated = False
 
-        target_order = db.query(Order).filter(Order.id == order_id).one()
+        target_order = db.execute(select(Order).where(Order.id == order_id)).scalar_one()
         if fully_allocated:
             target_order.status = "allocated"
         elif any_allocated and target_order.status not in {"allocated", "part_allocated"}:
@@ -310,21 +311,21 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
 
 
 def cancel_allocation(db: Session, allocation_id: int) -> None:
-    allocation = (
-        db.query(Allocation)
+    allocation_stmt = (
+        select(Allocation)
         .options(joinedload(Allocation.lot), joinedload(Allocation.order_line))
-        .filter(Allocation.id == allocation_id)
-        .first()
+        .where(Allocation.id == allocation_id)
     )
+    allocation = db.execute(allocation_stmt).scalar_one_or_none()
     if not allocation:
         raise AllocationNotFoundError(f"Allocation {allocation_id} not found")
 
-    lot_stock = (
-        db.query(LotCurrentStock)
-        .filter(LotCurrentStock.lot_id == allocation.lot_id)
+    lot_stock_stmt = (
+        select(LotCurrentStock)
+        .where(LotCurrentStock.lot_id == allocation.lot_id)
         .with_for_update()
-        .first()
     )
+    lot_stock = db.execute(lot_stock_stmt).scalar_one_or_none()
     if not lot_stock:
         raise AllocationCommitError(
             f"Lot current stock not found for lot {allocation.lot_id}"

@@ -258,7 +258,7 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
                     "product_code": line.product_code,
                     "quantity": line.quantity,
                 }
-                for line in order.lines
+                for line in getattr(order, "order_lines", [])
             ],
         }
 
