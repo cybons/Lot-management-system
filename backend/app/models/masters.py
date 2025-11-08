@@ -26,7 +26,13 @@ from .base_model import Base
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .forecast import Forecast
     from .inventory import ExpiryRule, Lot, StockMovement
-    from .orders import Allocation, Order, OrderLine, PurchaseRequest
+    from .orders import (
+        Allocation,
+        Order,
+        OrderLine,
+        OrderLineWarehouseAllocation,
+        PurchaseRequest,
+    )
 
 
 class Warehouse(Base):
@@ -58,6 +64,9 @@ class Warehouse(Base):
     lots: Mapped[list[Lot]] = relationship("Lot", back_populates="warehouse")
     stock_movements: Mapped[list[StockMovement]] = relationship(
         "StockMovement", back_populates="warehouse"
+    )
+    warehouse_allocations: Mapped[list["OrderLineWarehouseAllocation"]] = relationship(
+        "OrderLineWarehouseAllocation", back_populates="warehouse"
     )
 
 

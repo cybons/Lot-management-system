@@ -23,7 +23,6 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.orm import foreign
 
 from .base_model import Base
 
@@ -138,7 +137,9 @@ class OrderLineWarehouseAllocation(Base):
     order_line_id: Mapped[int] = mapped_column(
         ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
     )
-    warehouse_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    warehouse_id: Mapped[int] = mapped_column(
+        ForeignKey("warehouses.id", ondelete="RESTRICT"), nullable=False
+    )
     quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
@@ -156,13 +157,11 @@ class OrderLineWarehouseAllocation(Base):
         CheckConstraint("quantity > 0", name="ck_olwa_quantity_positive"),
     )
 
-    order_line: Mapped[OrderLine] = relationship(
+    order_line: Mapped["OrderLine"] = relationship(
         "OrderLine", back_populates="warehouse_allocations"
     )
-    warehouse: Mapped[Warehouse | None] = relationship(
-        "Warehouse",
-        primaryjoin=lambda: Warehouse.id == foreign(OrderLineWarehouseAllocation.warehouse_id),
-        viewonly=True,
+    warehouse: Mapped["Warehouse"] = relationship(
+        "Warehouse", back_populates="warehouse_allocations"
     )
 
 
