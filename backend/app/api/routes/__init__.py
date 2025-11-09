@@ -16,6 +16,7 @@ from .products import router as products_router
 from .orders import router as orders_router
 from .warehouse_alloc import router as warehouse_alloc_router
 from .orders_validate import router as orders_validate_router
+from .admin_seeds import router as admin_seeds_router
 
 __all__ = [
     "masters_router",
@@ -30,4 +31,5 @@ __all__ = [
     "health_router",
     "orders_validate_router",
     "products_router",
+    "admin_seeds_router",
 ]

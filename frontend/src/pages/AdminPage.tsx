@@ -1,8 +1,23 @@
 import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import SeedDataPage from "@/pages/SeedDataPage";
 
 export function AdminPage() {
+  const [showSeedData, setShowSeedData] = useState(false);
+
+  if (showSeedData) {
+    return (
+      <div className="space-y-6">
+        <Button variant="outline" onClick={() => setShowSeedData(false)} className="mb-4">
+          ← 管理画面に戻る
+        </Button>
+        <SeedDataPage />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>

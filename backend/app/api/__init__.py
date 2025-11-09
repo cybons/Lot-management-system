@@ -15,6 +15,7 @@ from .routes import (
     orders_router,
     warehouse_alloc_router,  # ⬅️ [修正] 不足していたルータを追加
     orders_validate_router,
+    admin_seeds_router,  # ⬅️ 追加
 )
 
 __all__ = [
@@ -28,4 +29,5 @@ __all__ = [
     "forecast_router",
     "warehouse_alloc_router",  # ⬅️ [修正] __all__ にも追加
     "orders_validate_router",
+    "admin_seeds_router",  # ⬅️ 追加
 ]

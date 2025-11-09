@@ -23,7 +23,8 @@ from app.api.routes import (
     orders_router,
     products_router,
     warehouse_alloc_router,
-    orders_validate_router
+    orders_validate_router,
+    admin_seeds_router
 )
 from app.core import errors
 from app.core.config import settings
@@ -89,6 +90,7 @@ app.include_router(products_router, prefix=settings.API_PREFIX)
 app.include_router(warehouse_alloc_router, prefix=settings.API_PREFIX)
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(orders_validate_router, prefix=settings.API_PREFIX)
+app.include_router(admin_seeds_router, prefix=settings.API_PREFIX)
 
 
 @app.get("/")
