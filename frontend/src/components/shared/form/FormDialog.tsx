@@ -33,8 +33,8 @@ export interface FormDialogProps {
   open: boolean;
   /** ダイアログを閉じる関数 */
   onClose: () => void;
-  /** フォームの送信処理 */
-  onSubmit: () => void | Promise<void>;
+  /** フォームの送信処理 (オプション: 子フォームが独自に処理する場合は不要) */
+  onSubmit?: () => void | Promise<void>;
   /** フォームの内容 */
   children: React.ReactNode;
   /** 送信ボタンのラベル */
@@ -71,7 +71,7 @@ export function FormDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isSubmitting || submitDisabled) return;
+    if (isSubmitting || submitDisabled || !onSubmit) return;
 
     setIsSubmitting(true);
     try {
@@ -96,25 +96,27 @@ export function FormDialog({
 
   return (
     <Dialog open={open} onOpenChange={(open: boolean) => !open && handleCancel()}>
-      <DialogContent className={sizeClasses[size]}>
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            {description && <DialogDescription>{description}</DialogDescription>}
-          </DialogHeader>
+      <DialogContent className={sizeClasses[size]} aria-describedby={description ? undefined : "dialog-content"}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {description && <DialogDescription>{description}</DialogDescription>}
+          {!description && <DialogDescription id="dialog-content" className="sr-only">{title}</DialogDescription>}
+        </DialogHeader>
 
-          <div className="py-4">{children}</div>
+        <div className="py-4">{children}</div>
 
+        {/* Only render footer if onSubmit is provided (for backwards compatibility) */}
+        {onSubmit && (
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleCancel} disabled={isSubmitting}>
               {cancelLabel}
             </Button>
-            <Button type="submit" disabled={isSubmitting || submitDisabled || isLoading}>
+            <Button type="button" onClick={handleSubmit} disabled={isSubmitting || submitDisabled || isLoading}>
               {(isSubmitting || isLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {submitLabel}
             </Button>
           </DialogFooter>
-        </form>
+        )}
       </DialogContent>
     </Dialog>
   );

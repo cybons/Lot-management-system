@@ -316,8 +316,8 @@ export function InventoryPage() {
         open={createDialog.isOpen}
         onClose={createDialog.close}
         title="ロット新規登録"
+        description="新しいロットを登録します"
         size="lg"
-        onSubmit={async () => {}}
       >
         <LotCreateForm
           onSubmit={async (data) => {

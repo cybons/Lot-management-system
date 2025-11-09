@@ -8,7 +8,7 @@
  */
 
 import { Search, X } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,28 +46,35 @@ export function SearchBar({
   disabled = false,
 }: SearchBarProps) {
   const [localValue, setLocalValue] = useState(value);
+  // useRefで最新のonChangeを保持し、無限ループを防ぐ
+  const onChangeRef = useRef(onChange);
 
   // 外部からの値の変更を反映
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
-  // デバウンス処理
+  // onChangeRefを常に最新に保つ
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  // デバウンス処理 (onChangeを依存配列から除外)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (localValue !== value) {
-        onChange(localValue);
+        onChangeRef.current(localValue);
       }
     }, debounceMs);
 
     return () => clearTimeout(timer);
-  }, [localValue, value, onChange, debounceMs]);
+  }, [localValue, value, debounceMs]);
 
   // クリア処理
   const handleClear = useCallback(() => {
     setLocalValue("");
-    onChange("");
-  }, [onChange]);
+    onChangeRef.current("");
+  }, []);
 
   return (
     <div className={cn("relative", className)}>

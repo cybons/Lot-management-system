@@ -330,8 +330,8 @@ export function OrdersListPage() {
         open={createDialog.isOpen}
         onClose={createDialog.close}
         title="受注新規登録"
+        description="新しい受注を登録します"
         size="lg"
-        onSubmit={async () => {}}
       >
         <OrderCreateForm
           onSubmit={async (data) => {

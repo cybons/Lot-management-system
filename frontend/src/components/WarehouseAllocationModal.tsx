@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -89,10 +90,13 @@ export function WarehouseAllocationModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>倉庫別数量編集</DialogTitle>
+          <DialogDescription>
+            製品の総数量を複数の倉庫に割り当てます。割当合計が総数量と一致する必要があります。
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
