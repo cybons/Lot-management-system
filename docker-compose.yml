@@ -72,7 +72,7 @@ services:
     container_name: lot-frontend
     environment:
       # フロントから見えるAPIのエンドポイント
-      VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000}
+      VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000/api}
       TZ: Asia/Tokyo
     ports:
       - "5173:5173"
