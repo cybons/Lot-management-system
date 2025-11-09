@@ -1,12 +1,13 @@
 /**
  * StatusBadge.tsx
- * 
+ *
  * ステータス表示用バッジコンポーネント
  * - 汎用ステータスバッジ
  * - ロット専用ステータスバッジ
  * - 受注専用ステータスバッジ
  */
 
+import * as React from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 

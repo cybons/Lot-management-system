@@ -9,6 +9,7 @@
  * - レスポンシブ対応
  */
 
+import * as React from "react";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { useMemo } from "react";
 
@@ -239,7 +240,7 @@ export function DataTable<T = never>({
               >
                 {/* 選択チェックボックス */}
                 {selectable && (
-                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-4 py-3" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                     <Checkbox
                       checked={isSelected}
                       onCheckedChange={() => handleSelectRow(rowId)}
@@ -270,7 +271,7 @@ export function DataTable<T = never>({
 
                 {/* アクションボタン */}
                 {rowActions && (
-                  <td className="px-4 py-3 text-sm text-right" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-4 py-3 text-sm text-right" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                     {rowActions(row)}
                   </td>
                 )}

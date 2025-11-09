@@ -1,12 +1,13 @@
 /**
  * SearchBar.tsx
- * 
+ *
  * 検索バーコンポーネント
  * - テキスト検索
  * - クリアボタン
  * - デバウンス対応
  */
 
+import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -78,7 +79,7 @@ export function SearchBar({
         <Input
           type="text"
           value={localValue}
-          onChange={(e) => setLocalValue(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocalValue(e.target.value)}
           placeholder={placeholder}
           disabled={disabled}
           className="pl-9 pr-9"
@@ -142,7 +143,7 @@ export function InstantSearchBar({
         <Input
           type="text"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           placeholder={placeholder}
           disabled={disabled}
           className="pl-9 pr-9"

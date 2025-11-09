@@ -7,6 +7,7 @@
  * - リセット機能
  */
 
+import * as React from 'react';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';

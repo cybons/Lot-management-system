@@ -83,7 +83,7 @@ export function TablePagination({
           <span className="text-sm text-gray-700">表示件数:</span>
           <Select
             value={String(pageSize)}
-            onValueChange={(value) => onPageSizeChange(Number(value))}
+            onValueChange={(value: string) => onPageSizeChange(Number(value))}
           >
             <SelectTrigger className="h-9 w-20">
               <SelectValue />

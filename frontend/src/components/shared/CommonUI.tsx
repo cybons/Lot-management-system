@@ -3,6 +3,7 @@
  * ローディングとエラー表示用の共通コンポーネント
  */
 
+import * as React from 'react';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { ApiError } from '@/utils/errors/custom-errors';
 
