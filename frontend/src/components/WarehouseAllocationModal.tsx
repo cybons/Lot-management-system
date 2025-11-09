@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,7 +59,7 @@ export function WarehouseAllocationModal({
   };
 
   const handleRemove = (index: number) => {
-    setAllocations(allocations.filter((_, i) => i !== index));
+    setAllocations(allocations.filter((_: WarehouseAllocation, i: number) => i !== index));
   };
 
   const handleWarehouseChange = (index: number, warehouseCode: string) => {
@@ -73,9 +74,9 @@ export function WarehouseAllocationModal({
     setAllocations(newAllocations);
   };
 
-  const allocatedTotal = allocations.reduce((sum, alloc) => sum + alloc.quantity, 0);
+  const allocatedTotal = allocations.reduce((sum: number, alloc: WarehouseAllocation) => sum + alloc.quantity, 0);
   const isValid = Math.abs(allocatedTotal - totalQuantity) < 0.01; // 浮動小数点誤差を考慮
-  const usedWarehouses = new Set(allocations.map((a) => a.warehouse_code));
+  const usedWarehouses = new Set(allocations.map((a: WarehouseAllocation) => a.warehouse_code));
 
   const handleSave = () => {
     if (isValid) {
@@ -116,12 +117,12 @@ export function WarehouseAllocationModal({
             </div>
 
             <div className="p-3 space-y-2">
-              {allocations.map((allocation, index) => (
+              {allocations.map((allocation: WarehouseAllocation, index: number) => (
                 <div key={index} className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-5">
                     <Select
                       value={allocation.warehouse_code}
-                      onValueChange={(value) => handleWarehouseChange(index, value)}
+                      onValueChange={(value: string) => handleWarehouseChange(index, value)}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="倉庫を選択" />
@@ -144,7 +145,7 @@ export function WarehouseAllocationModal({
                       type="number"
                       step="0.01"
                       value={allocation.quantity || ''}
-                      onChange={(e) => handleQuantityChange(index, e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleQuantityChange(index, e.target.value)}
                       placeholder="0"
                     />
                   </div>

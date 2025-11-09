@@ -7,6 +7,7 @@
  * - ローディング状態
  */
 
+import * as React from 'react';
 import { useState } from 'react';
 import {
   Dialog,
@@ -94,7 +95,7 @@ export function FormDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
+    <Dialog open={open} onOpenChange={(open: boolean) => !open && handleCancel()}>
       <DialogContent className={sizeClasses[size]}>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -189,7 +190,7 @@ export function ConfirmDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
+    <Dialog open={open} onOpenChange={(open: boolean) => !open && handleCancel()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

@@ -1,6 +1,6 @@
 /**
  * FormField.tsx
- * 
+ *
  * フォーム項目コンポーネント
  * - ラベル付き入力フィールド
  * - エラー表示
@@ -8,6 +8,7 @@
  * - ヘルプテキスト
  */
 
+import * as React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -81,7 +82,7 @@ export function TextFormField({
         id={fieldId}
         type={type}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
         className={cn(error && 'border-red-500')}
@@ -133,7 +134,7 @@ export function TextareaFormField({
       <Textarea
         id={fieldId}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
         disabled={disabled}
@@ -242,7 +243,7 @@ export function DateFormField({
         id={fieldId}
         type="date"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         disabled={disabled}
         className={cn(error && 'border-red-500')}
       />
@@ -300,7 +301,7 @@ export function NumberFormField({
         id={fieldId}
         type="number"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         placeholder={placeholder}
         min={min}
         max={max}

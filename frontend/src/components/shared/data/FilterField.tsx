@@ -1,6 +1,6 @@
 /**
  * FilterField.tsx
- * 
+ *
  * フィルター項目コンポーネント
  * - テキストフィルター
  * - セレクトフィルター
@@ -8,6 +8,7 @@
  * - チェックボックスフィルター
  */
 
+import * as React from 'react';
 import type { ReactNode } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -103,7 +104,7 @@ export function TextFilterField({
       <Input
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
       />
@@ -190,7 +191,7 @@ export function DateFilterField({
       <Input
         type="date"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         disabled={disabled}
       />
     </div>
@@ -234,14 +235,14 @@ export function DateRangeFilterField({
         <Input
           type="date"
           value={startDate}
-          onChange={(e) => onStartDateChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onStartDateChange(e.target.value)}
           disabled={disabled}
           placeholder="開始日"
         />
         <Input
           type="date"
           value={endDate}
-          onChange={(e) => onEndDateChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onEndDateChange(e.target.value)}
           disabled={disabled}
           placeholder="終了日"
         />
@@ -338,14 +339,14 @@ export function NumberRangeFilterField({
         <Input
           type="number"
           value={min}
-          onChange={(e) => onMinChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onMinChange(e.target.value)}
           disabled={disabled}
           placeholder="最小値"
         />
         <Input
           type="number"
           value={max}
-          onChange={(e) => onMaxChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onMaxChange(e.target.value)}
           disabled={disabled}
           placeholder="最大値"
         />
