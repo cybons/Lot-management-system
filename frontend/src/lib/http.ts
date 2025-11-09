@@ -1,87 +1,94 @@
 // frontend/src/lib/http.ts
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-/**
- * JWT の取得方法：
- * - 既定は localStorage の "access_token" または "jwt" を探す
- * - 必要なら setAuthToken(...) で明示設定してもOK
- */
-let _authToken: string | null = null;
+/** 基底URL: .env がなければ /api/ にフォールバック */
+const RAW_BASE = import.meta.env.VITE_API_BASE ?? "/api/";
 
-export function setAuthToken(token: string | null) {
-  _authToken = token;
+/** 末尾スラッシュを必ず付与 */
+function ensureTrailingSlash(u: string) {
+  return u.endsWith("/") ? u : u + "/";
 }
 
-function resolveAuthToken(): string | null {
-  if (_authToken) return _authToken;
-  try {
-    const byAccess = localStorage.getItem("access_token");
-    if (byAccess) return byAccess;
-    const byJwt = localStorage.getItem("jwt");
-    if (byJwt) return byJwt;
-  } catch {
-    /* SSRやブラウザ外は無視 */
-  }
-  return null;
+/** 先頭スラッシュを剥がす */
+function stripLeadingSlash(p: string) {
+  return p.replace(/^\/+/, "");
 }
 
-export class ApiError extends Error {
-  status: number;
-  detail?: unknown;
-  constructor(message: string, status: number, detail?: unknown) {
-    super(message);
-    this.status = status;
-    this.detail = detail;
+/** 絶対URLへ安全結合（/api/ + admin/seeds → http://localhost/api/admin/seeds） */
+export function toApiUrl(path: string): string {
+  const base = ensureTrailingSlash(RAW_BASE);
+  const clean = stripLeadingSlash(path);
+
+  // ベースが絶対URLなら new URL() を使用
+  if (/^https?:\/\//i.test(base)) {
+    return new URL(clean, base).toString();
   }
+
+  // ベースが相対パス（/api/等）の場合
+  // ブラウザ環境なら origin を付与して完全URLに
+  if (typeof window !== "undefined" && window.location) {
+    return new URL(clean, window.location.origin + base).toString();
+  }
+
+  // SSR/テスト環境等では単純結合（この場合interceptorで絶対化される前提）
+  return base + clean;
 }
 
-export async function fetchApi<T>(
-  endpoint: string,
-  init: RequestInit = {}
-): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const token = resolveAuthToken();
+/** 素のaxiosインスタンス（baseURLは使わず、常にtoApiUrlで解決） */
+const client: AxiosInstance = axios.create({
+  // baseURLは設定しない（結合は常にtoApiUrlで行う）
+  timeout: 15000,
+  withCredentials: false,
+});
 
-  const baseHeaders: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-  if (token) {
-    baseHeaders["Authorization"] = `Bearer ${token}`;
+/** リクエスト共通ヘッダとログ（必要なら調整） */
+client.interceptors.request.use((cfg) => {
+  // 相対指定なら必ずAPI絶対URLへ変換
+  if (cfg.url && !/^https?:\/\//i.test(cfg.url)) {
+    cfg.url = toApiUrl(cfg.url);
   }
+  cfg.headers.Accept = cfg.headers.Accept ?? "application/json";
+  cfg.headers["Content-Type"] = cfg.headers["Content-Type"] ?? "application/json";
+  return cfg;
+});
 
-  const resp = await fetch(url, {
-    headers: { ...baseHeaders, ...(init.headers ?? {}) },
-    ...init,
-  });
+/** レスポンスは data をそのまま返し、エラーは握りつぶさず投げる */
+client.interceptors.response.use(
+  (res: AxiosResponse) => res,
+  (err) => Promise.reject(err),
+);
 
-  if (!resp.ok) {
-    let detail: unknown = undefined;
-    try {
-      detail = await resp.json();
-    } catch {
-      /* no body */
-    }
-    throw new ApiError(
-      `HTTP ${resp.status} on ${endpoint}`,
-      resp.status,
-      detail
-    );
-  }
-  if (resp.status === 204) return null as T;
-  return (await resp.json()) as T;
-}
-
+/** 呼び出し側が使う薄いラッパ。既存の http.post("admin/seeds") と互換 */
 export const http = {
-  get: <T>(endpoint: string) => fetchApi<T>(endpoint, { method: "GET" }),
-  post: <T>(endpoint: string, body?: unknown) =>
-    fetchApi<T>(endpoint, {
-      method: "POST",
-      body: body ? JSON.stringify(body) : undefined,
-    }),
-  put: <T>(endpoint: string, body?: unknown) =>
-    fetchApi<T>(endpoint, {
-      method: "PUT",
-      body: body ? JSON.stringify(body) : undefined,
-    }),
-  del: <T>(endpoint: string) => fetchApi<T>(endpoint, { method: "DELETE" }),
+  async get<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
+    const res = await client.get<T>(path, config);
+    return res.data;
+  },
+  async post<T>(path: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+    const res = await client.post<T>(path, data, config);
+    return res.data;
+  },
+  async put<T>(path: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+    const res = await client.put<T>(path, data, config);
+    return res.data;
+  },
+  async patch<T>(path: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+    const res = await client.patch<T>(path, data, config);
+    return res.data;
+  },
+  async delete<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
+    const res = await client.delete<T>(path, config);
+    return res.data;
+  },
+};
+
+/** テストやデバッグ用に露出しておく */
+export const API_BASE = ensureTrailingSlash(RAW_BASE);
+export const axiosClient = client;
+export const fetchApi = {
+  get: http.get,
+  post: http.post,
+  put: http.put,
+  patch: http.patch,
+  delete: http.delete,
 };
