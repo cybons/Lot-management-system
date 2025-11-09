@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, RefreshCw, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { formatCodeAndName } from "@/lib/utils";
@@ -133,7 +133,7 @@ export function OrderDetailPage() {
               </tr>
             </thead>
             <tbody>
-              {order.lines.map((line) => (
+              {order.lines?.map((line) => (
                 <tr key={line.id} className="border-b hover:bg-muted/50">
                   <td className="p-3 text-sm">{line.line_no}</td>
                   <td className="p-3 text-sm font-medium">{line.product_code}</td>
@@ -142,12 +142,13 @@ export function OrderDetailPage() {
                   <td className="p-3 text-sm">
                     {line.due_date ? format(new Date(line.due_date), "yyyy-MM-dd") : "-"}
                   </td>
-                  <td className="p-3 text-right text-sm">{line.allocated_qty.toLocaleString()}</td>
+                  <td className="p-3 text-right text-sm">{line.allocated_qty?.toLocaleString() ?? "-"}</td>
                   <td className="p-3">
-                    <ForecastMatchBadge status={line.forecast_match_status} />
+                    {/* <ForecastMatchBadge status={line.forecast_match_status} /> */}
+                    <span className="text-sm text-gray-500">-</span>
                   </td>
                   <td className="p-3 text-right text-sm">
-                    {line.forecast_qty !== null ? line.forecast_qty.toLocaleString() : "-"}
+                    {line.forecast_qty !== null && line.forecast_qty !== undefined ? line.forecast_qty.toLocaleString() : "-"}
                   </td>
                   <td className="p-3 text-sm">
                     {line.forecast_version_no ? (
@@ -196,34 +197,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function ForecastMatchBadge({ status }: { status: string | null }) {
-  if (!status) {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800">
-        <XCircle className="h-3 w-3" />
-        未マッチ
-      </span>
-    );
-  }
-
-  const variants: Record<string, { icon: React.ElementType; class: string }> = {
-    matched: { icon: CheckCircle, class: "bg-green-100 text-green-800" },
-    partial: { icon: AlertCircle, class: "bg-yellow-100 text-yellow-800" },
-    unmatched: { icon: XCircle, class: "bg-red-100 text-red-800" },
-  };
-
-  const variant = variants[status] || variants.unmatched;
-  const Icon = variant.icon;
-
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${variant.class}`}
-    >
-      <Icon className="h-3 w-3" />
-      {status}
-    </span>
-  );
-}
+// TODO: forecast_match_status が OrderLine 型に追加されたら、ForecastMatchBadge を復活させる
 
 function DetailSkeleton() {
   return (

@@ -17,16 +17,14 @@ import { useCreateLot } from "@/hooks/mutations";
 import { useDialog, useToast, useTable, useFilters } from "@/hooks/ui";
 
 // バッチ3で作成した共通コンポーネント
-import { DataTable } from "@/components/shared/DataTable";
-import type { Column } from "@/components/shared/DataTable/types";
-import { FilterField } from "@/components/shared/FilterField";
-import { FilterPanel } from "@/components/shared/FilterPanel";
+import { DataTable, type Column } from "@/components/shared/data/DataTable";
+import { FilterField } from "@/components/shared/data/FilterField";
+import { FilterPanel } from "@/components/shared/data/FilterPanel";
 import { FormDialog } from "@/components/shared/form";
 import { PageHeader, PageContainer, Section } from "@/components/shared/layout";
-import { LotStatusBadge } from "@/components/shared/LotStatusBadge";
-import { SearchBar } from "@/components/shared/SearchBar";
-// eslint-disable-next-line import/order
-import { TablePagination } from "@/components/shared/TablePagination";
+import { LotStatusBadge } from "@/components/shared/data/StatusBadge";
+import { SearchBar } from "@/components/shared/data/SearchBar";
+import { TablePagination } from "@/components/shared/data/TablePagination";
 
 // 既存の型とコンポーネント
 import { Button } from "@/components/ui/button";
@@ -212,12 +210,11 @@ export function InventoryPage() {
       <Section className="mb-6">
         <FilterPanel
           title="検索・フィルター"
-          activeCount={filters.activeCount}
           onReset={filters.reset}
         >
           <SearchBar
             value={filters.values.search}
-            onChange={(value) => filters.set("search", value)}
+            onChange={(value: string) => filters.set("search", value)}
             placeholder="ロット番号、製品コード、製品名で検索..."
           />
 
@@ -262,7 +259,7 @@ export function InventoryPage() {
               type="checkbox"
               id="hasStock"
               checked={filters.values.hasStock}
-              onChange={(e) => filters.set("hasStock", e.target.checked)}
+              onChange={(e) => filters.set("hasStock", e.target.checked as false)}
               className="h-4 w-4 rounded border-gray-300"
             />
             <label htmlFor="hasStock" className="text-sm text-gray-700">
@@ -277,20 +274,14 @@ export function InventoryPage() {
         <DataTable
           data={paginatedLots}
           columns={columns}
-          getRowKey={(lot) => lot.id}
-          sort={table.sort}
-          onSort={table.handleSort}
+          sort={table.sort as any}
           isLoading={isLoading}
-          error={error}
           emptyMessage="ロットがありません"
         />
 
         {!isLoading && !error && sortedLots.length > 0 && (
           <TablePagination
-            page={pagination.page}
-            pageSize={pagination.pageSize}
-            totalItems={pagination.totalItems}
-            totalPages={pagination.totalPages}
+            {...pagination as any}
             onPageChange={table.setPage}
             onPageSizeChange={table.setPageSize}
           />

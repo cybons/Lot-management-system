@@ -182,7 +182,7 @@ export function LotAllocationPage() {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const orderListRef = useRef<HTMLDivElement | null>(null);
-  const [orderListScrollTop, setOrderListScrollTop] = useState(0);
+  const [_orderListScrollTop, _setOrderListScrollTop] = useState(0);
 
   // 初回マウント時のフラグ
   const isInitialMount = useRef(true);
@@ -312,7 +312,7 @@ export function LotAllocationPage() {
     if (!el) return;
 
     const handleScroll = () => {
-      setOrderListScrollTop(el.scrollTop);
+      _setOrderListScrollTop(el.scrollTop);
     };
 
     el.addEventListener("scroll", handleScroll);
@@ -334,6 +334,8 @@ export function LotAllocationPage() {
   const allocationList = useMemo(() => {
     return warehouseSummaries
       .map((warehouse) => ({
+        lotId: 0, // TODO: ロット選択機能実装時に適切なlot_idを設定
+        lot: null, // TODO: ロット選択機能実装時に適切なlotオブジェクトを設定
         warehouse_id: warehouse.warehouseId ?? null,
         warehouse_code: warehouse.warehouseCode ?? null,
         quantity: Number(warehouseAllocations[warehouse.key] ?? 0),
