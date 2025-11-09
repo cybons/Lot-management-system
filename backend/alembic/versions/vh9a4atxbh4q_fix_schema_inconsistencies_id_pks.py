@@ -64,11 +64,14 @@ def _get_primary_key_column(table: str) -> str | None:
     bind = op.get_bind()
     result = bind.execute(
         sa.text("""
-            SELECT a.attname
-            FROM pg_index i
-            JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
-            WHERE i.indrelid = :table::regclass
-              AND i.indisprimary
+            SELECT kcu.column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.key_column_usage kcu
+              ON tc.constraint_name = kcu.constraint_name
+              AND tc.table_schema = kcu.table_schema
+            WHERE tc.constraint_type = 'PRIMARY KEY'
+              AND tc.table_schema = current_schema()
+              AND tc.table_name = :table
             LIMIT 1
         """),
         {"table": table}
