@@ -20,7 +20,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = 'vh9a4atxbh4q'
-down_revision = '3f8a35b39c3d'
+down_revision = 'c91377233966'  # Fixed: point to the actual latest head
 branch_labels = None
 depends_on = None
 
