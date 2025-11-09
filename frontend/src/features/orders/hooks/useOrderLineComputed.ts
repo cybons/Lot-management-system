@@ -1,7 +1,8 @@
 // frontend/src/features/orders/hooks/useOrderLineComputed.ts
 import React from "react";
-import { isValidDate, diffDays } from "@/lib/utils/date";
+
 import { formatCodeAndName } from "@/lib/utils";
+import { isValidDate, diffDays } from "@/lib/utils/date";
 import type { OrderLineComputed, AllocatedLot } from "@/types/aliases";
 
 /**
@@ -26,7 +27,7 @@ export function useOrderLineComputed(
 
     // 引当済み数量
     const allocatedLots: AllocatedLot[] = line?.allocated_lots ?? [];
-    const allocatedTotal = allocatedLots.reduce((sum, a) => sum + Number(a.allocate_qty ?? 0), 0);
+    const allocatedTotal = allocatedLots.reduce((sum, a) => sum + Number(a.allocated_qty ?? 0), 0);
 
     // 残数量と進捗率
     const remainingQty = Math.max(0, totalQty - allocatedTotal);
@@ -62,22 +63,16 @@ export function useOrderLineComputed(
 
     return {
       ids: { lineId, orderId },
-      productCode,
-      productName,
-      totalQty,
-      unit,
+      id: line.id,
+      product_code: line.product_code,
+      product_name: line.product_name,
+      totalQty: Number(line.quantity ?? 0),
+      unit: line.unit ?? "EA",
       allocatedTotal,
-      remainingQty,
-      progressPct,
-      status,
-      customerCode,
-      customerName,
-      orderDate,
-      dueDate: dueDate ?? undefined,
-      shipDate: shipDate ?? undefined,
-      plannedShipDate: plannedShipDate ?? undefined,
-      shippingLeadTime,
-      warehouses,
-    };
+      remainingQty: Math.max(0, Number(line.quantity ?? 0) - allocatedTotal),
+      status: line.status ?? "open",
+      warehouses: line.warehouses ?? [],
+      shippingLeadTime: props.shippingLeadTime,
+    } satisfies OrderLineComputed;
   }, [line, order]);
 }

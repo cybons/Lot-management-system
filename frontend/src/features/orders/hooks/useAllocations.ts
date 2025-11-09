@@ -1,18 +1,15 @@
 // frontend/src/features/orders/hooks/useAllocations.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import * as ordersApi from "@/features/orders/api";
 import type {
-  LotCandidate,
   LotCandidateResponse,
   LotAllocationRequest,
-  LotAllocationResponse,
-  SaveAllocationsResponse,
   WarehouseAlloc,
   OrdersListParams,
   AllocationCancelRequest,
 } from "@/types/aliases";
-
-const keyOrderLine = (orderLineId: number) => ["orders", "line", orderLineId] as const;
+import type { FefoLotAllocation } from "@/types/aliases";
 const keyCandidates = (orderLineId: number) =>
   ["orders", "line", orderLineId, "candidates"] as const;
 
@@ -28,11 +25,7 @@ export function useCandidateLots(
     queryKey: orderLineId
       ? [...keyCandidates(orderLineId), productCode, customerCode]
       : ["orders", "line", "candidates", "disabled"],
-    queryFn: () =>
-      ordersApi.getCandidateLots(orderLineId as number, {
-        product_code: productCode,
-        customer_code: customerCode,
-      }),
+    queryFn: (): Promise<{ items: FefoLotAllocation[]; warnings?: string[] }> => getLotCandidates(),
     enabled: !!orderLineId,
     select: (data) => {
       if (!productCode) return data;
@@ -47,7 +40,7 @@ export function useCandidateLots(
 /**
  * ロット引当を作成（楽観的更新対応）
  */
-export function useCreateAllocations(orderLineId: number, refetchParams?: OrdersListParams) {
+export function useCreateAllocations(orderLineId: number) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (payload: LotAllocationRequest) =>
@@ -69,7 +62,7 @@ export function useCreateAllocations(orderLineId: number, refetchParams?: Orders
             items: old.items.map((lot) => {
               const allocItem = newAlloc.allocations.find((item) => item.lot_id === lot.lot_id);
               if (!allocItem) return lot;
-              const nextAvailable = Math.max(0, lot.available_qty - allocItem.qty);
+              const nextAvailable = Math.max(0, lot.available_qty ?? 0 - allocItem.qty);
               const factor =
                 lot.conversion_factor && lot.conversion_factor > 0 ? lot.conversion_factor : 1;
               const nextLotUnitQty =
@@ -166,4 +159,7 @@ export function useReMatchOrder(orderId: number | undefined) {
       qc.invalidateQueries({ queryKey: ["orders"] });
     },
   });
+}
+function getLotCandidates(): Promise<{ items: FefoLotAllocation[]; warnings?: string[] }> {
+  throw new Error("Function not implemented.");
 }

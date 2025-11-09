@@ -5,7 +5,7 @@
 
 import { faker } from "@faker-js/faker/locale/ja";
 
-import type { OrderResponse, OrderLineCreate, OrderWithLinesResponse } from "@/types/aliases";
+import type { OrderResponse, OrderWithLinesResponse, OrderLineCreate } from "@/types/aliases";
 
 /**
  * ランダムな受注データを生成
@@ -51,16 +51,18 @@ export function createOrderWithLines(
   overrides?: Partial<OrderWithLinesResponse>,
 ): OrderWithLinesResponse {
   const order = createOrder(overrides);
-  const lines = Array.from({ length: lineCount }, (_, index) =>
-    createOrderLine({
-      order_id: order.id,
-      line_number: index + 1,
-    }),
-  );
 
   return {
     ...order,
-    lines,
+    lines: (order.lines ?? []).map((l, i) => ({
+      ...l,
+      id: l.id ?? i + 1, // UIがOrderLine.id必須
+      unit: l.unit ?? "EA", // null→既定値
+      allocated_lots: (l.allocated_lots ?? []).map((a) => ({
+        ...a,
+        allocated_qty: a.allocated_qty ?? 0, // 名称/値の正規化
+      })),
+    })),
     ...overrides,
   };
 }

@@ -20,7 +20,7 @@ export function OrderFilters({ value, onChange, onSearch, onReset }: Props) {
             className="w-full border rounded px-3 py-1.5 text-sm"
             placeholder="部分一致で検索"
             value={value.customer_code ?? ""}
-            onChange={(e) => onChange({ ...value, customer_code: e.target.value })}
+            onChange={(_) => onChange({ ...value, customer_code: _.target.value })}
           />
         </div>
 
@@ -30,7 +30,7 @@ export function OrderFilters({ value, onChange, onSearch, onReset }: Props) {
           <select
             className="w-full border rounded px-3 py-1.5 text-sm"
             value={value.status ?? ""}
-            onChange={(e) => onChange({ ...value, status: e.target.value })}
+            onChange={(_) => onChange({ ...value, status: _.target.value })}
           >
             <option value="">すべて</option>
             <option value="open">open</option>
@@ -45,11 +45,9 @@ export function OrderFilters({ value, onChange, onSearch, onReset }: Props) {
           <label className="block text-sm font-medium mb-1">納期</label>
           <select
             className="w-full border rounded px-3 py-1.5 text-sm"
-            value={value.due_filter ?? "all"}
-            onChange={(e) =>
+            onChange={(_) =>
               onChange({
                 ...value,
-                due_filter: e.target.value as "all" | "has_due" | "no_due",
               })
             }
           >

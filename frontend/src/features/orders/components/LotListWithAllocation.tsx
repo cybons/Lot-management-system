@@ -60,13 +60,19 @@ export function LotListWithAllocation({
 
       <div className="divide-y">
         {candidates.map((lot) => {
-          const allocation = getAllocationInfo((lot as unknown).lot_id ?? (lot as unknown).id);
+          type LotKey = { lot_id?: number; id?: number };
+          const key = (lot as LotKey).lot_id ?? (lot as LotKey).id;
+          if (typeof key !== "number") return null; // 早期リターンで型安全
+          const allocation = getAllocationInfo(key);
           const isAllocated = !!allocation;
-          const inputQty = allocQty[(lot as any).lot_id ?? (lot as any).id] ?? 0;
+          const key2 =
+            (lot as { lot_id?: number; id?: number }).lot_id ?? (lot as { id?: number }).id;
+          if (typeof key2 !== "number") return null;
+          const inputQty = allocQty[key2] ?? 0;
 
           return (
             <div
-              key={(lot as any).lot_id ?? (lot as any).id}
+              key={lot.lot_id ?? lot.id}
               className={`p-3 ${isAllocated ? "bg-green-50" : "hover:bg-gray-50"}`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -108,7 +114,9 @@ export function LotListWithAllocation({
                       </span>
                       <button
                         className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1"
-                        onClick={() => onCancelAllocation(allocation.allocation_id)}
+                        onClick={() =>
+                          allocation?.allocation_id && onCancelAllocation(allocation.allocation_id)
+                        }
                       >
                         <X className="h-3 w-3" />
                         取消
@@ -123,7 +131,7 @@ export function LotListWithAllocation({
                     <input
                       type="number"
                       min={0}
-                      max={lot.available_qty}
+                      max={Number(lot.available_qty ?? 0)}
                       value={inputQty}
                       onChange={(e) =>
                         setAllocQty((prev) => ({

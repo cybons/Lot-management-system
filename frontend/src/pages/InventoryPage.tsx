@@ -17,16 +17,7 @@ import { useCreateLot } from "@/hooks/mutations";
 import { useDialog, useToast, useTable, useFilters } from "@/hooks/ui";
 
 // バッチ3で作成した共通コンポーネント
-import {
-  DataTable,
-  TablePagination,
-  SearchBar,
-  FilterPanel,
-  FilterField,
-  StatusBadge,
-  LotStatusBadge,
-  type Column,
-} from "@/components/shared/data";
+
 import { FormDialog } from "@/components/shared/form";
 import { PageHeader, PageContainer, Section } from "@/components/shared/layout";
 

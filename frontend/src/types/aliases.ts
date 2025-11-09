@@ -126,24 +126,45 @@ export type OrderWithLinesResponse = OrderResponse;
 export type OrderLineComputed = {
   id: number;
   product_code: string;
-  ordered_qty: number;
-  allocated_qty: number;
-  remaining_qty: number;
-  // 画面が参照する旧名も許容（暫定的に optional）
-  ids?: { lineId: number; orderId: number };
-  productName?: string;
-  productCode?: string;
-  customerCode?: string;
-  customerName?: string;
-  totalQty?: number;
+  product_name?: string;
+  totalQty: number; // UI用に必須化
+  unit: string; // null→"EA"などで埋める
+  allocatedTotal: number; // UI計算値
+  remainingQty: number; // UI計算値
+  status: string;
+  warehouses: string[];
+  shippingLeadTime?: string; // 任意表示
+};
+
+export type OrderLineCreate = {
+  id?: number;
+  orderId?: number;
+  line_number?: number;
+  product_code: string;
+  quantity: number;
   unit?: string;
-  remainingQty?: number;
-  progressPct?: number;
-  status?: string;
-  orderDate?: string;
-  dueDate?: string;
-  shipDate?: string | null;
-  plannedShipDate?: string | null;
+  allocated_qty?: number;
+};
+
+export type FefoLotAllocation = {
+  lot_id: number;
+  lot_code?: string;
+  lot_number?: string;
+  product_code: string;
+  warehouse_code?: string | null;
+  warehouse_name?: string | null;
+  base_unit?: string | null;
+  lot_unit?: string | null;
+  lot_unit_qty?: number | null;
+  conversion_factor?: number | null;
+  expiry_date?: string | null;
+  receipt_date?: string | null;
+  available_qty?: number | null;
+};
+
+export type getLotCandidates = {
+  items: FefoLotAllocation[];
+  warnings?: string[];
 };
 
 // ---- Query params ----

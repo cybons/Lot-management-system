@@ -1,9 +1,10 @@
 // src/features/orders/hooks/useOrders.ts
 import { useQuery } from "@tanstack/react-query";
+
 import * as ordersApi from "@/features/orders/api";
 import { api } from "@/lib/api-client";
 
-import type { OrdersListParams, OrderWithLinesResponse } from "@/types/aliases";
+import type { OrderResponse, OrdersListParams } from "@/types/aliases";
 
 export const queryKeys = {
   orders: (params: OrdersListParams) => ["orders", params] as const,
@@ -18,23 +19,28 @@ export function useOrdersList(params: OrdersListParams) {
   });
 }
 
-export function useOrder(orderId: number | undefined) {
-  return useQuery<OrderWithLinesResponse>({
-    queryKey: queryKeys.order(orderId ?? 0),
-    queryFn: () => ordersApi.getOrder(orderId as number),
-    enabled: !!orderId,
+export const useOrders = () =>
+  useQuery<OrderResponse[]>({
+    queryKey: ["orders"],
+    queryFn: () => api.getOrders(), // 無引数クロージャに
   });
-}
-
 /** 受注明細（行）の配列を返す */
 export function useOrdersWithAllocations() {
-  return useQuery({
-    queryKey: queryKeys.withAlloc(),
-    queryFn: () => api.getOrdersWithAllocations(), // { items:[...] } or [...]
+  useQuery<OrderResponse[]>({
+    queryKey: ["orders"],
+    queryFn: () => api.getOrders(),
+
     staleTime: 30_000,
     gcTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     // ここで常に「配列」に正規化して返す
     select: (raw: any) => (Array.isArray(raw) ? raw : (raw?.items ?? [])),
+  });
+}
+export function useOrderDetail(orderId?: number) {
+  return useQuery<ordersApi.OrderResponse>({
+    queryKey: ["orders", "detail", orderId ?? "none"],
+    queryFn: () => ordersApi.getOrder(Number(orderId)),
+    enabled: !!orderId,
   });
 }

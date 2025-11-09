@@ -46,7 +46,7 @@ export function OrderCard({ order, onSelectLine, onReMatch }: Props) {
               <tr key={ln.id} className="border-t">
                 <td className="py-1">{ln.id}</td>
                 <td className="py-1">{ln.product_code}</td>
-                <td className="py-1">{ln.qty}</td>
+                <td className="py-1">{ln.quantity}</td>
                 <td className="py-1">{ln.status}</td>
                 <td className="py-1">
                   {onSelectLine && (

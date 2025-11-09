@@ -75,7 +75,7 @@ export function OrderLineCard({ order, line, onRematch }: Props) {
           {/* 左カラム: 引当進捗 + ロット一覧 */}
           <div className="space-y-4">
             <AllocationProgress
-              lineId={c.ids?.lineId}
+              lineId={c.lineId}
               progressPct={c.progressPct ?? 0}
               allocatedTotal={c.allocatedTotal}
               totalQty={c.totalQty}
@@ -95,10 +95,8 @@ export function OrderLineCard({ order, line, onRematch }: Props) {
             {/* ★ ロット一覧（常時表示） */}
             {candidatesQ.data?.warnings?.length ? (
               <div className="rounded-lg border border-amber-100 bg-amber-50 p-3 text-xs text-amber-800 space-y-1">
-                {candidatesQ.data.warnings.map((warning) => (
-                  <div key={`${warning.code}-${warning.message}`}>
-                    <span className="font-semibold">{warning.code}:</span> {warning.message}
-                  </div>
+                {candidatesQ.data.warnings.map((warning, i) => (
+                  <div key={i}>{warning}</div>
                 ))}
               </div>
             ) : null}
