@@ -100,13 +100,7 @@ class Lot(Base):
         back_populates="lot",
         cascade="all, delete-orphan",
     )
-    current_stock: Mapped[Optional["LotCurrentStock"]] = relationship(
-        "LotCurrentStock",
-        back_populates="lot",
-        uselist=False,
-        cascade="all, delete-orphan",
-    )
-
+    
 class LotCurrentStock(Base):
     """Current stock aggregated per lot (VIEW)."""
 
