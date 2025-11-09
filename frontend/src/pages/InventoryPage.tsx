@@ -269,6 +269,27 @@ export function InventoryPage() {
         </FilterPanel>
       </Section>
 
+      {/* エラー表示 */}
+      {error && (
+        <Section>
+          <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+            <p className="text-sm font-semibold text-red-800">データの取得に失敗しました</p>
+            <p className="mt-2 text-xs text-red-600">
+              {error instanceof Error ? error.message : "サーバーエラーが発生しました"}
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              className="mt-4 border-red-300 text-red-700 hover:bg-red-100"
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              再試行
+            </Button>
+          </div>
+        </Section>
+      )}
+
       {/* テーブル */}
       <Section>
         <DataTable
@@ -280,7 +301,7 @@ export function InventoryPage() {
               : undefined
           }
           isLoading={isLoading}
-          emptyMessage="ロットがありません"
+          emptyMessage="ロットがありません。新規登録ボタンから最初のロットを作成してください。"
         />
 
         {!isLoading &&

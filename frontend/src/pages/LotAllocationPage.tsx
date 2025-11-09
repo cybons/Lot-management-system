@@ -497,15 +497,37 @@ export function LotAllocationPage() {
           )}
 
           {ordersQuery.isError && (
-            <div className="p-4 text-center text-red-500">エラーが発生しました</div>
+            <div className="p-4 mx-4 my-2 rounded-lg border border-red-200 bg-red-50">
+              <p className="text-sm font-semibold text-red-800 text-center">
+                受注データの取得に失敗しました
+              </p>
+              <p className="text-xs text-red-600 text-center mt-1">
+                {ordersQuery.error instanceof Error
+                  ? ordersQuery.error.message
+                  : "サーバーエラーが発生しました"}
+              </p>
+              <div className="flex justify-center mt-3">
+                <button
+                  onClick={() => ordersQuery.refetch()}
+                  className="px-3 py-1.5 text-xs font-medium text-red-700 bg-white border border-red-300 rounded hover:bg-red-50"
+                >
+                  再試行
+                </button>
+              </div>
+            </div>
           )}
 
           {orderCards.length === 0 && !ordersQuery.isLoading && !ordersQuery.isError && (
-            <div className="p-4 text-center text-gray-500">
-              表示可能な受注がありません
-              <div className="text-xs mt-2 text-gray-400">
+            <div className="p-6 mx-4 my-2 rounded-lg border border-gray-200 bg-gray-50">
+              <p className="text-sm font-semibold text-gray-700 text-center">
+                受注残がありません
+              </p>
+              <p className="text-xs text-gray-500 text-center mt-2">
+                引当可能な受注が見つかりませんでした。
+              </p>
+              <p className="text-xs text-gray-400 text-center mt-1">
                 ※製品コードと数量が入力されている明細を持つ受注のみ表示されます
-              </div>
+              </p>
             </div>
           )}
 
@@ -549,7 +571,16 @@ export function LotAllocationPage() {
               )}
 
               {orderDetailQuery.isError && (
-                <div className="text-center text-red-500 py-8">エラーが発生しました</div>
+                <div className="mx-2 my-4 p-4 rounded-lg border border-red-200 bg-red-50">
+                  <p className="text-sm font-semibold text-red-800 text-center">
+                    受注詳細の取得に失敗しました
+                  </p>
+                  <p className="text-xs text-red-600 text-center mt-1">
+                    {orderDetailQuery.error instanceof Error
+                      ? orderDetailQuery.error.message
+                      : "サーバーエラーが発生しました"}
+                  </p>
+                </div>
               )}
 
               {orderDetailQuery.data?.lines && orderDetailQuery.data.lines.length > 0 && (
@@ -593,11 +624,21 @@ export function LotAllocationPage() {
                   候補ロットを読み込み中...
                 </div>
               ) : lotsQuery.isError ? (
-                <div className="py-6 text-center text-sm text-red-600">
-                  候補ロットの取得に失敗しました
+                <div className="py-4 px-3 rounded-lg border border-red-200 bg-red-50">
+                  <p className="text-sm font-semibold text-red-800 text-center">
+                    候補ロットの取得に失敗しました
+                  </p>
+                  <p className="text-xs text-red-600 text-center mt-1">
+                    {lotsQuery.error instanceof Error
+                      ? lotsQuery.error.message
+                      : "サーバーエラーが発生しました"}
+                  </p>
                 </div>
               ) : candidateLots.length === 0 ? (
-                <div className="py-6 text-center text-sm text-gray-500">候補ロットがありません</div>
+                <div className="py-6 text-center">
+                  <p className="text-sm text-gray-600 font-medium">候補ロットがありません</p>
+                  <p className="text-xs text-gray-400 mt-1">この製品の在庫が存在しません</p>
+                </div>
               ) : (
                 <div className="max-h-56 overflow-y-auto">
                   <table className="w-full text-xs">
