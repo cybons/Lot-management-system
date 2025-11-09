@@ -90,9 +90,9 @@ export function useProductQuery(
 ): UseQueryResult<Product | undefined, Error> {
   return useQuery({
     queryKey: QUERY_KEYS.masters.product(productCode!),
-    queryFn: async () => {
+    queryFn: async (): Promise<Product | undefined> => {
       const products = await listProducts();
-      return products.find((p) => p.product_code === productCode);
+      return products.find((p: Product) => (p as any).product_code === productCode);
     },
     enabled: !!productCode,
     staleTime: 300000,
@@ -110,9 +110,9 @@ export function useCustomerQuery(
 ): UseQueryResult<Customer | undefined, Error> {
   return useQuery({
     queryKey: QUERY_KEYS.masters.customer(customerCode!),
-    queryFn: async () => {
+    queryFn: async (): Promise<Customer | undefined> => {
       const customers = await listCustomers();
-      return customers.find((c) => c.customer_code === customerCode);
+      return customers.find((c: Customer) => (c as any).customer_code === customerCode);
     },
     enabled: !!customerCode,
     staleTime: 300000,
@@ -130,9 +130,9 @@ export function useWarehouseQuery(
 ): UseQueryResult<Warehouse | undefined, Error> {
   return useQuery({
     queryKey: QUERY_KEYS.masters.warehouse(warehouseCode!),
-    queryFn: async () => {
+    queryFn: async (): Promise<Warehouse | undefined> => {
       const warehouses = await listWarehouses();
-      return warehouses.find((w) => w.warehouse_code === warehouseCode);
+      return warehouses.find((w: Warehouse) => (w as any).warehouse_code === warehouseCode);
     },
     enabled: !!warehouseCode,
     staleTime: 300000,
@@ -193,9 +193,9 @@ export function useProductOptions() {
   const { data: products } = useProductsQuery();
 
   return createSelectOptions(
-    products?.map((p) => ({ code: (p as any).product_code, name: (p as any).product_name })),
-    (p) => p.code,
-    (p) => p.name,
+    products?.map((p: Product) => ({ code: (p as any).product_code, name: (p as any).product_name })),
+    (p: { code: string; name: string }) => p.code,
+    (p: { code: string; name: string }) => p.name,
   );
 }
 
@@ -207,8 +207,8 @@ export function useCustomerOptions() {
 
   return createSelectOptions(
     customers,
-    (c) => (c as any).customer_code,
-    (c) => (c as any).customer_name,
+    (c: Customer) => (c as any).customer_code,
+    (c: Customer) => (c as any).customer_name,
   );
 }
 
@@ -220,7 +220,7 @@ export function useWarehouseOptions() {
 
   return createSelectOptions(
     warehouses,
-    (w) => (w as any).warehouse_code,
-    (w) => (w as any).warehouse_name,
+    (w: Warehouse) => (w as any).warehouse_code,
+    (w: Warehouse) => (w as any).warehouse_name,
   );
 }

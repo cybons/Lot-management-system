@@ -70,7 +70,7 @@ export function OrdersListPage() {
     error,
     refetch,
   } = useOrdersQuery({
-    customer_code: filters.values.customerCode || undefined,
+    customer_code: filters.values.customer_code || undefined,
     status: filters.values.status !== "all" ? filters.values.status : undefined,
     search: filters.values.search || undefined,
     unallocatedOnly: filters.values.unallocatedOnly,
@@ -93,13 +93,13 @@ export function OrdersListPage() {
       {
         id: "order_no",
         header: "受注番号",
-        cell: (order) => <span className="font-medium">{order.order_no}</span>,
+        cell: (order: Order) => <span className="font-medium">{order.order_no}</span>,
         sortable: true,
       },
       {
         id: "customer_code",
         header: "得意先",
-        cell: (order) => (
+        cell: (order: Order) => (
           <div>
             <div className="font-medium">{order.customer_code}</div>
             {order.customer_name && (
@@ -112,30 +112,30 @@ export function OrdersListPage() {
       {
         id: "order_date",
         header: "受注日",
-        cell: (order) => format(new Date(order.order_date), "yyyy/MM/dd"),
+        cell: (order: Order) => (order.order_date ? format(new Date(order.order_date), "yyyy/MM/dd") : "-"),
         sortable: true,
       },
       {
         id: "due_date",
         header: "納期",
-        cell: (order) => (order.due_date ? format(new Date(order.due_date), "yyyy/MM/dd") : "-"),
+        cell: (order: Order) => (order.due_date ? format(new Date(order.due_date), "yyyy/MM/dd") : "-"),
         sortable: true,
       },
       {
         id: "lines_count",
         header: "明細数",
-        cell: (order) => <span className="text-center">{order.lines?.length || 0}</span>,
+        cell: (order: Order) => <span className="text-center">{order.lines?.length || 0}</span>,
         align: "center",
       },
       {
         id: "allocation_status",
         header: "引当状況",
-        cell: (order) => {
+        cell: (order: Order) => {
           const lines = order.lines || [];
-          const totalQty = lines.reduce((sum, line) => sum + line.quantity, 0);
-          const allocatedQty = lines.reduce((sum, line) => {
+          const totalQty = lines.reduce((sum: number, line: any) => sum + line.quantity, 0);
+          const allocatedQty = lines.reduce((sum: number, line: any) => {
             const allocated =
-              line.allocated_lots?.reduce((a, alloc) => a + (alloc.allocated_qty || 0), 0) || 0;
+              line.allocated_lots?.reduce((a: number, alloc: any) => a + (alloc.allocated_qty || 0), 0) || 0;
             return sum + allocated;
           }, 0);
 
@@ -159,14 +159,14 @@ export function OrdersListPage() {
       {
         id: "status",
         header: "ステータス",
-        cell: (order) => <OrderStatusBadge status={order.status} />,
+        cell: (order: Order) => <OrderStatusBadge status={order.status} />,
         sortable: true,
         align: "center",
       },
       {
         id: "actions",
         header: "",
-        cell: (order) => (
+        cell: (order: Order) => (
           <Button
             variant="ghost"
             size="sm"
@@ -249,8 +249,8 @@ export function OrdersListPage() {
           <div className="grid grid-cols-2 gap-3">
             <FilterField label="得意先コード">
               <Input
-                value={filters.values.customerCode}
-                onChange={(e) => filters.set("customerCode", e.target.value)}
+                value={filters.values.customer_code}
+                onChange={(e) => filters.set("customer_code", e.target.value)}
                 placeholder="例: C001"
               />
             </FilterField>
@@ -316,10 +316,11 @@ export function OrdersListPage() {
 
       {/* 新規登録ダイアログ */}
       <FormDialog
-        isOpen={createDialog.isOpen}
+        open={createDialog.isOpen}
         onClose={createDialog.close}
         title="受注新規登録"
         size="lg"
+        onSubmit={async () => {}}
       >
         <OrderCreateForm
           onSubmit={async (data) => {

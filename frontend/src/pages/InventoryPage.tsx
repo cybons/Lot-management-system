@@ -17,7 +17,15 @@ import { useCreateLot } from "@/hooks/mutations";
 import { useDialog, useToast, useTable, useFilters } from "@/hooks/ui";
 
 // バッチ3で作成した共通コンポーネント
-
+import {
+  DataTable,
+  TablePagination,
+  SearchBar,
+  FilterPanel,
+  FilterField,
+  LotStatusBadge,
+  type Column,
+} from "@/components/shared/data";
 import { FormDialog } from "@/components/shared/form";
 import { PageHeader, PageContainer, Section } from "@/components/shared/layout";
 
@@ -33,7 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLotsQuery } from "@/hooks/api";
-import type { LotWithStock } from "@/utils/validators/lot-schemas";
+import type { LotResponse } from "@/types/aliases";
 
 /**
  * メインコンポーネント
@@ -51,7 +59,7 @@ export function InventoryPage() {
   const filters = useFilters({
     search: "",
     product_code: "",
-    warehouseCode: "",
+    warehouse_code: "",
     status: "all",
     hasStock: false,
   });
@@ -63,11 +71,9 @@ export function InventoryPage() {
     error,
     refetch,
   } = useLotsQuery({
-    product_code: filters.values.productCode || undefined,
-    warehouseCode: filters.values.warehouseCode || undefined,
-    status: filters.values.status !== "all" ? filters.values.status : undefined,
-    search: filters.values.search || undefined,
-    hasStock: filters.values.hasStock,
+    product_code: filters.values.product_code || undefined,
+    warehouse_code: filters.values.warehouse_code || undefined,
+    with_stock: filters.values.hasStock,
   });
 
   // ロット作成Mutation
@@ -82,37 +88,37 @@ export function InventoryPage() {
   });
 
   // テーブルカラム定義
-  const columns: Column<LotWithStock>[] = useMemo(
+  const columns: Column<LotResponse>[] = useMemo(
     () => [
       {
         id: "lot_no",
         header: "ロット番号",
-        cell: (lot) => <span className="font-medium">{lot.lot_no}</span>,
+        cell: (lot: LotResponse) => <span className="font-medium">{lot.lot_no || lot.lot_number}</span>,
         sortable: true,
       },
       {
         id: "product_code",
         header: "製品コード",
-        cell: (lot) => lot.product_code,
+        cell: (lot: LotResponse) => lot.product_code,
         sortable: true,
       },
       {
         id: "product_name",
         header: "製品名",
-        cell: (lot) => lot.product_name || "-",
+        cell: (lot: LotResponse) => lot.product_name || "-",
       },
       {
         id: "warehouse_code",
         header: "倉庫",
-        cell: (lot) => lot.warehouse_name || lot.warehouse_code,
+        cell: (lot: LotResponse) => lot.warehouse_name || lot.warehouse_code || "-",
         sortable: true,
       },
       {
         id: "current_quantity",
         header: "現在在庫",
-        cell: (lot) => (
-          <span className={lot.current_quantity > 0 ? "font-semibold" : "text-gray-400"}>
-            {lot.current_quantity.toLocaleString()}
+        cell: (lot: LotResponse) => (
+          <span className={(lot.current_quantity ?? 0) > 0 ? "font-semibold" : "text-gray-400"}>
+            {(lot.current_quantity ?? 0).toLocaleString()}
           </span>
         ),
         sortable: true,
@@ -121,25 +127,25 @@ export function InventoryPage() {
       {
         id: "unit",
         header: "単位",
-        cell: (lot) => lot.unit || "EA",
+        cell: (lot: LotResponse) => lot.unit || "EA",
         align: "center",
       },
       {
         id: "receipt_date",
         header: "入荷日",
-        cell: (lot) => (lot.receipt_date ? format(new Date(lot.receipt_date), "yyyy/MM/dd") : "-"),
+        cell: (lot: LotResponse) => (lot.receipt_date ? format(new Date(lot.receipt_date), "yyyy/MM/dd") : "-"),
         sortable: true,
       },
       {
         id: "expiry_date",
         header: "有効期限",
-        cell: (lot) => (lot.expiry_date ? format(new Date(lot.expiry_date), "yyyy/MM/dd") : "-"),
+        cell: (lot: LotResponse) => (lot.expiry_date ? format(new Date(lot.expiry_date), "yyyy/MM/dd") : "-"),
         sortable: true,
       },
       {
         id: "status",
         header: "ステータス",
-        cell: (lot) => <LotStatusBadge status={lot.status} />,
+        cell: (lot: LotResponse) => <LotStatusBadge status={lot.status || "available"} />,
         sortable: true,
         align: "center",
       },
@@ -155,8 +161,8 @@ export function InventoryPage() {
   // 統計情報
   const stats = useMemo(() => {
     const totalLots = allLots.length;
-    const activeLots = allLots.filter((lot) => lot.status === "active").length;
-    const totalQuantity = allLots.reduce((sum, lot) => sum + (lot.current_quantity || 0), 0);
+    const activeLots = allLots.filter((lot: LotResponse) => lot.status === "active").length;
+    const totalQuantity = allLots.reduce((sum: number, lot: LotResponse) => sum + (lot.current_quantity || 0), 0);
 
     return { totalLots, activeLots, totalQuantity };
   }, [allLots]);
@@ -212,16 +218,16 @@ export function InventoryPage() {
           <div className="grid grid-cols-3 gap-3">
             <FilterField label="製品コード">
               <Input
-                value={filters.values.productCode}
-                onChange={(e) => filters.set("productCode", e.target.value)}
+                value={filters.values.product_code}
+                onChange={(e) => filters.set("product_code", e.target.value)}
                 placeholder="例: P001"
               />
             </FilterField>
 
             <FilterField label="倉庫コード">
               <Input
-                value={filters.values.warehouseCode}
-                onChange={(e) => filters.set("warehouseCode", e.target.value)}
+                value={filters.values.warehouse_code}
+                onChange={(e) => filters.set("warehouse_code", e.target.value)}
                 placeholder="例: W01"
               />
             </FilterField>
@@ -287,10 +293,11 @@ export function InventoryPage() {
 
       {/* 新規登録ダイアログ */}
       <FormDialog
-        isOpen={createDialog.isOpen}
+        open={createDialog.isOpen}
         onClose={createDialog.close}
         title="ロット新規登録"
         size="lg"
+        onSubmit={async () => {}}
       >
         <LotCreateForm
           onSubmit={async (data) => {
