@@ -4,7 +4,7 @@
  */
 
 import { http, HttpResponse } from "msw";
-import { createLot, createLots, createLotWithStock } from "@/factories/lot-factory";
+import { createLots, createLotWithStock } from "@/factories/lot-factory";
 import type { LotResponse } from "@/types/aliases";
 
 const API_BASE = "/api";
@@ -19,7 +19,7 @@ export const lotHandlers = [
   http.get(`${API_BASE}/lots`, ({ request }) => {
     const url = new URL(request.url);
     const productCode = url.searchParams.get("product_code");
-    const supplierCode = url.searchParams.get("supplier_code");
+    // const supplierCode = url.searchParams.get("supplier_code");
     const hasStock = url.searchParams.get("has_stock");
 
     let filteredLots = [...lots];
@@ -28,11 +28,12 @@ export const lotHandlers = [
     if (productCode) {
       filteredLots = filteredLots.filter((lot) => lot.product_code === productCode);
     }
-    if (supplierCode) {
-      filteredLots = filteredLots.filter((lot) => lot.supplier_code === supplierCode);
-    }
+    // supplier_code is not available in LotResponse, commenting out
+    // if (supplierCode) {
+    //   filteredLots = filteredLots.filter((lot) => lot.supplier_code === supplierCode);
+    // }
     if (hasStock === "true") {
-      filteredLots = filteredLots.filter((lot) => lot.current_quantity > 0);
+      filteredLots = filteredLots.filter((lot) => (lot.current_quantity ?? 0) > 0);
     }
 
     return HttpResponse.json(filteredLots);

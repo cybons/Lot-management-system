@@ -157,12 +157,12 @@ export function useBulkCancelAllocations(options?: {
 /**
  * 受注明細の全引当取消フック
  *
- * @param orderLineId - 受注明細ID
+ * @param _orderLineId - 受注明細ID (未使用、将来の実装用)
  * @param options - Mutation オプション
  * @returns 全引当取消のMutation結果
  */
 export function useCancelAllAllocationsForLine(
-  orderLineId: number,
+  _orderLineId: number,
   options?: {
     onSuccess?: () => void;
     onError?: (error: Error) => void;
@@ -226,7 +226,7 @@ export function useAutoAllocate(options?: {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ order_line_id, product_code, quantity }) => {
+    mutationFn: async ({ order_line_id: _order_line_id, product_code: _product_code, quantity: _quantity }) => {
       // TODO: バックエンドに自動引当APIが実装されたら置き換え
       // 現状は手動で候補ロットを取得してFEFO方式で引当を実行する
 

@@ -4,7 +4,7 @@
  * スナックバー形式の通知メッセージを管理
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 /**
  * トーストの種類

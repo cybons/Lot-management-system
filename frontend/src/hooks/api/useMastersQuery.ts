@@ -206,9 +206,9 @@ export function useCustomerOptions() {
   const { data: customers } = useCustomersQuery();
 
   return createSelectOptions(
-    customers,
-    (c: Customer) => (c as any).customer_code,
-    (c: Customer) => (c as any).customer_name,
+    customers?.map((c: Customer) => ({ code: c.customer_code, name: c.customer_name ?? "" })),
+    (c: { code: string; name: string }) => c.code,
+    (c: { code: string; name: string }) => c.name,
   );
 }
 
@@ -219,8 +219,8 @@ export function useWarehouseOptions() {
   const { data: warehouses } = useWarehousesQuery();
 
   return createSelectOptions(
-    warehouses,
-    (w: Warehouse) => (w as any).warehouse_code,
-    (w: Warehouse) => (w as any).warehouse_name,
+    warehouses?.map((w: Warehouse) => ({ code: w.warehouse_code, name: w.warehouse_name })),
+    (w: { code: string; name: string }) => w.code,
+    (w: { code: string; name: string }) => w.name,
   );
 }

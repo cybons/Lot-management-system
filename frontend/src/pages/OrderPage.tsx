@@ -20,7 +20,7 @@ export function OrderPage() {
     isError,
   } = useQuery({
     queryKey: ["orders"],
-    queryFn: api.getOrders,
+    queryFn: () => api.getOrders(),
   });
 
   const getStatusVariant = (

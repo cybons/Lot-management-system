@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { api } from "@/lib/api-client";
 
 // ===== 型定義 =====
 
@@ -41,12 +40,13 @@ export function ForecastListPage() {
   });
 
   // フォーキャストデータを取得
-  const forecastsQuery = useQuery({
+  const forecastsQuery = useQuery<ForecastData[]>({
     queryKey: ["forecasts"],
-    queryFn: async () => {
+    queryFn: async (): Promise<ForecastData[]> => {
       // TODO: forecasts APIが不要なら削除。必要なら api に実装を追加。
       // const res = await api.getForecasts();
       // return res.data.items as ForecastData[];
+      return [];
     },
   });
 
