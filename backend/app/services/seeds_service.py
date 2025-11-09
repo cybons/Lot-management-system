@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.schemas.admin_seeds import SeedRequest, SeedResponse, SeedSummary
 from app.models.masters import Customer, Product, Warehouse  # 実際のモデル名に合わせる
-from app.models.inventory import Lot
+from app.models.inventory import Lot, StockMovement
 from app.models.orders import Order, OrderLine, Allocation  # Allocationはサマリ整合のため残置
 
 
@@ -82,6 +82,19 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
         created_lots.append(l)
         if not req.dry_run:
             db.add(l)
+            db.flush()  # l.id を得る
+            # 受入数量（適当な正数）
+            recv_qty = rng.randint(5, 200)
+            m = StockMovement(
+                product_id=l.product_id,
+                warehouse_id=l.warehouse_id,
+                lot_id=l.id,
+                reason="receipt",
+                quantity_delta=recv_qty,               # NUMERIC(15,4) だが整数でOK
+                occurred_at=datetime.utcnow(),        # もしくは datetime.combine(l.receipt_date, time())
+                created_at=datetime.utcnow(),
+            )
+            db.add(m)
 
     if not req.dry_run:
         db.flush()
