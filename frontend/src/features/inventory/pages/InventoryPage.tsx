@@ -36,8 +36,7 @@ import { LotStatusBadge } from "@/shared/components/data/StatusBadge";
 import { TablePagination } from "@/shared/components/data/TablePagination";
 import { FormDialog } from "@/shared/components/form";
 import { PageHeader, PageContainer, Section } from "@/shared/components/layout";
-// 既存の型とコンポーネント
-import type { LotResponse } from "@/shared/types/aliases";
+import type { LotUI } from "@/shared/libs/normalize";
 
 /**
  * メインコンポーネント
@@ -84,37 +83,35 @@ export function InventoryPage() {
   });
 
   // テーブルカラム定義
-  const columns: Column<LotResponse>[] = useMemo(
+  const columns: Column<LotUI>[] = useMemo(
     () => [
       {
         id: "lot_number",
         header: "ロット番号",
-        cell: (lot: LotResponse) => (
-          <span className="font-medium">{lot.lot_number || "-"}</span>
-        ),
+        cell: (lot: LotUI) => <span className="font-medium">{lot.lot_number}</span>,
         sortable: true,
       },
       {
         id: "product_code",
         header: "製品コード",
-        cell: (lot: LotResponse) => lot.product_code || "-",
+        cell: (lot: LotUI) => lot.product_code,
         sortable: true,
       },
       {
         id: "product_name",
         header: "製品名",
-        cell: (lot: LotResponse) => lot.product_name || "-",
+        cell: (lot: LotUI) => lot.product_name,
       },
       {
         id: "warehouse_code",
         header: "倉庫",
-        cell: (lot: LotResponse) => lot.warehouse_code || "-",
+        cell: (lot: LotUI) => lot.warehouse_code,
         sortable: true,
       },
       {
         id: "current_quantity",
         header: "現在在庫",
-        cell: (lot: LotResponse) => (
+        cell: (lot: LotUI) => (
           <span className={lot.current_quantity > 0 ? "font-semibold" : "text-gray-400"}>
             {lot.current_quantity.toLocaleString()}
           </span>
@@ -125,30 +122,34 @@ export function InventoryPage() {
       {
         id: "unit",
         header: "単位",
-        cell: (lot: LotResponse) => lot.lot_unit || "EA",
+        cell: (lot: LotUI) => lot.lot_unit,
         align: "center",
       },
       {
         id: "receipt_date",
         header: "入荷日",
-        cell: (lot: LotResponse) =>
-          lot.receipt_date ? format(new Date(lot.receipt_date), "yyyy/MM/dd") : "-",
+        cell: (lot: LotUI) =>
+          lot.receipt_date && lot.receipt_date !== "-"
+            ? format(new Date(lot.receipt_date), "yyyy/MM/dd")
+            : "-",
         sortable: true,
       },
       {
         id: "expiry_date",
         header: "有効期限",
-        cell: (lot: LotResponse) =>
-          lot.expiry_date ? format(new Date(lot.expiry_date), "yyyy/MM/dd") : "-",
+        cell: (lot: LotUI) =>
+          lot.expiry_date && lot.expiry_date !== "-"
+            ? format(new Date(lot.expiry_date), "yyyy/MM/dd")
+            : "-",
         sortable: true,
       },
       {
         id: "status",
         header: "ステータス",
-        cell: (lot: LotResponse) => {
+        cell: (lot: LotUI) => {
           // Derive status from current_quantity
           const status = lot.current_quantity > 0 ? "available" : "depleted";
-          return <LotStatusBadge status={lot.status || status} />;
+          return <LotStatusBadge status={status} />;
         },
         sortable: true,
         align: "center",
@@ -166,10 +167,10 @@ export function InventoryPage() {
 
   // 統計情報
   const stats = useMemo(() => {
-    const totalLots = allLots.length;
-    const activeLots = allLots.filter((lot: LotResponse) => lot.current_quantity > 0).length;
-    const totalQuantity = allLots.reduce(
-      (sum: number, lot: LotResponse) => sum + lot.current_quantity,
+    const totalLots = allLots?.length ?? 0;
+    const activeLots = (allLots ?? []).filter((lot: LotUI) => lot.current_quantity > 0).length;
+    const totalQuantity = (allLots ?? []).reduce<number>(
+      (sum, lot) => sum + lot.current_quantity,
       0,
     );
 

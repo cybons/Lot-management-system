@@ -37,7 +37,8 @@ import { TablePagination } from "@/shared/components/data/TablePagination";
 import { FormDialog } from "@/shared/components/form";
 import { PageHeader, PageContainer, Section } from "@/shared/components/layout";
 // 既存の型とコンポーネント
-import type { OrderResponse, OrderLine, AllocatedLot } from "@/shared/types/aliases";
+import type { OrderLine, AllocatedLot } from "@/shared/types/aliases";
+import type { OrderUI } from "@/shared/libs/normalize";
 import type { OrderCreate } from "@/utils/validators";
 
 /**
@@ -84,18 +85,18 @@ export function OrdersListPage() {
   });
 
   // テーブルカラム定義
-  const columns: Column<OrderResponse>[] = useMemo(
+  const columns: Column<OrderUI>[] = useMemo(
     () => [
       {
         id: "order_no",
         header: "受注番号",
-        cell: (order: OrderResponse) => <span className="font-medium">{order.order_no}</span>,
+        cell: (order: OrderUI) => <span className="font-medium">{order.order_no}</span>,
         sortable: true,
       },
       {
         id: "customer_code",
         header: "得意先",
-        cell: (order: OrderResponse) => (
+        cell: (order: OrderUI) => (
           <div>
             <div className="font-medium">{order.customer_code}</div>
             {order.customer_name && (
@@ -108,20 +109,20 @@ export function OrdersListPage() {
       {
         id: "order_date",
         header: "受注日",
-        cell: (order: OrderResponse) => format(new Date(order.order_date), "yyyy/MM/dd"),
+        cell: (order: OrderUI) => format(new Date(order.order_date), "yyyy/MM/dd"),
         sortable: true,
       },
       {
         id: "due_date",
         header: "納期",
-        cell: (order: OrderResponse) =>
+        cell: (order: OrderUI) =>
           order.due_date ? format(new Date(order.due_date), "yyyy/MM/dd") : "-",
         sortable: true,
       },
       {
         id: "lines_count",
         header: "明細数",
-        cell: (order: OrderResponse) => (
+        cell: (order: OrderUI) => (
           <span className="text-center">{order.lines?.length || 0}</span>
         ),
         align: "center",
@@ -129,13 +130,13 @@ export function OrdersListPage() {
       {
         id: "allocation_status",
         header: "引当状況",
-        cell: (order: OrderResponse) => {
+        cell: (order: OrderUI) => {
           const lines = order.lines || [];
-          const totalQty = lines.reduce((sum: number, line: OrderLine) => sum + line.quantity, 0);
-          const allocatedQty = lines.reduce((sum: number, line: OrderLine) => {
+          const totalQty = lines.reduce<number>((sum, line: OrderLine) => sum + line.quantity, 0);
+          const allocatedQty = lines.reduce<number>((sum, line: OrderLine) => {
             const allocated =
-              line.allocated_lots?.reduce(
-                (a: number, alloc: AllocatedLot) => a + (alloc.allocated_qty || 0),
+              line.allocated_lots?.reduce<number>(
+                (a, alloc: AllocatedLot) => a + (alloc.allocated_qty || 0),
                 0,
               ) || 0;
             return sum + allocated;
@@ -161,14 +162,14 @@ export function OrdersListPage() {
       {
         id: "status",
         header: "ステータス",
-        cell: (order: OrderResponse) => <OrderStatusBadge status={order.status} />,
+        cell: (order: OrderUI) => <OrderStatusBadge status={order.status} />,
         sortable: true,
         align: "center",
       },
       {
         id: "actions",
         header: "",
-        cell: (order: OrderResponse) => (
+        cell: (order: OrderUI) => (
           <Button
             variant="ghost"
             size="sm"
