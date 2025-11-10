@@ -3,7 +3,9 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 
-const target = process.env.VITE_BACKEND_ORIGIN || "http://lot-backend:8000";
+// Docker Compose environment: backend service name is "backend"
+// Development environment: can override with VITE_BACKEND_ORIGIN
+const target = process.env.VITE_BACKEND_ORIGIN || "http://backend:8000";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,6 +30,16 @@ export default defineConfig({
       "/api": {
         target,
         changeOrigin: true,
+        secure: false,
+        ws: true,
+        configure: (proxy, _options) => {
+          proxy.on("error", (err, _req, _res) => {
+            console.log("[vite] proxy error:", err);
+          });
+          proxy.on("proxyReq", (proxyReq, req, _res) => {
+            console.log("[vite] proxy request:", req.method, req.url, "->", target);
+          });
+        },
       },
     },
   },
