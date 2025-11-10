@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import * as ordersApi from "@/features/orders/api";
 import type { OrderResponse, OrdersListParams } from "@/shared/types/aliases";
+import { normalizeOrder, type OrderUI } from "@/shared/libs/normalize";
 
 export const queryKeys = {
   orders: (params: OrdersListParams) => ["orders", params] as const,
@@ -11,35 +12,45 @@ export const queryKeys = {
 };
 
 export function useOrdersList(params: OrdersListParams) {
-  return useQuery({
+  return useQuery<OrderResponse[], Error, OrderUI[]>({
     queryKey: queryKeys.orders(params),
     queryFn: () => ordersApi.getOrders(params),
+    initialData: [],
+    select: (data) => (data ?? []).map(normalizeOrder),
   });
 }
 
 export const useOrders = () =>
-  useQuery<OrderResponse[]>({
+  useQuery<OrderResponse[], Error, OrderUI[]>({
     queryKey: ["orders"],
-    queryFn: () => ordersApi.getOrders(), // 無引数クロージャに
+    queryFn: () => ordersApi.getOrders(),
+    initialData: [],
+    select: (data) => (data ?? []).map(normalizeOrder),
   });
 /** 受注明細（行）の配列を返す */
 export function useOrdersWithAllocations() {
-  useQuery<OrderResponse[]>({
+  return useQuery<OrderResponse[], Error, OrderUI[]>({
     queryKey: ["orders"],
     queryFn: () => ordersApi.getOrders(),
-
+    initialData: [],
     staleTime: 30_000,
     gcTime: 5 * 60_000,
     refetchOnWindowFocus: false,
-    // ここで常に「配列」に正規化して返す
-    select: (raw: OrderResponse[] | { items?: OrderResponse[] }) =>
-      Array.isArray(raw) ? raw : (raw?.items ?? []),
+    // ここで常に「配列」に正規化して返し、normalize も適用
+    select: (raw: OrderResponse[] | { items?: OrderResponse[] }) => {
+      const rawArray = Array.isArray(raw) ? raw : (raw?.items ?? []);
+      return (rawArray ?? []).map(normalizeOrder);
+    },
   });
 }
 export function useOrderDetail(orderId?: number) {
-  return useQuery<ordersApi.OrderResponse>({
+  return useQuery({
     queryKey: ["orders", "detail", orderId ?? "none"],
-    queryFn: () => ordersApi.getOrder(Number(orderId)),
+    queryFn: async () => {
+      const data = await ordersApi.getOrder(Number(orderId));
+      return data as OrderResponse;
+    },
     enabled: !!orderId,
+    select: (data: OrderResponse) => normalizeOrder(data),
   });
 }

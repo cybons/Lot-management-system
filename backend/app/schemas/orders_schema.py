@@ -14,7 +14,7 @@ from .base import BaseSchema, TimestampMixin
 # --- Order ---
 class OrderBase(BaseSchema):
     order_no: str
-    customer_code: str
+    customer_code: str | None = None
     order_date: date
     status: str = "open"
     customer_order_no: str | None = None
@@ -27,6 +27,7 @@ class OrderBase(BaseSchema):
 
 
 class OrderCreate(OrderBase):
+    customer_code: str  # 作成時は必須
     lines: list[OrderLineCreate] = Field(default_factory=list)
 
 
@@ -63,15 +64,16 @@ class OrderWithLinesResponse(OrderResponse):
 # --- OrderLine ---
 class OrderLineBase(BaseSchema):
     line_no: int
-    product_code: str
+    product_code: str | None = None
     quantity: float
-    unit: str
+    unit: str | None = None
     due_date: date | None = None
     next_div: str | None = None
     destination_id: int | None = None
 
 
 class OrderLineCreate(OrderLineBase):
+    product_code: str  # 作成時は必須
     external_unit: str | None = None  # 外部単位（変換用）
 
 
@@ -94,12 +96,12 @@ class WarehouseAllocIn(BaseSchema):
 class OrderLineOut(BaseSchema):
     id: int
     line_no: int | None = None
-    product_code: str
-    product_name: str
+    product_code: str | None = None
+    product_name: str | None = None
     customer_code: str | None = None
     supplier_code: str | None = None
     quantity: float
-    unit: str
+    unit: str | None = None
     due_date: date | None = None
     warehouse_allocations: list[WarehouseAllocOut] = Field(default_factory=list)
     related_lots: list[dict[str, Any]] = Field(default_factory=list)

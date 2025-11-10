@@ -121,7 +121,7 @@ export type OrderLine = {
 export type OrderResponse = {
   id: number;
   order_no: string;
-  customer_code: string;
+  customer_code?: string | null;
   customer_name?: string | null;
   order_date: string;
   status: string;

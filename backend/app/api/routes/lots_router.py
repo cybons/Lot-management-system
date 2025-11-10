@@ -64,7 +64,7 @@ def list_lots(
     if supplier_code:
         query = query.filter(Lot.supplier_code == supplier_code)
     if warehouse_code:
-        query = query.filter(Lot.warehouse.has(warehouse_code=warehouse_code))
+        query = query.filter(Lot.warehouse_code == warehouse_code)
     if expiry_from:
         query = query.filter(Lot.expiry_date >= expiry_from)
     if expiry_to:
@@ -72,7 +72,9 @@ def list_lots(
 
     # 在庫ありのみ
     if with_stock:
-        query = query.join(Lot.current_stock).filter(LotCurrentStock.current_quantity > 0)
+        query = query.outerjoin(LotCurrentStock, Lot.id == LotCurrentStock.lot_id).filter(
+            LotCurrentStock.current_quantity > 0
+        )
 
     # FEFO(先入先出): 有効期限昇順
     query = query.order_by(Lot.expiry_date.asc().nullslast())
@@ -174,12 +176,6 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
     try:
         db_lot = Lot(**lot_payload)
         db.add(db_lot)
-        db.flush()
-
-        # 現在在庫初期化
-        current_stock = LotCurrentStock(lot_id=db_lot.id, current_quantity=0.0)
-        db.add(current_stock)
-
         db.commit()
     except IntegrityError as exc:
         db.rollback()
@@ -342,31 +338,29 @@ def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(g
     )
     db.add(db_movement)
 
-    # 現在在庫更新
-    current_stock = (
-        db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == movement.lot_id).first()
-    )
-
-    if current_stock:
-        current_stock.current_quantity += movement.quantity_delta
-        current_stock.last_updated = datetime.now()
-    else:
-        current_stock = LotCurrentStock(
-            lot_id=movement.lot_id, current_quantity=movement.quantity_delta
+    # 現在在庫チェック（VIEW なので読み取り専用）
+    if movement.lot_id:
+        current_stock = (
+            db.query(LotCurrentStock).filter(LotCurrentStock.lot_id == movement.lot_id).first()
         )
-        db.add(current_stock)
 
-    # マイナス在庫チェック
-    if current_stock.current_quantity < 0:
-        db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "在庫不足: 現在在庫 "
-                f"{current_stock.current_quantity + movement.quantity_delta}, "
-                f"要求 {abs(movement.quantity_delta)}"
-            ),
-        )
+        # マイナス在庫チェック
+        if current_stock:
+            projected_quantity = current_stock.current_quantity + movement.quantity_delta
+        else:
+            # 既存の在庫移動がない場合
+            projected_quantity = movement.quantity_delta
+
+        if projected_quantity < 0:
+            db.rollback()
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "在庫不足: 現在在庫 "
+                    f"{current_stock.current_quantity if current_stock else 0}, "
+                    f"要求 {abs(movement.quantity_delta)}"
+                ),
+            )
 
     db.commit()
     db.refresh(db_movement)

@@ -22,7 +22,6 @@ from app.api.routes import (
     masters_router,
     orders_router,
     orders_validate_router,
-    products_router,
     warehouse_alloc_router,
 )
 from app.core import errors
@@ -86,7 +85,6 @@ app.include_router(admin_router, prefix=settings.API_PREFIX)
 app.include_router(admin_presets_router, prefix=settings.API_PREFIX)
 app.include_router(admin_healthcheck_router, prefix=settings.API_PREFIX)
 app.include_router(forecast_router, prefix=settings.API_PREFIX)
-app.include_router(products_router, prefix=settings.API_PREFIX)
 app.include_router(warehouse_alloc_router, prefix=settings.API_PREFIX)
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(orders_validate_router, prefix=settings.API_PREFIX)

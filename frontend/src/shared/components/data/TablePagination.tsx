@@ -45,31 +45,36 @@ export interface TablePaginationProps {
 // ============================================
 
 export function TablePagination({
-  currentPage,
-  pageSize,
-  totalCount,
+  currentPage = 1,
+  pageSize = 25,
+  totalCount = 0,
   onPageChange,
   onPageSizeChange,
   pageSizeOptions = [10, 25, 50, 100],
   className,
 }: TablePaginationProps) {
-  // 総ページ数
-  const totalPages = Math.ceil(totalCount / pageSize);
+  // 安全な値の取得（NaN防止）
+  const safeCurrentPage = Math.max(1, currentPage ?? 1);
+  const safePageSize = Math.max(1, pageSize ?? 25);
+  const safeTotalCount = Math.max(0, totalCount ?? 0);
+
+  // 総ページ数（NaN防止）
+  const totalPages = Math.max(1, Math.ceil(safeTotalCount / safePageSize) || 1);
 
   // 表示範囲
-  const startIndex = (currentPage - 1) * pageSize + 1;
-  const endIndex = Math.min(currentPage * pageSize, totalCount);
+  const startIndex = (safeCurrentPage - 1) * safePageSize + 1;
+  const endIndex = Math.min(safeCurrentPage * safePageSize, safeTotalCount);
 
   // ページ移動
   const goToFirstPage = () => onPageChange(1);
-  const goToPreviousPage = () => onPageChange(Math.max(1, currentPage - 1));
-  const goToNextPage = () => onPageChange(Math.min(totalPages, currentPage + 1));
+  const goToPreviousPage = () => onPageChange(Math.max(1, safeCurrentPage - 1));
+  const goToNextPage = () => onPageChange(Math.min(totalPages, safeCurrentPage + 1));
   const goToLastPage = () => onPageChange(totalPages);
 
   // ボタン無効化判定
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
-  const hasNoData = totalCount === 0;
+  const isFirstPage = safeCurrentPage === 1;
+  const isLastPage = safeCurrentPage === totalPages;
+  const hasNoData = safeTotalCount === 0;
 
   return (
     <div
@@ -83,7 +88,7 @@ export function TablePagination({
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-700">表示件数:</span>
           <Select
-            value={String(pageSize)}
+            value={String(safePageSize)}
             onValueChange={(value: string) => onPageSizeChange(Number(value))}
           >
             <SelectTrigger className="h-9 w-20">
@@ -104,8 +109,8 @@ export function TablePagination({
             <span>データがありません</span>
           ) : (
             <span>
-              {totalCount.toLocaleString()} 件中 {startIndex.toLocaleString()} -{" "}
-              {endIndex.toLocaleString()} 件を表示
+              {(safeTotalCount ?? 0).toLocaleString()} 件中 {(startIndex ?? 0).toLocaleString()} -{" "}
+              {(endIndex ?? 0).toLocaleString()} 件を表示
             </span>
           )}
         </div>
@@ -138,7 +143,7 @@ export function TablePagination({
         {/* ページ番号表示 */}
         <div className="flex items-center gap-1 px-2">
           <span className="text-sm text-gray-700">
-            ページ {currentPage} / {totalPages || 1}
+            ページ {safeCurrentPage} / {totalPages || 1}
           </span>
         </div>
 

@@ -8,8 +8,8 @@ from .base import BaseSchema, TimestampMixin
 
 # --- Lot ---
 class LotBase(BaseSchema):
-    supplier_code: str
-    product_code: str
+    supplier_code: str | None = None
+    product_code: str | None = None
     lot_number: str
     receipt_date: date
     mfg_date: date | None = None
@@ -27,7 +27,8 @@ class LotBase(BaseSchema):
 
 
 class LotCreate(LotBase):
-    pass
+    supplier_code: str  # 作成時は必須
+    product_code: str  # 作成時は必須
 
 
 class LotUpdate(BaseSchema):

@@ -1,3 +1,5 @@
+import type { OrderWithLinesResponse } from "@/shared/types/aliases";
+
 // Simplified order schema types (no zod) to pass initial typecheck.
 // Replace later with a real validator.
 export type OrderCreate = {
@@ -11,10 +13,5 @@ export type OrderUpdate = Partial<OrderCreate> & {
   remarks?: string | null;
 };
 
-export type OrderDetail = {
-  id: number;
-  order_no: string;
-  customer_code: string;
-  order_date?: string | null;
-  remarks?: string | null;
-};
+// OrderDetail is the same as OrderWithLinesResponse from the API
+export type OrderDetail = OrderWithLinesResponse;

@@ -1597,9 +1597,9 @@ export interface components {
       /** Updated At */
       updated_at?: string | null;
       /** Supplier Code */
-      supplier_code: string;
+      supplier_code?: string | null;
       /** Product Code */
-      product_code: string;
+      product_code?: string | null;
       /** Lot Number */
       lot_number: string;
       /**
@@ -1814,9 +1814,9 @@ export interface components {
       /** Line No */
       line_no?: number | null;
       /** Product Code */
-      product_code: string;
+      product_code?: string | null;
       /** Product Name */
-      product_name: string;
+      product_name?: string | null;
       /** Customer Code */
       customer_code?: string | null;
       /** Supplier Code */
@@ -1824,7 +1824,7 @@ export interface components {
       /** Quantity */
       quantity: number;
       /** Unit */
-      unit: string;
+      unit?: string | null;
       /** Due Date */
       due_date?: string | null;
       /** Warehouse Allocations */
@@ -1850,7 +1850,7 @@ export interface components {
       /** Order No */
       order_no: string;
       /** Customer Code */
-      customer_code: string;
+      customer_code?: string | null;
       /**
        * Order Date
        * Format: date
@@ -2024,9 +2024,6 @@ export interface components {
       product_code: string;
       /** Product Name */
       product_name: string;
-      /** Supplier Code */
-      supplier_code?: string | null;
-      /** Customer Part No */
       customer_part_no?: string | null;
       /** Maker Item Code */
       maker_item_code?: string | null;
@@ -2043,11 +2040,8 @@ export interface components {
        * @default EA
        */
       base_unit: string;
-      /** Packaging */
-      packaging?: string | null;
-      /** Assemble Div */
-      assemble_div?: string | null;
       /** Next Div */
+      assemble_div?: string | null;
       next_div?: string | null;
       /** Ji Ku Text */
       ji_ku_text?: string | null;
@@ -2059,7 +2053,7 @@ export interface components {
        * Requires Lot Number
        * @default true
        */
-      requires_lot_number: boolean;
+      requires_lot_number?: number | null;
       /** Delivery Place Id */
       delivery_place_id?: number | null;
       /** Delivery Place Name */

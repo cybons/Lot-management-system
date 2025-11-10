@@ -1,4 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { Sidebar } from "@/shared/components/layout/Sidebar";
+
 // Pages
 import { AdminPage } from "@/features/admin/pages/AdminPage";
 import { DashboardPage } from "@/features/dashboard/pages/DashboardPage";
@@ -8,59 +10,28 @@ import { InventoryPage } from "@/features/inventory/pages/InventoryPage";
 import { OrdersListPage } from "@/features/orders/pages/OrdersListPage";
 import { LotAllocationPage } from "@/pages/LotAllocationPage";
 
-function AppTabs() {
+function App() {
   return (
-    <div className="bg-background min-h-screen">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold">ロット管理システム (MVP)</h1>
-        </div>
-      </header>
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar Navigation */}
+      <Sidebar />
 
-      <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="dashboard" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="dashboard">ダッシュボード</TabsTrigger>
-            <TabsTrigger value="inventory">在庫管理</TabsTrigger>
-            {/* <TabsTrigger value="orders">受注管理</TabsTrigger> */}
-            <TabsTrigger value="orders-card">ロット引当処理</TabsTrigger>
-            <TabsTrigger value="forecast-list">Forecast一覧</TabsTrigger>
-
-            <TabsTrigger value="forecast">Forecast</TabsTrigger>
-            <TabsTrigger value="admin" className="text-destructive">
-              管理
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="orders-card">
-            <LotAllocationPage />
-          </TabsContent>
-          <TabsContent value="forecast-list">
-            <ForecastListPage />
-          </TabsContent>
-          <TabsContent value="dashboard" className="space-y-4">
-            <DashboardPage />
-          </TabsContent>
-
-          <TabsContent value="inventory" className="space-y-4">
-            <InventoryPage />
-          </TabsContent>
-
-          <TabsContent value="orders" className="space-y-4">
-            <OrdersListPage />
-          </TabsContent>
-
-          <TabsContent value="forecast" className="space-y-4">
-            <ForecastImportPage />
-          </TabsContent>
-
-          <TabsContent value="admin" className="space-y-4">
-            <AdminPage />
-          </TabsContent>
-        </Tabs>
+      {/* Main Content */}
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/inventory" element={<InventoryPage />} />
+          <Route path="/orders" element={<OrdersListPage />} />
+          <Route path="/allocations" element={<LotAllocationPage />} />
+          <Route path="/forecast" element={<ForecastImportPage />} />
+          <Route path="/forecast/list" element={<ForecastListPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </main>
     </div>
   );
 }
 
-export default AppTabs;
+export default App;

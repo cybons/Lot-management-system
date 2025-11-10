@@ -27,7 +27,6 @@ _ROUTER_DEFINITIONS = [
     ("masters_router", "masters_router"),
     ("orders_router", "orders_router"),
     ("orders_validate_router", "orders_validate_router"),
-    ("products_router", "products_router"),
     ("warehouse_alloc_router", "warehouse_alloc_router"),
 ]
 

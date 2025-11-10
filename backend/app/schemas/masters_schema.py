@@ -74,7 +74,6 @@ class CustomerResponse(CustomerBase):
 class ProductBase(BaseSchema):
     product_code: str
     product_name: str
-    supplier_code: str | None = None
     customer_part_no: str | None = None
     maker_item_code: str | None = None
     supplier_item_code: str | None = None
@@ -82,13 +81,12 @@ class ProductBase(BaseSchema):
     packaging_unit: str = Field(..., min_length=1)
     internal_unit: str = Field(..., min_length=1)
     base_unit: str = "EA"
-    packaging: str | None = None
     assemble_div: str | None = None
     next_div: str | None = None
     ji_ku_text: str | None = None
     kumitsuke_ku_text: str | None = None
     shelf_life_days: int | None = None
-    requires_lot_number: bool = True
+    requires_lot_number: int | None = None
     delivery_place_id: int | None = None
     delivery_place_name: str | None = None
     shipping_warehouse_name: str | None = None
@@ -100,7 +98,6 @@ class ProductCreate(ProductBase):
 
 class ProductUpdate(BaseSchema):
     product_name: str | None = None
-    supplier_code: str | None = None
     customer_part_no: str | None = None
     maker_item_code: str | None = None
     supplier_item_code: str | None = None
@@ -108,7 +105,6 @@ class ProductUpdate(BaseSchema):
     packaging_unit: str | None = None
     internal_unit: str | None = None
     base_unit: str | None = None
-    packaging: str | None = None
     assemble_div: str | None = None
     next_div: str | None = None
     ji_ku_text: str | None = None
