@@ -18,7 +18,7 @@ _sub_routers = [
     ("masters_bulk_load", "bulk_router"),
 ]
 
-for module_name, router_alias in _sub_routers:
+for module_name, _ in _sub_routers:
     try:
         module = __import__(f"app.api.routes.{module_name}", fromlist=["router"])
         sub_router = getattr(module, "router", None)
