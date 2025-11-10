@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useTable](../README.md) / useTable
 
@@ -16,7 +16,7 @@ Defined in: [src/hooks/ui/useTable.ts:59](https://github.com/cybons-lab/Lot-mana
 
 ### T
 
-`T` *extends* `string` = `string`
+`T` _extends_ `string` = `string`
 
 ## Parameters
 
@@ -202,7 +202,7 @@ Defined in: [src/hooks/ui/useTable.ts:59](https://github.com/cybons-lab/Lot-mana
 
 ##### D
 
-`D` *extends* `Record`\<`string`, `any`\>
+`D` _extends_ `Record`\<`string`, `any`\>
 
 #### Parameters
 
@@ -219,7 +219,7 @@ Defined in: [src/hooks/ui/useTable.ts:59](https://github.com/cybons-lab/Lot-mana
 ```tsx
 const table = useTable({
   initialPageSize: 25,
-  initialSort: { column: 'created_at', direction: 'desc' }
+  initialSort: { column: "created_at", direction: "desc" },
 });
 
 const sortedData = table.sortData(data);

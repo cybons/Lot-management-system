@@ -1,9 +1,6 @@
 # backend/app/api/routes/forecast.py
-"""
-フォーキャスト管理のAPIエンドポイント
-"""
+"""フォーキャスト管理のAPIエンドポイント."""
 
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
@@ -32,19 +29,17 @@ from app.services.forecast import (
     assign_auto_forecast_identifier,
 )
 
+
 router = APIRouter(prefix="/forecast", tags=["forecast"])
 
 
 @router.get("/list", response_model=ForecastListResponse)
 def list_forecast_summary(
-    product_code: Optional[str] = Query(default=None),
-    supplier_code: Optional[str] = Query(default=None),
+    product_code: str | None = Query(default=None),
+    supplier_code: str | None = Query(default=None),
     db: Session = Depends(get_db),
 ):
-    """
-    Forecast一覧（フロント表示用）
-    """
-
+    """Forecast一覧（フロント表示用）."""
     # 🔽 [修正] join を isouter=True (LEFT OUTER JOIN) に変更
     stmt = (
         select(Forecast, Product.product_name)
@@ -74,7 +69,7 @@ def list_forecast_summary(
     version_history = [{"version_no": "v1.0 (dummy)", "updated_at": "2025-11-01"}]
     # --- ダミーここまで ---
 
-    items: List[ForecastItemOut] = []
+    items: list[ForecastItemOut] = []
     for forecast, product_name in results:
         supplier_code = forecast.supplier_id or ""
 
@@ -91,9 +86,7 @@ def list_forecast_summary(
             dekad_data={"early": early, "middle": middle, "late": late}
             if forecast.granularity == "dekad"
             else None,
-            monthly_data={"11": monthly_total}
-            if forecast.granularity == "monthly"
-            else None,
+            monthly_data={"11": monthly_total} if forecast.granularity == "monthly" else None,
             dekad_summary=dekad_summary,
             customer_name=f"{forecast.customer_id} (ダミー)",
             supplier_name=f"{supplier_code or '未設定'} (ダミー)",
@@ -106,31 +99,25 @@ def list_forecast_summary(
 
 
 # ===== Basic CRUD =====
-@router.get("", response_model=List[ForecastResponse])
+@router.get("", response_model=list[ForecastResponse])
 def list_forecasts(
     skip: int = 0,
     limit: int = 100,
-    product_id: Optional[str] = None,
-    customer_id: Optional[str] = None,
-    product_code: Optional[str] = None,
-    customer_code: Optional[str] = None,
-    granularity: Optional[str] = None,
-    is_active: Optional[bool] = None,
-    version_no: Optional[int] = None,
+    product_id: str | None = None,
+    customer_id: str | None = None,
+    product_code: str | None = None,
+    customer_code: str | None = None,
+    granularity: str | None = None,
+    is_active: bool | None = None,
+    version_no: int | None = None,
     db: Session = Depends(get_db),
 ):
-    """
-    フォーキャスト一覧取得 (生データ)
-    """
+    """フォーキャスト一覧取得 (生データ)."""
     query = db.query(Forecast)
     if product_code:
         normalized_code = product_code.strip()
         product_codes = {normalized_code}
-        product = (
-            db.query(Product)
-            .filter(Product.product_code == normalized_code)
-            .first()
-        )
+        product = db.query(Product).filter(Product.product_code == normalized_code).first()
         if product:
             product_codes.add(product.product_code)
         query = query.filter(Forecast.product_id.in_(product_codes))
@@ -140,11 +127,7 @@ def list_forecasts(
     if customer_code:
         normalized_customer = customer_code.strip()
         customer_codes = {normalized_customer}
-        customer = (
-            db.query(Customer)
-            .filter(Customer.customer_code == normalized_customer)
-            .first()
-        )
+        customer = db.query(Customer).filter(Customer.customer_code == normalized_customer).first()
         if customer:
             customer_codes.add(customer.customer_code)
         query = query.filter(Forecast.customer_id.in_(customer_codes))
@@ -169,9 +152,7 @@ def list_forecasts(
 
 @router.post("", response_model=ForecastResponse, status_code=201)
 def create_forecast(forecast: ForecastCreate, db: Session = Depends(get_db)):
-    """
-    フォーキャスト単一登録
-    """
+    """フォーキャスト単一登録."""
     _validate_granularity_fields(forecast)
     db_forecast = Forecast(**forecast.model_dump())
     db.add(db_forecast)
@@ -184,7 +165,7 @@ def create_forecast(forecast: ForecastCreate, db: Session = Depends(get_db)):
 
 @router.get("/{forecast_id}", response_model=ForecastResponse)
 def get_forecast(forecast_id: int, db: Session = Depends(get_db)):
-    """フォーキャスト詳細取得"""
+    """フォーキャスト詳細取得."""
     forecast = db.query(Forecast).filter(Forecast.id == forecast_id).first()
     if not forecast:
         raise HTTPException(status_code=404, detail="フォーキャストが見つかりません")
@@ -192,10 +173,8 @@ def get_forecast(forecast_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{forecast_id}", response_model=ForecastResponse)
-def update_forecast(
-    forecast_id: int, forecast: ForecastUpdate, db: Session = Depends(get_db)
-):
-    """フォーキャスト更新"""
+def update_forecast(forecast_id: int, forecast: ForecastUpdate, db: Session = Depends(get_db)):
+    """フォーキャスト更新."""
     db_forecast = db.query(Forecast).filter(Forecast.id == forecast_id).first()
     if not db_forecast:
         raise HTTPException(status_code=404, detail="フォーキャストが見つかりません")
@@ -210,7 +189,7 @@ def update_forecast(
 
 @router.delete("/{forecast_id}", status_code=204)
 def delete_forecast(forecast_id: int, db: Session = Depends(get_db)):
-    """フォーキャスト削除"""
+    """フォーキャスト削除."""
     db_forecast = db.query(Forecast).filter(Forecast.id == forecast_id).first()
     if not db_forecast:
         raise HTTPException(status_code=404, detail="フォーキャストが見つかりません")
@@ -222,12 +201,8 @@ def delete_forecast(forecast_id: int, db: Session = Depends(get_db)):
 
 # ===== Bulk Import =====
 @router.post("/bulk", response_model=ForecastBulkImportResponse, status_code=201)
-def bulk_import_forecasts(
-    request: ForecastBulkImportRequest, db: Session = Depends(get_db)
-):
-    """
-    フォーキャスト一括登録
-    """
+def bulk_import_forecasts(request: ForecastBulkImportRequest, db: Session = Depends(get_db)):
+    """フォーキャスト一括登録."""
     imported_count = 0
     skipped_count = 0
     error_count = 0
@@ -235,7 +210,7 @@ def bulk_import_forecasts(
 
     if request.deactivate_old_version:
         db.query(Forecast).filter(
-            Forecast.version_no < request.version_no, Forecast.is_active == True
+            Forecast.version_no < request.version_no, Forecast.is_active
         ).update({"is_active": False})
 
     for index, forecast_data in enumerate(request.forecasts, start=1):
@@ -264,9 +239,6 @@ def bulk_import_forecasts(
         # deactivateのみ実行された場合は、前段のupdateを反映させる
         db.commit()
 
-    status = (
-        "success" if error_count == 0 else "partial" if imported_count > 0 else "failed"
-    )
 
     return ForecastBulkImportResponse(
         success=(error_count == 0),
@@ -282,9 +254,7 @@ def bulk_import_forecasts(
 # ===== Version Management =====
 @router.get("/versions", response_model=ForecastVersionListResponse)
 def list_versions(db: Session = Depends(get_db)):
-    """
-    フォーキャストバージョン一覧取得
-    """
+    """フォーキャストバージョン一覧取得."""
     versions = (
         db.query(
             Forecast.version_no,
@@ -319,12 +289,8 @@ def list_versions(db: Session = Depends(get_db)):
 
 @router.post("/activate", response_model=ForecastActivateResponse)
 def activate_version(request: ForecastActivateRequest, db: Session = Depends(get_db)):
-    """
-    指定バージョンをアクティブ化
-    """
-    target_forecasts = (
-        db.query(Forecast).filter(Forecast.version_no == request.version_no).all()
-    )
+    """指定バージョンをアクティブ化."""
+    target_forecasts = db.query(Forecast).filter(Forecast.version_no == request.version_no).all()
     if not target_forecasts:
         raise HTTPException(
             status_code=404, detail=f"バージョン {request.version_no} が見つかりません"
@@ -335,21 +301,17 @@ def activate_version(request: ForecastActivateRequest, db: Session = Depends(get
     if request.deactivate_others:
         other_versions = (
             db.query(Forecast.version_no)
-            .filter(
-                Forecast.version_no != request.version_no, Forecast.is_active == True
-            )
+            .filter(Forecast.version_no != request.version_no, Forecast.is_active)
             .distinct()
             .all()
         )
         deactivated_versions = [v[0] for v in other_versions]
 
         db.query(Forecast).filter(
-            Forecast.version_no != request.version_no, Forecast.is_active == True
+            Forecast.version_no != request.version_no, Forecast.is_active
         ).update({"is_active": False})
 
-    db.query(Forecast).filter(Forecast.version_no == request.version_no).update(
-        {"is_active": True}
-    )
+    db.query(Forecast).filter(Forecast.version_no == request.version_no).update({"is_active": True})
 
     db.commit()
 
@@ -364,9 +326,7 @@ def activate_version(request: ForecastActivateRequest, db: Session = Depends(get
 # ===== Matching =====
 @router.post("/match", response_model=ForecastMatchResponse)
 def match_forecasts(request: ForecastMatchRequest, db: Session = Depends(get_db)):
-    """
-    フォーキャストと受注明細の手動マッチング
-    """
+    """フォーキャストと受注明細の手動マッチング."""
     matcher = ForecastMatcher(db)
 
     query = db.query(OrderLine).join(Order)
@@ -446,9 +406,7 @@ def match_forecasts(request: ForecastMatchRequest, db: Session = Depends(get_db)
 
 # ===== Helper Functions =====
 def _validate_granularity_fields(forecast_data):
-    """
-    粒度別フィールドの整合性チェック
-    """
+    """粒度別フィールドの整合性チェック."""
     granularity = forecast_data.granularity
     date_day = forecast_data.date_day
     date_dekad_start = forecast_data.date_dekad_start

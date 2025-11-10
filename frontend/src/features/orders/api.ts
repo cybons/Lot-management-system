@@ -38,8 +38,7 @@ export const getOrders = (params?: OrdersListParams) => {
 /**
  * 受注詳細取得
  */
-export const getOrder = (orderId: number) =>
-  fetchApi.get<OrderGetResponse>(`/orders/${orderId}`);
+export const getOrder = (orderId: number) => fetchApi.get<OrderGetResponse>(`/orders/${orderId}`);
 
 /**
  * FEFO再マッチング実行

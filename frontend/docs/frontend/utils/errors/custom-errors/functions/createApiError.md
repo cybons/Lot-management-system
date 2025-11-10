@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/errors/custom-errors](../README.md) / createApiError
 

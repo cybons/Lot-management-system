@@ -3,15 +3,10 @@
  * マスタデータ関連のAPI通信関数を提供
  */
 
-import { http } from '@/services/http';
-import type {
-  Product,
-  Supplier,
-  Warehouse,
-  Customer,
-} from '@/utils/validators/master-schemas';
+import { http } from "@/services/http";
+import type { Product, Supplier, Warehouse, Customer } from "@/utils/validators/master-schemas";
 
-const BASE_PATH = '/masters';
+const BASE_PATH = "/masters";
 
 /**
  * 製品マスタ一覧を取得

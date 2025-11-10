@@ -1,10 +1,11 @@
 # backend/app/schemas/admin_seeds.py
 from __future__ import annotations
+
 from pydantic import BaseModel, Field, conint
-from typing import Optional
+
 
 class SeedRequest(BaseModel):
-    seed: Optional[int] = Field(default=42, description="Random seed for reproducibility")
+    seed: int | None = Field(default=42, description="Random seed for reproducibility")
     dry_run: bool = Field(default=False)
     customers: conint(ge=0) = 10
     suppliers: conint(ge=0) = 5
@@ -14,8 +15,10 @@ class SeedRequest(BaseModel):
     lots: conint(ge=0) = 80
     orders: conint(ge=0) = 25
 
+
 class SeedSummary(BaseModel):
-    """作成しようとした件数（UPSERT前）"""
+    """作成しようとした件数（UPSERT前）."""
+
     customers: int
     suppliers: int
     delivery_places: int
@@ -26,8 +29,10 @@ class SeedSummary(BaseModel):
     order_lines: int
     allocations: int
 
+
 class ActualCounts(BaseModel):
-    """実際のDB件数（投入後）"""
+    """実際のDB件数（投入後）."""
+
     customers: int
     suppliers: int
     delivery_places: int
@@ -39,11 +44,11 @@ class ActualCounts(BaseModel):
     order_lines: int
     allocations: int
 
+
 class SeedResponse(BaseModel):
     dry_run: bool
     seed: int
     summary: SeedSummary
-    actual_counts: Optional[ActualCounts] = Field(
-        default=None,
-        description="投入後の実際のDB件数（dry_run=falseの場合のみ）"
+    actual_counts: ActualCounts | None = Field(
+        default=None, description="投入後の実際のDB件数（dry_run=falseの場合のみ）"
     )

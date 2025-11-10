@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useDialog](../README.md) / useDialogWithData
 
@@ -94,10 +94,7 @@ return (
     <button onClick={() => editDialog.open(selectedLot)}>編集</button>
     <Dialog open={editDialog.isOpen} onOpenChange={editDialog.setIsOpen}>
       <DialogContent>
-        <LotForm 
-          initialData={editDialog.data} 
-          onSubmit={() => editDialog.close()} 
-        />
+        <LotForm initialData={editDialog.data} onSubmit={() => editDialog.close()} />
       </DialogContent>
     </Dialog>
   </>

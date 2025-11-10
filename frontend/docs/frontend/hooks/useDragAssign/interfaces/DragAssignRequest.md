@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [hooks/useDragAssign](../README.md) / DragAssignRequest
 
@@ -10,24 +10,24 @@ Defined in: [src/hooks/useDragAssign.ts:9](https://github.com/cybons-lab/Lot-man
 
 ## Properties
 
-### allocate\_qty
+### allocate_qty
 
-> **allocate\_qty**: `number`
+> **allocate_qty**: `number`
 
 Defined in: [src/hooks/useDragAssign.ts:12](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useDragAssign.ts#L12)
 
-***
+---
 
-### lot\_id
+### lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 Defined in: [src/hooks/useDragAssign.ts:11](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useDragAssign.ts#L11)
 
-***
+---
 
-### order\_line\_id
+### order_line_id
 
-> **order\_line\_id**: `number`
+> **order_line_id**: `number`
 
 Defined in: [src/hooks/useDragAssign.ts:10](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useDragAssign.ts#L10)

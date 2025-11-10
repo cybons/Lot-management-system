@@ -3,7 +3,7 @@
  * アプリケーション全体のエラーをキャッチするコンポーネント
  */
 
-import { Component, ErrorInfo, ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
 import { ApiError } from "@/utils/errors/custom-errors";
 

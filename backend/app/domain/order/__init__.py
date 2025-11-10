@@ -1,7 +1,5 @@
 # backend/app/domain/order/__init__.py
-"""
-Order Domain Layer
-"""
+"""Order Domain Layer."""
 
 from .business_rules import OrderBusinessRules
 from .exceptions import (
@@ -14,6 +12,7 @@ from .exceptions import (
     ProductNotFoundError,
 )
 from .state_machine import OrderStateMachine, OrderStatus
+
 
 __all__ = [
     # Exceptions

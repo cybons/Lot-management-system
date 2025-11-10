@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/validators/order-schemas](../README.md) / OrderCreate
 
@@ -12,24 +12,24 @@ Defined in: [src/utils/validators/order-schemas.ts:3](https://github.com/cybons-
 
 ## Properties
 
-### customer\_code
+### customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Defined in: [src/utils/validators/order-schemas.ts:4](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/order-schemas.ts#L4)
 
-***
+---
 
-### order\_date?
+### order_date?
 
-> `optional` **order\_date**: `string` \| `null`
+> `optional` **order_date**: `string` \| `null`
 
 Defined in: [src/utils/validators/order-schemas.ts:6](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/order-schemas.ts#L6)
 
-***
+---
 
-### order\_no
+### order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Defined in: [src/utils/validators/order-schemas.ts:5](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/order-schemas.ts#L5)

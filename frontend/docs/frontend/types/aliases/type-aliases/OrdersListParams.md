@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/aliases](../README.md) / OrdersListParams
 
@@ -12,29 +12,29 @@ Defined in: [src/types/aliases.ts:184](https://github.com/cybons-lab/Lot-managem
 
 ## Properties
 
-### customer\_code?
+### customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:188](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L188)
 
-***
+---
 
-### date\_from?
+### date_from?
 
-> `optional` **date\_from**: `string` \| `null`
+> `optional` **date_from**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:189](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L189)
 
-***
+---
 
-### date\_to?
+### date_to?
 
-> `optional` **date\_to**: `string` \| `null`
+> `optional` **date_to**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:190](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L190)
 
-***
+---
 
 ### limit?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/aliases.ts:190](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:186](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L186)
 
-***
+---
 
 ### skip?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/aliases.ts:186](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:185](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L185)
 
-***
+---
 
 ### status?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/aliases.ts:185](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:187](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L187)
 
-***
+---
 
 ### unallocatedOnly?
 

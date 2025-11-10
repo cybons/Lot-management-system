@@ -143,13 +143,17 @@ export function OrderDetailPage() {
                   <td className="p-3 text-sm">
                     {line.due_date ? format(new Date(line.due_date), "yyyy-MM-dd") : "-"}
                   </td>
-                  <td className="p-3 text-right text-sm">{line.allocated_qty?.toLocaleString() ?? "-"}</td>
+                  <td className="p-3 text-right text-sm">
+                    {line.allocated_qty?.toLocaleString() ?? "-"}
+                  </td>
                   <td className="p-3">
                     {/* <ForecastMatchBadge status={line.forecast_match_status} /> */}
                     <span className="text-sm text-gray-500">-</span>
                   </td>
                   <td className="p-3 text-right text-sm">
-                    {line.forecast_qty !== null && line.forecast_qty !== undefined ? line.forecast_qty.toLocaleString() : "-"}
+                    {line.forecast_qty !== null && line.forecast_qty !== undefined
+                      ? line.forecast_qty.toLocaleString()
+                      : "-"}
                   </td>
                   <td className="p-3 text-sm">
                     {line.forecast_version_no ? (

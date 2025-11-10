@@ -7,6 +7,7 @@ from app.api.deps import get_db
 from app.models import Customer, Product, Supplier, Warehouse
 from app.schemas import MasterBulkLoadRequest, MasterBulkLoadResponse
 
+
 router = APIRouter(tags=["masters"])
 
 
@@ -18,7 +19,6 @@ def _convert_requires_lot_number(payload: dict) -> dict:
 
 def perform_master_bulk_load(db: Session, request: MasterBulkLoadRequest) -> MasterBulkLoadResponse:
     """Persist master records if not existing and collect warnings."""
-
     created: dict[str, list[str]] = {
         "warehouses": [],
         "suppliers": [],
@@ -79,5 +79,4 @@ def bulk_load_masters(
     request: MasterBulkLoadRequest, db: Session = Depends(get_db)
 ) -> MasterBulkLoadResponse:
     """Create or update masters in bulk."""
-
     return perform_master_bulk_load(db, request)

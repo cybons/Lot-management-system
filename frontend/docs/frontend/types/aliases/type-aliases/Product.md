@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/aliases](../README.md) / Product
 
@@ -12,64 +12,64 @@ Defined in: [src/types/aliases.ts:3](https://github.com/cybons-lab/Lot-managemen
 
 ## Properties
 
-### customer\_part\_no?
+### customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:9](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L9)
 
-***
+---
 
-### internal\_unit?
+### internal_unit?
 
-> `optional` **internal\_unit**: `string` \| `null`
+> `optional` **internal_unit**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:8](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L8)
 
-***
+---
 
-### maker\_part\_no?
+### maker_part_no?
 
-> `optional` **maker\_part\_no**: `string` \| `null`
+> `optional` **maker_part_no**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:10](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L10)
 
-***
+---
 
-### packaging\_qty?
+### packaging_qty?
 
-> `optional` **packaging\_qty**: `number` \| `string` \| `null`
+> `optional` **packaging_qty**: `number` \| `string` \| `null`
 
 Defined in: [src/types/aliases.ts:6](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L6)
 
-***
+---
 
-### packaging\_unit?
+### packaging_unit?
 
-> `optional` **packaging\_unit**: `string` \| `null`
+> `optional` **packaging_unit**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:7](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L7)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/types/aliases.ts:4](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L4)
 
-***
+---
 
-### product\_name
+### product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Defined in: [src/types/aliases.ts:5](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L5)
 
-***
+---
 
-### requires\_lot\_number?
+### requires_lot_number?
 
-> `optional` **requires\_lot\_number**: `boolean` \| `null`
+> `optional` **requires_lot_number**: `boolean` \| `null`
 
 Defined in: [src/types/aliases.ts:11](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L11)

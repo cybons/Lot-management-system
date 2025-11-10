@@ -226,7 +226,11 @@ export function useAutoAllocate(options?: {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ order_line_id: _order_line_id, product_code: _product_code, quantity: _quantity }) => {
+    mutationFn: async ({
+      order_line_id: _order_line_id,
+      product_code: _product_code,
+      quantity: _quantity,
+    }) => {
       // TODO: バックエンドに自動引当APIが実装されたら置き換え
       // 現状は手動で候補ロットを取得してFEFO方式で引当を実行する
 

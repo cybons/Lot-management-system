@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/validators/master-schemas](../README.md) / Supplier
 
@@ -18,18 +18,18 @@ Defined in: [src/utils/validators/master-schemas.ts:75](https://github.com/cybon
 
 Defined in: [src/utils/validators/master-schemas.ts:78](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L78)
 
-***
+---
 
-### supplier\_code
+### supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:76](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L76)
 
-***
+---
 
-### supplier\_name
+### supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:77](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L77)

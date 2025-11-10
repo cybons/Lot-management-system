@@ -9,17 +9,9 @@ import {
 /**
  * 引当操作をまとめたカスタムフック
  */
-export function useAllocationActions(
-  lineId?: number,
-  productCode?: string,
-  customerCode?: string
-) {
+export function useAllocationActions(lineId?: number, productCode?: string, customerCode?: string) {
   const enabled = typeof lineId === "number" && lineId > 0;
-  const candidatesQ = useCandidateLots(
-    enabled ? lineId : undefined,
-    productCode,
-    customerCode
-  );
+  const candidatesQ = useCandidateLots(enabled ? lineId : undefined, productCode, customerCode);
   const createAlloc = useCreateAllocations(enabled ? lineId : undefined);
   const cancelAlloc = useCancelAllocations(enabled ? lineId : undefined);
   const saveWareAlloc = useSaveWarehouseAllocations(enabled ? lineId : undefined);

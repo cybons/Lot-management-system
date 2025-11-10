@@ -1,11 +1,10 @@
 # backend/app/services/forecast.py
 """
 フォーキャストマッチングサービス
-受注明細とフォーキャストデータを照合・紐付けするロジック
+受注明細とフォーキャストデータを照合・紐付けするロジック.
 """
 
 from datetime import date
-from typing import Optional
 
 from sqlalchemy import Select, select
 from sqlalchemy.orm import Session
@@ -14,9 +13,7 @@ from app.models import Customer, Forecast, OrderLine, Product
 
 
 class ForecastMatcher:
-    """
-    フォーキャストと受注明細のマッチングロジック
-    """
+    """フォーキャストと受注明細のマッチングロジック."""
 
     def __init__(self, db: Session):
         self.db = db
@@ -27,9 +24,9 @@ class ForecastMatcher:
         product_code: str,
         customer_code: str,
         order_date: date,
-    ) -> Optional[dict]:
+    ) -> dict | None:
         """
-        受注明細に対応するフォーキャストを検索し、マッチング結果を返す
+        受注明細に対応するフォーキャストを検索し、マッチング結果を返す.
 
         Args:
             order_line: 受注明細オブジェクト
@@ -48,9 +45,7 @@ class ForecastMatcher:
             }
         """
         # 1. 日次マッチング (EXACT)
-        daily_forecast = self._find_daily_forecast(
-            product_code, customer_code, order_date
-        )
+        daily_forecast = self._find_daily_forecast(product_code, customer_code, order_date)
         if daily_forecast:
             return {
                 "forecast_id": daily_forecast.id,
@@ -61,9 +56,7 @@ class ForecastMatcher:
             }
 
         # 2. 旬次マッチング (PERIOD)
-        dekad_forecast = self._find_dekad_forecast(
-            product_code, customer_code, order_date
-        )
+        dekad_forecast = self._find_dekad_forecast(product_code, customer_code, order_date)
         if dekad_forecast:
             return {
                 "forecast_id": dekad_forecast.id,
@@ -74,11 +67,9 @@ class ForecastMatcher:
             }
 
         # 3. 月次マッチング (PERIOD)
-        monthly_forecast = self._find_monthly_forecast(
-            product_code, customer_code, order_date
-        )
+        monthly_forecast = self._find_monthly_forecast(product_code, customer_code, order_date)
         if monthly_forecast:
-            year_month = order_date.strftime("%Y-%m")
+            order_date.strftime("%Y-%m")
             return {
                 "forecast_id": monthly_forecast.id,
                 "granularity": "monthly",
@@ -92,8 +83,8 @@ class ForecastMatcher:
 
     def _find_daily_forecast(
         self, product_code: str, customer_code: str, target_date: date
-    ) -> Optional[Forecast]:
-        """日次フォーキャストを検索"""
+    ) -> Forecast | None:
+        """日次フォーキャストを検索."""
         stmt: Select[Forecast] = (
             select(Forecast)
             .join(Product)
@@ -111,8 +102,8 @@ class ForecastMatcher:
 
     def _find_dekad_forecast(
         self, product_code: str, customer_code: str, target_date: date
-    ) -> Optional[Forecast]:
-        """旬次フォーキャストを検索 (1日～10日、11日～20日、21日～月末)"""
+    ) -> Forecast | None:
+        """旬次フォーキャストを検索 (1日～10日、11日～20日、21日～月末)."""
         day = target_date.day
         if day <= 10:
             dekad_start = date(target_date.year, target_date.month, 1)
@@ -138,8 +129,8 @@ class ForecastMatcher:
 
     def _find_monthly_forecast(
         self, product_code: str, customer_code: str, target_date: date
-    ) -> Optional[Forecast]:
-        """月次フォーキャストを検索"""
+    ) -> Forecast | None:
+        """月次フォーキャストを検索."""
         year_month = target_date.strftime("%Y-%m")
 
         stmt: Select[Forecast] = (
@@ -165,7 +156,7 @@ class ForecastMatcher:
         order_date: date,
     ) -> bool:
         """
-        受注明細にフォーキャスト情報を適用
+        受注明細にフォーキャスト情報を適用.
 
         Args:
             order_line: 受注明細オブジェクト
@@ -176,9 +167,7 @@ class ForecastMatcher:
         Returns:
             マッチングが成功したかどうか
         """
-        match_result = self.match_order_line(
-            order_line, product_code, customer_code, order_date
-        )
+        match_result = self.match_order_line(order_line, product_code, customer_code, order_date)
 
         if match_result:
             order_line.forecast_id = match_result["forecast_id"]
@@ -194,7 +183,6 @@ class ForecastMatcher:
 
 
 def assign_auto_forecast_identifier(forecast: Forecast) -> None:
-    """ID採番後に forecast_id を自動設定するユーティリティ"""
-
+    """ID採番後に forecast_id を自動設定するユーティリティ."""
     if forecast.forecast_id is None:
         forecast.forecast_id = forecast.id

@@ -1,27 +1,30 @@
 # backend/app/schemas/base.py
 """
 Pydantic Base Schemas
-共通の基底スキーマ
+共通の基底スキーマ.
 """
 
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
-from datetime import datetime, date
-from typing import Optional
 
 
 class BaseSchema(BaseModel):
-    """共通基底スキーマ"""
+    """共通基底スキーマ."""
+
     model_config = ConfigDict(from_attributes=True)
 
 
 class TimestampMixin(BaseModel):
-    """タイムスタンプミックスイン"""
+    """タイムスタンプミックスイン."""
+
     created_at: datetime
-    updated_at: Optional[datetime] = None
+    updated_at: datetime | None = None
 
 
 class ResponseBase(BaseModel):
-    """API共通レスポンス"""
+    """API共通レスポンス."""
+
     success: bool
-    message: Optional[str] = None
-    data: Optional[dict] = None
+    message: str | None = None
+    data: dict | None = None

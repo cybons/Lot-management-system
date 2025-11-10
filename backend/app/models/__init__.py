@@ -7,6 +7,7 @@ from .logs import InboundSubmission, OcrSubmission, SapSyncLog
 from .masters import Customer, DeliveryPlace, Product, Supplier, UnitConversion, Warehouse
 from .orders import Allocation, Order, OrderLine, OrderLineWarehouseAllocation, PurchaseRequest
 
+
 __all__ = [
     "Base",
     "Warehouse",

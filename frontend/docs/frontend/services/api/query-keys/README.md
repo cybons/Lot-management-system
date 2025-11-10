@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / services/api/query-keys
 
@@ -12,4 +12,4 @@
 - [lotKeys](variables/lotKeys.md)
 - [masterKeys](variables/masterKeys.md)
 - [orderKeys](variables/orderKeys.md)
-- [QUERY\_KEYS](variables/QUERY_KEYS.md)
+- [QUERY_KEYS](variables/QUERY_KEYS.md)

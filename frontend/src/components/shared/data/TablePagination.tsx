@@ -1,23 +1,23 @@
 /**
  * TablePagination.tsx
- * 
+ *
  * テーブルのページネーションコンポーネント
  * - ページ移動
  * - ページサイズ変更
  * - 件数表示
  */
 
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 // ============================================
 // 型定義
@@ -74,8 +74,8 @@ export function TablePagination({
   return (
     <div
       className={cn(
-        'flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white',
-        className
+        "flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white",
+        className,
       )}
     >
       {/* 左側: 表示件数 */}
@@ -104,7 +104,7 @@ export function TablePagination({
             <span>データがありません</span>
           ) : (
             <span>
-              {totalCount.toLocaleString()} 件中 {startIndex.toLocaleString()} -{' '}
+              {totalCount.toLocaleString()} 件中 {startIndex.toLocaleString()} -{" "}
               {endIndex.toLocaleString()} 件を表示
             </span>
           )}
@@ -198,7 +198,7 @@ export function SimplePagination({
   const hasNoPages = totalPages === 0;
 
   return (
-    <div className={cn('flex items-center justify-center gap-2', className)}>
+    <div className={cn("flex items-center justify-center gap-2", className)}>
       <Button
         variant="outline"
         size="sm"

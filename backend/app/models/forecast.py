@@ -20,6 +20,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import Base
 
+
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .masters import Customer, Product
 

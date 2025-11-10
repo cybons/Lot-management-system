@@ -1,7 +1,5 @@
 # backend/app/api/routes/warehouse_alloc.py
-"""
-倉庫マスタ（新/IDベース）のAPIエンドポイント
-"""
+"""倉庫マスタ（新/IDベース）のAPIエンドポイント."""
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
@@ -13,14 +11,13 @@ from app.api.deps import get_db
 from app.models import Warehouse
 from app.schemas import WarehouseListResponse, WarehouseOut
 
+
 router = APIRouter(prefix="/warehouse-alloc", tags=["warehouse-alloc"])
 
 
 @router.get("/warehouses", response_model=WarehouseListResponse)
 def list_warehouses(db: Session = Depends(get_db)):
-    """
-    配分対象の倉庫一覧（新しいwarehouseテーブル）を取得
-    """
+    """配分対象の倉庫一覧（新しいwarehouseテーブル）を取得."""
     # 新しい Warehouse モデル（単数形）に対してクエリ
     stmt = select(Warehouse).order_by(Warehouse.warehouse_code)
     warehouses = db.execute(stmt).scalars().all()

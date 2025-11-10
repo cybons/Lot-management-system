@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useToast](../README.md) / useToast
 
@@ -154,9 +154,9 @@ const toast = useToast();
 const handleSave = async () => {
   try {
     await saveData();
-    toast.success('保存しました');
+    toast.success("保存しました");
   } catch (error) {
-    toast.error('保存に失敗しました');
+    toast.error("保存に失敗しました");
   }
 };
 

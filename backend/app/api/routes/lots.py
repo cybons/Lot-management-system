@@ -1,10 +1,7 @@
 # backend/app/api/routes/lots.py
-"""
-ロット・在庫管理のAPIエンドポイント
-"""
+"""ロット・在庫管理のAPIエンドポイント."""
 
 from datetime import date, datetime
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_
@@ -29,23 +26,24 @@ from app.schemas import (
     StockMovementResponse,
 )
 
+
 router = APIRouter(prefix="/lots", tags=["lots"])
 
 
-@router.get("", response_model=List[LotResponse])
+@router.get("", response_model=list[LotResponse])
 def list_lots(
     skip: int = 0,
     limit: int = 100,
-    product_code: Optional[str] = None,
-    supplier_code: Optional[str] = None,
-    warehouse_code: Optional[str] = None,
-    expiry_from: Optional[date] = None,
-    expiry_to: Optional[date] = None,
+    product_code: str | None = None,
+    supplier_code: str | None = None,
+    warehouse_code: str | None = None,
+    expiry_from: date | None = None,
+    expiry_to: date | None = None,
     with_stock: bool = True,
     db: Session = Depends(get_db),
 ):
     """
-    ロット一覧取得
+    ロット一覧取得.
 
     Args:
         skip: スキップ件数
@@ -105,7 +103,7 @@ def list_lots(
 @router.post("", response_model=LotResponse, status_code=201)
 def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
     """
-    ロット新規登録
+    ロット新規登録.
 
     - ロットマスタ登録
     - 現在在庫テーブル初期化
@@ -142,7 +140,7 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
             detail=f"仕入先コード '{lot.supplier_code}' が見つかりません",
         )
 
-    warehouse_id: Optional[int] = None
+    warehouse_id: int | None = None
     if lot.warehouse_id is not None:
         warehouse = db.query(Warehouse).filter(Warehouse.id == lot.warehouse_id).first()
         if not warehouse:
@@ -202,7 +200,7 @@ def create_lot(lot: LotCreate, db: Session = Depends(get_db)):
 
 @router.get("/{lot_id}", response_model=LotResponse)
 def get_lot(lot_id: int, db: Session = Depends(get_db)):
-    """ロット詳細取得"""
+    """ロット詳細取得."""
     lot = db.query(Lot).filter(Lot.id == lot_id).first()
     if not lot:
         raise HTTPException(status_code=404, detail="ロットが見つかりません")
@@ -219,14 +217,14 @@ def get_lot(lot_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{lot_id}", response_model=LotResponse)
 def update_lot(lot_id: int, lot: LotUpdate, db: Session = Depends(get_db)):
-    """ロット更新"""
+    """ロット更新."""
     db_lot = db.query(Lot).filter(Lot.id == lot_id).first()
     if not db_lot:
         raise HTTPException(status_code=404, detail="ロットが見つかりません")
 
     updates = lot.model_dump(exclude_unset=True)
 
-    warehouse_id: Optional[int] = None
+    warehouse_id: int | None = None
     if "warehouse_id" in updates:
         warehouse = db.query(Warehouse).filter(Warehouse.id == updates["warehouse_id"]).first()
         if not warehouse:
@@ -279,7 +277,7 @@ def update_lot(lot_id: int, lot: LotUpdate, db: Session = Depends(get_db)):
 
 @router.delete("/{lot_id}", status_code=204)
 def delete_lot(lot_id: int, db: Session = Depends(get_db)):
-    """ロット削除"""
+    """ロット削除."""
     db_lot = db.query(Lot).filter(Lot.id == lot_id).first()
     if not db_lot:
         raise HTTPException(status_code=404, detail="ロットが見つかりません")
@@ -290,9 +288,9 @@ def delete_lot(lot_id: int, db: Session = Depends(get_db)):
 
 
 # ===== Stock Movements =====
-@router.get("/{lot_id}/movements", response_model=List[StockMovementResponse])
+@router.get("/{lot_id}/movements", response_model=list[StockMovementResponse])
 def list_lot_movements(lot_id: int, db: Session = Depends(get_db)):
-    """ロットの在庫変動履歴取得"""
+    """ロットの在庫変動履歴取得."""
     movements = (
         db.query(StockMovement)
         .filter(StockMovement.lot_id == lot_id)
@@ -305,7 +303,7 @@ def list_lot_movements(lot_id: int, db: Session = Depends(get_db)):
 @router.post("/movements", response_model=StockMovementResponse, status_code=201)
 def create_stock_movement(movement: StockMovementCreate, db: Session = Depends(get_db)):
     """
-    在庫変動記録
+    在庫変動記録.
 
     - 在庫変動履歴追加
     - 現在在庫更新

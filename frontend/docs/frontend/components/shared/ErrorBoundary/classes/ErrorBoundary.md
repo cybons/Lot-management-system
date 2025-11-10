@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [components/shared/ErrorBoundary](../README.md) / ErrorBoundary
 
@@ -42,7 +42,7 @@ Defined in: [src/components/shared/ErrorBoundary.tsx:24](https://github.com/cybo
 
 > **context**: `unknown`
 
-Defined in: node\_modules/@types/react/index.d.ts:946
+Defined in: node_modules/@types/react/index.d.ts:946
 
 If using React Context, re-declare this in your class to be the
 `React.ContextType` of your `static contextType`.
@@ -66,37 +66,37 @@ declare context: React.ContextType<typeof MyContext>
 
 `Component.context`
 
-***
+---
 
 ### props
 
 > `readonly` **props**: `Readonly`\<`P`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:970
+Defined in: node_modules/@types/react/index.d.ts:970
 
 #### Inherited from
 
 `Component.props`
 
-***
+---
 
 ### state
 
 > **state**: `Readonly`\<`S`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:971
+Defined in: node_modules/@types/react/index.d.ts:971
 
 #### Inherited from
 
 `Component.state`
 
-***
+---
 
 ### contextType?
 
 > `static` `optional` **contextType**: `Context`\<`any`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:922
+Defined in: node_modules/@types/react/index.d.ts:922
 
 If set, `this.context` will be set at runtime to the current value of the given Context.
 
@@ -123,13 +123,13 @@ class Foo extends React.Component {
 
 `Component.contextType`
 
-***
+---
 
 ### ~~propTypes?~~
 
 > `static` `optional` **propTypes**: `any`
 
-Defined in: node\_modules/@types/react/index.d.ts:928
+Defined in: node_modules/@types/react/index.d.ts:928
 
 Ignored by React.
 
@@ -170,13 +170,13 @@ the entire component tree to unmount.
 
 `Component.componentDidCatch`
 
-***
+---
 
 ### componentDidMount()?
 
 > `optional` **componentDidMount**(): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1189
+Defined in: node_modules/@types/react/index.d.ts:1189
 
 Called immediately after a component is mounted. Setting state here will trigger re-rendering.
 
@@ -188,13 +188,13 @@ Called immediately after a component is mounted. Setting state here will trigger
 
 `Component.componentDidMount`
 
-***
+---
 
 ### componentDidUpdate()?
 
 > `optional` **componentDidUpdate**(`prevProps`, `prevState`, `snapshot?`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1252
+Defined in: node_modules/@types/react/index.d.ts:1252
 
 Called immediately after updating occurs. Not called for the initial render.
 
@@ -222,13 +222,13 @@ The snapshot is only present if [getSnapshotBeforeUpdate](#getsnapshotbeforeupda
 
 `Component.componentDidUpdate`
 
-***
+---
 
 ### ~~componentWillMount()?~~
 
 > `optional` **componentWillMount**(): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1268
+Defined in: node_modules/@types/react/index.d.ts:1268
 
 Called immediately before mounting occurs, and before Component.render.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -247,20 +247,20 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.componentWillMount`
 
-***
+---
 
 ### ~~componentWillReceiveProps()?~~
 
 > `optional` **componentWillReceiveProps**(`nextProps`, `nextContext`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1299
+Defined in: node_modules/@types/react/index.d.ts:1299
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -292,20 +292,20 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.componentWillReceiveProps`
 
-***
+---
 
 ### componentWillUnmount()?
 
 > `optional` **componentWillUnmount**(): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1205
+Defined in: node_modules/@types/react/index.d.ts:1205
 
 Called immediately before a component is destroyed. Perform any necessary cleanup in this method, such as
 cancelled network requests, or cleaning up any DOM elements created in `componentDidMount`.
@@ -318,13 +318,13 @@ cancelled network requests, or cleaning up any DOM elements created in `componen
 
 `Component.componentWillUnmount`
 
-***
+---
 
 ### ~~componentWillUpdate()?~~
 
 > `optional` **componentWillUpdate**(`nextProps`, `nextState`, `nextContext`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1331
+Defined in: node_modules/@types/react/index.d.ts:1331
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -358,20 +358,20 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.componentWillUpdate`
 
-***
+---
 
 ### forceUpdate()
 
 > **forceUpdate**(`callback?`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:967
+Defined in: node_modules/@types/react/index.d.ts:967
 
 #### Parameters
 
@@ -387,13 +387,13 @@ Defined in: node\_modules/@types/react/index.d.ts:967
 
 `Component.forceUpdate`
 
-***
+---
 
 ### getSnapshotBeforeUpdate()?
 
 > `optional` **getSnapshotBeforeUpdate**(`prevProps`, `prevState`): `any`
 
-Defined in: node\_modules/@types/react/index.d.ts:1246
+Defined in: node_modules/@types/react/index.d.ts:1246
 
 Runs before React applies the result of Component.render render to the document, and
 returns an object to be given to [componentDidUpdate](#componentdidupdate). Useful for saving
@@ -420,7 +420,7 @@ lifecycle events from running.
 
 `Component.getSnapshotBeforeUpdate`
 
-***
+---
 
 ### render()
 
@@ -436,7 +436,7 @@ Defined in: [src/components/shared/ErrorBoundary.tsx:41](https://github.com/cybo
 
 `Component.render`
 
-***
+---
 
 ### reset()
 
@@ -448,19 +448,19 @@ Defined in: [src/components/shared/ErrorBoundary.tsx:37](https://github.com/cybo
 
 `void`
 
-***
+---
 
 ### setState()
 
 > **setState**\<`K`\>(`state`, `callback?`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:962
+Defined in: node_modules/@types/react/index.d.ts:962
 
 #### Type Parameters
 
 ##### K
 
-`K` *extends* keyof `State`
+`K` _extends_ keyof `State`
 
 #### Parameters
 
@@ -480,13 +480,13 @@ Defined in: node\_modules/@types/react/index.d.ts:962
 
 `Component.setState`
 
-***
+---
 
 ### shouldComponentUpdate()?
 
 > `optional` **shouldComponentUpdate**(`nextProps`, `nextState`, `nextContext`): `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:1200
+Defined in: node_modules/@types/react/index.d.ts:1200
 
 Called to determine whether the change in props and state should trigger a re-render.
 
@@ -519,13 +519,13 @@ and `componentDidUpdate` will not be called.
 
 `Component.shouldComponentUpdate`
 
-***
+---
 
-### ~~UNSAFE\_componentWillMount()?~~
+### ~~UNSAFE_componentWillMount()?~~
 
-> `optional` **UNSAFE\_componentWillMount**(): `void`
+> `optional` **UNSAFE_componentWillMount**(): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1283
+Defined in: node_modules/@types/react/index.d.ts:1283
 
 Called immediately before mounting occurs, and before Component.render.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -546,20 +546,20 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.UNSAFE_componentWillMount`
 
-***
+---
 
-### ~~UNSAFE\_componentWillReceiveProps()?~~
+### ~~UNSAFE_componentWillReceiveProps()?~~
 
-> `optional` **UNSAFE\_componentWillReceiveProps**(`nextProps`, `nextContext`): `void`
+> `optional` **UNSAFE_componentWillReceiveProps**(`nextProps`, `nextContext`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1317
+Defined in: node_modules/@types/react/index.d.ts:1317
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -593,20 +593,20 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.UNSAFE_componentWillReceiveProps`
 
-***
+---
 
-### ~~UNSAFE\_componentWillUpdate()?~~
+### ~~UNSAFE_componentWillUpdate()?~~
 
-> `optional` **UNSAFE\_componentWillUpdate**(`nextProps`, `nextState`, `nextContext`): `void`
+> `optional` **UNSAFE_componentWillUpdate**(`nextProps`, `nextState`, `nextContext`): `void`
 
-Defined in: node\_modules/@types/react/index.d.ts:1347
+Defined in: node_modules/@types/react/index.d.ts:1347
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -642,14 +642,14 @@ this from being invoked.
 
 #### See
 
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update)
- - [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update)
+- [https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path](https://legacy.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path)
 
 #### Inherited from
 
 `Component.UNSAFE_componentWillUpdate`
 
-***
+---
 
 ### getDerivedStateFromError()
 

@@ -3,12 +3,7 @@ import React from "react";
 
 import { formatCodeAndName } from "@/lib/utils";
 import { diffDays, isValidDate } from "@/lib/utils/date";
-import type {
-  AllocatedLot,
-  OrderLine,
-  OrderLineComputed,
-  OrderResponse,
-} from "@/types/aliases";
+import type { AllocatedLot, OrderLine, OrderLineComputed, OrderResponse } from "@/types/aliases";
 
 export type OrderLineSource = Partial<OrderLine> & {
   order_id?: number;

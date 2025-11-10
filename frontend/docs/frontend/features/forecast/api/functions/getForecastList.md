@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [features/forecast/api](../README.md) / getForecastList
 
@@ -13,6 +13,7 @@ Defined in: [src/features/forecast/api.ts:27](https://github.com/cybons-lab/Lot-
 予測サマリー一覧取得（フロント表示用）
 
 利用可能なパラメータ:
+
 - product_code: 製品コードフィルタ
 - supplier_code: 仕入先コードフィルタ
 

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useFilters](../README.md) / searchData
 
@@ -16,7 +16,7 @@ Defined in: [src/hooks/ui/useFilters.ts:245](https://github.com/cybons-lab/Lot-m
 
 ### T
 
-`T` *extends* `Record`\<`string`, `any`\>
+`T` _extends_ `Record`\<`string`, `any`\>
 
 ## Parameters
 
@@ -47,5 +47,5 @@ keyof `T`[]
 ## Example
 
 ```tsx
-const filtered = searchData(lots, searchTerm, ['lot_no', 'product_code', 'product_name']);
+const filtered = searchData(lots, searchTerm, ["lot_no", "product_code", "product_name"]);
 ```

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useOrderMutations](../README.md) / useDeleteOrder
 
@@ -37,8 +37,8 @@ Mutation オプション
 ```tsx
 const deleteOrderMutation = useDeleteOrder({
   onSuccess: () => {
-    toast.success('受注を削除しました');
-  }
+    toast.success("受注を削除しました");
+  },
 });
 
 await deleteOrderMutation.mutateAsync(123);

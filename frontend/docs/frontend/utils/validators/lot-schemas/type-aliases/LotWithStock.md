@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/validators/lot-schemas](../README.md) / LotWithStock
 
@@ -12,13 +12,13 @@ Defined in: [src/utils/validators/lot-schemas.ts:65](https://github.com/cybons-l
 
 ## Properties
 
-### current\_quantity?
+### current_quantity?
 
-> `optional` **current\_quantity**: `number` \| `null`
+> `optional` **current_quantity**: `number` \| `null`
 
 Defined in: [src/utils/validators/lot-schemas.ts:69](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L69)
 
-***
+---
 
 ### id
 
@@ -26,23 +26,23 @@ Defined in: [src/utils/validators/lot-schemas.ts:69](https://github.com/cybons-l
 
 Defined in: [src/utils/validators/lot-schemas.ts:66](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L66)
 
-***
+---
 
-### lot\_number
+### lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:68](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L68)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:67](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L67)
 
-***
+---
 
 ### status?
 

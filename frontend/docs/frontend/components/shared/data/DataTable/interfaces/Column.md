@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/DataTable](../README.md) / Column
 
@@ -34,7 +34,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:29](https://github.com/cyb
 
 `never`
 
-***
+---
 
 ### align?
 
@@ -44,7 +44,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:37](https://github.com/cyb
 
 テキスト配置
 
-***
+---
 
 ### cell()?
 
@@ -64,7 +64,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:31](https://github.com/cyb
 
 `ReactNode`
 
-***
+---
 
 ### className?
 
@@ -74,7 +74,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:39](https://github.com/cyb
 
 カラムのクラス名
 
-***
+---
 
 ### header
 
@@ -84,7 +84,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:27](https://github.com/cyb
 
 カラムヘッダー表示名
 
-***
+---
 
 ### id
 
@@ -94,7 +94,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:25](https://github.com/cyb
 
 カラムID
 
-***
+---
 
 ### sortable?
 
@@ -104,7 +104,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:33](https://github.com/cyb
 
 ソート可能かどうか
 
-***
+---
 
 ### width?
 

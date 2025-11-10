@@ -5,13 +5,12 @@ from __future__ import annotations
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum as PyEnum
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
-    Float,
     ForeignKey,
     Index,
     Integer,
@@ -24,6 +23,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import Base
+
 
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .masters import Product, Supplier, Warehouse
@@ -90,23 +90,24 @@ class Lot(Base):
     warehouse: Mapped[Warehouse | None] = relationship("Warehouse", back_populates="lots")
     product: Mapped[Product | None] = relationship("Product", back_populates="lots")
     supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="lots")
-    stock_movements: Mapped[list["StockMovement"]] = relationship(
+    stock_movements: Mapped[list[StockMovement]] = relationship(
         "StockMovement",
         back_populates="lot",
         cascade="all, delete-orphan",
     )
-    allocations: Mapped[list["Allocation"]] = relationship(
+    allocations: Mapped[list[Allocation]] = relationship(
         "Allocation",
         back_populates="lot",
         cascade="all, delete-orphan",
     )
-    current_stock: Mapped["LotCurrentStock | None"] = relationship(
+    current_stock: Mapped[LotCurrentStock | None] = relationship(
         "LotCurrentStock",
         foreign_keys="[LotCurrentStock.lot_id]",
         primaryjoin="Lot.id == LotCurrentStock.lot_id",
         uselist=False,
         viewonly=True,  # VIEWなので読み取り専用
     )
+
 
 class LotCurrentStock(Base):
     """Current stock aggregated per lot (VIEW)."""
@@ -122,6 +123,7 @@ class LotCurrentStock(Base):
     last_updated: Mapped[datetime | None] = mapped_column(DateTime)
 
     # VIEWなので書き込み用カラム/監査系カラム/relationshipは不要
+
 
 class StockMovement(Base):
     """Stock movement history."""

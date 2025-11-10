@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [services/api](../README-1.md) / DragAssignResponse
 
@@ -18,7 +18,7 @@ Defined in: [src/services/api.ts:21](https://github.com/cybons-lab/Lot-managemen
 
 Defined in: [src/services/api.ts:23](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/services/api.ts#L23)
 
-***
+---
 
 ### success
 

@@ -1,12 +1,13 @@
 from fastapi import APIRouter
 
+
 router = APIRouter(tags=["shipping"])
 
 
 @router.get("")
 def get_shipping_list():
     """
-    配送一覧を取得（未実装）
+    配送一覧を取得（未実装）.
 
     TODO: 配送管理機能の実装
     """

@@ -3,9 +3,9 @@
  * ブラウザ環境でのMSW設定
  */
 
-import { setupWorker } from 'msw/browser';
+import { setupWorker } from "msw/browser";
 
-import { handlers } from './handlers';
+import { handlers } from "./handlers";
 
 /**
  * MSW Service Workerのセットアップ
@@ -18,7 +18,7 @@ export const worker = setupWorker(...handlers);
 export async function startMockServiceWorker() {
   if (import.meta.env.DEV) {
     return worker.start({
-      onUnhandledRequest: 'bypass', // モックされていないリクエストは通過させる
+      onUnhandledRequest: "bypass", // モックされていないリクエストは通過させる
     });
   }
 }

@@ -1,6 +1,6 @@
 **lot-management-frontend v1.0.0**
 
-***
+---
 
 # lot-management-frontend v1.0.0
 

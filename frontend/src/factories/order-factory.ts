@@ -5,11 +5,7 @@
 
 import { faker } from "@faker-js/faker/locale/ja";
 
-import type {
-  OrderLine,
-  OrderResponse,
-  OrderWithLinesResponse,
-} from "@/types/aliases";
+import type { OrderLine, OrderResponse, OrderWithLinesResponse } from "@/types/aliases";
 
 type OrderLineFactoryExtras = {
   product_name?: string | null;
@@ -46,21 +42,18 @@ export function createOrderLine(
 ): OrderLineFactoryResult {
   const quantity = overrides?.quantity ?? faker.number.int({ min: 1, max: 100 });
   const allocatedFromLots = Array.isArray(overrides?.allocated_lots)
-    ? overrides?.allocated_lots.reduce(
+    ? (overrides?.allocated_lots.reduce(
         (sum, allocation) => sum + (allocation.allocated_qty ?? 0),
         0,
-      ) ?? 0
+      ) ?? 0)
     : 0;
   const defaultAllocated = Math.min(
     quantity,
-    allocatedFromLots > 0
-      ? allocatedFromLots
-      : faker.number.int({ min: 0, max: quantity }),
+    allocatedFromLots > 0 ? allocatedFromLots : faker.number.int({ min: 0, max: quantity }),
   );
   const allocatedQuantity = overrides?.allocated_qty ?? defaultAllocated;
 
-  const explicitLineNo =
-    overrides?.line_no ?? (overrides as { line_number?: number })?.line_number;
+  const explicitLineNo = overrides?.line_no ?? (overrides as { line_number?: number })?.line_number;
   const lineNo = explicitLineNo ?? faker.number.int({ min: 1, max: 999 });
   const unit = overrides?.unit ?? faker.helpers.arrayElement(["EA", "CASE", "BOX"]);
 
@@ -73,17 +66,17 @@ export function createOrderLine(
 
   const dueDate =
     overrides && "due_date" in overrides
-      ? overrides.due_date ?? null
+      ? (overrides.due_date ?? null)
       : faker.date.soon({ days: 30 }).toISOString().split("T")[0];
 
   const productName =
     overrides && "product_name" in overrides
-      ? overrides.product_name ?? null
+      ? (overrides.product_name ?? null)
       : faker.commerce.productName();
   const customerCode =
-    overrides && "customer_code" in overrides ? overrides.customer_code ?? null : null;
+    overrides && "customer_code" in overrides ? (overrides.customer_code ?? null) : null;
   const customerName =
-    overrides && "customer_name" in overrides ? overrides.customer_name ?? null : null;
+    overrides && "customer_name" in overrides ? (overrides.customer_name ?? null) : null;
 
   return {
     id: overrides?.id ?? faker.number.int({ min: 1, max: 10000 }),
@@ -124,18 +117,18 @@ export function createOrderWithLines(
         (line as { line_no?: number })?.line_no ??
         (line as { line_number?: number })?.line_number ??
         index + 1,
-      id: 'id' in line ? (line.id as number) : index + 1,
+      id: "id" in line ? (line.id as number) : index + 1,
       ...line,
       customer_code:
-        'customer_code' in line
+        "customer_code" in line
           ? (line.customer_code as string | null | undefined)
-          : overrides?.customer_code ?? order.customer_code,
+          : (overrides?.customer_code ?? order.customer_code),
       customer_name:
-        'customer_name' in line
+        "customer_name" in line
           ? (line.customer_name as string | null | undefined)
-          : (overrides as { customer_name?: string | null })?.customer_name ??
+          : ((overrides as { customer_name?: string | null })?.customer_name ??
             (order as { customer_name?: string | null }).customer_name ??
-            null,
+            null),
     }),
   );
 

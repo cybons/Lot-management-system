@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/api/useMastersQuery](../README.md) / useAllMastersQuery
 
@@ -46,10 +46,5 @@ Defined in: [src/hooks/api/useMastersQuery.ts:158](https://github.com/cybons-lab
 ## Example
 
 ```tsx
-const {
-  products,
-  customers,
-  warehouses,
-  isLoading
-} = useAllMastersQuery();
+const { products, customers, warehouses, isLoading } = useAllMastersQuery();
 ```

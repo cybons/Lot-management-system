@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatCodeAndName(
   code?: string | null,
   name?: string | null,
-  options?: { separator?: string }
+  options?: { separator?: string },
 ) {
   const separator = options?.separator ?? " ";
   const trimmedCode = code?.trim();

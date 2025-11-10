@@ -1,18 +1,16 @@
 # backend/app/api/routes/integration.py
 """
 連携管理のAPIエンドポイント
-OCR取込、SAP連携
+OCR取込、SAP連携.
 """
 
 import json
 import logging
 from datetime import datetime
-from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_db
 from app.models import Customer, OcrSubmission, Order, OrderLine, Product, SapSyncLog
@@ -24,6 +22,7 @@ from app.schemas import (
     SapSyncLogResponse,
 )
 from app.services.quantity import QuantityConversionError, to_internal_qty
+
 
 logger = logging.getLogger(__name__)
 # フォーキャストマッチング機能（オプション）
@@ -42,7 +41,7 @@ router = APIRouter(prefix="/integration", tags=["integration"])
 @router.post("/ai-ocr/submit", response_model=OcrSubmissionResponse)
 def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_db)):
     """
-    AI-OCR受注データ取込
+    AI-OCR受注データ取込.
 
     処理フロー:
     1. OCR取込ログ作成
@@ -68,7 +67,7 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
     forecast_matcher = ForecastMatcher(db) if FORECAST_AVAILABLE else None
 
     # 各受注レコードを処理
-    for idx, record in enumerate(submission.records):
+    for _idx, record in enumerate(submission.records):
         try:
             # 重複チェック
             existing = db.query(Order).filter(Order.order_no == record.order_no).first()
@@ -194,9 +193,9 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
     )
 
 
-@router.get("/ai-ocr/submissions", response_model=List[OcrSubmissionResponse])
+@router.get("/ai-ocr/submissions", response_model=list[OcrSubmissionResponse])
 def list_ocr_submissions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """OCR取込ログ一覧取得"""
+    """OCR取込ログ一覧取得."""
     submissions = (
         db.query(OcrSubmission)
         .order_by(OcrSubmission.submission_date.desc())
@@ -225,7 +224,7 @@ def list_ocr_submissions(skip: int = 0, limit: int = 100, db: Session = Depends(
 @router.post("/sap/register", response_model=SapRegisterResponse)
 def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     """
-    SAP連携(手動送信)
+    SAP連携(手動送信).
 
     注意: 実際のSAP APIは実装されていません。
     これはモック実装です。
@@ -238,7 +237,11 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
         if order:
             orders.append(order)
     elif request.target.type == "order_id":
-        stmt = select(Order).where(Order.id == request.target.value).options(selectinload(Order.order_lines))
+        stmt = (
+            select(Order)
+            .where(Order.id == request.target.value)
+            .options(selectinload(Order.order_lines))
+        )
         order = db.execute(stmt).scalar_one_or_none()
         if order:
             orders.append(order)
@@ -294,9 +297,9 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/sap/logs", response_model=List[SapSyncLogResponse])
+@router.get("/sap/logs", response_model=list[SapSyncLogResponse])
 def list_sap_logs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """SAP連携ログ一覧取得"""
+    """SAP連携ログ一覧取得."""
     logs = (
         db.query(SapSyncLog).order_by(SapSyncLog.executed_at.desc()).offset(skip).limit(limit).all()
     )

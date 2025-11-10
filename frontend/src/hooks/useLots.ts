@@ -6,7 +6,8 @@ import type { paths } from "@/types/api";
 
 type LotsList = paths["/api/lots"]["get"]["responses"]["200"]["content"]["application/json"];
 type LotsQuery = paths["/api/lots"]["get"]["parameters"]["query"];
-type LotDetail = paths["/api/lots/{lot_id}"]["get"]["responses"]["200"]["content"]["application/json"];
+type LotDetail =
+  paths["/api/lots/{lot_id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export function useLots(params?: LotsQuery) {
   return useQuery({

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/SearchBar](../README.md) / SearchBarProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:31](https://github.com/cyb
 
 クラス名
 
-***
+---
 
 ### debounceMs?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:29](https://github.com/cyb
 
 デバウンス時間(ms)
 
-***
+---
 
 ### disabled?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:33](https://github.com/cyb
 
 無効化
 
-***
+---
 
 ### onChange()
 
@@ -58,7 +58,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:25](https://github.com/cyb
 
 `void`
 
-***
+---
 
 ### placeholder?
 
@@ -68,7 +68,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:27](https://github.com/cyb
 
 プレースホルダー
 
-***
+---
 
 ### value
 

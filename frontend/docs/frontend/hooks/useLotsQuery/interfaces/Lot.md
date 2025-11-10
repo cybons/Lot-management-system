@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [hooks/useLotsQuery](../README.md) / Lot
 
@@ -10,25 +10,25 @@ Defined in: [src/hooks/useLotsQuery.ts:9](https://github.com/cybons-lab/Lot-mana
 
 ## Properties
 
-### current\_stock?
+### current_stock?
 
-> `optional` **current\_stock**: `object`
+> `optional` **current_stock**: `object`
 
 Defined in: [src/hooks/useLotsQuery.ts:18](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L18)
 
-#### current\_quantity
+#### current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
-***
+---
 
-### expiry\_date?
+### expiry_date?
 
-> `optional` **expiry\_date**: `string`
+> `optional` **expiry_date**: `string`
 
 Defined in: [src/hooks/useLotsQuery.ts:16](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L16)
 
-***
+---
 
 ### id
 
@@ -36,50 +36,50 @@ Defined in: [src/hooks/useLotsQuery.ts:16](https://github.com/cybons-lab/Lot-man
 
 Defined in: [src/hooks/useLotsQuery.ts:10](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L10)
 
-***
+---
 
-### lot\_number
+### lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Defined in: [src/hooks/useLotsQuery.ts:11](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L11)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/hooks/useLotsQuery.ts:12](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L12)
 
-***
+---
 
-### receipt\_date?
+### receipt_date?
 
-> `optional` **receipt\_date**: `string`
+> `optional` **receipt_date**: `string`
 
 Defined in: [src/hooks/useLotsQuery.ts:17](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L17)
 
-***
+---
 
-### warehouse\_code?
+### warehouse_code?
 
-> `optional` **warehouse\_code**: `string`
+> `optional` **warehouse_code**: `string`
 
 Defined in: [src/hooks/useLotsQuery.ts:14](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L14)
 
-***
+---
 
-### warehouse\_id?
+### warehouse_id?
 
-> `optional` **warehouse\_id**: `number`
+> `optional` **warehouse_id**: `number`
 
 Defined in: [src/hooks/useLotsQuery.ts:13](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L13)
 
-***
+---
 
-### warehouse\_name?
+### warehouse_name?
 
-> `optional` **warehouse\_name**: `string` \| `null`
+> `optional` **warehouse_name**: `string` \| `null`
 
 Defined in: [src/hooks/useLotsQuery.ts:15](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useLotsQuery.ts#L15)

@@ -10,6 +10,7 @@ from app.schemas.common import Page, PageQuery
 from app.schemas.products import ProductCreate, ProductOut, ProductUpdate
 from app.services.products import ProductService
 
+
 router = APIRouter(prefix="/products", tags=["products"])
 
 
@@ -19,7 +20,6 @@ def list_products(
     session: Session = Depends(get_db),
 ) -> Page[ProductOut]:
     """List products with pagination and optional fuzzy search."""
-
     service = ProductService(session)
     items, total = service.list_products(page=params.page, per_page=params.per_page, q=params.q)
     return Page[ProductOut](
@@ -33,7 +33,6 @@ def list_products(
 @router.get("/{product_id}", response_model=ProductOut)
 def get_product(product_id: int, session: Session = Depends(get_db)) -> ProductOut:
     """Retrieve a single product."""
-
     service = ProductService(session)
     return service.get_product(product_id)
 
@@ -44,7 +43,6 @@ def create_product(
     session: Session = Depends(get_db),
 ) -> ProductOut:
     """Create a new product."""
-
     service = ProductService(session)
     return service.create_product(payload)
 
@@ -56,7 +54,6 @@ def update_product(
     session: Session = Depends(get_db),
 ) -> ProductOut:
     """Partially update a product."""
-
     service = ProductService(session)
     return service.update_product(product_id, payload)
 
@@ -64,7 +61,6 @@ def update_product(
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(product_id: int, session: Session = Depends(get_db)) -> Response:
     """Delete a product."""
-
     service = ProductService(session)
     service.delete_product(product_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

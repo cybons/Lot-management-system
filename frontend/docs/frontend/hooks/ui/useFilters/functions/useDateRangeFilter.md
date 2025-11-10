@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useFilters](../README.md) / useDateRangeFilter
 
@@ -77,12 +77,12 @@ return (
   <div>
     <input
       type="date"
-      value={dateRange.from || ''}
+      value={dateRange.from || ""}
       onChange={(e) => dateRange.setFrom(e.target.value)}
     />
     <input
       type="date"
-      value={dateRange.to || ''}
+      value={dateRange.to || ""}
       onChange={(e) => dateRange.setTo(e.target.value)}
     />
   </div>

@@ -1,4 +1,5 @@
 """Admin preset management endpoints."""
+
 from __future__ import annotations
 
 import json
@@ -16,6 +17,7 @@ from app.schemas import (
 
 from .masters_bulk_load import perform_master_bulk_load
 
+
 PRESET_DIR = Path(__file__).resolve().parents[2] / "sample_presets"
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -24,7 +26,6 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 @router.get("/presets", response_model=AdminPresetListResponse)
 def list_presets() -> AdminPresetListResponse:
     """Return available preset names."""
-
     if not PRESET_DIR.exists():
         return AdminPresetListResponse(presets=[])
 
@@ -38,7 +39,6 @@ def load_preset(
     db: Session = Depends(get_db),
 ) -> AdminPresetLoadResponse:
     """Load a preset JSON file and bulk insert masters."""
-
     file_path = PRESET_DIR / f"{name}.json"
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="プリセットが見つかりません")
@@ -49,4 +49,3 @@ def load_preset(
     request = MasterBulkLoadRequest.model_validate(payload)
     result = perform_master_bulk_load(db, request)
     return AdminPresetLoadResponse(preset=name, result=result)
-

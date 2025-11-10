@@ -96,11 +96,18 @@ export function FormDialog({
 
   return (
     <Dialog open={open} onOpenChange={(open: boolean) => !open && handleCancel()}>
-      <DialogContent className={sizeClasses[size]} aria-describedby={description ? undefined : "dialog-content"}>
+      <DialogContent
+        className={sizeClasses[size]}
+        aria-describedby={description ? undefined : "dialog-content"}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
-          {!description && <DialogDescription id="dialog-content" className="sr-only">{title}</DialogDescription>}
+          {!description && (
+            <DialogDescription id="dialog-content" className="sr-only">
+              {title}
+            </DialogDescription>
+          )}
         </DialogHeader>
 
         <div className="py-4">{children}</div>
@@ -111,7 +118,11 @@ export function FormDialog({
             <Button type="button" variant="outline" onClick={handleCancel} disabled={isSubmitting}>
               {cancelLabel}
             </Button>
-            <Button type="button" onClick={handleSubmit} disabled={isSubmitting || submitDisabled || isLoading}>
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isSubmitting || submitDisabled || isLoading}
+            >
               {(isSubmitting || isLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {submitLabel}
             </Button>

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/layout/PageHeader](../README.md) / PageHeader
 
@@ -28,8 +28,6 @@ Defined in: [src/components/shared/layout/PageHeader.tsx:34](https://github.com/
 <PageHeader
   title="ロット管理"
   subtitle="在庫ロットの一覧と登録"
-  actions={
-    <button onClick={handleCreate}>新規登録</button>
-  }
+  actions={<button onClick={handleCreate}>新規登録</button>}
 />
 ```

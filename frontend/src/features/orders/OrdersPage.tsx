@@ -36,10 +36,7 @@ export function OrdersPage() {
   const { toast } = useToast();
 
   const ordersQuery = useOrdersList(filters);
-  const orders = React.useMemo(
-    () => normaliseOrders(ordersQuery.data),
-    [ordersQuery.data],
-  );
+  const orders = React.useMemo(() => normaliseOrders(ordersQuery.data), [ordersQuery.data]);
 
   const handleSearch = React.useCallback(() => {
     ordersQuery.refetch();
@@ -71,13 +68,22 @@ export function OrdersPage() {
           <h1 className="text-2xl font-semibold">受注一覧</h1>
           <p className="text-sm text-muted-foreground">受注と引当状況を確認します</p>
         </div>
-        <Button variant="outline" onClick={() => ordersQuery.refetch()} disabled={ordersQuery.isFetching}>
+        <Button
+          variant="outline"
+          onClick={() => ordersQuery.refetch()}
+          disabled={ordersQuery.isFetching}
+        >
           <RefreshCcw className={`mr-2 h-4 w-4 ${ordersQuery.isFetching ? "animate-spin" : ""}`} />
           最新の状態を取得
         </Button>
       </div>
 
-      <OrderFilters value={filters} onChange={handleChange} onSearch={handleSearch} onReset={handleReset} />
+      <OrderFilters
+        value={filters}
+        onChange={handleChange}
+        onSearch={handleSearch}
+        onReset={handleReset}
+      />
 
       <div className="space-y-4">
         {ordersQuery.isLoading ? (

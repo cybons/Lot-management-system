@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useAllocationMutations](../README.md) / useCreateAllocations
 
@@ -37,13 +37,13 @@ Mutation オプション
 ```tsx
 const allocateMutation = useCreateAllocations({
   onSuccess: () => {
-    toast.success('引当を実行しました');
-  }
+    toast.success("引当を実行しました");
+  },
 });
 
 await allocateMutation.mutateAsync({
   order_line_id: 123,
-  product_code: 'P001',
-  allocations: [{ lot_id: 1, warehouse_code: 'W01', quantity: 100 }]
+  product_code: "P001",
+  allocations: [{ lot_id: 1, warehouse_code: "W01", quantity: 100 }],
 });
 ```

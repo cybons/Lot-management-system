@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/SearchBar](../README.md) / InstantSearchBarProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:118](https://github.com/cy
 
 クラス名
 
-***
+---
 
 ### disabled?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:120](https://github.com/cy
 
 無効化
 
-***
+---
 
 ### onChange()
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:114](https://github.com/cy
 
 `void`
 
-***
+---
 
 ### placeholder?
 
@@ -58,7 +58,7 @@ Defined in: [src/components/shared/data/SearchBar.tsx:116](https://github.com/cy
 
 プレースホルダー
 
-***
+---
 
 ### value
 

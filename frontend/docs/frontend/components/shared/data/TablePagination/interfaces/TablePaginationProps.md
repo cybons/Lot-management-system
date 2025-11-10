@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/TablePagination](../README.md) / TablePaginationProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:40](https://github.c
 
 クラス名
 
-***
+---
 
 ### currentPage
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:28](https://github.c
 
 現在のページ番号(1始まり)
 
-***
+---
 
 ### onPageChange()
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:34](https://github.c
 
 `void`
 
-***
+---
 
 ### onPageSizeChange()
 
@@ -68,7 +68,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:36](https://github.c
 
 `void`
 
-***
+---
 
 ### pageSize
 
@@ -78,7 +78,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:30](https://github.c
 
 1ページあたりの表示件数
 
-***
+---
 
 ### pageSizeOptions?
 
@@ -88,7 +88,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:38](https://github.c
 
 ページサイズのオプション
 
-***
+---
 
 ### totalCount
 

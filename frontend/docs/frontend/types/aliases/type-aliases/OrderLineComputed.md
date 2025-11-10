@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/aliases](../README.md) / OrderLineComputed
 
@@ -18,7 +18,7 @@ Defined in: [src/types/aliases.ts:126](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:143](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L143)
 
-***
+---
 
 ### customerCode?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/aliases.ts:143](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:146](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L146)
 
-***
+---
 
 ### customerName?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/aliases.ts:146](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:147](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L147)
 
-***
+---
 
 ### dueDate?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/aliases.ts:147](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:138](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L138)
 
-***
+---
 
 ### id?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/aliases.ts:138](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:133](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L133)
 
-***
+---
 
 ### ids
 
@@ -66,7 +66,7 @@ Defined in: [src/types/aliases.ts:127](https://github.com/cybons-lab/Lot-managem
 
 > `optional` **orderId**: `number`
 
-***
+---
 
 ### lineId?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/aliases.ts:127](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:131](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L131)
 
-***
+---
 
 ### orderDate?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/aliases.ts:131](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:137](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L137)
 
-***
+---
 
 ### orderId?
 
@@ -90,7 +90,7 @@ Defined in: [src/types/aliases.ts:137](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:132](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L132)
 
-***
+---
 
 ### plannedShipDate?
 
@@ -98,7 +98,7 @@ Defined in: [src/types/aliases.ts:132](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:140](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L140)
 
-***
+---
 
 ### productCode
 
@@ -106,7 +106,7 @@ Defined in: [src/types/aliases.ts:140](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:134](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L134)
 
-***
+---
 
 ### productName
 
@@ -114,7 +114,7 @@ Defined in: [src/types/aliases.ts:134](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:135](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L135)
 
-***
+---
 
 ### progressPct
 
@@ -122,7 +122,7 @@ Defined in: [src/types/aliases.ts:135](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:145](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L145)
 
-***
+---
 
 ### remainingQty
 
@@ -130,7 +130,7 @@ Defined in: [src/types/aliases.ts:145](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:144](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L144)
 
-***
+---
 
 ### shipDate?
 
@@ -138,7 +138,7 @@ Defined in: [src/types/aliases.ts:144](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:139](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L139)
 
-***
+---
 
 ### shippingLeadTime?
 
@@ -146,7 +146,7 @@ Defined in: [src/types/aliases.ts:139](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:149](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L149)
 
-***
+---
 
 ### status?
 
@@ -154,7 +154,7 @@ Defined in: [src/types/aliases.ts:149](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:136](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L136)
 
-***
+---
 
 ### totalQty
 
@@ -162,7 +162,7 @@ Defined in: [src/types/aliases.ts:136](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:141](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L141)
 
-***
+---
 
 ### unit
 
@@ -170,7 +170,7 @@ Defined in: [src/types/aliases.ts:141](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:142](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L142)
 
-***
+---
 
 ### warehouses
 

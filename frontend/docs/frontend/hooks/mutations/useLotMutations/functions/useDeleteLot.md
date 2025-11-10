@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useLotMutations](../README.md) / useDeleteLot
 
@@ -37,8 +37,8 @@ Mutation オプション
 ```tsx
 const deleteLotMutation = useDeleteLot({
   onSuccess: () => {
-    toast.success('ロットを削除しました');
-  }
+    toast.success("ロットを削除しました");
+  },
 });
 
 await deleteLotMutation.mutateAsync(123);

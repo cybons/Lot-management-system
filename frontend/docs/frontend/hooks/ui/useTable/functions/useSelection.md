@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useTable](../README.md) / useSelection
 
@@ -16,7 +16,7 @@ Defined in: [src/hooks/ui/useTable.ts:229](https://github.com/cybons-lab/Lot-man
 
 ### T
 
-`T` *extends* `Record`\<`string`, `any`\>
+`T` _extends_ `Record`\<`string`, `any`\>
 
 ## Parameters
 
@@ -139,12 +139,12 @@ keyof `T` = `'id'`
 ## Example
 
 ```tsx
-const selection = useSelection('id');
+const selection = useSelection("id");
 
 return (
   <Table>
-    {items.map(item => (
-      <TableRow 
+    {items.map((item) => (
+      <TableRow
         key={item.id}
         selected={selection.isSelected(item.id)}
         onClick={() => selection.toggle(item.id)}

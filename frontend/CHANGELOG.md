@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Frontend - Initial Release
 
 #### Added
+
 - 🎨 Modern UI with Tailwind CSS and shadcn/ui components
 - 📋 Inventory management page with lot listing
 - ➕ Create new lots with modal form
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📱 Tab-based navigation (Inventory, Shipping, Alerts)
 
 #### Technical Stack
+
 - React 19.2.0 with TypeScript
 - Vite for build tooling
 - Tailwind CSS for styling
@@ -31,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lucide React for icons
 
 #### Components
+
 - Button component with multiple variants
 - Dialog (Modal) component
 - Input and Label components
@@ -39,12 +42,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Form components with validation
 
 #### API Integration
+
 - Full CRUD operations for lots
 - RESTful API client with TypeScript types
 - Error handling and loading states
 - Optimistic updates with React Query
 
 #### Developer Experience
+
 - Hot Module Replacement (HMR)
 - TypeScript for type safety
 - ESLint configuration
@@ -54,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Backend - Previously Released
 
 #### Added
+
 - FastAPI backend with SQLAlchemy ORM
 - SQLite database for data persistence
 - CRUD APIs for lot management
@@ -66,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-01
 
 ### Initial Release
+
 - Project setup and structure
 - Backend API implementation
 - Frontend application with modern UI

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/aliases](../README.md) / LotResponse
 
@@ -12,29 +12,29 @@ Defined in: [src/types/aliases.ts:33](https://github.com/cybons-lab/Lot-manageme
 
 ## Properties
 
-### created\_at
+### created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Defined in: [src/types/aliases.ts:46](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L46)
 
-***
+---
 
-### current\_quantity?
+### current_quantity?
 
-> `optional` **current\_quantity**: `number` \| `null`
+> `optional` **current_quantity**: `number` \| `null`
 
 Defined in: [src/types/aliases.ts:45](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L45)
 
-***
+---
 
-### expiry\_date?
+### expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:44](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L44)
 
-***
+---
 
 ### id
 
@@ -42,47 +42,47 @@ Defined in: [src/types/aliases.ts:44](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/types/aliases.ts:34](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L34)
 
-***
+---
 
-### lot\_no?
+### lot_no?
 
-> `optional` **lot\_no**: `string` \| `null`
+> `optional` **lot_no**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:35](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L35)
 
-***
+---
 
-### lot\_number?
+### lot_number?
 
-> `optional` **lot\_number**: `string`
+> `optional` **lot_number**: `string`
 
 Defined in: [src/types/aliases.ts:36](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L36)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/types/aliases.ts:37](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L37)
 
-***
+---
 
-### product\_name?
+### product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:38](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L38)
 
-***
+---
 
-### receipt\_date?
+### receipt_date?
 
-> `optional` **receipt\_date**: `string` \| `null`
+> `optional` **receipt_date**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:43](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L43)
 
-***
+---
 
 ### status?
 
@@ -90,7 +90,7 @@ Defined in: [src/types/aliases.ts:43](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/types/aliases.ts:42](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L42)
 
-***
+---
 
 ### unit?
 
@@ -98,26 +98,26 @@ Defined in: [src/types/aliases.ts:42](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/types/aliases.ts:41](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L41)
 
-***
+---
 
-### updated\_at?
+### updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:47](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L47)
 
-***
+---
 
-### warehouse\_code?
+### warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:39](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L39)
 
-***
+---
 
-### warehouse\_name?
+### warehouse_name?
 
-> `optional` **warehouse\_name**: `string` \| `null`
+> `optional` **warehouse_name**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:40](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L40)

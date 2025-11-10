@@ -1,22 +1,23 @@
 # backend/app/api/__init__.py
 """
 API Package
-APIルーティングの集約
+APIルーティングの集約.
 """
 
 from .routes import (
     admin_presets_router,
     admin_router,
+    admin_seeds_router,  # ⬅️ 追加
     allocations_router,
     forecast_router,
     integration_router,
     lots_router,
     masters_router,
     orders_router,
-    warehouse_alloc_router,  # ⬅️ [修正] 不足していたルータを追加
     orders_validate_router,
-    admin_seeds_router,  # ⬅️ 追加
+    warehouse_alloc_router,  # ⬅️ [修正] 不足していたルータを追加
 )
+
 
 __all__ = [
     "masters_router",

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [features/allocations/api](../README.md) / AllocationInputItem
 
@@ -20,7 +20,7 @@ Defined in: [src/features/allocations/api.ts:4](https://github.com/cybons-lab/Lo
 
 Defined in: [src/features/allocations/api.ts:6](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/features/allocations/api.ts#L6)
 
-***
+---
 
 ### lotId
 
@@ -28,7 +28,7 @@ Defined in: [src/features/allocations/api.ts:6](https://github.com/cybons-lab/Lo
 
 Defined in: [src/features/allocations/api.ts:5](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/features/allocations/api.ts#L5)
 
-***
+---
 
 ### quantity
 
@@ -36,18 +36,18 @@ Defined in: [src/features/allocations/api.ts:5](https://github.com/cybons-lab/Lo
 
 Defined in: [src/features/allocations/api.ts:9](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/features/allocations/api.ts#L9)
 
-***
+---
 
-### warehouse\_code?
+### warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Defined in: [src/features/allocations/api.ts:8](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/features/allocations/api.ts#L8)
 
-***
+---
 
-### warehouse\_id?
+### warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Defined in: [src/features/allocations/api.ts:7](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/features/allocations/api.ts#L7)

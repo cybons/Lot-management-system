@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useToast](../README.md) / usePromiseToast
 
@@ -179,13 +179,10 @@ Promiseトーストフック
 const toast = usePromiseToast();
 
 const handleSave = async () => {
-  await toast.promise(
-    saveData(),
-    {
-      loading: '保存中...',
-      success: '保存しました',
-      error: '保存に失敗しました',
-    }
-  );
+  await toast.promise(saveData(), {
+    loading: "保存中...",
+    success: "保存しました",
+    error: "保存に失敗しました",
+  });
 };
 ```

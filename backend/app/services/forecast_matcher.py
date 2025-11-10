@@ -1,10 +1,11 @@
 from datetime import date
-from typing import Literal, Optional, Tuple
+from typing import Literal
 
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from app.models.forecast import Forecast
+
 
 MatchStatus = Literal["EXACT", "PERIOD", "FALLBACK", "DIFF", "NONE"]
 
@@ -24,7 +25,7 @@ def pick_forecast(
     customer_id: str,
     supplier_id: str,
     order_date: date,
-) -> Tuple[Optional[Forecast], Optional[str]]:
+) -> tuple[Forecast | None, str | None]:
     # 1) daily
     stmt = (
         select(Forecast)
@@ -34,7 +35,7 @@ def pick_forecast(
             Forecast.supplier_id == supplier_id,
             Forecast.granularity == "daily",
             Forecast.date_day == order_date,
-            Forecast.is_active == True,
+            Forecast.is_active,
         )
         .order_by(desc(Forecast.version_no))
         .limit(1)
@@ -53,7 +54,7 @@ def pick_forecast(
             Forecast.supplier_id == supplier_id,
             Forecast.granularity == "dekad",
             Forecast.date_dekad_start == dk_start,
-            Forecast.is_active == True,
+            Forecast.is_active,
         )
         .order_by(desc(Forecast.version_no))
         .limit(1)
@@ -72,7 +73,7 @@ def pick_forecast(
             Forecast.supplier_id == supplier_id,
             Forecast.granularity == "monthly",
             Forecast.year_month == ym,
-            Forecast.is_active == True,
+            Forecast.is_active,
         )
         .order_by(desc(Forecast.version_no))
         .limit(1)
@@ -84,15 +85,11 @@ def pick_forecast(
     return None, None
 
 
-def judge_status(
-    matched_granularity: Optional[str], diff_qty: Optional[int]
-) -> MatchStatus:
+def judge_status(matched_granularity: str | None, diff_qty: int | None) -> MatchStatus:
     if matched_granularity is None:
         return "NONE"
     if diff_qty is None:
         return "PERIOD"  # 粒度一致/数量差分不明の場合の暫定
     if diff_qty == 0:
         return "EXACT" if matched_granularity == "daily" else "PERIOD"
-    return (
-        "DIFF" if matched_granularity in ("daily", "dekad", "monthly") else "FALLBACK"
-    )
+    return "DIFF" if matched_granularity in ("daily", "dekad", "monthly") else "FALLBACK"

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/api/useMastersQuery](../README.md) / createSelectOptions
 
@@ -16,7 +16,7 @@ Defined in: [src/hooks/api/useMastersQuery.ts:176](https://github.com/cybons-lab
 
 ### T
 
-`T` *extends* `object`
+`T` _extends_ `object`
 
 ## Parameters
 

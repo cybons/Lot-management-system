@@ -1,15 +1,15 @@
 /**
  * トースト通知フック
- * 
+ *
  * スナックバー形式の通知メッセージを管理
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 /**
  * トーストの種類
  */
-export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
+export type ToastVariant = "success" | "error" | "warning" | "info";
 
 /**
  * トーストメッセージの型
@@ -23,14 +23,14 @@ export interface Toast {
 
 /**
  * トースト通知フック
- * 
+ *
  * @param defaultDuration - デフォルト表示時間(ミリ秒)
  * @returns トースト状態と操作関数
- * 
+ *
  * @example
  * ```tsx
  * const toast = useToast();
- * 
+ *
  * const handleSave = async () => {
  *   try {
  *     await saveData();
@@ -39,7 +39,7 @@ export interface Toast {
  *     toast.error('保存に失敗しました');
  *   }
  * };
- * 
+ *
  * return (
  *   <div>
  *     <button onClick={handleSave}>保存</button>
@@ -50,9 +50,9 @@ export interface Toast {
  */
 export function useToast(defaultDuration = 3000) {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  
+
   const show = useCallback(
-    (message: string, variant: ToastVariant = 'info', duration?: number) => {
+    (message: string, variant: ToastVariant = "info", duration?: number) => {
       const id = Math.random().toString(36).substring(7);
       const newToast: Toast = {
         id,
@@ -60,9 +60,9 @@ export function useToast(defaultDuration = 3000) {
         variant,
         duration: duration ?? defaultDuration,
       };
-      
+
       setToasts((prev) => [...prev, newToast]);
-      
+
       // 自動削除
       const timeoutDuration = duration ?? defaultDuration;
       if (timeoutDuration > 0) {
@@ -70,40 +70,40 @@ export function useToast(defaultDuration = 3000) {
           setToasts((prev) => prev.filter((t) => t.id !== id));
         }, timeoutDuration);
       }
-      
+
       return id;
     },
-    [defaultDuration]
+    [defaultDuration],
   );
-  
+
   const dismiss = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
-  
+
   const dismissAll = useCallback(() => {
     setToasts([]);
   }, []);
-  
+
   const success = useCallback(
-    (message: string, duration?: number) => show(message, 'success', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "success", duration),
+    [show],
   );
-  
+
   const error = useCallback(
-    (message: string, duration?: number) => show(message, 'error', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "error", duration),
+    [show],
   );
-  
+
   const warning = useCallback(
-    (message: string, duration?: number) => show(message, 'warning', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "warning", duration),
+    [show],
   );
-  
+
   const info = useCallback(
-    (message: string, duration?: number) => show(message, 'info', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "info", duration),
+    [show],
   );
-  
+
   return {
     toasts,
     show,
@@ -119,20 +119,20 @@ export function useToast(defaultDuration = 3000) {
 /**
  * シングルトーストフック
  * (一度に1つのトーストのみ表示)
- * 
+ *
  * @param defaultDuration - デフォルト表示時間(ミリ秒)
  * @returns トースト状態と操作関数
- * 
+ *
  * @example
  * ```tsx
  * const toast = useSingleToast();
- * 
+ *
  * return (
  *   <div>
  *     <button onClick={() => toast.success('成功しました')}>実行</button>
  *     {toast.current && (
- *       <ToastMessage 
- *         message={toast.current.message} 
+ *       <ToastMessage
+ *         message={toast.current.message}
  *         variant={toast.current.variant}
  *         onClose={toast.dismiss}
  *       />
@@ -143,9 +143,9 @@ export function useToast(defaultDuration = 3000) {
  */
 export function useSingleToast(defaultDuration = 3000) {
   const [current, setCurrent] = useState<Toast | null>(null);
-  
+
   const show = useCallback(
-    (message: string, variant: ToastVariant = 'info', duration?: number) => {
+    (message: string, variant: ToastVariant = "info", duration?: number) => {
       const id = Math.random().toString(36).substring(7);
       const newToast: Toast = {
         id,
@@ -153,9 +153,9 @@ export function useSingleToast(defaultDuration = 3000) {
         variant,
         duration: duration ?? defaultDuration,
       };
-      
+
       setCurrent(newToast);
-      
+
       // 自動削除
       const timeoutDuration = duration ?? defaultDuration;
       if (timeoutDuration > 0) {
@@ -163,36 +163,36 @@ export function useSingleToast(defaultDuration = 3000) {
           setCurrent(null);
         }, timeoutDuration);
       }
-      
+
       return id;
     },
-    [defaultDuration]
+    [defaultDuration],
   );
-  
+
   const dismiss = useCallback(() => {
     setCurrent(null);
   }, []);
-  
+
   const success = useCallback(
-    (message: string, duration?: number) => show(message, 'success', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "success", duration),
+    [show],
   );
-  
+
   const error = useCallback(
-    (message: string, duration?: number) => show(message, 'error', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "error", duration),
+    [show],
   );
-  
+
   const warning = useCallback(
-    (message: string, duration?: number) => show(message, 'warning', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "warning", duration),
+    [show],
   );
-  
+
   const info = useCallback(
-    (message: string, duration?: number) => show(message, 'info', duration),
-    [show]
+    (message: string, duration?: number) => show(message, "info", duration),
+    [show],
   );
-  
+
   return {
     current,
     show,
@@ -207,13 +207,13 @@ export function useSingleToast(defaultDuration = 3000) {
 /**
  * Promiseトーストフック
  * (非同期処理の進行状況を表示)
- * 
+ *
  * @returns トースト操作関数
- * 
+ *
  * @example
  * ```tsx
  * const toast = usePromiseToast();
- * 
+ *
  * const handleSave = async () => {
  *   await toast.promise(
  *     saveData(),
@@ -228,18 +228,18 @@ export function useSingleToast(defaultDuration = 3000) {
  */
 export function usePromiseToast() {
   const toast = useToast();
-  
+
   const promise = useCallback(
-    async <T,>(
+    async <T>(
       promiseFn: Promise<T>,
       messages: {
         loading: string;
         success: string;
         error: string;
-      }
+      },
     ): Promise<T> => {
       const loadingId = toast.info(messages.loading, 0); // 無期限表示
-      
+
       try {
         const result = await promiseFn;
         toast.dismiss(loadingId);
@@ -251,9 +251,9 @@ export function usePromiseToast() {
         throw error;
       }
     },
-    [toast]
+    [toast],
   );
-  
+
   return {
     ...toast,
     promise,

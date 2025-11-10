@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/forecast](../README.md) / ForecastResponse
 
@@ -12,29 +12,29 @@ Defined in: [src/types/forecast.ts:2](https://github.com/cybons-lab/Lot-manageme
 
 ## Properties
 
-### date\_day?
+### date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Defined in: [src/types/forecast.ts:6](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L6)
 
-***
+---
 
-### date\_dekad\_start?
+### date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Defined in: [src/types/forecast.ts:7](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L7)
 
-***
+---
 
-### forecast\_qty?
+### forecast_qty?
 
-> `optional` **forecast\_qty**: `number` \| `null`
+> `optional` **forecast_qty**: `number` \| `null`
 
 Defined in: [src/types/forecast.ts:9](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L9)
 
-***
+---
 
 ### granularity?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/forecast.ts:9](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/types/forecast.ts:5](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L5)
 
-***
+---
 
 ### id?
 
@@ -50,42 +50,42 @@ Defined in: [src/types/forecast.ts:5](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/types/forecast.ts:3](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L3)
 
-***
+---
 
-### product\_code?
+### product_code?
 
-> `optional` **product\_code**: `string`
+> `optional` **product_code**: `string`
 
 Defined in: [src/types/forecast.ts:4](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L4)
 
-***
+---
 
-### qty\_forecast?
+### qty_forecast?
 
-> `optional` **qty\_forecast**: `number` \| `null`
+> `optional` **qty_forecast**: `number` \| `null`
 
 Defined in: [src/types/forecast.ts:10](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L10)
 
-***
+---
 
-### version\_issued\_at?
+### version_issued_at?
 
-> `optional` **version\_issued\_at**: `string` \| `null`
+> `optional` **version_issued_at**: `string` \| `null`
 
 Defined in: [src/types/forecast.ts:12](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L12)
 
-***
+---
 
-### version\_no?
+### version_no?
 
-> `optional` **version\_no**: `number` \| `null`
+> `optional` **version_no**: `number` \| `null`
 
 Defined in: [src/types/forecast.ts:11](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L11)
 
-***
+---
 
-### year\_month?
+### year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Defined in: [src/types/forecast.ts:8](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/forecast.ts#L8)

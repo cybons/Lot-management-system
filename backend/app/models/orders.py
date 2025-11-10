@@ -26,6 +26,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import Base
 
+
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .inventory import Lot
     from .logs import SapSyncLog
@@ -83,12 +84,10 @@ class Order(Base):
     )
 
     customer: Mapped[Customer | None] = relationship("Customer", back_populates="orders")
-    order_lines: Mapped[list["OrderLine"]] = relationship(
+    order_lines: Mapped[list[OrderLine]] = relationship(
         "OrderLine", back_populates="order", cascade="all, delete-orphan"
     )
-    sap_sync_logs: Mapped[list[SapSyncLog]] = relationship(
-        "SapSyncLog", back_populates="order"
-    )
+    sap_sync_logs: Mapped[list[SapSyncLog]] = relationship("SapSyncLog", back_populates="order")
 
 
 class OrderLine(Base):
@@ -123,13 +122,13 @@ class OrderLine(Base):
 
     order: Mapped[Order] = relationship("Order", back_populates="order_lines")
     product: Mapped[Product | None] = relationship("Product", back_populates="order_lines")
-    allocations: Mapped[list["Allocation"]] = relationship(
+    allocations: Mapped[list[Allocation]] = relationship(
         "Allocation", back_populates="order_line"
     )
-    warehouse_allocations: Mapped[list["OrderLineWarehouseAllocation"]] = relationship(
+    warehouse_allocations: Mapped[list[OrderLineWarehouseAllocation]] = relationship(
         "OrderLineWarehouseAllocation", back_populates="order_line"
     )
-    purchase_requests: Mapped[list["PurchaseRequest"]] = relationship(
+    purchase_requests: Mapped[list[PurchaseRequest]] = relationship(
         "PurchaseRequest", back_populates="order_line"
     )
 
@@ -163,10 +162,10 @@ class OrderLineWarehouseAllocation(Base):
         CheckConstraint("quantity > 0", name="ck_olwa_quantity_positive"),
     )
 
-    order_line: Mapped["OrderLine"] = relationship(
+    order_line: Mapped[OrderLine] = relationship(
         "OrderLine", back_populates="warehouse_allocations"
     )
-    warehouse: Mapped["Warehouse"] = relationship(
+    warehouse: Mapped[Warehouse] = relationship(
         "Warehouse", back_populates="warehouse_allocations"
     )
 
@@ -180,9 +179,7 @@ class Allocation(Base):
     order_line_id: Mapped[int] = mapped_column(
         ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
     )
-    lot_id: Mapped[int] = mapped_column(
-        ForeignKey("lots.id", ondelete="CASCADE"), nullable=False
-    )
+    lot_id: Mapped[int] = mapped_column(ForeignKey("lots.id", ondelete="CASCADE"), nullable=False)
     allocated_qty: Mapped[float] = mapped_column(Float, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
@@ -244,6 +241,4 @@ class PurchaseRequest(Base):
         "OrderLine", back_populates="purchase_requests"
     )
     product: Mapped[Product | None] = relationship("Product", back_populates="purchase_requests")
-    supplier: Mapped[Supplier | None] = relationship(
-        "Supplier", back_populates="purchase_requests"
-    )
+    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="purchase_requests")

@@ -3,8 +3,8 @@
  * 全てのMSWハンドラーを統合
  */
 
-import { lotHandlers } from './lot-handlers';
-import { orderHandlers } from './order-handlers';
+import { lotHandlers } from "./lot-handlers";
+import { orderHandlers } from "./order-handlers";
 
 /**
  * 全てのハンドラーを結合

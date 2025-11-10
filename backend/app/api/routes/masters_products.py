@@ -1,6 +1,5 @@
 """Product master CRUD endpoints."""
 
-from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -9,10 +8,11 @@ from app.api.deps import get_db
 from app.models import Product
 from app.schemas import ProductCreate, ProductResponse, ProductUpdate
 
+
 router = APIRouter(prefix="/products", tags=["masters"])
 
 
-@router.get("", response_model=List[ProductResponse])
+@router.get("", response_model=list[ProductResponse])
 def list_products(
     skip: int = 0,
     limit: int = 100,
@@ -20,7 +20,6 @@ def list_products(
     db: Session = Depends(get_db),
 ):
     """Return a paginated list of products."""
-
     query = db.query(Product)
 
     if search:
@@ -35,7 +34,6 @@ def list_products(
 @router.get("/{product_code}", response_model=ProductResponse)
 def get_product(product_code: str, db: Session = Depends(get_db)):
     """Fetch a product by its code."""
-
     product = db.query(Product).filter(Product.product_code == product_code).first()
     if not product:
         raise HTTPException(status_code=404, detail="製品が見つかりません")
@@ -45,7 +43,6 @@ def get_product(product_code: str, db: Session = Depends(get_db)):
 @router.post("", response_model=ProductResponse, status_code=201)
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     """Create a new product."""
-
     exists = db.query(Product).filter(Product.product_code == product.product_code).first()
     if exists:
         raise HTTPException(status_code=400, detail="製品コードが既に存在します")
@@ -67,7 +64,6 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
 @router.put("/{product_code}", response_model=ProductResponse)
 def update_product(product_code: str, product: ProductUpdate, db: Session = Depends(get_db)):
     """Update an existing product."""
-
     db_product = db.query(Product).filter(Product.product_code == product_code).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="製品が見つかりません")
@@ -88,7 +84,6 @@ def update_product(product_code: str, product: ProductUpdate, db: Session = Depe
 @router.delete("/{product_code}", status_code=204)
 def delete_product(product_code: str, db: Session = Depends(get_db)):
     """Delete a product by its code."""
-
     db_product = db.query(Product).filter(Product.product_code == product_code).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="製品が見つかりません")

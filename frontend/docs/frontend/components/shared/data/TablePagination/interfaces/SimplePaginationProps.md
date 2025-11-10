@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/TablePagination](../README.md) / SimplePaginationProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:183](https://github.
 
 クラス名
 
-***
+---
 
 ### currentPage
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:177](https://github.
 
 現在のページ番号(1始まり)
 
-***
+---
 
 ### onPageChange()
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/data/TablePagination.tsx:181](https://github.
 
 `void`
 
-***
+---
 
 ### totalPages
 

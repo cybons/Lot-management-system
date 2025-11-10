@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from fastapi import Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
@@ -15,8 +15,9 @@ from app.schemas import (
 )
 from app.services.orders.validation import OrderLineDemand, OrderValidationService
 
-from fastapi import APIRouter
+
 router = APIRouter(prefix="/orders", tags=["orders"])
+
 
 @router.post("/validate", response_model=OrderValidationResponse, summary="受注在庫検証")
 def validate_order_stock(
@@ -25,7 +26,6 @@ def validate_order_stock(
     db: Session = Depends(get_db),
 ) -> OrderValidationResponse:
     """Validate that each requested order line can be fulfilled by available stock."""
-
     service = OrderValidationService(db)
     demands = [
         OrderLineDemand(

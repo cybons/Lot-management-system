@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useFilters](../README.md) / useSearchFilter
 
@@ -76,7 +76,7 @@ return (
   <input
     value={search.value}
     onChange={(e) => search.setValue(e.target.value)}
-    onKeyDown={(e) => e.key === 'Enter' && search.handleSearch()}
+    onKeyDown={(e) => e.key === "Enter" && search.handleSearch()}
   />
 );
 ```

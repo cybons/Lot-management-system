@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [hooks/useOrderQuery](../README.md) / OrderDetail
 
@@ -10,21 +10,21 @@ Defined in: [src/hooks/useOrderQuery.ts:24](https://github.com/cybons-lab/Lot-ma
 
 ## Properties
 
-### customer\_code
+### customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Defined in: [src/hooks/useOrderQuery.ts:27](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L27)
 
-***
+---
 
-### customer\_name?
+### customer_name?
 
-> `optional` **customer\_name**: `string` \| `null`
+> `optional` **customer_name**: `string` \| `null`
 
 Defined in: [src/hooks/useOrderQuery.ts:28](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L28)
 
-***
+---
 
 ### id
 
@@ -32,7 +32,7 @@ Defined in: [src/hooks/useOrderQuery.ts:28](https://github.com/cybons-lab/Lot-ma
 
 Defined in: [src/hooks/useOrderQuery.ts:25](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L25)
 
-***
+---
 
 ### lines
 
@@ -40,23 +40,23 @@ Defined in: [src/hooks/useOrderQuery.ts:25](https://github.com/cybons-lab/Lot-ma
 
 Defined in: [src/hooks/useOrderQuery.ts:31](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L31)
 
-***
+---
 
-### order\_date
+### order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Defined in: [src/hooks/useOrderQuery.ts:29](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L29)
 
-***
+---
 
-### order\_no
+### order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Defined in: [src/hooks/useOrderQuery.ts:26](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/hooks/useOrderQuery.ts#L26)
 
-***
+---
 
 ### status?
 

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 
+
 router = APIRouter(tags=["health"])
 
 

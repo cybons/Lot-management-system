@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/FilterPanel](../README.md) / InlineFilterPanelProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:119](https://github.com/
 
 子要素(フィルター項目)
 
-***
+---
 
 ### className?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:123](https://github.com/
 
 クラス名
 
-***
+---
 
 ### onReset()?
 

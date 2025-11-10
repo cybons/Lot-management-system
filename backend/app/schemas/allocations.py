@@ -1,10 +1,9 @@
 # backend/app/schemas/allocations.py
-"""FEFO引当およびドラッグ引当関連のスキーマ"""
+"""FEFO引当およびドラッグ引当関連のスキーマ."""
 
 from __future__ import annotations
 
 from datetime import date
-from typing import List, Optional
 
 from pydantic import Field
 
@@ -19,8 +18,8 @@ class FefoLotAllocation(BaseSchema):
     lot_id: int
     lot_number: str
     allocate_qty: float
-    expiry_date: Optional[date] = None
-    receipt_date: Optional[date] = None
+    expiry_date: date | None = None
+    receipt_date: date | None = None
 
 
 class FefoLineAllocation(BaseSchema):
@@ -28,20 +27,20 @@ class FefoLineAllocation(BaseSchema):
     product_code: str
     required_qty: float
     already_allocated_qty: float
-    allocations: List[FefoLotAllocation] = Field(default_factory=list)
-    next_div: Optional[str] = None
-    warnings: List[str] = Field(default_factory=list)
+    allocations: list[FefoLotAllocation] = Field(default_factory=list)
+    next_div: str | None = None
+    warnings: list[str] = Field(default_factory=list)
 
 
 class FefoPreviewResponse(BaseSchema):
     order_id: int
-    lines: List[FefoLineAllocation] = Field(default_factory=list)
-    warnings: List[str] = Field(default_factory=list)
+    lines: list[FefoLineAllocation] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
 class FefoCommitResponse(BaseSchema):
     order_id: int
-    created_allocation_ids: List[int] = Field(default_factory=list)
+    created_allocation_ids: list[int] = Field(default_factory=list)
     preview: FefoPreviewResponse
 
 

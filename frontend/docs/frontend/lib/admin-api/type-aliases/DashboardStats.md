@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [lib/admin-api](../README.md) / DashboardStats
 
@@ -12,24 +12,24 @@ Defined in: [src/lib/admin-api.ts:4](https://github.com/cybons-lab/Lot-managemen
 
 ## Properties
 
-### total\_orders
+### total_orders
 
-> **total\_orders**: `number`
+> **total_orders**: `number`
 
 Defined in: [src/lib/admin-api.ts:6](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L6)
 
-***
+---
 
-### total\_stock
+### total_stock
 
-> **total\_stock**: `number`
+> **total_stock**: `number`
 
 Defined in: [src/lib/admin-api.ts:5](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L5)
 
-***
+---
 
-### unallocated\_orders
+### unallocated_orders
 
-> **unallocated\_orders**: `number`
+> **unallocated_orders**: `number`
 
 Defined in: [src/lib/admin-api.ts:7](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L7)

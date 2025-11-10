@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useDialog](../README.md) / useConfirmDialog
 
@@ -69,10 +69,10 @@ const confirmDialog = useConfirmDialog();
 
 const handleDelete = async () => {
   const confirmed = await confirmDialog.confirm({
-    title: '削除確認',
-    message: '本当に削除しますか?',
+    title: "削除確認",
+    message: "本当に削除しますか?",
   });
-  
+
   if (confirmed) {
     // 削除処理
   }

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/validators/master-schemas](../README.md) / Product
 
@@ -12,64 +12,64 @@ Defined in: [src/utils/validators/master-schemas.ts:51](https://github.com/cybon
 
 ## Properties
 
-### customer\_part\_no?
+### customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Defined in: [src/utils/validators/master-schemas.ts:57](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L57)
 
-***
+---
 
-### internal\_unit?
+### internal_unit?
 
-> `optional` **internal\_unit**: `string`
+> `optional` **internal_unit**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:56](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L56)
 
-***
+---
 
-### maker\_part\_no?
+### maker_part_no?
 
-> `optional` **maker\_part\_no**: `string` \| `null`
+> `optional` **maker_part_no**: `string` \| `null`
 
 Defined in: [src/utils/validators/master-schemas.ts:58](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L58)
 
-***
+---
 
-### packaging\_qty?
+### packaging_qty?
 
-> `optional` **packaging\_qty**: `string`
+> `optional` **packaging_qty**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:54](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L54)
 
-***
+---
 
-### packaging\_unit?
+### packaging_unit?
 
-> `optional` **packaging\_unit**: `string`
+> `optional` **packaging_unit**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:55](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L55)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:52](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L52)
 
-***
+---
 
-### product\_name
+### product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Defined in: [src/utils/validators/master-schemas.ts:53](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L53)
 
-***
+---
 
-### requires\_lot\_number?
+### requires_lot_number?
 
-> `optional` **requires\_lot\_number**: `boolean`
+> `optional` **requires_lot_number**: `boolean`
 
 Defined in: [src/utils/validators/master-schemas.ts:59](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/master-schemas.ts#L59)

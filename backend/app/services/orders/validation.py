@@ -3,9 +3,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
-from typing import Iterable
 
 from sqlalchemy.orm import Session
 
@@ -73,7 +73,7 @@ class OrderValidationService:
         except InsufficientStockError as e:
             # Return domain error details as plain dict
             details_raw = e.details or {}
-            
+
             return ValidationResult(
                 ok=False,
                 message=f"在庫不足: {e.product_code}",
@@ -92,7 +92,6 @@ class OrderValidationService:
         lock: bool = True,
     ) -> None:
         """Validate that all demanded lines can be fulfilled by inventory."""
-
         for line in lines:
             lots = self._stock_repo.find_fifo_lots_for_allocation(
                 product_code=line.product_code,

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/api](../README.md) / paths
 
@@ -129,7 +129,7 @@ Successful Response
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/admin/load-full-sample-data
 
@@ -326,7 +326,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/admin/load-preset
 
@@ -508,7 +508,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/admin/presets
 
@@ -632,7 +632,7 @@ Presets
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/admin/reset-database
 
@@ -689,7 +689,7 @@ Reset Database
 ##### Description
 
 データベースリセット（開発環境のみ）
-    新スキーマに対応したマスタデータを投入
+新スキーマに対応したマスタデータを投入
 
 ##### post.parameters
 
@@ -769,7 +769,7 @@ Success
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/admin/stats
 
@@ -835,21 +835,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.total\_orders
+##### get.responses.200.content.application/json.total_orders
 
-> **total\_orders**: `number`
+> **total_orders**: `number`
 
 Total Orders
 
-##### get.responses.200.content.application/json.total\_stock
+##### get.responses.200.content.application/json.total_stock
 
-> **total\_stock**: `number`
+> **total_stock**: `number`
 
 Total Stock
 
-##### get.responses.200.content.application/json.unallocated\_orders
+##### get.responses.200.content.application/json.unallocated_orders
 
-> **unallocated\_orders**: `number`
+> **unallocated_orders**: `number`
 
 Unallocated Orders
 
@@ -905,11 +905,11 @@ Unallocated Orders
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/allocations/\{allocation\_id\}
+### /api/allocations/\{allocation_id\}
 
-> **/api/allocations/\{allocation\_id\}**: `object`
+> **/api/allocations/\{allocation_id\}**: `object`
 
 Defined in: [src/types/api.d.ts:503](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L503)
 
@@ -939,9 +939,9 @@ Delete Allocation
 
 > **path**: `object`
 
-##### delete.parameters.path.allocation\_id
+##### delete.parameters.path.allocation_id
 
-> **allocation\_id**: `number`
+> **allocation_id**: `number`
 
 ##### delete.parameters.query?
 
@@ -1053,7 +1053,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/allocations/drag-assign
 
@@ -1110,7 +1110,7 @@ Drag Assign Allocation
 ##### Description
 
 互換エンドポイント: ドラッグ引当
-    ※元々 orders.py に存在したものを再実装（URL・I/O変更なし）
+※元々 orders.py に存在したものを再実装（URL・I/O変更なし）
 
 ##### post.parameters
 
@@ -1144,21 +1144,21 @@ Drag Assign Allocation
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.allocate\_qty
+##### post.requestBody.content.application/json.allocate_qty
 
-> **allocate\_qty**: `number`
+> **allocate_qty**: `number`
 
 Allocate Qty
 
-##### post.requestBody.content.application/json.lot\_id
+##### post.requestBody.content.application/json.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 Lot Id
 
-##### post.requestBody.content.application/json.order\_line\_id
+##### post.requestBody.content.application/json.order_line_id
 
-> **order\_line\_id**: `number`
+> **order_line_id**: `number`
 
 Order Line Id
 
@@ -1228,11 +1228,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/allocations/orders/\{order\_id\}/allocate
+### /api/allocations/orders/\{order_id\}/allocate
 
-> **/api/allocations/orders/\{order\_id\}/allocate**: `object`
+> **/api/allocations/orders/\{order_id\}/allocate**: `object`
 
 Defined in: [src/types/api.d.ts:543](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L543)
 
@@ -1302,9 +1302,9 @@ Allocate Order
 
 > **path**: `object`
 
-##### post.parameters.path.order\_id
+##### post.parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### post.parameters.query?
 
@@ -1334,15 +1334,15 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.200.content.application/json.created\_allocation\_ids?
+##### post.responses.200.content.application/json.created_allocation_ids?
 
-> `optional` **created\_allocation\_ids**: `number`[]
+> `optional` **created_allocation_ids**: `number`[]
 
 Created Allocation Ids
 
-##### post.responses.200.content.application/json.order\_id
+##### post.responses.200.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -1356,9 +1356,9 @@ Order Id
 
 Lines
 
-##### post.responses.200.content.application/json.preview.order\_id
+##### post.responses.200.content.application/json.preview.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -1414,7 +1414,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/allocations/preview
 
@@ -1504,9 +1504,9 @@ Preview Allocations
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.order\_id
+##### post.requestBody.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -1536,9 +1536,9 @@ Successful Response
 
 Lines
 
-##### post.responses.200.content.application/json.order\_id
+##### post.responses.200.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -1594,7 +1594,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast
 
@@ -1636,41 +1636,41 @@ List Forecasts
 
 > `optional` **query**: `object`
 
-##### get.parameters.query.customer\_code?
+##### get.parameters.query.customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
-##### get.parameters.query.customer\_id?
+##### get.parameters.query.customer_id?
 
-> `optional` **customer\_id**: `string` \| `null`
+> `optional` **customer_id**: `string` \| `null`
 
 ##### get.parameters.query.granularity?
 
 > `optional` **granularity**: `string` \| `null`
 
-##### get.parameters.query.is\_active?
+##### get.parameters.query.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 ##### get.parameters.query.limit?
 
 > `optional` **limit**: `number`
 
-##### get.parameters.query.product\_code?
+##### get.parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
-##### get.parameters.query.product\_id?
+##### get.parameters.query.product_id?
 
-> `optional` **product\_id**: `string` \| `null`
+> `optional` **product_id**: `string` \| `null`
 
 ##### get.parameters.query.skip?
 
 > `optional` **skip**: `number`
 
-##### get.parameters.query.version\_no?
+##### get.parameters.query.version_no?
 
-> `optional` **version\_no**: `number` \| `null`
+> `optional` **version_no**: `number` \| `null`
 
 ##### get.requestBody?
 
@@ -1808,21 +1808,21 @@ Create Forecast
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.customer\_id
+##### post.requestBody.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### post.requestBody.content.application/json.date\_day?
+##### post.requestBody.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### post.requestBody.content.application/json.date\_dekad\_start?
+##### post.requestBody.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
@@ -1832,64 +1832,64 @@ Date Dekad Start
 
 Granularity
 
-##### post.requestBody.content.application/json.is\_active
+##### post.requestBody.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.requestBody.content.application/json.product\_id
+##### post.requestBody.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### post.requestBody.content.application/json.qty\_forecast
+##### post.requestBody.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### post.requestBody.content.application/json.source\_system
+##### post.requestBody.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### post.requestBody.content.application/json.version\_issued\_at
+##### post.requestBody.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### post.requestBody.content.application/json.version\_no
+##### post.requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### post.requestBody.content.application/json.year\_month?
+##### post.requestBody.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -1913,34 +1913,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.created\_at
+##### post.responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### post.responses.201.content.application/json.customer\_id
+##### post.responses.201.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### post.responses.201.content.application/json.date\_day?
+##### post.responses.201.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### post.responses.201.content.application/json.date\_dekad\_start?
+##### post.responses.201.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### post.responses.201.content.application/json.forecast\_id?
+##### post.responses.201.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -1956,76 +1956,76 @@ Granularity
 
 Id
 
-##### post.responses.201.content.application/json.is\_active
+##### post.responses.201.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.responses.201.content.application/json.product\_id
+##### post.responses.201.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### post.responses.201.content.application/json.qty\_forecast
+##### post.responses.201.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### post.responses.201.content.application/json.source\_system
+##### post.responses.201.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### post.responses.201.content.application/json.supplier\_id?
+##### post.responses.201.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### post.responses.201.content.application/json.updated\_at?
+##### post.responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### post.responses.201.content.application/json.version\_issued\_at
+##### post.responses.201.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### post.responses.201.content.application/json.version\_no
+##### post.responses.201.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### post.responses.201.content.application/json.year\_month?
+##### post.responses.201.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -2075,11 +2075,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/forecast/\{forecast\_id\}
+### /api/forecast/\{forecast_id\}
 
-> **/api/forecast/\{forecast\_id\}**: `object`
+> **/api/forecast/\{forecast_id\}**: `object`
 
 Defined in: [src/types/api.d.ts:805](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L805)
 
@@ -2109,9 +2109,9 @@ Delete Forecast
 
 > **path**: `object`
 
-##### delete.parameters.path.forecast\_id
+##### delete.parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### delete.parameters.query?
 
@@ -2201,9 +2201,9 @@ Get Forecast
 
 > **path**: `object`
 
-##### get.parameters.path.forecast\_id
+##### get.parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### get.parameters.query?
 
@@ -2233,34 +2233,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.created\_at
+##### get.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### get.responses.200.content.application/json.customer\_id
+##### get.responses.200.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### get.responses.200.content.application/json.date\_day?
+##### get.responses.200.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### get.responses.200.content.application/json.date\_dekad\_start?
+##### get.responses.200.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### get.responses.200.content.application/json.forecast\_id?
+##### get.responses.200.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -2276,76 +2276,76 @@ Granularity
 
 Id
 
-##### get.responses.200.content.application/json.is\_active
+##### get.responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### get.responses.200.content.application/json.product\_id
+##### get.responses.200.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### get.responses.200.content.application/json.qty\_forecast
+##### get.responses.200.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### get.responses.200.content.application/json.source\_system
+##### get.responses.200.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### get.responses.200.content.application/json.supplier\_id?
+##### get.responses.200.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### get.responses.200.content.application/json.updated\_at?
+##### get.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### get.responses.200.content.application/json.version\_issued\_at
+##### get.responses.200.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### get.responses.200.content.application/json.version\_no
+##### get.responses.200.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### get.responses.200.content.application/json.year\_month?
+##### get.responses.200.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -2449,9 +2449,9 @@ Update Forecast
 
 > **path**: `object`
 
-##### put.parameters.path.forecast\_id
+##### put.parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### put.parameters.query?
 
@@ -2469,15 +2469,15 @@ Update Forecast
 
 > **application/json**: `object`
 
-##### put.requestBody.content.application/json.is\_active?
+##### put.requestBody.content.application/json.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 Is Active
 
-##### put.requestBody.content.application/json.qty\_forecast?
+##### put.requestBody.content.application/json.qty_forecast?
 
-> `optional` **qty\_forecast**: `number` \| `null`
+> `optional` **qty_forecast**: `number` \| `null`
 
 Qty Forecast
 
@@ -2501,34 +2501,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### put.responses.200.content.application/json.created\_at
+##### put.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### put.responses.200.content.application/json.customer\_id
+##### put.responses.200.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### put.responses.200.content.application/json.date\_day?
+##### put.responses.200.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### put.responses.200.content.application/json.date\_dekad\_start?
+##### put.responses.200.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### put.responses.200.content.application/json.forecast\_id?
+##### put.responses.200.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -2544,76 +2544,76 @@ Granularity
 
 Id
 
-##### put.responses.200.content.application/json.is\_active
+##### put.responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### put.responses.200.content.application/json.product\_id
+##### put.responses.200.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### put.responses.200.content.application/json.qty\_forecast
+##### put.responses.200.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### put.responses.200.content.application/json.source\_system
+##### put.responses.200.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### put.responses.200.content.application/json.supplier\_id?
+##### put.responses.200.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### put.responses.200.content.application/json.updated\_at?
+##### put.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### put.responses.200.content.application/json.version\_issued\_at
+##### put.responses.200.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### put.responses.200.content.application/json.version\_no
+##### put.responses.200.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### put.responses.200.content.application/json.year\_month?
+##### put.responses.200.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -2659,7 +2659,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast/activate
 
@@ -2749,21 +2749,21 @@ Activate Version
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.deactivate\_others
+##### post.requestBody.content.application/json.deactivate_others
 
-> **deactivate\_others**: `boolean`
+> **deactivate_others**: `boolean`
 
 Deactivate Others
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.requestBody.content.application/json.version\_no
+##### post.requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -2787,22 +2787,22 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.200.content.application/json.activated\_version
+##### post.responses.200.content.application/json.activated_version
 
-> **activated\_version**: `number`
+> **activated_version**: `number`
 
 Activated Version
 
-##### post.responses.200.content.application/json.deactivated\_versions
+##### post.responses.200.content.application/json.deactivated_versions
 
-> **deactivated\_versions**: `number`[]
+> **deactivated_versions**: `number`[]
 
 Deactivated Versions
 
 ###### Default
 
 ```ts
-[]
+[];
 ```
 
 ##### post.responses.200.content.application/json.message
@@ -2863,7 +2863,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast/bulk
 
@@ -2953,16 +2953,16 @@ Bulk Import Forecasts
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.deactivate\_old\_version
+##### post.requestBody.content.application/json.deactivate_old_version
 
-> **deactivate\_old\_version**: `boolean`
+> **deactivate_old_version**: `boolean`
 
 Deactivate Old Version
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
 ##### post.requestBody.content.application/json.forecasts
@@ -2971,28 +2971,28 @@ true
 
 Forecasts
 
-##### post.requestBody.content.application/json.source\_system
+##### post.requestBody.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### post.requestBody.content.application/json.version\_issued\_at
+##### post.requestBody.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### post.requestBody.content.application/json.version\_no
+##### post.requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -3016,21 +3016,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.error\_count
+##### post.responses.201.content.application/json.error_count
 
-> **error\_count**: `number`
+> **error_count**: `number`
 
 Error Count
 
-##### post.responses.201.content.application/json.error\_details?
+##### post.responses.201.content.application/json.error_details?
 
-> `optional` **error\_details**: `string` \| `null`
+> `optional` **error_details**: `string` \| `null`
 
 Error Details
 
-##### post.responses.201.content.application/json.imported\_count
+##### post.responses.201.content.application/json.imported_count
 
-> **imported\_count**: `number`
+> **imported_count**: `number`
 
 Imported Count
 
@@ -3040,9 +3040,9 @@ Imported Count
 
 Message
 
-##### post.responses.201.content.application/json.skipped\_count
+##### post.responses.201.content.application/json.skipped_count
 
-> **skipped\_count**: `number`
+> **skipped_count**: `number`
 
 Skipped Count
 
@@ -3052,9 +3052,9 @@ Skipped Count
 
 Success
 
-##### post.responses.201.content.application/json.version\_no
+##### post.responses.201.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -3104,7 +3104,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast/list
 
@@ -3146,13 +3146,13 @@ Forecast一覧（フロント表示用）
 
 > `optional` **query**: `object`
 
-##### get.parameters.query.product\_code?
+##### get.parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
-##### get.parameters.query.supplier\_code?
+##### get.parameters.query.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 ##### get.requestBody?
 
@@ -3266,7 +3266,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast/match
 
@@ -3356,39 +3356,39 @@ Match Forecasts
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.date\_from?
+##### post.requestBody.content.application/json.date_from?
 
-> `optional` **date\_from**: `string` \| `null`
+> `optional` **date_from**: `string` \| `null`
 
 Date From
 
-##### post.requestBody.content.application/json.date\_to?
+##### post.requestBody.content.application/json.date_to?
 
-> `optional` **date\_to**: `string` \| `null`
+> `optional` **date_to**: `string` \| `null`
 
 Date To
 
-##### post.requestBody.content.application/json.force\_rematch
+##### post.requestBody.content.application/json.force_rematch
 
-> **force\_rematch**: `boolean`
+> **force_rematch**: `boolean`
 
 Force Rematch
 
 ###### Default
 
 ```ts
-false
+false;
 ```
 
-##### post.requestBody.content.application/json.order\_id?
+##### post.requestBody.content.application/json.order_id?
 
-> `optional` **order\_id**: `number` \| `null`
+> `optional` **order_id**: `number` \| `null`
 
 Order Id
 
-##### post.requestBody.content.application/json.order\_ids?
+##### post.requestBody.content.application/json.order_ids?
 
-> `optional` **order\_ids**: `number`[] \| `null`
+> `optional` **order_ids**: `number`[] \| `null`
 
 Order Ids
 
@@ -3412,9 +3412,9 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.200.content.application/json.matched\_lines
+##### post.responses.200.content.application/json.matched_lines
 
-> **matched\_lines**: `number`
+> **matched_lines**: `number`
 
 Matched Lines
 
@@ -3433,7 +3433,7 @@ Results
 ###### Default
 
 ```ts
-[]
+[];
 ```
 
 ##### post.responses.200.content.application/json.success
@@ -3442,15 +3442,15 @@ Results
 
 Success
 
-##### post.responses.200.content.application/json.total\_lines
+##### post.responses.200.content.application/json.total_lines
 
-> **total\_lines**: `number`
+> **total_lines**: `number`
 
 Total Lines
 
-##### post.responses.200.content.application/json.unmatched\_lines
+##### post.responses.200.content.application/json.unmatched_lines
 
-> **unmatched\_lines**: `number`
+> **unmatched_lines**: `number`
 
 Unmatched Lines
 
@@ -3500,7 +3500,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/forecast/versions
 
@@ -3624,7 +3624,7 @@ Versions
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/health
 
@@ -3738,7 +3738,7 @@ Successful Response
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/healthz
 
@@ -3852,7 +3852,7 @@ Successful Response
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/integration/ai-ocr/submissions
 
@@ -4008,7 +4008,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/integration/ai-ocr/submit
 
@@ -4107,9 +4107,9 @@ AI-OCR受注データ取込
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.file\_name?
+##### post.requestBody.content.application/json.file_name?
 
-> `optional` **file\_name**: `string` \| `null`
+> `optional` **file_name**: `string` \| `null`
 
 File Name
 
@@ -4125,9 +4125,9 @@ Operator
 
 Records
 
-##### post.requestBody.content.application/json.schema\_version
+##### post.requestBody.content.application/json.schema_version
 
-> **schema\_version**: `string`
+> **schema_version**: `string`
 
 Schema Version
 
@@ -4146,7 +4146,7 @@ Source
 ###### Default
 
 ```ts
-PAD
+PAD;
 ```
 
 ##### post.responses
@@ -4169,39 +4169,39 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.200.content.application/json.created\_lines
+##### post.responses.200.content.application/json.created_lines
 
-> **created\_lines**: `number`
+> **created_lines**: `number`
 
 Created Lines
 
-##### post.responses.200.content.application/json.created\_orders
+##### post.responses.200.content.application/json.created_orders
 
-> **created\_orders**: `number`
+> **created_orders**: `number`
 
 Created Orders
 
-##### post.responses.200.content.application/json.error\_details?
+##### post.responses.200.content.application/json.error_details?
 
-> `optional` **error\_details**: `string` \| `null`
+> `optional` **error_details**: `string` \| `null`
 
 Error Details
 
-##### post.responses.200.content.application/json.failed\_records
+##### post.responses.200.content.application/json.failed_records
 
-> **failed\_records**: `number`
+> **failed_records**: `number`
 
 Failed Records
 
-##### post.responses.200.content.application/json.processed\_records
+##### post.responses.200.content.application/json.processed_records
 
-> **processed\_records**: `number`
+> **processed_records**: `number`
 
 Processed Records
 
-##### post.responses.200.content.application/json.skipped\_records
+##### post.responses.200.content.application/json.skipped_records
 
-> **skipped\_records**: `number`
+> **skipped_records**: `number`
 
 Skipped Records
 
@@ -4211,15 +4211,15 @@ Skipped Records
 
 Status
 
-##### post.responses.200.content.application/json.submission\_id
+##### post.responses.200.content.application/json.submission_id
 
-> **submission\_id**: `string`
+> **submission_id**: `string`
 
 Submission Id
 
-##### post.responses.200.content.application/json.total\_records
+##### post.responses.200.content.application/json.total_records
 
-> **total\_records**: `number`
+> **total_records**: `number`
 
 Total Records
 
@@ -4269,7 +4269,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/integration/sap/logs
 
@@ -4425,7 +4425,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/integration/sap/register
 
@@ -4573,21 +4573,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.200.content.application/json.error\_message?
+##### post.responses.200.content.application/json.error_message?
 
-> `optional` **error\_message**: `string` \| `null`
+> `optional` **error_message**: `string` \| `null`
 
 Error Message
 
-##### post.responses.200.content.application/json.sap\_order\_id?
+##### post.responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### post.responses.200.content.application/json.sap\_status?
+##### post.responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -4649,7 +4649,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/lots
 
@@ -4701,37 +4701,37 @@ List Lots
 
 > `optional` **query**: `object`
 
-##### get.parameters.query.expiry\_from?
+##### get.parameters.query.expiry_from?
 
-> `optional` **expiry\_from**: `string` \| `null`
+> `optional` **expiry_from**: `string` \| `null`
 
-##### get.parameters.query.expiry\_to?
+##### get.parameters.query.expiry_to?
 
-> `optional` **expiry\_to**: `string` \| `null`
+> `optional` **expiry_to**: `string` \| `null`
 
 ##### get.parameters.query.limit?
 
 > `optional` **limit**: `number`
 
-##### get.parameters.query.product\_code?
+##### get.parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
 ##### get.parameters.query.skip?
 
 > `optional` **skip**: `number`
 
-##### get.parameters.query.supplier\_code?
+##### get.parameters.query.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
-##### get.parameters.query.warehouse\_code?
+##### get.parameters.query.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
-##### get.parameters.query.with\_stock?
+##### get.parameters.query.with_stock?
 
-> `optional` **with\_stock**: `boolean`
+> `optional` **with_stock**: `boolean`
 
 ##### get.requestBody?
 
@@ -4872,100 +4872,100 @@ Create Lot
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.expiry\_date?
+##### post.requestBody.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
-##### post.requestBody.content.application/json.inventory\_unit?
+##### post.requestBody.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### post.requestBody.content.application/json.kanban\_class?
+##### post.requestBody.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### post.requestBody.content.application/json.lot\_number
+##### post.requestBody.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### post.requestBody.content.application/json.lot\_unit?
+##### post.requestBody.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### post.requestBody.content.application/json.mfg\_date?
+##### post.requestBody.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### post.requestBody.content.application/json.product\_code
+##### post.requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.requestBody.content.application/json.qc\_certificate\_file?
+##### post.requestBody.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### post.requestBody.content.application/json.qc\_certificate\_status?
+##### post.requestBody.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### post.requestBody.content.application/json.receipt\_date
+##### post.requestBody.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### post.requestBody.content.application/json.received\_by?
+##### post.requestBody.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### post.requestBody.content.application/json.sales\_unit?
+##### post.requestBody.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### post.requestBody.content.application/json.source\_doc?
+##### post.requestBody.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### post.requestBody.content.application/json.supplier\_code
+##### post.requestBody.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### post.requestBody.content.application/json.warehouse\_code?
+##### post.requestBody.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### post.requestBody.content.application/json.warehouse\_id?
+##### post.requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -4989,28 +4989,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.created\_at
+##### post.responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### post.responses.201.content.application/json.current\_quantity
+##### post.responses.201.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### post.responses.201.content.application/json.expiry\_date?
+##### post.responses.201.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -5020,112 +5020,112 @@ Expiry Date
 
 Id
 
-##### post.responses.201.content.application/json.inventory\_unit?
+##### post.responses.201.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### post.responses.201.content.application/json.kanban\_class?
+##### post.responses.201.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### post.responses.201.content.application/json.last\_updated?
+##### post.responses.201.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### post.responses.201.content.application/json.lot\_number
+##### post.responses.201.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### post.responses.201.content.application/json.lot\_unit?
+##### post.responses.201.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### post.responses.201.content.application/json.mfg\_date?
+##### post.responses.201.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### post.responses.201.content.application/json.product\_code
+##### post.responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.responses.201.content.application/json.product\_name?
+##### post.responses.201.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### post.responses.201.content.application/json.qc\_certificate\_file?
+##### post.responses.201.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### post.responses.201.content.application/json.qc\_certificate\_status?
+##### post.responses.201.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### post.responses.201.content.application/json.receipt\_date
+##### post.responses.201.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### post.responses.201.content.application/json.received\_by?
+##### post.responses.201.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### post.responses.201.content.application/json.sales\_unit?
+##### post.responses.201.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### post.responses.201.content.application/json.source\_doc?
+##### post.responses.201.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### post.responses.201.content.application/json.supplier\_code
+##### post.responses.201.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### post.responses.201.content.application/json.updated\_at?
+##### post.responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### post.responses.201.content.application/json.warehouse\_code?
+##### post.responses.201.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### post.responses.201.content.application/json.warehouse\_id?
+##### post.responses.201.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -5175,11 +5175,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/lots/\{lot\_id\}
+### /api/lots/\{lot_id\}
 
-> **/api/lots/\{lot\_id\}**: `object`
+> **/api/lots/\{lot_id\}**: `object`
 
 Defined in: [src/types/api.d.ts:272](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L272)
 
@@ -5209,9 +5209,9 @@ Delete Lot
 
 > **path**: `object`
 
-##### delete.parameters.path.lot\_id
+##### delete.parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### delete.parameters.query?
 
@@ -5301,9 +5301,9 @@ Get Lot
 
 > **path**: `object`
 
-##### get.parameters.path.lot\_id
+##### get.parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### get.parameters.query?
 
@@ -5333,28 +5333,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.created\_at
+##### get.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### get.responses.200.content.application/json.current\_quantity
+##### get.responses.200.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### get.responses.200.content.application/json.expiry\_date?
+##### get.responses.200.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -5364,112 +5364,112 @@ Expiry Date
 
 Id
 
-##### get.responses.200.content.application/json.inventory\_unit?
+##### get.responses.200.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### get.responses.200.content.application/json.kanban\_class?
+##### get.responses.200.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### get.responses.200.content.application/json.last\_updated?
+##### get.responses.200.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### get.responses.200.content.application/json.lot\_number
+##### get.responses.200.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### get.responses.200.content.application/json.lot\_unit?
+##### get.responses.200.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### get.responses.200.content.application/json.mfg\_date?
+##### get.responses.200.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### get.responses.200.content.application/json.product\_code
+##### get.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### get.responses.200.content.application/json.product\_name?
+##### get.responses.200.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### get.responses.200.content.application/json.qc\_certificate\_file?
+##### get.responses.200.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### get.responses.200.content.application/json.qc\_certificate\_status?
+##### get.responses.200.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### get.responses.200.content.application/json.receipt\_date
+##### get.responses.200.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### get.responses.200.content.application/json.received\_by?
+##### get.responses.200.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### get.responses.200.content.application/json.sales\_unit?
+##### get.responses.200.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### get.responses.200.content.application/json.source\_doc?
+##### get.responses.200.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### get.responses.200.content.application/json.supplier\_code
+##### get.responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### get.responses.200.content.application/json.updated\_at?
+##### get.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### get.responses.200.content.application/json.warehouse\_code?
+##### get.responses.200.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### get.responses.200.content.application/json.warehouse\_id?
+##### get.responses.200.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -5573,9 +5573,9 @@ Update Lot
 
 > **path**: `object`
 
-##### put.parameters.path.lot\_id
+##### put.parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### put.parameters.query?
 
@@ -5593,45 +5593,45 @@ Update Lot
 
 > **application/json**: `object`
 
-##### put.requestBody.content.application/json.expiry\_date?
+##### put.requestBody.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
-##### put.requestBody.content.application/json.lot\_unit?
+##### put.requestBody.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### put.requestBody.content.application/json.mfg\_date?
+##### put.requestBody.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### put.requestBody.content.application/json.qc\_certificate\_file?
+##### put.requestBody.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### put.requestBody.content.application/json.qc\_certificate\_status?
+##### put.requestBody.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### put.requestBody.content.application/json.warehouse\_code?
+##### put.requestBody.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### put.requestBody.content.application/json.warehouse\_id?
+##### put.requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -5655,28 +5655,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### put.responses.200.content.application/json.created\_at
+##### put.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### put.responses.200.content.application/json.current\_quantity
+##### put.responses.200.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### put.responses.200.content.application/json.expiry\_date?
+##### put.responses.200.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -5686,112 +5686,112 @@ Expiry Date
 
 Id
 
-##### put.responses.200.content.application/json.inventory\_unit?
+##### put.responses.200.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### put.responses.200.content.application/json.kanban\_class?
+##### put.responses.200.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### put.responses.200.content.application/json.last\_updated?
+##### put.responses.200.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### put.responses.200.content.application/json.lot\_number
+##### put.responses.200.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### put.responses.200.content.application/json.lot\_unit?
+##### put.responses.200.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### put.responses.200.content.application/json.mfg\_date?
+##### put.responses.200.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### put.responses.200.content.application/json.product\_code
+##### put.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### put.responses.200.content.application/json.product\_name?
+##### put.responses.200.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### put.responses.200.content.application/json.qc\_certificate\_file?
+##### put.responses.200.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### put.responses.200.content.application/json.qc\_certificate\_status?
+##### put.responses.200.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### put.responses.200.content.application/json.receipt\_date
+##### put.responses.200.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### put.responses.200.content.application/json.received\_by?
+##### put.responses.200.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### put.responses.200.content.application/json.sales\_unit?
+##### put.responses.200.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### put.responses.200.content.application/json.source\_doc?
+##### put.responses.200.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### put.responses.200.content.application/json.supplier\_code
+##### put.responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### put.responses.200.content.application/json.updated\_at?
+##### put.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### put.responses.200.content.application/json.warehouse\_code?
+##### put.responses.200.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### put.responses.200.content.application/json.warehouse\_id?
+##### put.responses.200.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -5837,11 +5837,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/lots/\{lot\_id\}/movements
+### /api/lots/\{lot_id\}/movements
 
-> **/api/lots/\{lot\_id\}/movements**: `object`
+> **/api/lots/\{lot_id\}/movements**: `object`
 
 Defined in: [src/types/api.d.ts:300](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L300)
 
@@ -5875,9 +5875,9 @@ List Lot Movements
 
 > **path**: `object`
 
-##### get.parameters.path.lot\_id
+##### get.parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### get.parameters.query?
 
@@ -5989,7 +5989,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/lots/movements
 
@@ -6082,39 +6082,39 @@ Create Stock Movement
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.batch\_id?
+##### post.requestBody.content.application/json.batch_id?
 
-> `optional` **batch\_id**: `string` \| `null`
+> `optional` **batch_id**: `string` \| `null`
 
 Batch Id
 
-##### post.requestBody.content.application/json.created\_by
+##### post.requestBody.content.application/json.created_by
 
-> **created\_by**: `string`
+> **created_by**: `string`
 
 Created By
 
 ###### Default
 
 ```ts
-system
+system;
 ```
 
-##### post.requestBody.content.application/json.lot\_id?
+##### post.requestBody.content.application/json.lot_id?
 
-> `optional` **lot\_id**: `number` \| `null`
+> `optional` **lot_id**: `number` \| `null`
 
 Lot Id
 
-##### post.requestBody.content.application/json.product\_id
+##### post.requestBody.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### post.requestBody.content.application/json.quantity\_delta
+##### post.requestBody.content.application/json.quantity_delta
 
-> **quantity\_delta**: `number`
+> **quantity_delta**: `number`
 
 Quantity Delta
 
@@ -6124,21 +6124,21 @@ Quantity Delta
 
 Reason
 
-##### post.requestBody.content.application/json.source\_id?
+##### post.requestBody.content.application/json.source_id?
 
-> `optional` **source\_id**: `number` \| `null`
+> `optional` **source_id**: `number` \| `null`
 
 Source Id
 
-##### post.requestBody.content.application/json.source\_table?
+##### post.requestBody.content.application/json.source_table?
 
-> `optional` **source\_table**: `string` \| `null`
+> `optional` **source_table**: `string` \| `null`
 
 Source Table
 
-##### post.requestBody.content.application/json.warehouse\_id?
+##### post.requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -6162,29 +6162,29 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.batch\_id?
+##### post.responses.201.content.application/json.batch_id?
 
-> `optional` **batch\_id**: `string` \| `null`
+> `optional` **batch_id**: `string` \| `null`
 
 Batch Id
 
-##### post.responses.201.content.application/json.created\_at
+##### post.responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### post.responses.201.content.application/json.created\_by
+##### post.responses.201.content.application/json.created_by
 
-> **created\_by**: `string`
+> **created_by**: `string`
 
 Created By
 
 ###### Default
 
 ```ts
-system
+system;
 ```
 
 ##### post.responses.201.content.application/json.id
@@ -6193,28 +6193,28 @@ system
 
 Id
 
-##### post.responses.201.content.application/json.lot\_id?
+##### post.responses.201.content.application/json.lot_id?
 
-> `optional` **lot\_id**: `number` \| `null`
+> `optional` **lot_id**: `number` \| `null`
 
 Lot Id
 
-##### post.responses.201.content.application/json.occurred\_at
+##### post.responses.201.content.application/json.occurred_at
 
-> **occurred\_at**: `string`
+> **occurred_at**: `string`
 
 Occurred At
 Format: date-time
 
-##### post.responses.201.content.application/json.product\_id
+##### post.responses.201.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### post.responses.201.content.application/json.quantity\_delta
+##### post.responses.201.content.application/json.quantity_delta
 
-> **quantity\_delta**: `number`
+> **quantity_delta**: `number`
 
 Quantity Delta
 
@@ -6224,27 +6224,27 @@ Quantity Delta
 
 Reason
 
-##### post.responses.201.content.application/json.source\_id?
+##### post.responses.201.content.application/json.source_id?
 
-> `optional` **source\_id**: `number` \| `null`
+> `optional` **source_id**: `number` \| `null`
 
 Source Id
 
-##### post.responses.201.content.application/json.source\_table?
+##### post.responses.201.content.application/json.source_table?
 
-> `optional` **source\_table**: `string` \| `null`
+> `optional` **source_table**: `string` \| `null`
 
 Source Table
 
-##### post.responses.201.content.application/json.updated\_at?
+##### post.responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### post.responses.201.content.application/json.warehouse\_id?
+##### post.responses.201.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -6294,7 +6294,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/masters/bulk-load
 
@@ -6490,7 +6490,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/masters/customers
 
@@ -6682,15 +6682,15 @@ Create a new customer.
 
 Address
 
-##### post.requestBody.content.application/json.customer\_code
+##### post.requestBody.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### post.requestBody.content.application/json.customer\_name
+##### post.requestBody.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -6720,15 +6720,15 @@ Successful Response
 
 Address
 
-##### post.responses.201.content.application/json.customer\_code
+##### post.responses.201.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### post.responses.201.content.application/json.customer\_name
+##### post.responses.201.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -6778,11 +6778,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/masters/customers/\{customer\_code\}
+### /api/masters/customers/\{customer_code\}
 
-> **/api/masters/customers/\{customer\_code\}**: `object`
+> **/api/masters/customers/\{customer_code\}**: `object`
 
 Defined in: [src/types/api.d.ts:83](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L83)
 
@@ -6812,9 +6812,9 @@ Delete a customer.
 
 > **path**: `object`
 
-##### delete.parameters.path.customer\_code
+##### delete.parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### delete.parameters.query?
 
@@ -6904,9 +6904,9 @@ Fetch a customer by code.
 
 > **path**: `object`
 
-##### get.parameters.path.customer\_code
+##### get.parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### get.parameters.query?
 
@@ -6942,15 +6942,15 @@ Successful Response
 
 Address
 
-##### get.responses.200.content.application/json.customer\_code
+##### get.responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### get.responses.200.content.application/json.customer\_name
+##### get.responses.200.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -7054,9 +7054,9 @@ Update a customer.
 
 > **path**: `object`
 
-##### put.parameters.path.customer\_code
+##### put.parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### put.parameters.query?
 
@@ -7080,9 +7080,9 @@ Update a customer.
 
 Address
 
-##### put.requestBody.content.application/json.customer\_name?
+##### put.requestBody.content.application/json.customer_name?
 
-> `optional` **customer\_name**: `string` \| `null`
+> `optional` **customer_name**: `string` \| `null`
 
 Customer Name
 
@@ -7112,15 +7112,15 @@ Successful Response
 
 Address
 
-##### put.responses.200.content.application/json.customer\_code
+##### put.responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### put.responses.200.content.application/json.customer\_name
+##### put.responses.200.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -7166,7 +7166,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/masters/products
 
@@ -7356,69 +7356,69 @@ Create a new product.
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.assemble\_div?
+##### post.requestBody.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### post.requestBody.content.application/json.base\_unit
+##### post.requestBody.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### post.requestBody.content.application/json.customer\_part\_no?
+##### post.requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### post.requestBody.content.application/json.delivery\_place\_id?
+##### post.requestBody.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### post.requestBody.content.application/json.delivery\_place\_name?
+##### post.requestBody.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### post.requestBody.content.application/json.internal\_unit
+##### post.requestBody.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### post.requestBody.content.application/json.ji\_ku\_text?
+##### post.requestBody.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### post.requestBody.content.application/json.kumitsuke\_ku\_text?
+##### post.requestBody.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### post.requestBody.content.application/json.maker\_item\_code?
+##### post.requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### post.requestBody.content.application/json.next\_div?
+##### post.requestBody.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -7428,63 +7428,63 @@ Next Div
 
 Packaging
 
-##### post.requestBody.content.application/json.packaging\_qty
+##### post.requestBody.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string` \| `number`
+> **packaging_qty**: `string` \| `number`
 
 Packaging Qty
 
-##### post.requestBody.content.application/json.packaging\_unit
+##### post.requestBody.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### post.requestBody.content.application/json.product\_code
+##### post.requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.requestBody.content.application/json.product\_name
+##### post.requestBody.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### post.requestBody.content.application/json.requires\_lot\_number
+##### post.requestBody.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.requestBody.content.application/json.shelf\_life\_days?
+##### post.requestBody.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### post.requestBody.content.application/json.shipping\_warehouse\_name?
+##### post.requestBody.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### post.requestBody.content.application/json.supplier\_code?
+##### post.requestBody.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### post.requestBody.content.application/json.supplier\_item\_code?
+##### post.requestBody.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -7508,69 +7508,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.assemble\_div?
+##### post.responses.201.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### post.responses.201.content.application/json.base\_unit
+##### post.responses.201.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### post.responses.201.content.application/json.customer\_part\_no?
+##### post.responses.201.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### post.responses.201.content.application/json.delivery\_place\_id?
+##### post.responses.201.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### post.responses.201.content.application/json.delivery\_place\_name?
+##### post.responses.201.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### post.responses.201.content.application/json.internal\_unit
+##### post.responses.201.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### post.responses.201.content.application/json.ji\_ku\_text?
+##### post.responses.201.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### post.responses.201.content.application/json.kumitsuke\_ku\_text?
+##### post.responses.201.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### post.responses.201.content.application/json.maker\_item\_code?
+##### post.responses.201.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### post.responses.201.content.application/json.next\_div?
+##### post.responses.201.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -7580,63 +7580,63 @@ Next Div
 
 Packaging
 
-##### post.responses.201.content.application/json.packaging\_qty
+##### post.responses.201.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### post.responses.201.content.application/json.packaging\_unit
+##### post.responses.201.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### post.responses.201.content.application/json.product\_code
+##### post.responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.responses.201.content.application/json.product\_name
+##### post.responses.201.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### post.responses.201.content.application/json.requires\_lot\_number
+##### post.responses.201.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.responses.201.content.application/json.shelf\_life\_days?
+##### post.responses.201.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### post.responses.201.content.application/json.shipping\_warehouse\_name?
+##### post.responses.201.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### post.responses.201.content.application/json.supplier\_code?
+##### post.responses.201.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### post.responses.201.content.application/json.supplier\_item\_code?
+##### post.responses.201.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -7686,11 +7686,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/masters/products/\{product\_code\}
+### /api/masters/products/\{product_code\}
 
-> **/api/masters/products/\{product\_code\}**: `object`
+> **/api/masters/products/\{product_code\}**: `object`
 
 Defined in: [src/types/api.d.ts:31](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L31)
 
@@ -7720,9 +7720,9 @@ Delete a product by its code.
 
 > **path**: `object`
 
-##### delete.parameters.path.product\_code
+##### delete.parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### delete.parameters.query?
 
@@ -7812,9 +7812,9 @@ Fetch a product by its code.
 
 > **path**: `object`
 
-##### get.parameters.path.product\_code
+##### get.parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### get.parameters.query?
 
@@ -7844,69 +7844,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.assemble\_div?
+##### get.responses.200.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### get.responses.200.content.application/json.base\_unit
+##### get.responses.200.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### get.responses.200.content.application/json.customer\_part\_no?
+##### get.responses.200.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### get.responses.200.content.application/json.delivery\_place\_id?
+##### get.responses.200.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### get.responses.200.content.application/json.delivery\_place\_name?
+##### get.responses.200.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### get.responses.200.content.application/json.internal\_unit
+##### get.responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### get.responses.200.content.application/json.ji\_ku\_text?
+##### get.responses.200.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### get.responses.200.content.application/json.kumitsuke\_ku\_text?
+##### get.responses.200.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### get.responses.200.content.application/json.maker\_item\_code?
+##### get.responses.200.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### get.responses.200.content.application/json.next\_div?
+##### get.responses.200.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -7916,63 +7916,63 @@ Next Div
 
 Packaging
 
-##### get.responses.200.content.application/json.packaging\_qty
+##### get.responses.200.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### get.responses.200.content.application/json.packaging\_unit
+##### get.responses.200.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### get.responses.200.content.application/json.product\_code
+##### get.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### get.responses.200.content.application/json.product\_name
+##### get.responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### get.responses.200.content.application/json.requires\_lot\_number
+##### get.responses.200.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### get.responses.200.content.application/json.shelf\_life\_days?
+##### get.responses.200.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### get.responses.200.content.application/json.shipping\_warehouse\_name?
+##### get.responses.200.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### get.responses.200.content.application/json.supplier\_code?
+##### get.responses.200.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### get.responses.200.content.application/json.supplier\_item\_code?
+##### get.responses.200.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -8076,9 +8076,9 @@ Update an existing product.
 
 > **path**: `object`
 
-##### put.parameters.path.product\_code
+##### put.parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### put.parameters.query?
 
@@ -8096,63 +8096,63 @@ Update an existing product.
 
 > **application/json**: `object`
 
-##### put.requestBody.content.application/json.assemble\_div?
+##### put.requestBody.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### put.requestBody.content.application/json.base\_unit?
+##### put.requestBody.content.application/json.base_unit?
 
-> `optional` **base\_unit**: `string` \| `null`
+> `optional` **base_unit**: `string` \| `null`
 
 Base Unit
 
-##### put.requestBody.content.application/json.customer\_part\_no?
+##### put.requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### put.requestBody.content.application/json.delivery\_place\_id?
+##### put.requestBody.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### put.requestBody.content.application/json.delivery\_place\_name?
+##### put.requestBody.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### put.requestBody.content.application/json.internal\_unit?
+##### put.requestBody.content.application/json.internal_unit?
 
-> `optional` **internal\_unit**: `string` \| `null`
+> `optional` **internal_unit**: `string` \| `null`
 
 Internal Unit
 
-##### put.requestBody.content.application/json.ji\_ku\_text?
+##### put.requestBody.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### put.requestBody.content.application/json.kumitsuke\_ku\_text?
+##### put.requestBody.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### put.requestBody.content.application/json.maker\_item\_code?
+##### put.requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### put.requestBody.content.application/json.next\_div?
+##### put.requestBody.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -8162,51 +8162,51 @@ Next Div
 
 Packaging
 
-##### put.requestBody.content.application/json.packaging\_qty?
+##### put.requestBody.content.application/json.packaging_qty?
 
-> `optional` **packaging\_qty**: `string` \| `number` \| `null`
+> `optional` **packaging_qty**: `string` \| `number` \| `null`
 
 Packaging Qty
 
-##### put.requestBody.content.application/json.packaging\_unit?
+##### put.requestBody.content.application/json.packaging_unit?
 
-> `optional` **packaging\_unit**: `string` \| `null`
+> `optional` **packaging_unit**: `string` \| `null`
 
 Packaging Unit
 
-##### put.requestBody.content.application/json.product\_name?
+##### put.requestBody.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### put.requestBody.content.application/json.requires\_lot\_number?
+##### put.requestBody.content.application/json.requires_lot_number?
 
-> `optional` **requires\_lot\_number**: `boolean` \| `null`
+> `optional` **requires_lot_number**: `boolean` \| `null`
 
 Requires Lot Number
 
-##### put.requestBody.content.application/json.shelf\_life\_days?
+##### put.requestBody.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### put.requestBody.content.application/json.shipping\_warehouse\_name?
+##### put.requestBody.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### put.requestBody.content.application/json.supplier\_code?
+##### put.requestBody.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### put.requestBody.content.application/json.supplier\_item\_code?
+##### put.requestBody.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -8230,69 +8230,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### put.responses.200.content.application/json.assemble\_div?
+##### put.responses.200.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### put.responses.200.content.application/json.base\_unit
+##### put.responses.200.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### put.responses.200.content.application/json.customer\_part\_no?
+##### put.responses.200.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### put.responses.200.content.application/json.delivery\_place\_id?
+##### put.responses.200.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### put.responses.200.content.application/json.delivery\_place\_name?
+##### put.responses.200.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### put.responses.200.content.application/json.internal\_unit
+##### put.responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### put.responses.200.content.application/json.ji\_ku\_text?
+##### put.responses.200.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### put.responses.200.content.application/json.kumitsuke\_ku\_text?
+##### put.responses.200.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### put.responses.200.content.application/json.maker\_item\_code?
+##### put.responses.200.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### put.responses.200.content.application/json.next\_div?
+##### put.responses.200.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -8302,63 +8302,63 @@ Next Div
 
 Packaging
 
-##### put.responses.200.content.application/json.packaging\_qty
+##### put.responses.200.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### put.responses.200.content.application/json.packaging\_unit
+##### put.responses.200.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### put.responses.200.content.application/json.product\_code
+##### put.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### put.responses.200.content.application/json.product\_name
+##### put.responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### put.responses.200.content.application/json.requires\_lot\_number
+##### put.responses.200.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### put.responses.200.content.application/json.shelf\_life\_days?
+##### put.responses.200.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### put.responses.200.content.application/json.shipping\_warehouse\_name?
+##### put.responses.200.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### put.responses.200.content.application/json.supplier\_code?
+##### put.responses.200.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### put.responses.200.content.application/json.supplier\_item\_code?
+##### put.responses.200.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -8404,7 +8404,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/masters/suppliers
 
@@ -8596,15 +8596,15 @@ Create supplier.
 
 Address
 
-##### post.requestBody.content.application/json.supplier\_code
+##### post.requestBody.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### post.requestBody.content.application/json.supplier\_name
+##### post.requestBody.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -8634,15 +8634,15 @@ Successful Response
 
 Address
 
-##### post.responses.201.content.application/json.supplier\_code
+##### post.responses.201.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### post.responses.201.content.application/json.supplier\_name
+##### post.responses.201.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -8692,11 +8692,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/masters/suppliers/\{supplier\_code\}
+### /api/masters/suppliers/\{supplier_code\}
 
-> **/api/masters/suppliers/\{supplier\_code\}**: `object`
+> **/api/masters/suppliers/\{supplier_code\}**: `object`
 
 Defined in: [src/types/api.d.ts:135](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L135)
 
@@ -8726,9 +8726,9 @@ Delete supplier.
 
 > **path**: `object`
 
-##### delete.parameters.path.supplier\_code
+##### delete.parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### delete.parameters.query?
 
@@ -8818,9 +8818,9 @@ Get supplier by code.
 
 > **path**: `object`
 
-##### get.parameters.path.supplier\_code
+##### get.parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### get.parameters.query?
 
@@ -8856,15 +8856,15 @@ Successful Response
 
 Address
 
-##### get.responses.200.content.application/json.supplier\_code
+##### get.responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### get.responses.200.content.application/json.supplier\_name
+##### get.responses.200.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -8968,9 +8968,9 @@ Update supplier.
 
 > **path**: `object`
 
-##### put.parameters.path.supplier\_code
+##### put.parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### put.parameters.query?
 
@@ -8994,9 +8994,9 @@ Update supplier.
 
 Address
 
-##### put.requestBody.content.application/json.supplier\_name?
+##### put.requestBody.content.application/json.supplier_name?
 
-> `optional` **supplier\_name**: `string` \| `null`
+> `optional` **supplier_name**: `string` \| `null`
 
 Supplier Name
 
@@ -9026,15 +9026,15 @@ Successful Response
 
 Address
 
-##### put.responses.200.content.application/json.supplier\_code
+##### put.responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### put.responses.200.content.application/json.supplier\_name
+##### put.responses.200.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -9080,7 +9080,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/masters/warehouses
 
@@ -9272,27 +9272,27 @@ Create warehouse.
 
 Address
 
-##### post.requestBody.content.application/json.is\_active
+##### post.requestBody.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### post.requestBody.content.application/json.warehouse\_code
+##### post.requestBody.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### post.requestBody.content.application/json.warehouse\_name
+##### post.requestBody.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -9322,27 +9322,27 @@ Successful Response
 
 Address
 
-##### post.responses.201.content.application/json.is\_active
+##### post.responses.201.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### post.responses.201.content.application/json.warehouse\_code
+##### post.responses.201.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### post.responses.201.content.application/json.warehouse\_name
+##### post.responses.201.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -9392,11 +9392,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/masters/warehouses/\{warehouse\_code\}
+### /api/masters/warehouses/\{warehouse_code\}
 
-> **/api/masters/warehouses/\{warehouse\_code\}**: `object`
+> **/api/masters/warehouses/\{warehouse_code\}**: `object`
 
 Defined in: [src/types/api.d.ts:187](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L187)
 
@@ -9426,9 +9426,9 @@ Delete warehouse.
 
 > **path**: `object`
 
-##### delete.parameters.path.warehouse\_code
+##### delete.parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### delete.parameters.query?
 
@@ -9518,9 +9518,9 @@ Get warehouse by code.
 
 > **path**: `object`
 
-##### get.parameters.path.warehouse\_code
+##### get.parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### get.parameters.query?
 
@@ -9556,27 +9556,27 @@ Successful Response
 
 Address
 
-##### get.responses.200.content.application/json.is\_active
+##### get.responses.200.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### get.responses.200.content.application/json.warehouse\_code
+##### get.responses.200.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### get.responses.200.content.application/json.warehouse\_name
+##### get.responses.200.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -9680,9 +9680,9 @@ Update warehouse.
 
 > **path**: `object`
 
-##### put.parameters.path.warehouse\_code
+##### put.parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### put.parameters.query?
 
@@ -9706,21 +9706,21 @@ Update warehouse.
 
 Address
 
-##### put.requestBody.content.application/json.is\_active
+##### put.requestBody.content.application/json.is_active
 
-> **is\_active**: `number` \| `null`
+> **is_active**: `number` \| `null`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### put.requestBody.content.application/json.warehouse\_name?
+##### put.requestBody.content.application/json.warehouse_name?
 
-> `optional` **warehouse\_name**: `string` \| `null`
+> `optional` **warehouse_name**: `string` \| `null`
 
 Warehouse Name
 
@@ -9750,27 +9750,27 @@ Successful Response
 
 Address
 
-##### put.responses.200.content.application/json.is\_active
+##### put.responses.200.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### put.responses.200.content.application/json.warehouse\_code
+##### put.responses.200.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### put.responses.200.content.application/json.warehouse\_name
+##### put.responses.200.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -9816,7 +9816,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/orders
 
@@ -9864,17 +9864,17 @@ List Orders
 
 > `optional` **query**: `object`
 
-##### get.parameters.query.customer\_code?
+##### get.parameters.query.customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
-##### get.parameters.query.date\_from?
+##### get.parameters.query.date_from?
 
-> `optional` **date\_from**: `string` \| `null`
+> `optional` **date_from**: `string` \| `null`
 
-##### get.parameters.query.date\_to?
+##### get.parameters.query.date_to?
 
-> `optional` **date\_to**: `string` \| `null`
+> `optional` **date_to**: `string` \| `null`
 
 ##### get.parameters.query.limit?
 
@@ -10037,27 +10037,27 @@ Create Order
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.customer\_code
+##### post.requestBody.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### post.requestBody.content.application/json.customer\_order\_no?
+##### post.requestBody.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### post.requestBody.content.application/json.customer\_order\_no\_last6?
+##### post.requestBody.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### post.requestBody.content.application/json.delivery\_mode?
+##### post.requestBody.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -10067,40 +10067,40 @@ Delivery Mode
 
 Lines
 
-##### post.requestBody.content.application/json.order\_date
+##### post.requestBody.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### post.requestBody.content.application/json.order\_no
+##### post.requestBody.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### post.requestBody.content.application/json.sap\_error\_msg?
+##### post.requestBody.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### post.requestBody.content.application/json.sap\_order\_id?
+##### post.requestBody.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### post.requestBody.content.application/json.sap\_sent\_at?
+##### post.requestBody.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### post.requestBody.content.application/json.sap\_status?
+##### post.requestBody.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -10113,7 +10113,7 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
 ##### post.responses
@@ -10136,34 +10136,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.created\_at
+##### post.responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### post.responses.201.content.application/json.customer\_code
+##### post.responses.201.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### post.responses.201.content.application/json.customer\_order\_no?
+##### post.responses.201.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### post.responses.201.content.application/json.customer\_order\_no\_last6?
+##### post.responses.201.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### post.responses.201.content.application/json.delivery\_mode?
+##### post.responses.201.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -10179,40 +10179,40 @@ Id
 
 Lines
 
-##### post.responses.201.content.application/json.order\_date
+##### post.responses.201.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### post.responses.201.content.application/json.order\_no
+##### post.responses.201.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### post.responses.201.content.application/json.sap\_error\_msg?
+##### post.responses.201.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### post.responses.201.content.application/json.sap\_order\_id?
+##### post.responses.201.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### post.responses.201.content.application/json.sap\_sent\_at?
+##### post.responses.201.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### post.responses.201.content.application/json.sap\_status?
+##### post.responses.201.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -10225,12 +10225,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### post.responses.201.content.application/json.updated\_at?
+##### post.responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -10280,11 +10280,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/orders/\{order\_id\}
+### /api/orders/\{order_id\}
 
-> **/api/orders/\{order\_id\}**: `object`
+> **/api/orders/\{order_id\}**: `object`
 
 Defined in: [src/types/api.d.ts:386](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L386)
 
@@ -10323,9 +10323,9 @@ Get Order
 
 > **path**: `object`
 
-##### get.parameters.path.order\_id
+##### get.parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### get.parameters.query?
 
@@ -10355,34 +10355,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.created\_at
+##### get.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### get.responses.200.content.application/json.customer\_code
+##### get.responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### get.responses.200.content.application/json.customer\_order\_no?
+##### get.responses.200.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### get.responses.200.content.application/json.customer\_order\_no\_last6?
+##### get.responses.200.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### get.responses.200.content.application/json.delivery\_mode?
+##### get.responses.200.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -10398,40 +10398,40 @@ Id
 
 Lines
 
-##### get.responses.200.content.application/json.order\_date
+##### get.responses.200.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### get.responses.200.content.application/json.order\_no
+##### get.responses.200.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### get.responses.200.content.application/json.sap\_error\_msg?
+##### get.responses.200.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### get.responses.200.content.application/json.sap\_order\_id?
+##### get.responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### get.responses.200.content.application/json.sap\_sent\_at?
+##### get.responses.200.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### get.responses.200.content.application/json.sap\_status?
+##### get.responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -10444,12 +10444,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### get.responses.200.content.application/json.updated\_at?
+##### get.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -10535,11 +10535,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/orders/\{order\_id\}/cancel
+### /api/orders/\{order_id\}/cancel
 
-> **/api/orders/\{order\_id\}/cancel**: `object`
+> **/api/orders/\{order_id\}/cancel**: `object`
 
 Defined in: [src/types/api.d.ts:448](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L448)
 
@@ -10583,9 +10583,9 @@ Cancel Order
 
 > **path**: `object`
 
-##### delete.parameters.path.order\_id
+##### delete.parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### delete.parameters.query?
 
@@ -10697,11 +10697,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/orders/\{order\_id\}/status
+### /api/orders/\{order_id\}/status
 
-> **/api/orders/\{order\_id\}/status**: `object`
+> **/api/orders/\{order_id\}/status**: `object`
 
 Defined in: [src/types/api.d.ts:411](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L411)
 
@@ -10784,9 +10784,9 @@ Update Order Status
 
 > **path**: `object`
 
-##### patch.parameters.path.order\_id
+##### patch.parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### patch.parameters.query?
 
@@ -10817,11 +10817,11 @@ Status
 ###### Examples
 
 ```ts
-allocated
+allocated;
 ```
 
 ```ts
-shipped
+shipped;
 ```
 
 ##### patch.responses
@@ -10844,34 +10844,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### patch.responses.200.content.application/json.created\_at
+##### patch.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### patch.responses.200.content.application/json.customer\_code
+##### patch.responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### patch.responses.200.content.application/json.customer\_order\_no?
+##### patch.responses.200.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### patch.responses.200.content.application/json.customer\_order\_no\_last6?
+##### patch.responses.200.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### patch.responses.200.content.application/json.delivery\_mode?
+##### patch.responses.200.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -10881,40 +10881,40 @@ Delivery Mode
 
 Id
 
-##### patch.responses.200.content.application/json.order\_date
+##### patch.responses.200.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### patch.responses.200.content.application/json.order\_no
+##### patch.responses.200.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### patch.responses.200.content.application/json.sap\_error\_msg?
+##### patch.responses.200.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### patch.responses.200.content.application/json.sap\_order\_id?
+##### patch.responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### patch.responses.200.content.application/json.sap\_sent\_at?
+##### patch.responses.200.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### patch.responses.200.content.application/json.sap\_status?
+##### patch.responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -10927,12 +10927,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### patch.responses.200.content.application/json.updated\_at?
+##### patch.responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -10986,7 +10986,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/orders/validate
 
@@ -11078,9 +11078,9 @@ Defined in: [src/types/api.d.ts:1036](https://github.com/cybons-lab/Lot-manageme
 
 Lines
 
-##### post.requestBody.content.application/json.ship\_date?
+##### post.requestBody.content.application/json.ship_date?
 
-> `optional` **ship\_date**: `string` \| `null`
+> `optional` **ship_date**: `string` \| `null`
 
 Ship Date
 
@@ -11172,7 +11172,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/products
 
@@ -11218,9 +11218,9 @@ List products with pagination and optional fuzzy search.
 
 > `optional` **page**: `number`
 
-##### get.parameters.query.per\_page?
+##### get.parameters.query.per_page?
 
-> `optional` **per\_page**: `number`
+> `optional` **per_page**: `number`
 
 ##### get.parameters.query.q?
 
@@ -11262,9 +11262,9 @@ Items
 
 Page
 
-##### get.responses.200.content.application/json.per\_page
+##### get.responses.200.content.application/json.per_page
 
-> **per\_page**: `number`
+> **per_page**: `number`
 
 Per Page
 
@@ -11386,45 +11386,45 @@ Create a new product.
 
 > **application/json**: `object`
 
-##### post.requestBody.content.application/json.customer\_part\_no?
+##### post.requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### post.requestBody.content.application/json.internal\_unit
+##### post.requestBody.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### post.requestBody.content.application/json.is\_active
+##### post.requestBody.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### post.requestBody.content.application/json.maker\_item\_code?
+##### post.requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### post.requestBody.content.application/json.product\_code
+##### post.requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.requestBody.content.application/json.product\_name
+##### post.requestBody.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
@@ -11448,16 +11448,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### post.responses.201.content.application/json.created\_at
+##### post.responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### post.responses.201.content.application/json.customer\_part\_no
+##### post.responses.201.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -11467,39 +11467,39 @@ Customer Part No
 
 Id
 
-##### post.responses.201.content.application/json.internal\_unit
+##### post.responses.201.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### post.responses.201.content.application/json.is\_active
+##### post.responses.201.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### post.responses.201.content.application/json.maker\_item\_code
+##### post.responses.201.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### post.responses.201.content.application/json.product\_code
+##### post.responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### post.responses.201.content.application/json.product\_name
+##### post.responses.201.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### post.responses.201.content.application/json.updated\_at
+##### post.responses.201.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -11550,11 +11550,11 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
-### /api/products/\{product\_id\}
+### /api/products/\{product_id\}
 
-> **/api/products/\{product\_id\}**: `object`
+> **/api/products/\{product_id\}**: `object`
 
 Defined in: [src/types/api.d.ts:937](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L937)
 
@@ -11584,9 +11584,9 @@ Delete a product.
 
 > **path**: `object`
 
-##### delete.parameters.path.product\_id
+##### delete.parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### delete.parameters.query?
 
@@ -11676,9 +11676,9 @@ Retrieve a single product.
 
 > **path**: `object`
 
-##### get.parameters.path.product\_id
+##### get.parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### get.parameters.query?
 
@@ -11708,16 +11708,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### get.responses.200.content.application/json.created\_at
+##### get.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### get.responses.200.content.application/json.customer\_part\_no
+##### get.responses.200.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -11727,39 +11727,39 @@ Customer Part No
 
 Id
 
-##### get.responses.200.content.application/json.internal\_unit
+##### get.responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### get.responses.200.content.application/json.is\_active
+##### get.responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### get.responses.200.content.application/json.maker\_item\_code
+##### get.responses.200.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### get.responses.200.content.application/json.product\_code
+##### get.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### get.responses.200.content.application/json.product\_name
+##### get.responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### get.responses.200.content.application/json.updated\_at
+##### get.responses.200.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -11856,9 +11856,9 @@ Partially update a product.
 
 > **path**: `object`
 
-##### patch.parameters.path.product\_id
+##### patch.parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### patch.parameters.query?
 
@@ -11876,39 +11876,39 @@ Partially update a product.
 
 > **application/json**: `object`
 
-##### patch.requestBody.content.application/json.customer\_part\_no?
+##### patch.requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### patch.requestBody.content.application/json.internal\_unit?
+##### patch.requestBody.content.application/json.internal_unit?
 
-> `optional` **internal\_unit**: `string` \| `null`
+> `optional` **internal_unit**: `string` \| `null`
 
 Internal Unit
 
-##### patch.requestBody.content.application/json.is\_active?
+##### patch.requestBody.content.application/json.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 Is Active
 
-##### patch.requestBody.content.application/json.maker\_item\_code?
+##### patch.requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### patch.requestBody.content.application/json.product\_code?
+##### patch.requestBody.content.application/json.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
 Product Code
 
-##### patch.requestBody.content.application/json.product\_name?
+##### patch.requestBody.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
@@ -11932,16 +11932,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### patch.responses.200.content.application/json.created\_at
+##### patch.responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### patch.responses.200.content.application/json.customer\_part\_no
+##### patch.responses.200.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -11951,39 +11951,39 @@ Customer Part No
 
 Id
 
-##### patch.responses.200.content.application/json.internal\_unit
+##### patch.responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### patch.responses.200.content.application/json.is\_active
+##### patch.responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### patch.responses.200.content.application/json.maker\_item\_code
+##### patch.responses.200.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### patch.responses.200.content.application/json.product\_code
+##### patch.responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### patch.responses.200.content.application/json.product\_name
+##### patch.responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### patch.responses.200.content.application/json.updated\_at
+##### patch.responses.200.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -12038,7 +12038,7 @@ Detail
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/readyz
 
@@ -12152,7 +12152,7 @@ Successful Response
 
 > `optional` **trace**: `undefined`
 
-***
+---
 
 ### /api/warehouse-alloc/warehouses
 

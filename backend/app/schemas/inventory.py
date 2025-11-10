@@ -1,10 +1,7 @@
 # backend/app/schemas/inventory.py
-"""
-在庫関連のPydanticスキーマ
-"""
+"""在庫関連のPydanticスキーマ."""
 
 from datetime import date, datetime
-from typing import Optional
 
 from .base import BaseSchema, TimestampMixin
 
@@ -15,18 +12,18 @@ class LotBase(BaseSchema):
     product_code: str
     lot_number: str
     receipt_date: date
-    mfg_date: Optional[date] = None
-    expiry_date: Optional[date] = None
-    warehouse_code: Optional[str] = None
-    warehouse_id: Optional[int] = None
-    lot_unit: Optional[str] = None
-    kanban_class: Optional[str] = None
-    sales_unit: Optional[str] = None
-    inventory_unit: Optional[str] = None
-    received_by: Optional[str] = None
-    source_doc: Optional[str] = None
-    qc_certificate_status: Optional[str] = None
-    qc_certificate_file: Optional[str] = None
+    mfg_date: date | None = None
+    expiry_date: date | None = None
+    warehouse_code: str | None = None
+    warehouse_id: int | None = None
+    lot_unit: str | None = None
+    kanban_class: str | None = None
+    sales_unit: str | None = None
+    inventory_unit: str | None = None
+    received_by: str | None = None
+    source_doc: str | None = None
+    qc_certificate_status: str | None = None
+    qc_certificate_file: str | None = None
 
 
 class LotCreate(LotBase):
@@ -34,32 +31,32 @@ class LotCreate(LotBase):
 
 
 class LotUpdate(BaseSchema):
-    mfg_date: Optional[date] = None
-    expiry_date: Optional[date] = None
-    warehouse_code: Optional[str] = None
-    warehouse_id: Optional[int] = None
-    lot_unit: Optional[str] = None
-    qc_certificate_status: Optional[str] = None
-    qc_certificate_file: Optional[str] = None
+    mfg_date: date | None = None
+    expiry_date: date | None = None
+    warehouse_code: str | None = None
+    warehouse_id: int | None = None
+    lot_unit: str | None = None
+    qc_certificate_status: str | None = None
+    qc_certificate_file: str | None = None
 
 
 class LotResponse(LotBase, TimestampMixin):
     id: int
     current_quantity: float = 0.0
-    last_updated: Optional[datetime] = None
-    product_name: Optional[str] = None
+    last_updated: datetime | None = None
+    product_name: str | None = None
 
 
 # --- StockMovement ---
 class StockMovementBase(BaseSchema):
     product_id: str
-    warehouse_id: Optional[int] = None
-    lot_id: Optional[int] = None
+    warehouse_id: int | None = None
+    lot_id: int | None = None
     quantity_delta: float
     reason: str
-    source_table: Optional[str] = None
-    source_id: Optional[int] = None
-    batch_id: Optional[str] = None
+    source_table: str | None = None
+    source_id: int | None = None
+    batch_id: str | None = None
     created_by: str = "system"
 
 
@@ -76,7 +73,7 @@ class StockMovementResponse(StockMovementBase, TimestampMixin):
 class LotCurrentStockResponse(BaseSchema):
     lot_id: int
     current_quantity: float
-    last_updated: Optional[datetime] = None
+    last_updated: datetime | None = None
 
 
 # --- ExpiryRule ---

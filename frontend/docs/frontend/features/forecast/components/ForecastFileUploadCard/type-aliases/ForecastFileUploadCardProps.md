@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [features/forecast/components/ForecastFileUploadCard](../README.md) / ForecastFileUploadCardProps
 
@@ -20,7 +20,7 @@ Defined in: [src/features/forecast/components/ForecastFileUploadCard.tsx:12](htt
 
 追加のクラス名
 
-***
+---
 
 ### onUpload()?
 

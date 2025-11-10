@@ -1,10 +1,7 @@
 # backend/app/schemas/masters.py
-"""
-マスタ関連のPydanticスキーマ
-"""
+"""マスタ関連のPydanticスキーマ."""
 
 from decimal import Decimal
-from typing import Optional
 
 from pydantic import Field
 
@@ -15,7 +12,7 @@ from .base import BaseSchema
 class WarehouseBase(BaseSchema):
     warehouse_code: str
     warehouse_name: str
-    address: Optional[str] = None
+    address: str | None = None
     is_active: int = 1
 
 
@@ -24,9 +21,9 @@ class WarehouseCreate(WarehouseBase):
 
 
 class WarehouseUpdate(BaseSchema):
-    warehouse_name: Optional[str] = None
-    address: Optional[str] = None
-    is_active: Optional[int] = 1
+    warehouse_name: str | None = None
+    address: str | None = None
+    is_active: int | None = 1
 
 
 class WarehouseResponse(WarehouseBase):
@@ -37,7 +34,7 @@ class WarehouseResponse(WarehouseBase):
 class SupplierBase(BaseSchema):
     supplier_code: str
     supplier_name: str
-    address: Optional[str] = None
+    address: str | None = None
 
 
 class SupplierCreate(SupplierBase):
@@ -45,8 +42,8 @@ class SupplierCreate(SupplierBase):
 
 
 class SupplierUpdate(BaseSchema):
-    supplier_name: Optional[str] = None
-    address: Optional[str] = None
+    supplier_name: str | None = None
+    address: str | None = None
 
 
 class SupplierResponse(SupplierBase):
@@ -57,7 +54,7 @@ class SupplierResponse(SupplierBase):
 class CustomerBase(BaseSchema):
     customer_code: str
     customer_name: str
-    address: Optional[str] = None
+    address: str | None = None
 
 
 class CustomerCreate(CustomerBase):
@@ -65,8 +62,8 @@ class CustomerCreate(CustomerBase):
 
 
 class CustomerUpdate(BaseSchema):
-    customer_name: Optional[str] = None
-    address: Optional[str] = None
+    customer_name: str | None = None
+    address: str | None = None
 
 
 class CustomerResponse(CustomerBase):
@@ -77,24 +74,24 @@ class CustomerResponse(CustomerBase):
 class ProductBase(BaseSchema):
     product_code: str
     product_name: str
-    supplier_code: Optional[str] = None
-    customer_part_no: Optional[str] = None
-    maker_item_code: Optional[str] = None
-    supplier_item_code: Optional[str] = None
+    supplier_code: str | None = None
+    customer_part_no: str | None = None
+    maker_item_code: str | None = None
+    supplier_item_code: str | None = None
     packaging_qty: Decimal = Field(..., gt=Decimal("0"))
     packaging_unit: str = Field(..., min_length=1)
     internal_unit: str = Field(..., min_length=1)
     base_unit: str = "EA"
-    packaging: Optional[str] = None
-    assemble_div: Optional[str] = None
-    next_div: Optional[str] = None
-    ji_ku_text: Optional[str] = None
-    kumitsuke_ku_text: Optional[str] = None
-    shelf_life_days: Optional[int] = None
+    packaging: str | None = None
+    assemble_div: str | None = None
+    next_div: str | None = None
+    ji_ku_text: str | None = None
+    kumitsuke_ku_text: str | None = None
+    shelf_life_days: int | None = None
     requires_lot_number: bool = True
-    delivery_place_id: Optional[int] = None
-    delivery_place_name: Optional[str] = None
-    shipping_warehouse_name: Optional[str] = None
+    delivery_place_id: int | None = None
+    delivery_place_name: str | None = None
+    shipping_warehouse_name: str | None = None
 
 
 class ProductCreate(ProductBase):
@@ -102,25 +99,25 @@ class ProductCreate(ProductBase):
 
 
 class ProductUpdate(BaseSchema):
-    product_name: Optional[str] = None
-    supplier_code: Optional[str] = None
-    customer_part_no: Optional[str] = None
-    maker_item_code: Optional[str] = None
-    supplier_item_code: Optional[str] = None
-    packaging_qty: Optional[Decimal] = Field(default=None, gt=Decimal("0"))
-    packaging_unit: Optional[str] = None
-    internal_unit: Optional[str] = None
-    base_unit: Optional[str] = None
-    packaging: Optional[str] = None
-    assemble_div: Optional[str] = None
-    next_div: Optional[str] = None
-    ji_ku_text: Optional[str] = None
-    kumitsuke_ku_text: Optional[str] = None
-    shelf_life_days: Optional[int] = None
-    requires_lot_number: Optional[bool] = None
-    delivery_place_id: Optional[int] = None
-    delivery_place_name: Optional[str] = None
-    shipping_warehouse_name: Optional[str] = None
+    product_name: str | None = None
+    supplier_code: str | None = None
+    customer_part_no: str | None = None
+    maker_item_code: str | None = None
+    supplier_item_code: str | None = None
+    packaging_qty: Decimal | None = Field(default=None, gt=Decimal("0"))
+    packaging_unit: str | None = None
+    internal_unit: str | None = None
+    base_unit: str | None = None
+    packaging: str | None = None
+    assemble_div: str | None = None
+    next_div: str | None = None
+    ji_ku_text: str | None = None
+    kumitsuke_ku_text: str | None = None
+    shelf_life_days: int | None = None
+    requires_lot_number: bool | None = None
+    delivery_place_id: int | None = None
+    delivery_place_name: str | None = None
+    shipping_warehouse_name: str | None = None
 
 
 class ProductResponse(ProductBase):
@@ -140,8 +137,8 @@ class ProductUomConversionCreate(ProductUomConversionBase):
 
 
 class ProductUomConversionUpdate(BaseSchema):
-    source_value: Optional[float] = None
-    internal_unit_value: Optional[float] = None
+    source_value: float | None = None
+    internal_unit_value: float | None = None
 
 
 class ProductUomConversionResponse(ProductUomConversionBase):

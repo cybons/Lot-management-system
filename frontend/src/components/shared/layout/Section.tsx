@@ -1,10 +1,10 @@
 /**
  * セクションコンポーネント
- * 
+ *
  * ページ内のセクション区切りを表示
  */
 
-import React from 'react';
+import React from "react";
 
 interface SectionProps {
   /** セクションタイトル */
@@ -21,7 +21,7 @@ interface SectionProps {
 
 /**
  * セクションコンポーネント
- * 
+ *
  * @example
  * ```tsx
  * <Section
@@ -33,34 +33,20 @@ interface SectionProps {
  * </Section>
  * ```
  */
-export function Section({ 
-  title, 
-  description, 
-  actions, 
-  children, 
-  className = '' 
-}: SectionProps) {
+export function Section({ title, description, actions, children, className = "" }: SectionProps) {
   return (
     <div className={`rounded-lg border bg-white p-6 ${className}`}>
       {(title || actions) && (
         <div className="mb-4 flex items-start justify-between">
           <div>
-            {title && (
-              <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-            )}
-            {description && (
-              <p className="mt-1 text-sm text-gray-600">{description}</p>
-            )}
+            {title && <h2 className="text-lg font-semibold text-gray-900">{title}</h2>}
+            {description && <p className="mt-1 text-sm text-gray-600">{description}</p>}
           </div>
-          
-          {actions && (
-            <div className="flex items-center space-x-2">
-              {actions}
-            </div>
-          )}
+
+          {actions && <div className="flex items-center space-x-2">{actions}</div>}
         </div>
       )}
-      
+
       <div>{children}</div>
     </div>
   );

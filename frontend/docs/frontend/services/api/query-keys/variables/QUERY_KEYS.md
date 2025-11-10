@@ -1,12 +1,12 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
-[lot-management-frontend](../../../../README.md) / [services/api/query-keys](../README.md) / QUERY\_KEYS
+[lot-management-frontend](../../../../README.md) / [services/api/query-keys](../README.md) / QUERY_KEYS
 
-# Variable: QUERY\_KEYS
+# Variable: QUERY_KEYS
 
-> `const` **QUERY\_KEYS**: `object`
+> `const` **QUERY_KEYS**: `object`
 
 Defined in: [src/services/api/query-keys.ts:65](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/services/api/query-keys.ts#L65)
 

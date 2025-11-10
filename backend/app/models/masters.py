@@ -23,6 +23,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import Base
 
+
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .forecast import Forecast
     from .inventory import ExpiryRule, Lot, StockMovement
@@ -65,7 +66,7 @@ class Warehouse(Base):
     stock_movements: Mapped[list[StockMovement]] = relationship(
         "StockMovement", back_populates="warehouse"
     )
-    warehouse_allocations: Mapped[list["OrderLineWarehouseAllocation"]] = relationship(
+    warehouse_allocations: Mapped[list[OrderLineWarehouseAllocation]] = relationship(
         "OrderLineWarehouseAllocation", back_populates="warehouse"
     )
 
@@ -95,13 +96,9 @@ class Supplier(Base):
         Index("ix_suppliers_supplier_code", "supplier_code"),
     )
 
-    products: Mapped[list["Product"]] = relationship(
-        "Product", back_populates="supplier"
-    )
+    products: Mapped[list[Product]] = relationship("Product", back_populates="supplier")
     lots: Mapped[list[Lot]] = relationship("Lot", back_populates="supplier")
-    expiry_rules: Mapped[list[ExpiryRule]] = relationship(
-        "ExpiryRule", back_populates="supplier"
-    )
+    expiry_rules: Mapped[list[ExpiryRule]] = relationship("ExpiryRule", back_populates="supplier")
     purchase_requests: Mapped[list[PurchaseRequest]] = relationship(
         "PurchaseRequest", back_populates="supplier"
     )
@@ -133,9 +130,7 @@ class Customer(Base):
     )
 
     orders: Mapped[list[Order]] = relationship("Order", back_populates="customer")
-    forecasts: Mapped[list[Forecast]] = relationship(
-        "Forecast", back_populates="customer"
-    )
+    forecasts: Mapped[list[Forecast]] = relationship("Forecast", back_populates="customer")
 
 
 class DeliveryPlace(Base):
@@ -165,12 +160,8 @@ class DeliveryPlace(Base):
         Index("ix_delivery_places_delivery_place_code", "delivery_place_code"),
     )
 
-    allocations: Mapped[list[Allocation]] = relationship(
-        "Allocation", back_populates="destination"
-    )
-    products: Mapped[list["Product"]] = relationship(
-        "Product", back_populates="delivery_place"
-    )
+    allocations: Mapped[list[Allocation]] = relationship("Allocation", back_populates="destination")
+    products: Mapped[list[Product]] = relationship("Product", back_populates="delivery_place")
 
 
 class Product(Base):
@@ -198,14 +189,14 @@ class Product(Base):
     updated_by: Mapped[str | None] = mapped_column(String(50))
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
     revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
-    base_unit: Mapped[str] = mapped_column(
-        String(10), nullable=False, server_default=text("'EA'")
-    )
+    base_unit: Mapped[str] = mapped_column(String(10), nullable=False, server_default=text("'EA'"))
     packaging_qty: Mapped[Decimal] = mapped_column(
         Numeric(10, 2), nullable=False, server_default=text("1")
     )
     packaging_unit: Mapped[str] = mapped_column(
-        String(20), nullable=False, server_default=text("'EA'"),
+        String(20),
+        nullable=False,
+        server_default=text("'EA'"),
     )
     supplier_item_code: Mapped[str | None] = mapped_column(String)
     delivery_place_id: Mapped[int | None] = mapped_column(
@@ -224,31 +215,23 @@ class Product(Base):
         Index("ix_products_product_code", "product_code"),
     )
 
-    supplier: Mapped[Supplier | None] = relationship(
-        "Supplier", back_populates="products"
-    )
+    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="products")
     delivery_place: Mapped[DeliveryPlace | None] = relationship(
         "DeliveryPlace", back_populates="products"
     )
     lots: Mapped[list[Lot]] = relationship("Lot", back_populates="product")
-    order_lines: Mapped[list[OrderLine]] = relationship(
-        "OrderLine", back_populates="product"
-    )
-    expiry_rules: Mapped[list[ExpiryRule]] = relationship(
-        "ExpiryRule", back_populates="product"
-    )
+    order_lines: Mapped[list[OrderLine]] = relationship("OrderLine", back_populates="product")
+    expiry_rules: Mapped[list[ExpiryRule]] = relationship("ExpiryRule", back_populates="product")
     purchase_requests: Mapped[list[PurchaseRequest]] = relationship(
         "PurchaseRequest", back_populates="product"
     )
     stock_movements: Mapped[list[StockMovement]] = relationship(
         "StockMovement", back_populates="product"
     )
-    unit_conversions: Mapped[list["UnitConversion"]] = relationship(
+    unit_conversions: Mapped[list[UnitConversion]] = relationship(
         "UnitConversion", back_populates="product"
     )
-    forecasts: Mapped[list[Forecast]] = relationship(
-        "Forecast", back_populates="product"
-    )
+    forecasts: Mapped[list[Forecast]] = relationship("Forecast", back_populates="product")
 
 
 class UnitConversion(Base):

@@ -93,7 +93,10 @@ export async function getOrderDetail(orderId: number): Promise<OrderWithLinesRes
   return response.data;
 }
 
-export async function updateOrder(orderId: number, data: OrderUpdate): Promise<OrderWithLinesResponse> {
+export async function updateOrder(
+  orderId: number,
+  data: OrderUpdate,
+): Promise<OrderWithLinesResponse> {
   const response = await http.put<OrderWithLinesResponse>(`/orders/${orderId}`, data);
   return response.data;
 }

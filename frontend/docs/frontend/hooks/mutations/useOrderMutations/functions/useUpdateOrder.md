@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useOrderMutations](../README.md) / useUpdateOrder
 
@@ -43,8 +43,8 @@ Mutation オプション
 ```tsx
 const updateOrderMutation = useUpdateOrder(123, {
   onSuccess: () => {
-    toast.success('受注を更新しました');
-  }
+    toast.success("受注を更新しました");
+  },
 });
 
 await updateOrderMutation.mutateAsync(updatedData);

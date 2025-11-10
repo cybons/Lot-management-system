@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/form/FormField](../README.md) / BaseFormFieldProps
 
@@ -26,7 +26,7 @@ Defined in: [src/components/shared/form/FormField.tsx:39](https://github.com/cyb
 
 クラス名
 
-***
+---
 
 ### error?
 
@@ -36,7 +36,7 @@ Defined in: [src/components/shared/form/FormField.tsx:35](https://github.com/cyb
 
 エラーメッセージ
 
-***
+---
 
 ### helpText?
 
@@ -46,7 +46,7 @@ Defined in: [src/components/shared/form/FormField.tsx:37](https://github.com/cyb
 
 ヘルプテキスト
 
-***
+---
 
 ### id?
 
@@ -56,7 +56,7 @@ Defined in: [src/components/shared/form/FormField.tsx:31](https://github.com/cyb
 
 フィールドID
 
-***
+---
 
 ### label
 
@@ -66,7 +66,7 @@ Defined in: [src/components/shared/form/FormField.tsx:29](https://github.com/cyb
 
 フィールドのラベル
 
-***
+---
 
 ### required?
 

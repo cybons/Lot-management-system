@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/aliases](../README.md) / OrderResponse
 
@@ -12,37 +12,37 @@ Defined in: [src/types/aliases.ts:109](https://github.com/cybons-lab/Lot-managem
 
 ## Properties
 
-### created\_at?
+### created_at?
 
-> `optional` **created\_at**: `string`
+> `optional` **created_at**: `string`
 
 Defined in: [src/types/aliases.ts:117](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L117)
 
-***
+---
 
-### customer\_code
+### customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Defined in: [src/types/aliases.ts:112](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L112)
 
-***
+---
 
-### customer\_name?
+### customer_name?
 
-> `optional` **customer\_name**: `string` \| `null`
+> `optional` **customer_name**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:113](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L113)
 
-***
+---
 
-### due\_date?
+### due_date?
 
-> `optional` **due\_date**: `string` \| `null`
+> `optional` **due_date**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:115](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L115)
 
-***
+---
 
 ### id
 
@@ -50,7 +50,7 @@ Defined in: [src/types/aliases.ts:115](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:110](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L110)
 
-***
+---
 
 ### lines?
 
@@ -58,23 +58,23 @@ Defined in: [src/types/aliases.ts:110](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:121](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L121)
 
-***
+---
 
-### order\_date?
+### order_date?
 
-> `optional` **order\_date**: `string` \| `null`
+> `optional` **order_date**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:114](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L114)
 
-***
+---
 
-### order\_no
+### order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Defined in: [src/types/aliases.ts:111](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L111)
 
-***
+---
 
 ### remarks?
 
@@ -82,15 +82,15 @@ Defined in: [src/types/aliases.ts:111](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:120](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L120)
 
-***
+---
 
-### sap\_order\_id?
+### sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:119](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L119)
 
-***
+---
 
 ### status
 
@@ -98,10 +98,10 @@ Defined in: [src/types/aliases.ts:119](https://github.com/cybons-lab/Lot-managem
 
 Defined in: [src/types/aliases.ts:116](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L116)
 
-***
+---
 
-### updated\_at?
+### updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Defined in: [src/types/aliases.ts:118](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/aliases.ts#L118)

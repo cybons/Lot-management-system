@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useFilters](../README.md) / useFilters
 
@@ -16,7 +16,7 @@ Defined in: [src/hooks/ui/useFilters.ts:44](https://github.com/cybons-lab/Lot-ma
 
 ### T
 
-`T` *extends* [`FilterState`](../type-aliases/FilterState.md)
+`T` _extends_ [`FilterState`](../type-aliases/FilterState.md)
 
 ## Parameters
 
@@ -56,7 +56,7 @@ Defined in: [src/hooks/ui/useFilters.ts:44](https://github.com/cybons-lab/Lot-ma
 
 ##### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: [src/hooks/ui/useFilters.ts:44](https://github.com/cybons-lab/Lot-ma
 
 ##### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 #### Parameters
 
@@ -114,16 +114,16 @@ Defined in: [src/hooks/ui/useFilters.ts:44](https://github.com/cybons-lab/Lot-ma
 
 ```tsx
 const filters = useFilters({
-  productCode: '',
-  warehouseCode: '',
-  status: 'active',
+  productCode: "",
+  warehouseCode: "",
+  status: "active",
 });
 
 return (
   <div>
     <input
       value={filters.values.productCode}
-      onChange={(e) => filters.set('productCode', e.target.value)}
+      onChange={(e) => filters.set("productCode", e.target.value)}
     />
     <button onClick={filters.reset}>クリア</button>
   </div>

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/DataTable](../README.md) / DataTableProps
 
@@ -24,7 +24,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:73](https://github.com/cyb
 
 テーブルのクラス名
 
-***
+---
 
 ### columns
 
@@ -34,7 +34,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:51](https://github.com/cyb
 
 カラム定義
 
-***
+---
 
 ### data
 
@@ -44,7 +44,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:49](https://github.com/cyb
 
 表示データ
 
-***
+---
 
 ### emptyMessage?
 
@@ -54,7 +54,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:69](https://github.com/cyb
 
 空データ時のメッセージ
 
-***
+---
 
 ### getRowId()?
 
@@ -74,7 +74,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:63](https://github.com/cyb
 
 `string` \| `number`
 
-***
+---
 
 ### isLoading?
 
@@ -84,7 +84,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:71](https://github.com/cyb
 
 ローディング状態
 
-***
+---
 
 ### onRowClick()?
 
@@ -104,7 +104,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:65](https://github.com/cyb
 
 `void`
 
-***
+---
 
 ### onSelectionChange()?
 
@@ -124,7 +124,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:61](https://github.com/cyb
 
 `void`
 
-***
+---
 
 ### onSortChange()?
 
@@ -144,7 +144,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:55](https://github.com/cyb
 
 `void`
 
-***
+---
 
 ### rowActions()?
 
@@ -164,7 +164,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:67](https://github.com/cyb
 
 `ReactNode`
 
-***
+---
 
 ### selectable?
 
@@ -174,7 +174,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:57](https://github.com/cyb
 
 行選択を有効化
 
-***
+---
 
 ### selectedIds?
 
@@ -184,7 +184,7 @@ Defined in: [src/components/shared/data/DataTable.tsx:59](https://github.com/cyb
 
 選択された行のID配列
 
-***
+---
 
 ### sort?
 

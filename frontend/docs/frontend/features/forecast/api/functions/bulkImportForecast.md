@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [features/forecast/api](../README.md) / bulkImportForecast
 
@@ -25,7 +25,7 @@ Deactivate Old Version
 **Default**
 
 ```ts
-true
+true;
 ```
 
 #### forecasts
@@ -43,7 +43,7 @@ Source System
 **Default**
 
 ```ts
-external
+external;
 ```
 
 #### version_issued_at

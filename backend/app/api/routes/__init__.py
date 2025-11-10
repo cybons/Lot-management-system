@@ -1,23 +1,24 @@
 # app/api/routes/__init__.py
 """
 API Routes Package
-全ルーターのエクスポート
+全ルーターのエクスポート.
 """
 
 from .admin import router as admin_router
-from .admin_presets import router as admin_presets_router
 from .admin_healthcheck import router as admin_healthcheck_router
+from .admin_presets import router as admin_presets_router
+from .admin_seeds import router as admin_seeds_router
 from .allocations import router as allocations_router
 from .forecast import router as forecast_router
 from .health import router as health_router
 from .integration import router as integration_router
 from .lots import router as lots_router
 from .masters import router as masters_router
-from .products import router as products_router
 from .orders_refactored import router as orders_router
-from .warehouse_alloc import router as warehouse_alloc_router
 from .orders_validate import router as orders_validate_router
-from .admin_seeds import router as admin_seeds_router
+from .products import router as products_router
+from .warehouse_alloc import router as warehouse_alloc_router
+
 
 __all__ = [
     "masters_router",

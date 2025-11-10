@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [components/ui/button](../README.md) / ButtonProps
 
@@ -10,7 +10,7 @@ Defined in: [src/components/ui/button.tsx:33](https://github.com/cybons-lab/Lot-
 
 ## Extends
 
-- `ButtonHTMLAttributes`\<`HTMLButtonElement`\>.`VariantProps`\<*typeof* [`buttonVariants`](../variables/buttonVariants.md)\>
+- `ButtonHTMLAttributes`\<`HTMLButtonElement`\>.`VariantProps`\<_typeof_ [`buttonVariants`](../variables/buttonVariants.md)\>
 
 ## Properties
 
@@ -18,31 +18,31 @@ Defined in: [src/components/ui/button.tsx:33](https://github.com/cybons-lab/Lot-
 
 > `optional` **about**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2759
+Defined in: node_modules/@types/react/index.d.ts:2759
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.about`
 
-***
+---
 
 ### accessKey?
 
 > `optional` **accessKey**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2732
+Defined in: node_modules/@types/react/index.d.ts:2732
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.accessKey`
 
-***
+---
 
 ### aria-activedescendant?
 
 > `optional` **aria-activedescendant**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2430
+Defined in: node_modules/@types/react/index.d.ts:2430
 
 Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application.
 
@@ -50,13 +50,13 @@ Identifies the currently active element when DOM focus is on a composite widget,
 
 `React.ButtonHTMLAttributes.aria-activedescendant`
 
-***
+---
 
 ### aria-atomic?
 
 > `optional` **aria-atomic**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2432
+Defined in: node_modules/@types/react/index.d.ts:2432
 
 Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute.
 
@@ -64,13 +64,13 @@ Indicates whether assistive technologies will present all, or only parts of, the
 
 `React.ButtonHTMLAttributes.aria-atomic`
 
-***
+---
 
 ### aria-autocomplete?
 
 > `optional` **aria-autocomplete**: `"none"` \| `"list"` \| `"inline"` \| `"both"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2437
+Defined in: node_modules/@types/react/index.d.ts:2437
 
 Indicates whether inputting text could trigger display of one or more predictions of the user's intended value for an input and specifies how predictions would be
 presented if they are made.
@@ -79,13 +79,13 @@ presented if they are made.
 
 `React.ButtonHTMLAttributes.aria-autocomplete`
 
-***
+---
 
 ### aria-braillelabel?
 
 > `optional` **aria-braillelabel**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2443
+Defined in: node_modules/@types/react/index.d.ts:2443
 
 Defines a string value that labels the current element, which is intended to be converted into Braille.
 
@@ -97,13 +97,13 @@ aria-label.
 
 `React.ButtonHTMLAttributes.aria-braillelabel`
 
-***
+---
 
 ### aria-brailleroledescription?
 
 > `optional` **aria-brailleroledescription**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2448
+Defined in: node_modules/@types/react/index.d.ts:2448
 
 Defines a human-readable, author-localized abbreviated description for the role of an element, which is intended to be converted into Braille.
 
@@ -115,44 +115,44 @@ aria-roledescription.
 
 `React.ButtonHTMLAttributes.aria-brailleroledescription`
 
-***
+---
 
 ### aria-busy?
 
 > `optional` **aria-busy**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2449
+Defined in: node_modules/@types/react/index.d.ts:2449
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-busy`
 
-***
+---
 
 ### aria-checked?
 
 > `optional` **aria-checked**: `boolean` \| `"true"` \| `"false"` \| `"mixed"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2454
+Defined in: node_modules/@types/react/index.d.ts:2454
 
 Indicates the current "checked" state of checkboxes, radio buttons, and other widgets.
 
 #### See
 
- - aria-pressed
- - aria-selected.
+- aria-pressed
+- aria-selected.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-checked`
 
-***
+---
 
 ### aria-colcount?
 
 > `optional` **aria-colcount**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2459
+Defined in: node_modules/@types/react/index.d.ts:2459
 
 Defines the total number of columns in a table, grid, or treegrid.
 
@@ -164,32 +164,32 @@ aria-colindex.
 
 `React.ButtonHTMLAttributes.aria-colcount`
 
-***
+---
 
 ### aria-colindex?
 
 > `optional` **aria-colindex**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2464
+Defined in: node_modules/@types/react/index.d.ts:2464
 
 Defines an element's column index or position with respect to the total number of columns within a table, grid, or treegrid.
 
 #### See
 
- - aria-colcount
- - aria-colspan.
+- aria-colcount
+- aria-colspan.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-colindex`
 
-***
+---
 
 ### aria-colindextext?
 
 > `optional` **aria-colindextext**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2469
+Defined in: node_modules/@types/react/index.d.ts:2469
 
 Defines a human readable text alternative of aria-colindex.
 
@@ -201,32 +201,32 @@ aria-rowindextext.
 
 `React.ButtonHTMLAttributes.aria-colindextext`
 
-***
+---
 
 ### aria-colspan?
 
 > `optional` **aria-colspan**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2474
+Defined in: node_modules/@types/react/index.d.ts:2474
 
 Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.
 
 #### See
 
- - aria-colindex
- - aria-rowspan.
+- aria-colindex
+- aria-rowspan.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-colspan`
 
-***
+---
 
 ### aria-controls?
 
 > `optional` **aria-controls**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2479
+Defined in: node_modules/@types/react/index.d.ts:2479
 
 Identifies the element (or elements) whose contents or presence are controlled by the current element.
 
@@ -238,13 +238,13 @@ aria-owns.
 
 `React.ButtonHTMLAttributes.aria-controls`
 
-***
+---
 
 ### aria-current?
 
 > `optional` **aria-current**: `boolean` \| `"time"` \| `"true"` \| `"false"` \| `"page"` \| `"step"` \| `"location"` \| `"date"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2481
+Defined in: node_modules/@types/react/index.d.ts:2481
 
 Indicates the element that represents the current item within a container or set of related elements.
 
@@ -252,13 +252,13 @@ Indicates the element that represents the current item within a container or set
 
 `React.ButtonHTMLAttributes.aria-current`
 
-***
+---
 
 ### aria-describedby?
 
 > `optional` **aria-describedby**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2486
+Defined in: node_modules/@types/react/index.d.ts:2486
 
 Identifies the element (or elements) that describes the object.
 
@@ -270,13 +270,13 @@ aria-labelledby
 
 `React.ButtonHTMLAttributes.aria-describedby`
 
-***
+---
 
 ### aria-description?
 
 > `optional` **aria-description**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2491
+Defined in: node_modules/@types/react/index.d.ts:2491
 
 Defines a string value that describes or annotates the current element.
 
@@ -288,13 +288,13 @@ related aria-describedby.
 
 `React.ButtonHTMLAttributes.aria-description`
 
-***
+---
 
 ### aria-details?
 
 > `optional` **aria-details**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2496
+Defined in: node_modules/@types/react/index.d.ts:2496
 
 Identifies the element that provides a detailed, extended description for the object.
 
@@ -306,32 +306,32 @@ aria-describedby.
 
 `React.ButtonHTMLAttributes.aria-details`
 
-***
+---
 
 ### aria-disabled?
 
 > `optional` **aria-disabled**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2501
+Defined in: node_modules/@types/react/index.d.ts:2501
 
 Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.
 
 #### See
 
- - aria-hidden
- - aria-readonly.
+- aria-hidden
+- aria-readonly.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-disabled`
 
-***
+---
 
 ### ~~aria-dropeffect?~~
 
 > `optional` **aria-dropeffect**: `"link"` \| `"none"` \| `"copy"` \| `"execute"` \| `"move"` \| `"popup"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2506
+Defined in: node_modules/@types/react/index.d.ts:2506
 
 Indicates what functions can be performed when a dragged object is released on the drop target.
 
@@ -343,32 +343,32 @@ in ARIA 1.1
 
 `React.ButtonHTMLAttributes.aria-dropeffect`
 
-***
+---
 
 ### aria-errormessage?
 
 > `optional` **aria-errormessage**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2511
+Defined in: node_modules/@types/react/index.d.ts:2511
 
 Identifies the element that provides an error message for the object.
 
 #### See
 
- - aria-invalid
- - aria-describedby.
+- aria-invalid
+- aria-describedby.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-errormessage`
 
-***
+---
 
 ### aria-expanded?
 
 > `optional` **aria-expanded**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2513
+Defined in: node_modules/@types/react/index.d.ts:2513
 
 Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed.
 
@@ -376,13 +376,13 @@ Indicates whether the element, or another grouping element it controls, is curre
 
 `React.ButtonHTMLAttributes.aria-expanded`
 
-***
+---
 
 ### aria-flowto?
 
 > `optional` **aria-flowto**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2518
+Defined in: node_modules/@types/react/index.d.ts:2518
 
 Identifies the next element (or elements) in an alternate reading order of content which, at the user's discretion,
 allows assistive technology to override the general default of reading in document source order.
@@ -391,13 +391,13 @@ allows assistive technology to override the general default of reading in docume
 
 `React.ButtonHTMLAttributes.aria-flowto`
 
-***
+---
 
 ### ~~aria-grabbed?~~
 
 > `optional` **aria-grabbed**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2523
+Defined in: node_modules/@types/react/index.d.ts:2523
 
 Indicates an element's "grabbed" state in a drag-and-drop operation.
 
@@ -409,13 +409,13 @@ in ARIA 1.1
 
 `React.ButtonHTMLAttributes.aria-grabbed`
 
-***
+---
 
 ### aria-haspopup?
 
 > `optional` **aria-haspopup**: `boolean` \| `"dialog"` \| `"menu"` \| `"true"` \| `"false"` \| `"grid"` \| `"listbox"` \| `"tree"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2525
+Defined in: node_modules/@types/react/index.d.ts:2525
 
 Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element.
 
@@ -423,13 +423,13 @@ Indicates the availability and type of interactive popup element, such as menu o
 
 `React.ButtonHTMLAttributes.aria-haspopup`
 
-***
+---
 
 ### aria-hidden?
 
 > `optional` **aria-hidden**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2530
+Defined in: node_modules/@types/react/index.d.ts:2530
 
 Indicates whether the element is exposed to an accessibility API.
 
@@ -441,13 +441,13 @@ aria-disabled.
 
 `React.ButtonHTMLAttributes.aria-hidden`
 
-***
+---
 
 ### aria-invalid?
 
 > `optional` **aria-invalid**: `boolean` \| `"true"` \| `"false"` \| `"grammar"` \| `"spelling"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2535
+Defined in: node_modules/@types/react/index.d.ts:2535
 
 Indicates the entered value does not conform to the format expected by the application.
 
@@ -459,13 +459,13 @@ aria-errormessage.
 
 `React.ButtonHTMLAttributes.aria-invalid`
 
-***
+---
 
 ### aria-keyshortcuts?
 
 > `optional` **aria-keyshortcuts**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2537
+Defined in: node_modules/@types/react/index.d.ts:2537
 
 Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element.
 
@@ -473,13 +473,13 @@ Indicates keyboard shortcuts that an author has implemented to activate or give 
 
 `React.ButtonHTMLAttributes.aria-keyshortcuts`
 
-***
+---
 
 ### aria-label?
 
 > `optional` **aria-label**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2542
+Defined in: node_modules/@types/react/index.d.ts:2542
 
 Defines a string value that labels the current element.
 
@@ -491,13 +491,13 @@ aria-labelledby.
 
 `React.ButtonHTMLAttributes.aria-label`
 
-***
+---
 
 ### aria-labelledby?
 
 > `optional` **aria-labelledby**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2547
+Defined in: node_modules/@types/react/index.d.ts:2547
 
 Identifies the element (or elements) that labels the current element.
 
@@ -509,13 +509,13 @@ aria-describedby.
 
 `React.ButtonHTMLAttributes.aria-labelledby`
 
-***
+---
 
 ### aria-level?
 
 > `optional` **aria-level**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2549
+Defined in: node_modules/@types/react/index.d.ts:2549
 
 Defines the hierarchical level of an element within a structure.
 
@@ -523,13 +523,13 @@ Defines the hierarchical level of an element within a structure.
 
 `React.ButtonHTMLAttributes.aria-level`
 
-***
+---
 
 ### aria-live?
 
 > `optional` **aria-live**: `"off"` \| `"assertive"` \| `"polite"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2551
+Defined in: node_modules/@types/react/index.d.ts:2551
 
 Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live region.
 
@@ -537,13 +537,13 @@ Indicates that an element will be updated, and describes the types of updates th
 
 `React.ButtonHTMLAttributes.aria-live`
 
-***
+---
 
 ### aria-modal?
 
 > `optional` **aria-modal**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2553
+Defined in: node_modules/@types/react/index.d.ts:2553
 
 Indicates whether an element is modal when displayed.
 
@@ -551,13 +551,13 @@ Indicates whether an element is modal when displayed.
 
 `React.ButtonHTMLAttributes.aria-modal`
 
-***
+---
 
 ### aria-multiline?
 
 > `optional` **aria-multiline**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2555
+Defined in: node_modules/@types/react/index.d.ts:2555
 
 Indicates whether a text box accepts multiple lines of input or only a single line.
 
@@ -565,13 +565,13 @@ Indicates whether a text box accepts multiple lines of input or only a single li
 
 `React.ButtonHTMLAttributes.aria-multiline`
 
-***
+---
 
 ### aria-multiselectable?
 
 > `optional` **aria-multiselectable**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2557
+Defined in: node_modules/@types/react/index.d.ts:2557
 
 Indicates that the user may select more than one item from the current selectable descendants.
 
@@ -579,13 +579,13 @@ Indicates that the user may select more than one item from the current selectabl
 
 `React.ButtonHTMLAttributes.aria-multiselectable`
 
-***
+---
 
 ### aria-orientation?
 
 > `optional` **aria-orientation**: `"horizontal"` \| `"vertical"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2559
+Defined in: node_modules/@types/react/index.d.ts:2559
 
 Indicates whether the element's orientation is horizontal, vertical, or unknown/ambiguous.
 
@@ -593,13 +593,13 @@ Indicates whether the element's orientation is horizontal, vertical, or unknown/
 
 `React.ButtonHTMLAttributes.aria-orientation`
 
-***
+---
 
 ### aria-owns?
 
 > `optional` **aria-owns**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2565
+Defined in: node_modules/@types/react/index.d.ts:2565
 
 Identifies an element (or elements) in order to define a visual, functional, or contextual parent/child relationship
 between DOM elements where the DOM hierarchy cannot be used to represent the relationship.
@@ -612,13 +612,13 @@ aria-controls.
 
 `React.ButtonHTMLAttributes.aria-owns`
 
-***
+---
 
 ### aria-placeholder?
 
 > `optional` **aria-placeholder**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2570
+Defined in: node_modules/@types/react/index.d.ts:2570
 
 Defines a short hint (a word or short phrase) intended to aid the user with data entry when the control has no value.
 A hint could be a sample value or a brief description of the expected format.
@@ -627,13 +627,13 @@ A hint could be a sample value or a brief description of the expected format.
 
 `React.ButtonHTMLAttributes.aria-placeholder`
 
-***
+---
 
 ### aria-posinset?
 
 > `optional` **aria-posinset**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2575
+Defined in: node_modules/@types/react/index.d.ts:2575
 
 Defines an element's number or position in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.
 
@@ -645,32 +645,32 @@ aria-setsize.
 
 `React.ButtonHTMLAttributes.aria-posinset`
 
-***
+---
 
 ### aria-pressed?
 
 > `optional` **aria-pressed**: `boolean` \| `"true"` \| `"false"` \| `"mixed"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2580
+Defined in: node_modules/@types/react/index.d.ts:2580
 
 Indicates the current "pressed" state of toggle buttons.
 
 #### See
 
- - aria-checked
- - aria-selected.
+- aria-checked
+- aria-selected.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-pressed`
 
-***
+---
 
 ### aria-readonly?
 
 > `optional` **aria-readonly**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2585
+Defined in: node_modules/@types/react/index.d.ts:2585
 
 Indicates that the element is not editable, but is otherwise operable.
 
@@ -682,13 +682,13 @@ aria-disabled.
 
 `React.ButtonHTMLAttributes.aria-readonly`
 
-***
+---
 
 ### aria-relevant?
 
 > `optional` **aria-relevant**: `"text"` \| `"additions"` \| `"additions removals"` \| `"additions text"` \| `"all"` \| `"removals"` \| `"removals additions"` \| `"removals text"` \| `"text additions"` \| `"text removals"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2590
+Defined in: node_modules/@types/react/index.d.ts:2590
 
 Indicates what notifications the user agent will trigger when the accessibility tree within a live region is modified.
 
@@ -700,13 +700,13 @@ aria-atomic.
 
 `React.ButtonHTMLAttributes.aria-relevant`
 
-***
+---
 
 ### aria-required?
 
 > `optional` **aria-required**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2603
+Defined in: node_modules/@types/react/index.d.ts:2603
 
 Indicates that user input is required on the element before a form may be submitted.
 
@@ -714,13 +714,13 @@ Indicates that user input is required on the element before a form may be submit
 
 `React.ButtonHTMLAttributes.aria-required`
 
-***
+---
 
 ### aria-roledescription?
 
 > `optional` **aria-roledescription**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2605
+Defined in: node_modules/@types/react/index.d.ts:2605
 
 Defines a human-readable, author-localized description for the role of an element.
 
@@ -728,13 +728,13 @@ Defines a human-readable, author-localized description for the role of an elemen
 
 `React.ButtonHTMLAttributes.aria-roledescription`
 
-***
+---
 
 ### aria-rowcount?
 
 > `optional` **aria-rowcount**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2610
+Defined in: node_modules/@types/react/index.d.ts:2610
 
 Defines the total number of rows in a table, grid, or treegrid.
 
@@ -746,32 +746,32 @@ aria-rowindex.
 
 `React.ButtonHTMLAttributes.aria-rowcount`
 
-***
+---
 
 ### aria-rowindex?
 
 > `optional` **aria-rowindex**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2615
+Defined in: node_modules/@types/react/index.d.ts:2615
 
 Defines an element's row index or position with respect to the total number of rows within a table, grid, or treegrid.
 
 #### See
 
- - aria-rowcount
- - aria-rowspan.
+- aria-rowcount
+- aria-rowspan.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-rowindex`
 
-***
+---
 
 ### aria-rowindextext?
 
 > `optional` **aria-rowindextext**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2620
+Defined in: node_modules/@types/react/index.d.ts:2620
 
 Defines a human readable text alternative of aria-rowindex.
 
@@ -783,51 +783,51 @@ aria-colindextext.
 
 `React.ButtonHTMLAttributes.aria-rowindextext`
 
-***
+---
 
 ### aria-rowspan?
 
 > `optional` **aria-rowspan**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2625
+Defined in: node_modules/@types/react/index.d.ts:2625
 
 Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.
 
 #### See
 
- - aria-rowindex
- - aria-colspan.
+- aria-rowindex
+- aria-colspan.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-rowspan`
 
-***
+---
 
 ### aria-selected?
 
 > `optional` **aria-selected**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2630
+Defined in: node_modules/@types/react/index.d.ts:2630
 
 Indicates the current "selected" state of various widgets.
 
 #### See
 
- - aria-checked
- - aria-pressed.
+- aria-checked
+- aria-pressed.
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.aria-selected`
 
-***
+---
 
 ### aria-setsize?
 
 > `optional` **aria-setsize**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2635
+Defined in: node_modules/@types/react/index.d.ts:2635
 
 Defines the number of items in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.
 
@@ -839,13 +839,13 @@ aria-posinset.
 
 `React.ButtonHTMLAttributes.aria-setsize`
 
-***
+---
 
 ### aria-sort?
 
 > `optional` **aria-sort**: `"none"` \| `"ascending"` \| `"descending"` \| `"other"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2637
+Defined in: node_modules/@types/react/index.d.ts:2637
 
 Indicates if items in a table or grid are sorted in ascending or descending order.
 
@@ -853,13 +853,13 @@ Indicates if items in a table or grid are sorted in ascending or descending orde
 
 `React.ButtonHTMLAttributes.aria-sort`
 
-***
+---
 
 ### aria-valuemax?
 
 > `optional` **aria-valuemax**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2639
+Defined in: node_modules/@types/react/index.d.ts:2639
 
 Defines the maximum allowed value for a range widget.
 
@@ -867,13 +867,13 @@ Defines the maximum allowed value for a range widget.
 
 `React.ButtonHTMLAttributes.aria-valuemax`
 
-***
+---
 
 ### aria-valuemin?
 
 > `optional` **aria-valuemin**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2641
+Defined in: node_modules/@types/react/index.d.ts:2641
 
 Defines the minimum allowed value for a range widget.
 
@@ -881,13 +881,13 @@ Defines the minimum allowed value for a range widget.
 
 `React.ButtonHTMLAttributes.aria-valuemin`
 
-***
+---
 
 ### aria-valuenow?
 
 > `optional` **aria-valuenow**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2646
+Defined in: node_modules/@types/react/index.d.ts:2646
 
 Defines the current value for a range widget.
 
@@ -899,13 +899,13 @@ aria-valuetext.
 
 `React.ButtonHTMLAttributes.aria-valuenow`
 
-***
+---
 
 ### aria-valuetext?
 
 > `optional` **aria-valuetext**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2648
+Defined in: node_modules/@types/react/index.d.ts:2648
 
 Defines the human readable text alternative of aria-valuenow for a range widget.
 
@@ -913,7 +913,7 @@ Defines the human readable text alternative of aria-valuenow for a range widget.
 
 `React.ButtonHTMLAttributes.aria-valuetext`
 
-***
+---
 
 ### asChild?
 
@@ -921,133 +921,133 @@ Defines the human readable text alternative of aria-valuenow for a range widget.
 
 Defined in: [src/components/ui/button.tsx:36](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/components/ui/button.tsx#L36)
 
-***
+---
 
 ### autoCapitalize?
 
 > `optional` **autoCapitalize**: `"off"` \| `"none"` \| `"on"` \| `"sentences"` \| `"words"` \| `"characters"` \| `string` & `object`
 
-Defined in: node\_modules/@types/react/index.d.ts:2733
+Defined in: node_modules/@types/react/index.d.ts:2733
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.autoCapitalize`
 
-***
+---
 
 ### autoCorrect?
 
 > `optional` **autoCorrect**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2772
+Defined in: node_modules/@types/react/index.d.ts:2772
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.autoCorrect`
 
-***
+---
 
 ### autoFocus?
 
 > `optional` **autoFocus**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2734
+Defined in: node_modules/@types/react/index.d.ts:2734
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.autoFocus`
 
-***
+---
 
 ### autoSave?
 
 > `optional` **autoSave**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2773
+Defined in: node_modules/@types/react/index.d.ts:2773
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.autoSave`
 
-***
+---
 
 ### children?
 
 > `optional` **children**: `ReactNode`
 
-Defined in: node\_modules/@types/react/index.d.ts:2206
+Defined in: node_modules/@types/react/index.d.ts:2206
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.children`
 
-***
+---
 
 ### className?
 
 > `optional` **className**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2735
+Defined in: node_modules/@types/react/index.d.ts:2735
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.className`
 
-***
+---
 
 ### color?
 
 > `optional` **color**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2774
+Defined in: node_modules/@types/react/index.d.ts:2774
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.color`
 
-***
+---
 
 ### content?
 
 > `optional` **content**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2760
+Defined in: node_modules/@types/react/index.d.ts:2760
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.content`
 
-***
+---
 
 ### contentEditable?
 
 > `optional` **contentEditable**: `Booleanish` \| `"inherit"` \| `"plaintext-only"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2736
+Defined in: node_modules/@types/react/index.d.ts:2736
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.contentEditable`
 
-***
+---
 
 ### contextMenu?
 
 > `optional` **contextMenu**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2737
+Defined in: node_modules/@types/react/index.d.ts:2737
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.contextMenu`
 
-***
+---
 
 ### dangerouslySetInnerHTML?
 
 > `optional` **dangerouslySetInnerHTML**: `object`
 
-Defined in: node\_modules/@types/react/index.d.ts:2207
+Defined in: node_modules/@types/react/index.d.ts:2207
 
 #### \_\_html
 
@@ -1057,209 +1057,209 @@ Defined in: node\_modules/@types/react/index.d.ts:2207
 
 `React.ButtonHTMLAttributes.dangerouslySetInnerHTML`
 
-***
+---
 
 ### datatype?
 
 > `optional` **datatype**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2761
+Defined in: node_modules/@types/react/index.d.ts:2761
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.datatype`
 
-***
+---
 
 ### defaultChecked?
 
 > `optional` **defaultChecked**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2726
+Defined in: node_modules/@types/react/index.d.ts:2726
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.defaultChecked`
 
-***
+---
 
 ### defaultValue?
 
 > `optional` **defaultValue**: `string` \| `number` \| readonly `string`[]
 
-Defined in: node\_modules/@types/react/index.d.ts:2727
+Defined in: node_modules/@types/react/index.d.ts:2727
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.defaultValue`
 
-***
+---
 
 ### dir?
 
 > `optional` **dir**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2738
+Defined in: node_modules/@types/react/index.d.ts:2738
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.dir`
 
-***
+---
 
 ### disabled?
 
 > `optional` **disabled**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2992
+Defined in: node_modules/@types/react/index.d.ts:2992
 
 #### Inherited from
 
 `ButtonProps`.[`disabled`](#disabled)
 
-***
+---
 
 ### draggable?
 
 > `optional` **draggable**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2739
+Defined in: node_modules/@types/react/index.d.ts:2739
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.draggable`
 
-***
+---
 
 ### enterKeyHint?
 
 > `optional` **enterKeyHint**: `"search"` \| `"enter"` \| `"done"` \| `"go"` \| `"next"` \| `"previous"` \| `"send"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2740
+Defined in: node_modules/@types/react/index.d.ts:2740
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.enterKeyHint`
 
-***
+---
 
 ### exportparts?
 
 > `optional` **exportparts**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2807
+Defined in: node_modules/@types/react/index.d.ts:2807
 
 #### See
 
-[https://developer.mozilla.org/en-US/docs/Web/HTML/Global\_attributes/exportparts](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/exportparts)
+[https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/exportparts](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/exportparts)
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.exportparts`
 
-***
+---
 
 ### form?
 
 > `optional` **form**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2993
+Defined in: node_modules/@types/react/index.d.ts:2993
 
 #### Inherited from
 
 `ButtonProps`.[`form`](#form)
 
-***
+---
 
 ### formAction?
 
 > `optional` **formAction**: `string` \| (`formData`) => `void` \| `Promise`\<`void`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2994
+Defined in: node_modules/@types/react/index.d.ts:2994
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.formAction`
 
-***
+---
 
 ### formEncType?
 
 > `optional` **formEncType**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:3001
+Defined in: node_modules/@types/react/index.d.ts:3001
 
 #### Inherited from
 
 `ButtonProps`.[`formEncType`](#formenctype)
 
-***
+---
 
 ### formMethod?
 
 > `optional` **formMethod**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:3002
+Defined in: node_modules/@types/react/index.d.ts:3002
 
 #### Inherited from
 
 `ButtonProps`.[`formMethod`](#formmethod)
 
-***
+---
 
 ### formNoValidate?
 
 > `optional` **formNoValidate**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:3003
+Defined in: node_modules/@types/react/index.d.ts:3003
 
 #### Inherited from
 
 `ButtonProps`.[`formNoValidate`](#formnovalidate)
 
-***
+---
 
 ### formTarget?
 
 > `optional` **formTarget**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:3004
+Defined in: node_modules/@types/react/index.d.ts:3004
 
 #### Inherited from
 
 `ButtonProps`.[`formTarget`](#formtarget)
 
-***
+---
 
 ### hidden?
 
 > `optional` **hidden**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2741
+Defined in: node_modules/@types/react/index.d.ts:2741
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.hidden`
 
-***
+---
 
 ### id?
 
 > `optional` **id**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2742
+Defined in: node_modules/@types/react/index.d.ts:2742
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.id`
 
-***
+---
 
 ### inert?
 
 > `optional` **inert**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2793
+Defined in: node_modules/@types/react/index.d.ts:2793
 
 #### See
 
@@ -1269,25 +1269,25 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert
 
 `React.ButtonHTMLAttributes.inert`
 
-***
+---
 
 ### inlist?
 
 > `optional` **inlist**: `any`
 
-Defined in: node\_modules/@types/react/index.d.ts:2762
+Defined in: node_modules/@types/react/index.d.ts:2762
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.inlist`
 
-***
+---
 
 ### inputMode?
 
 > `optional` **inputMode**: `"search"` \| `"text"` \| `"none"` \| `"tel"` \| `"url"` \| `"email"` \| `"numeric"` \| `"decimal"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2798
+Defined in: node_modules/@types/react/index.d.ts:2798
 
 Hints at the type of data that might be entered by the user while editing the element or its contents
 
@@ -1299,13 +1299,13 @@ Hints at the type of data that might be entered by the user while editing the el
 
 `React.ButtonHTMLAttributes.inputMode`
 
-***
+---
 
 ### is?
 
 > `optional` **is**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2803
+Defined in: node_modules/@types/react/index.d.ts:2803
 
 Specify that a standard HTML element should behave like a defined custom built-in element
 
@@ -1317,985 +1317,985 @@ Specify that a standard HTML element should behave like a defined custom built-i
 
 `React.ButtonHTMLAttributes.is`
 
-***
+---
 
 ### itemID?
 
 > `optional` **itemID**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2778
+Defined in: node_modules/@types/react/index.d.ts:2778
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.itemID`
 
-***
+---
 
 ### itemProp?
 
 > `optional` **itemProp**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2775
+Defined in: node_modules/@types/react/index.d.ts:2775
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.itemProp`
 
-***
+---
 
 ### itemRef?
 
 > `optional` **itemRef**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2779
+Defined in: node_modules/@types/react/index.d.ts:2779
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.itemRef`
 
-***
+---
 
 ### itemScope?
 
 > `optional` **itemScope**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2776
+Defined in: node_modules/@types/react/index.d.ts:2776
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.itemScope`
 
-***
+---
 
 ### itemType?
 
 > `optional` **itemType**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2777
+Defined in: node_modules/@types/react/index.d.ts:2777
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.itemType`
 
-***
+---
 
 ### lang?
 
 > `optional` **lang**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2743
+Defined in: node_modules/@types/react/index.d.ts:2743
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.lang`
 
-***
+---
 
 ### name?
 
 > `optional` **name**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:3005
+Defined in: node_modules/@types/react/index.d.ts:3005
 
 #### Inherited from
 
 `ButtonProps`.[`name`](#name)
 
-***
+---
 
 ### nonce?
 
 > `optional` **nonce**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2744
+Defined in: node_modules/@types/react/index.d.ts:2744
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.nonce`
 
-***
+---
 
 ### onAbort?
 
 > `optional` **onAbort**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2266
+Defined in: node_modules/@types/react/index.d.ts:2266
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAbort`
 
-***
+---
 
 ### onAbortCapture?
 
 > `optional` **onAbortCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2267
+Defined in: node_modules/@types/react/index.d.ts:2267
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAbortCapture`
 
-***
+---
 
 ### onAnimationEnd?
 
 > `optional` **onAnimationEnd**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2396
+Defined in: node_modules/@types/react/index.d.ts:2396
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationEnd`
 
-***
+---
 
 ### onAnimationEndCapture?
 
 > `optional` **onAnimationEndCapture**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2397
+Defined in: node_modules/@types/react/index.d.ts:2397
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationEndCapture`
 
-***
+---
 
 ### onAnimationIteration?
 
 > `optional` **onAnimationIteration**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2398
+Defined in: node_modules/@types/react/index.d.ts:2398
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationIteration`
 
-***
+---
 
 ### onAnimationIterationCapture?
 
 > `optional` **onAnimationIterationCapture**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2399
+Defined in: node_modules/@types/react/index.d.ts:2399
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationIterationCapture`
 
-***
+---
 
 ### onAnimationStart?
 
 > `optional` **onAnimationStart**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2394
+Defined in: node_modules/@types/react/index.d.ts:2394
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationStart`
 
-***
+---
 
 ### onAnimationStartCapture?
 
 > `optional` **onAnimationStartCapture**: `AnimationEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2395
+Defined in: node_modules/@types/react/index.d.ts:2395
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAnimationStartCapture`
 
-***
+---
 
 ### onAuxClick?
 
 > `optional` **onAuxClick**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2312
+Defined in: node_modules/@types/react/index.d.ts:2312
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAuxClick`
 
-***
+---
 
 ### onAuxClickCapture?
 
 > `optional` **onAuxClickCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2313
+Defined in: node_modules/@types/react/index.d.ts:2313
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onAuxClickCapture`
 
-***
+---
 
 ### onBeforeInput?
 
 > `optional` **onBeforeInput**: `InputEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2238
+Defined in: node_modules/@types/react/index.d.ts:2238
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onBeforeInput`
 
-***
+---
 
 ### onBeforeInputCapture?
 
 > `optional` **onBeforeInputCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2239
+Defined in: node_modules/@types/react/index.d.ts:2239
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onBeforeInputCapture`
 
-***
+---
 
 ### onBeforeToggle?
 
 > `optional` **onBeforeToggle**: `ToggleEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2403
+Defined in: node_modules/@types/react/index.d.ts:2403
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onBeforeToggle`
 
-***
+---
 
 ### onBlur?
 
 > `optional` **onBlur**: `FocusEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2232
+Defined in: node_modules/@types/react/index.d.ts:2232
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onBlur`
 
-***
+---
 
 ### onBlurCapture?
 
 > `optional` **onBlurCapture**: `FocusEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2233
+Defined in: node_modules/@types/react/index.d.ts:2233
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onBlurCapture`
 
-***
+---
 
 ### onCanPlay?
 
 > `optional` **onCanPlay**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2268
+Defined in: node_modules/@types/react/index.d.ts:2268
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCanPlay`
 
-***
+---
 
 ### onCanPlayCapture?
 
 > `optional` **onCanPlayCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2269
+Defined in: node_modules/@types/react/index.d.ts:2269
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCanPlayCapture`
 
-***
+---
 
 ### onCanPlayThrough?
 
 > `optional` **onCanPlayThrough**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2270
+Defined in: node_modules/@types/react/index.d.ts:2270
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCanPlayThrough`
 
-***
+---
 
 ### onCanPlayThroughCapture?
 
 > `optional` **onCanPlayThroughCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2271
+Defined in: node_modules/@types/react/index.d.ts:2271
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCanPlayThroughCapture`
 
-***
+---
 
 ### onChange?
 
 > `optional` **onChange**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2236
+Defined in: node_modules/@types/react/index.d.ts:2236
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onChange`
 
-***
+---
 
 ### onChangeCapture?
 
 > `optional` **onChangeCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2237
+Defined in: node_modules/@types/react/index.d.ts:2237
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onChangeCapture`
 
-***
+---
 
 ### onClick?
 
 > `optional` **onClick**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2314
+Defined in: node_modules/@types/react/index.d.ts:2314
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onClick`
 
-***
+---
 
 ### onClickCapture?
 
 > `optional` **onClickCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2315
+Defined in: node_modules/@types/react/index.d.ts:2315
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onClickCapture`
 
-***
+---
 
 ### onCompositionEnd?
 
 > `optional` **onCompositionEnd**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2222
+Defined in: node_modules/@types/react/index.d.ts:2222
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionEnd`
 
-***
+---
 
 ### onCompositionEndCapture?
 
 > `optional` **onCompositionEndCapture**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2223
+Defined in: node_modules/@types/react/index.d.ts:2223
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionEndCapture`
 
-***
+---
 
 ### onCompositionStart?
 
 > `optional` **onCompositionStart**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2224
+Defined in: node_modules/@types/react/index.d.ts:2224
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionStart`
 
-***
+---
 
 ### onCompositionStartCapture?
 
 > `optional` **onCompositionStartCapture**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2225
+Defined in: node_modules/@types/react/index.d.ts:2225
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionStartCapture`
 
-***
+---
 
 ### onCompositionUpdate?
 
 > `optional` **onCompositionUpdate**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2226
+Defined in: node_modules/@types/react/index.d.ts:2226
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionUpdate`
 
-***
+---
 
 ### onCompositionUpdateCapture?
 
 > `optional` **onCompositionUpdateCapture**: `CompositionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2227
+Defined in: node_modules/@types/react/index.d.ts:2227
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCompositionUpdateCapture`
 
-***
+---
 
 ### onContextMenu?
 
 > `optional` **onContextMenu**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2316
+Defined in: node_modules/@types/react/index.d.ts:2316
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onContextMenu`
 
-***
+---
 
 ### onContextMenuCapture?
 
 > `optional` **onContextMenuCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2317
+Defined in: node_modules/@types/react/index.d.ts:2317
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onContextMenuCapture`
 
-***
+---
 
 ### onCopy?
 
 > `optional` **onCopy**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2214
+Defined in: node_modules/@types/react/index.d.ts:2214
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCopy`
 
-***
+---
 
 ### onCopyCapture?
 
 > `optional` **onCopyCapture**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2215
+Defined in: node_modules/@types/react/index.d.ts:2215
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCopyCapture`
 
-***
+---
 
 ### onCut?
 
 > `optional` **onCut**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2216
+Defined in: node_modules/@types/react/index.d.ts:2216
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCut`
 
-***
+---
 
 ### onCutCapture?
 
 > `optional` **onCutCapture**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2217
+Defined in: node_modules/@types/react/index.d.ts:2217
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onCutCapture`
 
-***
+---
 
 ### onDoubleClick?
 
 > `optional` **onDoubleClick**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2318
+Defined in: node_modules/@types/react/index.d.ts:2318
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDoubleClick`
 
-***
+---
 
 ### onDoubleClickCapture?
 
 > `optional` **onDoubleClickCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2319
+Defined in: node_modules/@types/react/index.d.ts:2319
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDoubleClickCapture`
 
-***
+---
 
 ### onDrag?
 
 > `optional` **onDrag**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2320
+Defined in: node_modules/@types/react/index.d.ts:2320
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDrag`
 
-***
+---
 
 ### onDragCapture?
 
 > `optional` **onDragCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2321
+Defined in: node_modules/@types/react/index.d.ts:2321
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragCapture`
 
-***
+---
 
 ### onDragEnd?
 
 > `optional` **onDragEnd**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2322
+Defined in: node_modules/@types/react/index.d.ts:2322
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragEnd`
 
-***
+---
 
 ### onDragEndCapture?
 
 > `optional` **onDragEndCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2323
+Defined in: node_modules/@types/react/index.d.ts:2323
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragEndCapture`
 
-***
+---
 
 ### onDragEnter?
 
 > `optional` **onDragEnter**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2324
+Defined in: node_modules/@types/react/index.d.ts:2324
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragEnter`
 
-***
+---
 
 ### onDragEnterCapture?
 
 > `optional` **onDragEnterCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2325
+Defined in: node_modules/@types/react/index.d.ts:2325
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragEnterCapture`
 
-***
+---
 
 ### onDragExit?
 
 > `optional` **onDragExit**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2326
+Defined in: node_modules/@types/react/index.d.ts:2326
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragExit`
 
-***
+---
 
 ### onDragExitCapture?
 
 > `optional` **onDragExitCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2327
+Defined in: node_modules/@types/react/index.d.ts:2327
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragExitCapture`
 
-***
+---
 
 ### onDragLeave?
 
 > `optional` **onDragLeave**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2328
+Defined in: node_modules/@types/react/index.d.ts:2328
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragLeave`
 
-***
+---
 
 ### onDragLeaveCapture?
 
 > `optional` **onDragLeaveCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2329
+Defined in: node_modules/@types/react/index.d.ts:2329
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragLeaveCapture`
 
-***
+---
 
 ### onDragOver?
 
 > `optional` **onDragOver**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2330
+Defined in: node_modules/@types/react/index.d.ts:2330
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragOver`
 
-***
+---
 
 ### onDragOverCapture?
 
 > `optional` **onDragOverCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2331
+Defined in: node_modules/@types/react/index.d.ts:2331
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragOverCapture`
 
-***
+---
 
 ### onDragStart?
 
 > `optional` **onDragStart**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2332
+Defined in: node_modules/@types/react/index.d.ts:2332
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragStart`
 
-***
+---
 
 ### onDragStartCapture?
 
 > `optional` **onDragStartCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2333
+Defined in: node_modules/@types/react/index.d.ts:2333
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDragStartCapture`
 
-***
+---
 
 ### onDrop?
 
 > `optional` **onDrop**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2334
+Defined in: node_modules/@types/react/index.d.ts:2334
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDrop`
 
-***
+---
 
 ### onDropCapture?
 
 > `optional` **onDropCapture**: `DragEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2335
+Defined in: node_modules/@types/react/index.d.ts:2335
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDropCapture`
 
-***
+---
 
 ### onDurationChange?
 
 > `optional` **onDurationChange**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2272
+Defined in: node_modules/@types/react/index.d.ts:2272
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDurationChange`
 
-***
+---
 
 ### onDurationChangeCapture?
 
 > `optional` **onDurationChangeCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2273
+Defined in: node_modules/@types/react/index.d.ts:2273
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onDurationChangeCapture`
 
-***
+---
 
 ### onEmptied?
 
 > `optional` **onEmptied**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2274
+Defined in: node_modules/@types/react/index.d.ts:2274
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEmptied`
 
-***
+---
 
 ### onEmptiedCapture?
 
 > `optional` **onEmptiedCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2275
+Defined in: node_modules/@types/react/index.d.ts:2275
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEmptiedCapture`
 
-***
+---
 
 ### onEncrypted?
 
 > `optional` **onEncrypted**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2276
+Defined in: node_modules/@types/react/index.d.ts:2276
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEncrypted`
 
-***
+---
 
 ### onEncryptedCapture?
 
 > `optional` **onEncryptedCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2277
+Defined in: node_modules/@types/react/index.d.ts:2277
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEncryptedCapture`
 
-***
+---
 
 ### onEnded?
 
 > `optional` **onEnded**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2278
+Defined in: node_modules/@types/react/index.d.ts:2278
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEnded`
 
-***
+---
 
 ### onEndedCapture?
 
 > `optional` **onEndedCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2279
+Defined in: node_modules/@types/react/index.d.ts:2279
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onEndedCapture`
 
-***
+---
 
 ### onError?
 
 > `optional` **onError**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2252
+Defined in: node_modules/@types/react/index.d.ts:2252
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onError`
 
-***
+---
 
 ### onErrorCapture?
 
 > `optional` **onErrorCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2253
+Defined in: node_modules/@types/react/index.d.ts:2253
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onErrorCapture`
 
-***
+---
 
 ### onFocus?
 
 > `optional` **onFocus**: `FocusEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2230
+Defined in: node_modules/@types/react/index.d.ts:2230
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onFocus`
 
-***
+---
 
 ### onFocusCapture?
 
 > `optional` **onFocusCapture**: `FocusEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2231
+Defined in: node_modules/@types/react/index.d.ts:2231
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onFocusCapture`
 
-***
+---
 
 ### onGotPointerCapture?
 
 > `optional` **onGotPointerCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2378
+Defined in: node_modules/@types/react/index.d.ts:2378
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onGotPointerCapture`
 
-***
+---
 
 ### onGotPointerCaptureCapture?
 
 > `optional` **onGotPointerCaptureCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2379
+Defined in: node_modules/@types/react/index.d.ts:2379
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onGotPointerCaptureCapture`
 
-***
+---
 
 ### onInput?
 
 > `optional` **onInput**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2240
+Defined in: node_modules/@types/react/index.d.ts:2240
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onInput`
 
-***
+---
 
 ### onInputCapture?
 
 > `optional` **onInputCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2241
+Defined in: node_modules/@types/react/index.d.ts:2241
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onInputCapture`
 
-***
+---
 
 ### onInvalid?
 
 > `optional` **onInvalid**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2246
+Defined in: node_modules/@types/react/index.d.ts:2246
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onInvalid`
 
-***
+---
 
 ### onInvalidCapture?
 
 > `optional` **onInvalidCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2247
+Defined in: node_modules/@types/react/index.d.ts:2247
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onInvalidCapture`
 
-***
+---
 
 ### onKeyDown?
 
 > `optional` **onKeyDown**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2256
+Defined in: node_modules/@types/react/index.d.ts:2256
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onKeyDown`
 
-***
+---
 
 ### onKeyDownCapture?
 
 > `optional` **onKeyDownCapture**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2257
+Defined in: node_modules/@types/react/index.d.ts:2257
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onKeyDownCapture`
 
-***
+---
 
 ### ~~onKeyPress?~~
 
 > `optional` **onKeyPress**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2259
+Defined in: node_modules/@types/react/index.d.ts:2259
 
 #### Deprecated
 
@@ -2305,13 +2305,13 @@ Use `onKeyUp` or `onKeyDown` instead
 
 `React.ButtonHTMLAttributes.onKeyPress`
 
-***
+---
 
 ### ~~onKeyPressCapture?~~
 
 > `optional` **onKeyPressCapture**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2261
+Defined in: node_modules/@types/react/index.d.ts:2261
 
 #### Deprecated
 
@@ -2321,1283 +2321,1283 @@ Use `onKeyUpCapture` or `onKeyDownCapture` instead
 
 `React.ButtonHTMLAttributes.onKeyPressCapture`
 
-***
+---
 
 ### onKeyUp?
 
 > `optional` **onKeyUp**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2262
+Defined in: node_modules/@types/react/index.d.ts:2262
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onKeyUp`
 
-***
+---
 
 ### onKeyUpCapture?
 
 > `optional` **onKeyUpCapture**: `KeyboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2263
+Defined in: node_modules/@types/react/index.d.ts:2263
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onKeyUpCapture`
 
-***
+---
 
 ### onLoad?
 
 > `optional` **onLoad**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2250
+Defined in: node_modules/@types/react/index.d.ts:2250
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoad`
 
-***
+---
 
 ### onLoadCapture?
 
 > `optional` **onLoadCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2251
+Defined in: node_modules/@types/react/index.d.ts:2251
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadCapture`
 
-***
+---
 
 ### onLoadedData?
 
 > `optional` **onLoadedData**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2280
+Defined in: node_modules/@types/react/index.d.ts:2280
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadedData`
 
-***
+---
 
 ### onLoadedDataCapture?
 
 > `optional` **onLoadedDataCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2281
+Defined in: node_modules/@types/react/index.d.ts:2281
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadedDataCapture`
 
-***
+---
 
 ### onLoadedMetadata?
 
 > `optional` **onLoadedMetadata**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2282
+Defined in: node_modules/@types/react/index.d.ts:2282
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadedMetadata`
 
-***
+---
 
 ### onLoadedMetadataCapture?
 
 > `optional` **onLoadedMetadataCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2283
+Defined in: node_modules/@types/react/index.d.ts:2283
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadedMetadataCapture`
 
-***
+---
 
 ### onLoadStart?
 
 > `optional` **onLoadStart**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2284
+Defined in: node_modules/@types/react/index.d.ts:2284
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadStart`
 
-***
+---
 
 ### onLoadStartCapture?
 
 > `optional` **onLoadStartCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2285
+Defined in: node_modules/@types/react/index.d.ts:2285
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLoadStartCapture`
 
-***
+---
 
 ### onLostPointerCapture?
 
 > `optional` **onLostPointerCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2380
+Defined in: node_modules/@types/react/index.d.ts:2380
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLostPointerCapture`
 
-***
+---
 
 ### onLostPointerCaptureCapture?
 
 > `optional` **onLostPointerCaptureCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2381
+Defined in: node_modules/@types/react/index.d.ts:2381
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onLostPointerCaptureCapture`
 
-***
+---
 
 ### onMouseDown?
 
 > `optional` **onMouseDown**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2336
+Defined in: node_modules/@types/react/index.d.ts:2336
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseDown`
 
-***
+---
 
 ### onMouseDownCapture?
 
 > `optional` **onMouseDownCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2337
+Defined in: node_modules/@types/react/index.d.ts:2337
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseDownCapture`
 
-***
+---
 
 ### onMouseEnter?
 
 > `optional` **onMouseEnter**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2338
+Defined in: node_modules/@types/react/index.d.ts:2338
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseEnter`
 
-***
+---
 
 ### onMouseLeave?
 
 > `optional` **onMouseLeave**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2339
+Defined in: node_modules/@types/react/index.d.ts:2339
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseLeave`
 
-***
+---
 
 ### onMouseMove?
 
 > `optional` **onMouseMove**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2340
+Defined in: node_modules/@types/react/index.d.ts:2340
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseMove`
 
-***
+---
 
 ### onMouseMoveCapture?
 
 > `optional` **onMouseMoveCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2341
+Defined in: node_modules/@types/react/index.d.ts:2341
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseMoveCapture`
 
-***
+---
 
 ### onMouseOut?
 
 > `optional` **onMouseOut**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2342
+Defined in: node_modules/@types/react/index.d.ts:2342
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseOut`
 
-***
+---
 
 ### onMouseOutCapture?
 
 > `optional` **onMouseOutCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2343
+Defined in: node_modules/@types/react/index.d.ts:2343
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseOutCapture`
 
-***
+---
 
 ### onMouseOver?
 
 > `optional` **onMouseOver**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2344
+Defined in: node_modules/@types/react/index.d.ts:2344
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseOver`
 
-***
+---
 
 ### onMouseOverCapture?
 
 > `optional` **onMouseOverCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2345
+Defined in: node_modules/@types/react/index.d.ts:2345
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseOverCapture`
 
-***
+---
 
 ### onMouseUp?
 
 > `optional` **onMouseUp**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2346
+Defined in: node_modules/@types/react/index.d.ts:2346
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseUp`
 
-***
+---
 
 ### onMouseUpCapture?
 
 > `optional` **onMouseUpCapture**: `MouseEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2347
+Defined in: node_modules/@types/react/index.d.ts:2347
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onMouseUpCapture`
 
-***
+---
 
 ### onPaste?
 
 > `optional` **onPaste**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2218
+Defined in: node_modules/@types/react/index.d.ts:2218
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPaste`
 
-***
+---
 
 ### onPasteCapture?
 
 > `optional` **onPasteCapture**: `ClipboardEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2219
+Defined in: node_modules/@types/react/index.d.ts:2219
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPasteCapture`
 
-***
+---
 
 ### onPause?
 
 > `optional` **onPause**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2286
+Defined in: node_modules/@types/react/index.d.ts:2286
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPause`
 
-***
+---
 
 ### onPauseCapture?
 
 > `optional` **onPauseCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2287
+Defined in: node_modules/@types/react/index.d.ts:2287
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPauseCapture`
 
-***
+---
 
 ### onPlay?
 
 > `optional` **onPlay**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2288
+Defined in: node_modules/@types/react/index.d.ts:2288
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPlay`
 
-***
+---
 
 ### onPlayCapture?
 
 > `optional` **onPlayCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2289
+Defined in: node_modules/@types/react/index.d.ts:2289
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPlayCapture`
 
-***
+---
 
 ### onPlaying?
 
 > `optional` **onPlaying**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2290
+Defined in: node_modules/@types/react/index.d.ts:2290
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPlaying`
 
-***
+---
 
 ### onPlayingCapture?
 
 > `optional` **onPlayingCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2291
+Defined in: node_modules/@types/react/index.d.ts:2291
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPlayingCapture`
 
-***
+---
 
 ### onPointerCancel?
 
 > `optional` **onPointerCancel**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2370
+Defined in: node_modules/@types/react/index.d.ts:2370
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerCancel`
 
-***
+---
 
 ### onPointerCancelCapture?
 
 > `optional` **onPointerCancelCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2371
+Defined in: node_modules/@types/react/index.d.ts:2371
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerCancelCapture`
 
-***
+---
 
 ### onPointerDown?
 
 > `optional` **onPointerDown**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2364
+Defined in: node_modules/@types/react/index.d.ts:2364
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerDown`
 
-***
+---
 
 ### onPointerDownCapture?
 
 > `optional` **onPointerDownCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2365
+Defined in: node_modules/@types/react/index.d.ts:2365
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerDownCapture`
 
-***
+---
 
 ### onPointerEnter?
 
 > `optional` **onPointerEnter**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2372
+Defined in: node_modules/@types/react/index.d.ts:2372
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerEnter`
 
-***
+---
 
 ### onPointerLeave?
 
 > `optional` **onPointerLeave**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2373
+Defined in: node_modules/@types/react/index.d.ts:2373
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerLeave`
 
-***
+---
 
 ### onPointerMove?
 
 > `optional` **onPointerMove**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2366
+Defined in: node_modules/@types/react/index.d.ts:2366
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerMove`
 
-***
+---
 
 ### onPointerMoveCapture?
 
 > `optional` **onPointerMoveCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2367
+Defined in: node_modules/@types/react/index.d.ts:2367
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerMoveCapture`
 
-***
+---
 
 ### onPointerOut?
 
 > `optional` **onPointerOut**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2376
+Defined in: node_modules/@types/react/index.d.ts:2376
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerOut`
 
-***
+---
 
 ### onPointerOutCapture?
 
 > `optional` **onPointerOutCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2377
+Defined in: node_modules/@types/react/index.d.ts:2377
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerOutCapture`
 
-***
+---
 
 ### onPointerOver?
 
 > `optional` **onPointerOver**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2374
+Defined in: node_modules/@types/react/index.d.ts:2374
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerOver`
 
-***
+---
 
 ### onPointerOverCapture?
 
 > `optional` **onPointerOverCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2375
+Defined in: node_modules/@types/react/index.d.ts:2375
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerOverCapture`
 
-***
+---
 
 ### onPointerUp?
 
 > `optional` **onPointerUp**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2368
+Defined in: node_modules/@types/react/index.d.ts:2368
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerUp`
 
-***
+---
 
 ### onPointerUpCapture?
 
 > `optional` **onPointerUpCapture**: `PointerEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2369
+Defined in: node_modules/@types/react/index.d.ts:2369
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onPointerUpCapture`
 
-***
+---
 
 ### onProgress?
 
 > `optional` **onProgress**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2292
+Defined in: node_modules/@types/react/index.d.ts:2292
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onProgress`
 
-***
+---
 
 ### onProgressCapture?
 
 > `optional` **onProgressCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2293
+Defined in: node_modules/@types/react/index.d.ts:2293
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onProgressCapture`
 
-***
+---
 
 ### onRateChange?
 
 > `optional` **onRateChange**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2294
+Defined in: node_modules/@types/react/index.d.ts:2294
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onRateChange`
 
-***
+---
 
 ### onRateChangeCapture?
 
 > `optional` **onRateChangeCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2295
+Defined in: node_modules/@types/react/index.d.ts:2295
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onRateChangeCapture`
 
-***
+---
 
 ### onReset?
 
 > `optional` **onReset**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2242
+Defined in: node_modules/@types/react/index.d.ts:2242
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onReset`
 
-***
+---
 
 ### onResetCapture?
 
 > `optional` **onResetCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2243
+Defined in: node_modules/@types/react/index.d.ts:2243
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onResetCapture`
 
-***
+---
 
 ### onScroll?
 
 > `optional` **onScroll**: `UIEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2384
+Defined in: node_modules/@types/react/index.d.ts:2384
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onScroll`
 
-***
+---
 
 ### onScrollCapture?
 
 > `optional` **onScrollCapture**: `UIEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2385
+Defined in: node_modules/@types/react/index.d.ts:2385
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onScrollCapture`
 
-***
+---
 
 ### onScrollEnd?
 
 > `optional` **onScrollEnd**: `UIEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2386
+Defined in: node_modules/@types/react/index.d.ts:2386
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onScrollEnd`
 
-***
+---
 
 ### onScrollEndCapture?
 
 > `optional` **onScrollEndCapture**: `UIEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2387
+Defined in: node_modules/@types/react/index.d.ts:2387
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onScrollEndCapture`
 
-***
+---
 
 ### onSeeked?
 
 > `optional` **onSeeked**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2296
+Defined in: node_modules/@types/react/index.d.ts:2296
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSeeked`
 
-***
+---
 
 ### onSeekedCapture?
 
 > `optional` **onSeekedCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2297
+Defined in: node_modules/@types/react/index.d.ts:2297
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSeekedCapture`
 
-***
+---
 
 ### onSeeking?
 
 > `optional` **onSeeking**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2298
+Defined in: node_modules/@types/react/index.d.ts:2298
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSeeking`
 
-***
+---
 
 ### onSeekingCapture?
 
 > `optional` **onSeekingCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2299
+Defined in: node_modules/@types/react/index.d.ts:2299
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSeekingCapture`
 
-***
+---
 
 ### onSelect?
 
 > `optional` **onSelect**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2350
+Defined in: node_modules/@types/react/index.d.ts:2350
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSelect`
 
-***
+---
 
 ### onSelectCapture?
 
 > `optional` **onSelectCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2351
+Defined in: node_modules/@types/react/index.d.ts:2351
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSelectCapture`
 
-***
+---
 
 ### onStalled?
 
 > `optional` **onStalled**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2300
+Defined in: node_modules/@types/react/index.d.ts:2300
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onStalled`
 
-***
+---
 
 ### onStalledCapture?
 
 > `optional` **onStalledCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2301
+Defined in: node_modules/@types/react/index.d.ts:2301
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onStalledCapture`
 
-***
+---
 
 ### onSubmit?
 
 > `optional` **onSubmit**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2244
+Defined in: node_modules/@types/react/index.d.ts:2244
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSubmit`
 
-***
+---
 
 ### onSubmitCapture?
 
 > `optional` **onSubmitCapture**: `FormEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2245
+Defined in: node_modules/@types/react/index.d.ts:2245
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSubmitCapture`
 
-***
+---
 
 ### onSuspend?
 
 > `optional` **onSuspend**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2302
+Defined in: node_modules/@types/react/index.d.ts:2302
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSuspend`
 
-***
+---
 
 ### onSuspendCapture?
 
 > `optional` **onSuspendCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2303
+Defined in: node_modules/@types/react/index.d.ts:2303
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onSuspendCapture`
 
-***
+---
 
 ### onTimeUpdate?
 
 > `optional` **onTimeUpdate**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2304
+Defined in: node_modules/@types/react/index.d.ts:2304
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTimeUpdate`
 
-***
+---
 
 ### onTimeUpdateCapture?
 
 > `optional` **onTimeUpdateCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2305
+Defined in: node_modules/@types/react/index.d.ts:2305
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTimeUpdateCapture`
 
-***
+---
 
 ### onToggle?
 
 > `optional` **onToggle**: `ToggleEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2402
+Defined in: node_modules/@types/react/index.d.ts:2402
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onToggle`
 
-***
+---
 
 ### onTouchCancel?
 
 > `optional` **onTouchCancel**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2354
+Defined in: node_modules/@types/react/index.d.ts:2354
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchCancel`
 
-***
+---
 
 ### onTouchCancelCapture?
 
 > `optional` **onTouchCancelCapture**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2355
+Defined in: node_modules/@types/react/index.d.ts:2355
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchCancelCapture`
 
-***
+---
 
 ### onTouchEnd?
 
 > `optional` **onTouchEnd**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2356
+Defined in: node_modules/@types/react/index.d.ts:2356
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchEnd`
 
-***
+---
 
 ### onTouchEndCapture?
 
 > `optional` **onTouchEndCapture**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2357
+Defined in: node_modules/@types/react/index.d.ts:2357
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchEndCapture`
 
-***
+---
 
 ### onTouchMove?
 
 > `optional` **onTouchMove**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2358
+Defined in: node_modules/@types/react/index.d.ts:2358
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchMove`
 
-***
+---
 
 ### onTouchMoveCapture?
 
 > `optional` **onTouchMoveCapture**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2359
+Defined in: node_modules/@types/react/index.d.ts:2359
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchMoveCapture`
 
-***
+---
 
 ### onTouchStart?
 
 > `optional` **onTouchStart**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2360
+Defined in: node_modules/@types/react/index.d.ts:2360
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchStart`
 
-***
+---
 
 ### onTouchStartCapture?
 
 > `optional` **onTouchStartCapture**: `TouchEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2361
+Defined in: node_modules/@types/react/index.d.ts:2361
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTouchStartCapture`
 
-***
+---
 
 ### onTransitionCancel?
 
 > `optional` **onTransitionCancel**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2406
+Defined in: node_modules/@types/react/index.d.ts:2406
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionCancel`
 
-***
+---
 
 ### onTransitionCancelCapture?
 
 > `optional` **onTransitionCancelCapture**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2407
+Defined in: node_modules/@types/react/index.d.ts:2407
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionCancelCapture`
 
-***
+---
 
 ### onTransitionEnd?
 
 > `optional` **onTransitionEnd**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2408
+Defined in: node_modules/@types/react/index.d.ts:2408
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionEnd`
 
-***
+---
 
 ### onTransitionEndCapture?
 
 > `optional` **onTransitionEndCapture**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2409
+Defined in: node_modules/@types/react/index.d.ts:2409
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionEndCapture`
 
-***
+---
 
 ### onTransitionRun?
 
 > `optional` **onTransitionRun**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2410
+Defined in: node_modules/@types/react/index.d.ts:2410
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionRun`
 
-***
+---
 
 ### onTransitionRunCapture?
 
 > `optional` **onTransitionRunCapture**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2411
+Defined in: node_modules/@types/react/index.d.ts:2411
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionRunCapture`
 
-***
+---
 
 ### onTransitionStart?
 
 > `optional` **onTransitionStart**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2412
+Defined in: node_modules/@types/react/index.d.ts:2412
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionStart`
 
-***
+---
 
 ### onTransitionStartCapture?
 
 > `optional` **onTransitionStartCapture**: `TransitionEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2413
+Defined in: node_modules/@types/react/index.d.ts:2413
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onTransitionStartCapture`
 
-***
+---
 
 ### onVolumeChange?
 
 > `optional` **onVolumeChange**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2306
+Defined in: node_modules/@types/react/index.d.ts:2306
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onVolumeChange`
 
-***
+---
 
 ### onVolumeChangeCapture?
 
 > `optional` **onVolumeChangeCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2307
+Defined in: node_modules/@types/react/index.d.ts:2307
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onVolumeChangeCapture`
 
-***
+---
 
 ### onWaiting?
 
 > `optional` **onWaiting**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2308
+Defined in: node_modules/@types/react/index.d.ts:2308
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onWaiting`
 
-***
+---
 
 ### onWaitingCapture?
 
 > `optional` **onWaitingCapture**: `ReactEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2309
+Defined in: node_modules/@types/react/index.d.ts:2309
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onWaitingCapture`
 
-***
+---
 
 ### onWheel?
 
 > `optional` **onWheel**: `WheelEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2390
+Defined in: node_modules/@types/react/index.d.ts:2390
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onWheel`
 
-***
+---
 
 ### onWheelCapture?
 
 > `optional` **onWheelCapture**: `WheelEventHandler`\<`HTMLButtonElement`\>
 
-Defined in: node\_modules/@types/react/index.d.ts:2391
+Defined in: node_modules/@types/react/index.d.ts:2391
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.onWheelCapture`
 
-***
+---
 
 ### part?
 
 > `optional` **part**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2811
+Defined in: node_modules/@types/react/index.d.ts:2811
 
 #### See
 
-[https://developer.mozilla.org/en-US/docs/Web/HTML/Global\_attributes/part](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/part)
+[https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/part](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/part)
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.part`
 
-***
+---
 
 ### popover?
 
 > `optional` **popover**: `""` \| `"auto"` \| `"manual"` \| `"hint"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2785
+Defined in: node_modules/@types/react/index.d.ts:2785
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.popover`
 
-***
+---
 
 ### popoverTarget?
 
 > `optional` **popoverTarget**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2787
+Defined in: node_modules/@types/react/index.d.ts:2787
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.popoverTarget`
 
-***
+---
 
 ### popoverTargetAction?
 
 > `optional` **popoverTargetAction**: `"toggle"` \| `"show"` \| `"hide"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2786
+Defined in: node_modules/@types/react/index.d.ts:2786
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.popoverTargetAction`
 
-***
+---
 
 ### prefix?
 
 > `optional` **prefix**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2763
+Defined in: node_modules/@types/react/index.d.ts:2763
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.prefix`
 
-***
+---
 
 ### property?
 
 > `optional` **property**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2764
+Defined in: node_modules/@types/react/index.d.ts:2764
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.property`
 
-***
+---
 
 ### radioGroup?
 
 > `optional` **radioGroup**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2753
+Defined in: node_modules/@types/react/index.d.ts:2753
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.radioGroup`
 
-***
+---
 
 ### rel?
 
 > `optional` **rel**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2765
+Defined in: node_modules/@types/react/index.d.ts:2765
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.rel`
 
-***
+---
 
 ### resource?
 
 > `optional` **resource**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2766
+Defined in: node_modules/@types/react/index.d.ts:2766
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.resource`
 
-***
+---
 
 ### results?
 
 > `optional` **results**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2780
+Defined in: node_modules/@types/react/index.d.ts:2780
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.results`
 
-***
+---
 
 ### rev?
 
 > `optional` **rev**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2767
+Defined in: node_modules/@types/react/index.d.ts:2767
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.rev`
 
-***
+---
 
 ### role?
 
 > `optional` **role**: `AriaRole`
 
-Defined in: node\_modules/@types/react/index.d.ts:2756
+Defined in: node_modules/@types/react/index.d.ts:2756
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.role`
 
-***
+---
 
 ### security?
 
 > `optional` **security**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2781
+Defined in: node_modules/@types/react/index.d.ts:2781
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.security`
 
-***
+---
 
 ### size?
 
@@ -3609,151 +3609,151 @@ Defined in: [src/components/ui/button.tsx:19](https://github.com/cybons-lab/Lot-
 
 `VariantProps.size`
 
-***
+---
 
 ### slot?
 
 > `optional` **slot**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2745
+Defined in: node_modules/@types/react/index.d.ts:2745
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.slot`
 
-***
+---
 
 ### spellCheck?
 
 > `optional` **spellCheck**: `Booleanish`
 
-Defined in: node\_modules/@types/react/index.d.ts:2746
+Defined in: node_modules/@types/react/index.d.ts:2746
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.spellCheck`
 
-***
+---
 
 ### style?
 
 > `optional` **style**: `CSSProperties`
 
-Defined in: node\_modules/@types/react/index.d.ts:2747
+Defined in: node_modules/@types/react/index.d.ts:2747
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.style`
 
-***
+---
 
 ### suppressContentEditableWarning?
 
 > `optional` **suppressContentEditableWarning**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2728
+Defined in: node_modules/@types/react/index.d.ts:2728
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.suppressContentEditableWarning`
 
-***
+---
 
 ### suppressHydrationWarning?
 
 > `optional` **suppressHydrationWarning**: `boolean`
 
-Defined in: node\_modules/@types/react/index.d.ts:2729
+Defined in: node_modules/@types/react/index.d.ts:2729
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.suppressHydrationWarning`
 
-***
+---
 
 ### tabIndex?
 
 > `optional` **tabIndex**: `number`
 
-Defined in: node\_modules/@types/react/index.d.ts:2748
+Defined in: node_modules/@types/react/index.d.ts:2748
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.tabIndex`
 
-***
+---
 
 ### title?
 
 > `optional` **title**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2749
+Defined in: node_modules/@types/react/index.d.ts:2749
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.title`
 
-***
+---
 
 ### translate?
 
 > `optional` **translate**: `"yes"` \| `"no"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2750
+Defined in: node_modules/@types/react/index.d.ts:2750
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.translate`
 
-***
+---
 
 ### type?
 
 > `optional` **type**: `"button"` \| `"submit"` \| `"reset"`
 
-Defined in: node\_modules/@types/react/index.d.ts:3006
+Defined in: node_modules/@types/react/index.d.ts:3006
 
 #### Inherited from
 
 `ButtonProps`.[`type`](#type)
 
-***
+---
 
 ### typeof?
 
 > `optional` **typeof**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2768
+Defined in: node_modules/@types/react/index.d.ts:2768
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.typeof`
 
-***
+---
 
 ### unselectable?
 
 > `optional` **unselectable**: `"off"` \| `"on"`
 
-Defined in: node\_modules/@types/react/index.d.ts:2782
+Defined in: node_modules/@types/react/index.d.ts:2782
 
 #### Inherited from
 
 `React.ButtonHTMLAttributes.unselectable`
 
-***
+---
 
 ### value?
 
 > `optional` **value**: `string` \| `number` \| readonly `string`[]
 
-Defined in: node\_modules/@types/react/index.d.ts:3007
+Defined in: node_modules/@types/react/index.d.ts:3007
 
 #### Inherited from
 
 `ButtonProps`.[`value`](#value)
 
-***
+---
 
 ### variant?
 
@@ -3765,13 +3765,13 @@ Defined in: [src/components/ui/button.tsx:11](https://github.com/cybons-lab/Lot-
 
 `VariantProps.variant`
 
-***
+---
 
 ### vocab?
 
 > `optional` **vocab**: `string`
 
-Defined in: node\_modules/@types/react/index.d.ts:2769
+Defined in: node_modules/@types/react/index.d.ts:2769
 
 #### Inherited from
 

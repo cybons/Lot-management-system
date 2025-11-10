@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useOrderMutations](../README.md) / useCreateOrder
 
@@ -37,8 +37,8 @@ Mutation オプション
 ```tsx
 const createOrderMutation = useCreateOrder({
   onSuccess: () => {
-    toast.success('受注を作成しました');
-  }
+    toast.success("受注を作成しました");
+  },
 });
 
 await createOrderMutation.mutateAsync(newOrderData);

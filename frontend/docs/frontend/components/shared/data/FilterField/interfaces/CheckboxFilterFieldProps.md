@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/FilterField](../README.md) / CheckboxFilterFieldProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/FilterField.tsx:262](https://github.com/
 
 チェック状態
 
-***
+---
 
 ### className?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/FilterField.tsx:268](https://github.com/
 
 クラス名
 
-***
+---
 
 ### description?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/shared/data/FilterField.tsx:266](https://github.com/
 
 説明文
 
-***
+---
 
 ### disabled?
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/data/FilterField.tsx:270](https://github.com/
 
 無効化
 
-***
+---
 
 ### label
 
@@ -58,7 +58,7 @@ Defined in: [src/components/shared/data/FilterField.tsx:260](https://github.com/
 
 ラベル
 
-***
+---
 
 ### onChange()
 

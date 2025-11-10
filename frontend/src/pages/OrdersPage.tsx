@@ -15,9 +15,7 @@ export const OrdersPage = () => {
   const { data: orders, isLoading: isLoadingOrders } = useOrders();
 
   // 受注詳細の取得
-  const { data: orderDetail, isLoading: isLoadingDetail } = useOrderDetail(
-    selectedOrderId || 0
-  );
+  const { data: orderDetail, isLoading: isLoadingDetail } = useOrderDetail(selectedOrderId || 0);
 
   // ドラッグ&ドロップ引当
   const { assign: dragAssign, isPending: isAssigning } = useDragAssign();
@@ -54,9 +52,7 @@ export const OrdersPage = () => {
             onClick={() => setSelectedOrderId(order.id)}
           >
             <div className="font-semibold">受注ID: {order.id}</div>
-            <div className="text-sm text-gray-600">
-              受注番号: {order.order_no}
-            </div>
+            <div className="text-sm text-gray-600">受注番号: {order.order_no}</div>
           </div>
         ))}
       </div>
@@ -72,26 +68,28 @@ export const OrdersPage = () => {
             <div>
               <div className="mb-4">
                 <div className="font-semibold">受注番号</div>
-                <div>{(orderDetail as OrderWithLinesResponse)?.order_no || '-'}</div>
+                <div>{(orderDetail as OrderWithLinesResponse)?.order_no || "-"}</div>
               </div>
 
               <div className="mb-4">
                 <div className="font-semibold">明細行</div>
                 <div className="space-y-2">
-                  {((orderDetail as OrderWithLinesResponse)?.lines as OrderLine[])?.map((line: OrderLine) => (
-                    <div key={line.id} className="border p-3 rounded">
-                      <div>明細ID: {line.id}</div>
-                      <div>商品コード: {line.product_code}</div>
-                      <div>数量: {line.quantity}</div>
-                      <button
-                        onClick={() => handleDragAssign(1, line.id)}
-                        disabled={isAssigning}
-                        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                      >
-                        {isAssigning ? "引当中..." : "引当実行"}
-                      </button>
-                    </div>
-                  ))}
+                  {((orderDetail as OrderWithLinesResponse)?.lines as OrderLine[])?.map(
+                    (line: OrderLine) => (
+                      <div key={line.id} className="border p-3 rounded">
+                        <div>明細ID: {line.id}</div>
+                        <div>商品コード: {line.product_code}</div>
+                        <div>数量: {line.quantity}</div>
+                        <button
+                          onClick={() => handleDragAssign(1, line.id)}
+                          disabled={isAssigning}
+                          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                        >
+                          {isAssigning ? "引当中..." : "引当実行"}
+                        </button>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </div>

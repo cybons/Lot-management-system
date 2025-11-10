@@ -1,11 +1,13 @@
 """Quantity conversion utilities.
 
-高精度な外部単位→内部単位変換ロジックを提供するサービス層。"""
+高精度な外部単位→内部単位変換ロジックを提供するサービス層。
+"""
 
 from __future__ import annotations
 
-from decimal import Decimal, ROUND_HALF_UP, ROUND_UP, getcontext
+from decimal import ROUND_HALF_UP, ROUND_UP, Decimal, getcontext
 from typing import TYPE_CHECKING, Union
+
 
 getcontext().prec = 28
 
@@ -16,7 +18,7 @@ NumberLike = Union[Decimal, float, int, str]
 
 
 class QuantityConversionError(ValueError):
-    """数量変換時のバリデーションエラー。"""
+    """数量変換時のバリデーションエラー。."""
 
 
 # 将来的には製品ごとの換算テーブルを参照する想定。
@@ -31,8 +33,7 @@ DEFAULT_ROUNDING = ROUND_HALF_UP
 
 
 def _to_decimal(value: NumberLike) -> Decimal:
-    """安全にDecimalへ変換する。"""
-
+    """安全にDecimalへ変換する。."""
     if isinstance(value, Decimal):
         return value
     try:
@@ -41,9 +42,8 @@ def _to_decimal(value: NumberLike) -> Decimal:
         raise QuantityConversionError(f"数値変換に失敗しました: {value}") from exc
 
 
-def to_internal_qty(product: "Product", qty_external: NumberLike, external_unit: str) -> Decimal:
-    """指定した製品の外部単位数量を内部単位数量へ変換する。"""
-
+def to_internal_qty(product: Product, qty_external: NumberLike, external_unit: str) -> Decimal:
+    """指定した製品の外部単位数量を内部単位数量へ変換する。."""
     if not getattr(product, "packaging_unit", None):
         raise QuantityConversionError("製品に包装単位が設定されていません")
 

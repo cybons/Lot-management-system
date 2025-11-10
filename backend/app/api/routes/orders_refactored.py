@@ -1,11 +1,10 @@
 # backend/app/api/routes/orders_refactored.py
 """
 受注エンドポイント（全修正版）
-I/O整形のみを責務とし、例外変換はグローバルハンドラに委譲
+I/O整形のみを責務とし、例外変換はグローバルハンドラに委譲.
 """
 
 from datetime import date
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -20,24 +19,25 @@ from app.schemas import (
 from app.services.order_service import OrderService
 from app.services.uow import UnitOfWork
 
+
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
-@router.get("", response_model=List[OrderResponse])
+@router.get("", response_model=list[OrderResponse])
 def list_orders(
     skip: int = 0,
     limit: int = 100,
-    status: Optional[str] = None,
-    customer_code: Optional[str] = None,
-    date_from: Optional[date] = None,
-    date_to: Optional[date] = None,
-    db: Session = Depends(get_db)
+    status: str | None = None,
+    customer_code: str | None = None,
+    date_from: date | None = None,
+    date_to: date | None = None,
+    db: Session = Depends(get_db),
 ):
     """
-    受注一覧取得（読み取り専用）
-    
+    受注一覧取得（読み取り専用）.
+
     トランザクション不要のため、通常のSessionを使用
-    
+
     Note:
         例外はグローバルハンドラで処理されるため、
         ここではHTTPExceptionを投げない
@@ -49,20 +49,17 @@ def list_orders(
         status=status,
         customer_code=customer_code,
         date_from=date_from,
-        date_to=date_to
+        date_to=date_to,
     )
 
 
 @router.get("/{order_id}", response_model=OrderWithLinesResponse)
-def get_order(
-    order_id: int,
-    db: Session = Depends(get_db)
-):
+def get_order(order_id: int, db: Session = Depends(get_db)):
     """
-    受注詳細取得（読み取り専用、明細含む）
-    
+    受注詳細取得（読み取り専用、明細含む）.
+
     トランザクション不要のため、通常のSessionを使用
-    
+
     Note:
         - OrderNotFoundError → 404はグローバルハンドラが処理
     """
@@ -71,19 +68,16 @@ def get_order(
 
 
 @router.post("", response_model=OrderWithLinesResponse, status_code=201)
-def create_order(
-    order: OrderCreate,
-    uow: UnitOfWork = Depends(get_uow)
-):
+def create_order(order: OrderCreate, uow: UnitOfWork = Depends(get_uow)):
     """
-    受注作成
-    
+    受注作成.
+
     【修正#5】UnitOfWorkを依存注入で取得（SessionLocal直参照を回避）
-    
+
     トランザクション管理:
         - 成功時: UnitOfWorkが自動commit
         - 例外発生時: UnitOfWorkが自動rollback
-    
+
     例外処理:
         - DuplicateOrderError → 409 Conflict
         - OrderValidationError → 422 Unprocessable Entity
@@ -96,26 +90,22 @@ def create_order(
 
 
 @router.patch("/{order_id}/status", response_model=OrderResponse)
-def update_order_status(
-    order_id: int,
-    body: OrderStatusUpdate,
-    uow: UnitOfWork = Depends(get_uow)
-):
+def update_order_status(order_id: int, body: OrderStatusUpdate, uow: UnitOfWork = Depends(get_uow)):
     """
-    受注ステータス更新
-    
+    受注ステータス更新.
+
     【修正#2】dict入力を廃止し、OrderStatusUpdateスキーマを使用
     【修正#5】UnitOfWorkを依存注入で取得
-    
+
     Args:
         order_id: 受注ID
         body: ステータス更新データ（Schema検証済み）
         uow: UnitOfWork（依存注入）
-    
+
     トランザクション管理:
         - 成功時: UnitOfWorkが自動commit
         - 例外発生時: UnitOfWorkが自動rollback
-    
+
     例外処理:
         - OrderNotFoundError → 404 Not Found
         - InvalidOrderStatusError → 400 Bad Request
@@ -126,24 +116,21 @@ def update_order_status(
 
 
 @router.delete("/{order_id}/cancel", status_code=204)
-def cancel_order(
-    order_id: int,
-    uow: UnitOfWork = Depends(get_uow)
-):
+def cancel_order(order_id: int, uow: UnitOfWork = Depends(get_uow)):
     """
-    受注キャンセル
-    
+    受注キャンセル.
+
     【修正#5】UnitOfWorkを依存注入で取得
-    
+
     トランザクション管理:
         - 成功時: UnitOfWorkが自動commit
         - 例外発生時: UnitOfWorkが自動rollback
-    
+
     例外処理:
         - OrderNotFoundError → 404 Not Found
         - InvalidOrderStatusError → 400 Bad Request
         上記はグローバルハンドラで変換される
-    
+
     Returns:
         None (204 No Content)
     """

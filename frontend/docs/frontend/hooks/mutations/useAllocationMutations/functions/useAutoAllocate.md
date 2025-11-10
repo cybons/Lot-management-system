@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useAllocationMutations](../README.md) / useAutoAllocate
 
@@ -38,13 +38,13 @@ Mutation オプション
 ```tsx
 const autoAllocateMutation = useAutoAllocate({
   onSuccess: () => {
-    toast.success('自動引当が完了しました');
-  }
+    toast.success("自動引当が完了しました");
+  },
 });
 
 await autoAllocateMutation.mutateAsync({
   order_line_id: 123,
-  product_code: 'P001',
-  quantity: 500
+  product_code: "P001",
+  quantity: 500,
 });
 ```

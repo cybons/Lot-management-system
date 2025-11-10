@@ -1,46 +1,43 @@
-"""
-管理機能のAPIエンドポイント - サンプルデータ投入修正版（パッチ適用済）
-"""
+"""管理機能のAPIエンドポイント - サンプルデータ投入修正版（パッチ適用済）."""
 
 import logging
-import traceback
 import random  # ファイル冒頭に追加されていなければ
+import traceback
 from datetime import date, datetime
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
-from app.models.inventory import StockMovement
 
 from app.api.deps import get_db
 from app.core.config import settings
-from app.core.database import drop_db, init_db, truncate_all_tables
+from app.core.database import truncate_all_tables
 from app.models import (
     Allocation,
     Customer,
     Lot,
-    LotCurrentStock,
     Order,
     OrderLine,
     Product,
     Supplier,
     Warehouse,  # 統合された新Warehouse
 )
+from app.models.inventory import StockMovement
 from app.schemas import (
     DashboardStatsResponse,
     FullSampleDataRequest,
     ResponseBase,
 )
 
+
 router = APIRouter(prefix="/admin", tags=["admin"])
 logger = logging.getLogger(__name__)
 rng = random.Random()
 
+
 @router.get("/stats", response_model=DashboardStatsResponse)
 def get_dashboard_stats(db: Session = Depends(get_db)):
-    """ダッシュボード用の統計情報を返す"""
-
+    """ダッシュボード用の統計情報を返す."""
     # search_path 依存を避け、public スキーマを明示
     # ビュー未作成時でも API 全体が 500 にならないようフォールバック
     try:
@@ -70,8 +67,7 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     )
 
     unallocated_orders = (
-        db.query(func.count(func.distinct(unallocated_subquery.c.order_id))).scalar()
-        or 0
+        db.query(func.count(func.distinct(unallocated_subquery.c.order_id))).scalar() or 0
     )
 
     return DashboardStatsResponse(
@@ -87,7 +83,7 @@ def reset_database(db: Session = Depends(get_db)):
     データベースリセット（開発環境のみ）
     - テーブル構造は保持したまま、全データを削除
     - alembic_versionは保持（マイグレーション履歴を維持）
-    - TRUNCATE ... RESTART IDENTITY CASCADEで高速にデータをクリア
+    - TRUNCATE ... RESTART IDENTITY CASCADEで高速にデータをクリア.
     """
     if settings.ENVIRONMENT == "production":
         raise HTTPException(
@@ -116,7 +112,7 @@ def reset_database(db: Session = Depends(get_db)):
 @router.post("/load-full-sample-data", response_model=ResponseBase)
 def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get_db)):
     """
-    一括サンプルデータ投入（新スキーマ対応版）
+    一括サンプルデータ投入（新スキーマ対応版）.
 
     処理順序:
     1. 製品マスタ
@@ -124,9 +120,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
     3. 受注登録
     """
     if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=403, detail="本番環境ではサンプルデータの投入はできません"
-        )
+        raise HTTPException(status_code=403, detail="本番環境ではサンプルデータの投入はできません")
 
     counts = {
         "products": 0,
@@ -161,9 +155,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
         # ==== 1. 製品マスタ ====
         if data.products:
             for p in data.products:
-                existing_product = (
-                    db.query(Product).filter_by(product_code=p.product_code).first()
-                )
+                existing_product = db.query(Product).filter_by(product_code=p.product_code).first()
                 if existing_product:
                     continue
 
@@ -197,11 +189,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     continue
 
                 # 製品の存在確認とid取得（StockMovementでproduct_idが必要）
-                product = (
-                    db.query(Product)
-                    .filter_by(product_code=lot_data.product_code)
-                    .first()
-                )
+                product = db.query(Product).filter_by(product_code=lot_data.product_code).first()
                 if not product:
                     warn(
                         f"ロット {lot_data.lot_number}: 製品コード '{lot_data.product_code}' が存在しないためスキップしました"
@@ -212,9 +200,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 supplier = None
                 if lot_data.supplier_code:
                     supplier = (
-                        db.query(Supplier)
-                        .filter_by(supplier_code=lot_data.supplier_code)
-                        .first()
+                        db.query(Supplier).filter_by(supplier_code=lot_data.supplier_code).first()
                     )
 
                 existing_lot = (
@@ -246,7 +232,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
 
                 # idフィールドとcodeフィールド両方を設定（デノーマライズ）
                 db_lot = Lot(
-                    product_id=product.id,           # id-based FK (required for StockMovement)
+                    product_id=product.id,  # id-based FK (required for StockMovement)
                     product_code=lot_data.product_code,  # denormalized code
                     supplier_id=supplier.id if supplier else None,
                     supplier_code=lot_data.supplier_code,
@@ -261,15 +247,17 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 db.flush()
 
                 # 現在在庫の初期化 - StockMovementモデルに合わせた正しいフィールド名を使用
-                recv_qty = getattr(lot_data, "initial_qty", None) or  rng.randint(5, 200)
-                db.add(StockMovement(
-                    product_id=product.id,          # INTEGER FK to products.id (必須)
-                    lot_id=db_lot.id,
-                    warehouse_id=warehouse.id,
-                    reason="inbound",               # 正: reason (StockMovementReason enum)
-                    quantity_delta=recv_qty,        # 正: quantity_delta (NUMERIC)
-                    occurred_at=datetime.utcnow(),  # 正: occurred_at (TIMESTAMP)
-                ))
+                recv_qty = getattr(lot_data, "initial_qty", None) or rng.randint(5, 200)
+                db.add(
+                    StockMovement(
+                        product_id=product.id,  # INTEGER FK to products.id (必須)
+                        lot_id=db_lot.id,
+                        warehouse_id=warehouse.id,
+                        reason="inbound",  # 正: reason (StockMovementReason enum)
+                        quantity_delta=recv_qty,  # 正: quantity_delta (NUMERIC)
+                        occurred_at=datetime.utcnow(),  # 正: occurred_at (TIMESTAMP)
+                    )
+                )
 
                 counts["lots"] += 1
 
@@ -278,9 +266,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
         # ==== 3. 受注登録 ====
         if data.orders:
             for order_data in data.orders:
-                existing_order = (
-                    db.query(Order).filter_by(order_no=order_data.order_no).first()
-                )
+                existing_order = db.query(Order).filter_by(order_no=order_data.order_no).first()
 
                 if existing_order:
                     continue
@@ -289,9 +275,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 customer = None
                 if order_data.customer_code:
                     customer = (
-                        db.query(Customer)
-                        .filter_by(customer_code=order_data.customer_code)
-                        .first()
+                        db.query(Customer).filter_by(customer_code=order_data.customer_code).first()
                     )
 
                 order_date_raw = getattr(order_data, "order_date", None)
@@ -318,9 +302,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                 db.flush()
 
                 if not order_data.lines:
-                    warn(
-                        f"受注 {order_data.order_no}: 明細が存在しないためスキップしました"
-                    )
+                    warn(f"受注 {order_data.order_no}: 明細が存在しないためスキップしました")
                     db.delete(db_order)
                     db.flush()
                     continue
@@ -334,9 +316,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                         continue
 
                     product = (
-                        db.query(Product)
-                        .filter_by(product_code=line_data.product_code)
-                        .first()
+                        db.query(Product).filter_by(product_code=line_data.product_code).first()
                     )
                     if not product:
                         warn(
@@ -358,7 +338,7 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
                     db_line = OrderLine(
                         order_id=db_order.id,
                         line_no=line_data.line_no,
-                        product_id=product.id,           # id-based FK
+                        product_id=product.id,  # id-based FK
                         product_code=line_data.product_code,  # denormalized code
                         quantity=line_data.quantity,
                         unit=line_data.unit,
@@ -397,10 +377,8 @@ def load_full_sample_data(data: FullSampleDataRequest, db: Session = Depends(get
         )
 
 
-def _parse_iso_date(value, context: str, field: str) -> Optional[date]:
-    """
-    入力値をdateに変換し、失敗した場合は警告を記録する
-    """
+def _parse_iso_date(value, context: str, field: str) -> date | None:
+    """入力値をdateに変換し、失敗した場合は警告を記録する."""
     if value is None:
         return None
 
@@ -414,9 +392,7 @@ def _parse_iso_date(value, context: str, field: str) -> Optional[date]:
         try:
             return date.fromisoformat(raw)
         except ValueError:
-            logger.warning(
-                f"[{context}] {field} が日付形式 (YYYY-MM-DD) ではありません: '{value}'"
-            )
+            logger.warning(f"[{context}] {field} が日付形式 (YYYY-MM-DD) ではありません: '{value}'")
             return None
 
     logger.warning(
@@ -429,11 +405,7 @@ def _ensure_suppliers(db: Session, supplier_codes: set[str], warn_cb) -> None:
     if not supplier_codes:
         return
 
-    existing = (
-        db.query(Supplier)
-        .filter(Supplier.supplier_code.in_(supplier_codes))
-        .all()
-    )
+    existing = db.query(Supplier).filter(Supplier.supplier_code.in_(supplier_codes)).all()
     existing_codes = {s.supplier_code for s in existing}
 
     for code in sorted(supplier_codes - existing_codes):
@@ -452,11 +424,7 @@ def _ensure_customers(db: Session, customer_codes: set[str], warn_cb) -> None:
     if not customer_codes:
         return
 
-    existing = (
-        db.query(Customer)
-        .filter(Customer.customer_code.in_(customer_codes))
-        .all()
-    )
+    existing = db.query(Customer).filter(Customer.customer_code.in_(customer_codes)).all()
     existing_codes = {c.customer_code for c in existing}
 
     for code in sorted(customer_codes - existing_codes):
@@ -475,11 +443,7 @@ def _ensure_warehouses(db: Session, warehouse_codes: set[str], warn_cb) -> None:
     if not warehouse_codes:
         return
 
-    existing = (
-        db.query(Warehouse)
-        .filter(Warehouse.warehouse_code.in_(warehouse_codes))
-        .all()
-    )
+    existing = db.query(Warehouse).filter(Warehouse.warehouse_code.in_(warehouse_codes)).all()
     existing_codes = {w.warehouse_code for w in existing}
 
     for code in sorted(warehouse_codes - existing_codes):
@@ -495,14 +459,12 @@ def _ensure_warehouses(db: Session, warehouse_codes: set[str], warn_cb) -> None:
         db.commit()
 
 
-def _ensure_warehouse(db: Session, warehouse_code: str, warn_cb) -> Optional[Warehouse]:
+def _ensure_warehouse(db: Session, warehouse_code: str, warn_cb) -> Warehouse | None:
     if not warehouse_code:
         warn_cb("倉庫コードが指定されていません")
         return None
 
-    warehouse = (
-        db.query(Warehouse).filter_by(warehouse_code=warehouse_code).first()
-    )
+    warehouse = db.query(Warehouse).filter_by(warehouse_code=warehouse_code).first()
     if warehouse:
         return warehouse
 
@@ -536,7 +498,5 @@ def _collect_warehouse_codes(data: FullSampleDataRequest) -> set[str]:
 def _collect_customer_codes(data: FullSampleDataRequest) -> set[str]:
     codes: set[str] = set()
     if data.orders:
-        codes.update(
-            order.customer_code for order in data.orders if order.customer_code
-        )
+        codes.update(order.customer_code for order in data.orders if order.customer_code)
     return codes

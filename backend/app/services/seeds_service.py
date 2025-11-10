@@ -1,18 +1,19 @@
 # backend/app/services/seeds_service.py
 from __future__ import annotations
+
+from collections.abc import Sequence
 from datetime import datetime, timedelta
 from random import Random
-from typing import List, Sequence
 
 from faker import Faker
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
-from app.schemas.admin_seeds import SeedRequest, SeedResponse, SeedSummary, ActualCounts
-from app.models.masters import Customer, Product, Warehouse, Supplier, DeliveryPlace
 from app.models.inventory import Lot, StockMovement
-from app.models.orders import Order, OrderLine, Allocation
+from app.models.masters import Customer, DeliveryPlace, Product, Supplier, Warehouse
+from app.models.orders import Allocation, Order, OrderLine
+from app.schemas.admin_seeds import ActualCounts, SeedRequest, SeedResponse, SeedSummary
 
 
 def _choose(rng: Random, seq: Sequence):
@@ -22,10 +23,10 @@ def _choose(rng: Random, seq: Sequence):
 def _next_code(prefix: str, width: int, rng: Random, existing: set[str]) -> str:
     """
     既存集合と照合しながら、prefix+数値(ゼロ埋め可)の一意なコードを返す。
-    例: prefix='C', width=4 -> 'C1043'
+    例: prefix='C', width=4 -> 'C1043'.
     """
     lo = 10 ** (width - 1)
-    hi = (10 ** width) - 1
+    hi = (10**width) - 1
     while True:
         n = rng.randint(lo, hi)
         code = f"{prefix}{n}"
@@ -40,15 +41,15 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
     faker.seed_instance(seed)
     rng = Random(seed)
 
-    created_customers: List[Customer] = []
-    created_suppliers: List[Supplier] = []
-    created_delivery_places: List[DeliveryPlace] = []
-    created_products: List[Product] = []
-    created_warehouses: List[Warehouse] = []
-    created_lots: List[Lot] = []
-    created_orders: List[Order] = []
-    created_lines: List[OrderLine] = []
-    created_allocs: List[Allocation] = []
+    created_customers: list[Customer] = []
+    created_suppliers: list[Supplier] = []
+    created_delivery_places: list[DeliveryPlace] = []
+    created_products: list[Product] = []
+    created_warehouses: list[Warehouse] = []
+    created_lots: list[Lot] = []
+    created_orders: list[Order] = []
+    created_lines: list[OrderLine] = []
+    created_allocs: list[Allocation] = []
 
     # ==========================================================
     # 1) masters（Customer / Product / Warehouse をUPSERTで投入）
@@ -57,7 +58,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     # --- Customer ---
     if req.customers > 0:
-        existing_customer_codes = {c for (c,) in db.execute(select(Customer.customer_code)).all()} if not req.dry_run else set()
+        existing_customer_codes = (
+            {c for (c,) in db.execute(select(Customer.customer_code)).all()}
+            if not req.dry_run
+            else set()
+        )
         customer_rows = [
             {
                 "customer_code": _next_code("C", 4, rng, existing_customer_codes),
@@ -75,7 +80,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     # --- Supplier ---
     if req.suppliers > 0:
-        existing_supplier_codes = {c for (c,) in db.execute(select(Supplier.supplier_code)).all()} if not req.dry_run else set()
+        existing_supplier_codes = (
+            {c for (c,) in db.execute(select(Supplier.supplier_code)).all()}
+            if not req.dry_run
+            else set()
+        )
         supplier_rows = [
             {
                 "supplier_code": _next_code("S", 4, rng, existing_supplier_codes),
@@ -93,7 +102,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     # --- DeliveryPlace ---
     if req.delivery_places > 0:
-        existing_dp_codes = {c for (c,) in db.execute(select(DeliveryPlace.delivery_place_code)).all()} if not req.dry_run else set()
+        existing_dp_codes = (
+            {c for (c,) in db.execute(select(DeliveryPlace.delivery_place_code)).all()}
+            if not req.dry_run
+            else set()
+        )
         delivery_place_rows = [
             {
                 "delivery_place_code": _next_code("D", 3, rng, existing_dp_codes),
@@ -120,7 +133,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
         elif created_delivery_places:
             existing_dps = created_delivery_places
 
-        existing_product_codes = {c for (c,) in db.execute(select(Product.product_code)).all()} if not req.dry_run else set()
+        existing_product_codes = (
+            {c for (c,) in db.execute(select(Product.product_code)).all()}
+            if not req.dry_run
+            else set()
+        )
         product_rows = []
         for _ in range(req.products):
             row = {
@@ -144,7 +161,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     # --- Warehouse ---
     if req.warehouses > 0:
-        existing_wh_codes = {c for (c,) in db.execute(select(Warehouse.warehouse_code)).all()} if not req.dry_run else set()
+        existing_wh_codes = (
+            {c for (c,) in db.execute(select(Warehouse.warehouse_code)).all()}
+            if not req.dry_run
+            else set()
+        )
         warehouse_rows = [
             {
                 "warehouse_code": _next_code("W", 2, rng, existing_wh_codes),
@@ -162,11 +183,11 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     # DBに実データが必要な後続処理用に、利用可能な一覧を取得
     if not req.dry_run:
-        all_customers: List[Customer] = db.execute(select(Customer)).scalars().all()
-        all_suppliers: List[Supplier] = db.execute(select(Supplier)).scalars().all()
-        all_delivery_places: List[DeliveryPlace] = db.execute(select(DeliveryPlace)).scalars().all()
-        all_products: List[Product] = db.execute(select(Product)).scalars().all()
-        all_warehouses: List[Warehouse] = db.execute(select(Warehouse)).scalars().all()
+        all_customers: list[Customer] = db.execute(select(Customer)).scalars().all()
+        all_suppliers: list[Supplier] = db.execute(select(Supplier)).scalars().all()
+        all_delivery_places: list[DeliveryPlace] = db.execute(select(DeliveryPlace)).scalars().all()
+        all_products: list[Product] = db.execute(select(Product)).scalars().all()
+        all_warehouses: list[Warehouse] = db.execute(select(Warehouse)).scalars().all()
     else:
         # dry_run時は作成予定のデータを使って疑似的に進める（idはNone）
         all_customers = created_customers
@@ -203,7 +224,7 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
                 warehouse_id=l.warehouse_id,
                 lot_id=l.id,
                 reason="receipt",
-                quantity_delta=recv_qty,               # NUMERIC(15,4) だが整数でOK
+                quantity_delta=recv_qty,  # NUMERIC(15,4) だが整数でOK
                 occurred_at=datetime.utcnow(),
                 created_at=datetime.utcnow(),
             )
@@ -251,8 +272,8 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
     # 4) allocations（簡易版：受注明細の30%程度にロットを引当）
     # ==========================================================
     if not req.dry_run and created_lots:
-        all_lots: List[Lot] = db.execute(select(Lot)).scalars().all()
-        all_lines: List[OrderLine] = db.execute(select(OrderLine)).scalars().all()
+        all_lots: list[Lot] = db.execute(select(Lot)).scalars().all()
+        all_lines: list[OrderLine] = db.execute(select(OrderLine)).scalars().all()
 
         # 明細の30%程度にランダムに引当
         sample_size = max(1, int(len(all_lines) * 0.3))

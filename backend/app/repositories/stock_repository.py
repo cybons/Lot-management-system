@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import date
-from typing import Sequence
 
 from sqlalchemy import Select, or_, select
 from sqlalchemy.orm import Session, joinedload
@@ -26,7 +26,6 @@ class StockRepository:
         for_update: bool = True,
     ) -> list[Lot]:
         """Fetch candidate lots in FIFO order with optional row locking."""
-
         stmt: Select[tuple[Lot]] = (
             select(Lot)
             .join(Lot.warehouse)
@@ -36,18 +35,16 @@ class StockRepository:
         )
 
         if hasattr(Lot, "is_active"):
-            stmt = stmt.where(getattr(Lot, "is_active") == True)  # noqa: E712
+            stmt = stmt.where(Lot.is_active == True)  # noqa: E712
 
         if hasattr(Lot, "is_locked"):
-            stmt = stmt.where(getattr(Lot, "is_locked") == False)  # noqa: E712
+            stmt = stmt.where(Lot.is_locked == False)  # noqa: E712
 
         expiry_column = getattr(Lot, "expiry_date", None)
         if ship_date is not None and expiry_column is not None:
             stmt = stmt.where(or_(expiry_column.is_(None), expiry_column >= ship_date))
 
-        received_column = getattr(Lot, "receipt_date", None) or getattr(
-            Lot, "received_at", None
-        )
+        received_column = getattr(Lot, "receipt_date", None) or getattr(Lot, "received_at", None)
         if received_column is not None:
             stmt = stmt.order_by(received_column.asc(), Lot.id.asc())
         else:
@@ -64,7 +61,6 @@ class StockRepository:
     @staticmethod
     def calc_available_qty(lot: Lot) -> int:
         """Calculate allocatable quantity for a lot."""
-
         stock: LotCurrentStock | None = lot.current_stock
         if stock is None:
             return 0

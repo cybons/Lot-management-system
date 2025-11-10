@@ -1,10 +1,10 @@
 /**
  * フィルター状態管理フック
- * 
+ *
  * 検索フィルターの状態を管理
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from "react";
 
 /**
  * フィルター値の型
@@ -18,10 +18,10 @@ export type FilterState = Record<string, FilterValue>;
 
 /**
  * フィルター状態管理フック
- * 
+ *
  * @param initialFilters - 初期フィルター状態
  * @returns フィルター状態と操作関数
- * 
+ *
  * @example
  * ```tsx
  * const filters = useFilters({
@@ -29,7 +29,7 @@ export type FilterState = Record<string, FilterValue>;
  *   warehouseCode: '',
  *   status: 'active',
  * });
- * 
+ *
  * return (
  *   <div>
  *     <input
@@ -43,48 +43,49 @@ export type FilterState = Record<string, FilterValue>;
  */
 export function useFilters<T extends FilterState>(initialFilters: T) {
   const [filters, setFilters] = useState<T>(initialFilters);
-  
+
   // 単一フィルターの値を設定
   const set = useCallback(<K extends keyof T>(key: K, value: T[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   }, []);
-  
+
   // 複数フィルターの値を一括設定
   const setMultiple = useCallback((updates: Partial<T>) => {
     setFilters((prev) => ({ ...prev, ...updates }));
   }, []);
-  
+
   // フィルターをリセット
   const reset = useCallback(() => {
     setFilters(initialFilters);
   }, [initialFilters]);
-  
+
   // 特定のフィルターをリセット
-  const resetKey = useCallback(<K extends keyof T>(key: K) => {
-    setFilters((prev) => ({ ...prev, [key]: initialFilters[key] }));
-  }, [initialFilters]);
-  
+  const resetKey = useCallback(
+    <K extends keyof T>(key: K) => {
+      setFilters((prev) => ({ ...prev, [key]: initialFilters[key] }));
+    },
+    [initialFilters],
+  );
+
   // フィルターが初期状態かどうか
   const isDefault = useMemo(() => {
-    return Object.keys(filters).every(
-      (key) => filters[key] === initialFilters[key]
-    );
+    return Object.keys(filters).every((key) => filters[key] === initialFilters[key]);
   }, [filters, initialFilters]);
-  
+
   // アクティブなフィルター数
   const activeCount = useMemo(() => {
     return Object.keys(filters).filter((key) => {
       const value = filters[key];
       const initialValue = initialFilters[key];
-      
+
       // 空文字、null、undefined は非アクティブとみなす
-      if (value === '' || value == null) return false;
-      
+      if (value === "" || value == null) return false;
+
       // 初期値と異なる場合はアクティブ
       return value !== initialValue;
     }).length;
   }, [filters, initialFilters]);
-  
+
   return {
     values: filters,
     set,
@@ -99,14 +100,14 @@ export function useFilters<T extends FilterState>(initialFilters: T) {
 /**
  * 検索フィルター状態管理フック
  * (検索キーワード特化版)
- * 
+ *
  * @param initialValue - 初期値
  * @returns 検索状態と操作関数
- * 
+ *
  * @example
  * ```tsx
  * const search = useSearchFilter();
- * 
+ *
  * return (
  *   <input
  *     value={search.value}
@@ -116,27 +117,27 @@ export function useFilters<T extends FilterState>(initialFilters: T) {
  * );
  * ```
  */
-export function useSearchFilter(initialValue = '') {
+export function useSearchFilter(initialValue = "") {
   const [value, setValue] = useState(initialValue);
   const [searchTerm, setSearchTerm] = useState(initialValue);
-  
+
   // 検索実行
   const handleSearch = useCallback(() => {
     setSearchTerm(value);
   }, [value]);
-  
+
   // クリア
   const clear = useCallback(() => {
-    setValue('');
-    setSearchTerm('');
+    setValue("");
+    setSearchTerm("");
   }, []);
-  
+
   // リセット
   const reset = useCallback(() => {
     setValue(initialValue);
     setSearchTerm(initialValue);
   }, [initialValue]);
-  
+
   return {
     value,
     setValue,
@@ -150,15 +151,15 @@ export function useSearchFilter(initialValue = '') {
 
 /**
  * 日付範囲フィルター状態管理フック
- * 
+ *
  * @param initialFrom - 開始日初期値
  * @param initialTo - 終了日初期値
  * @returns 日付範囲状態と操作関数
- * 
+ *
  * @example
  * ```tsx
  * const dateRange = useDateRangeFilter();
- * 
+ *
  * return (
  *   <div>
  *     <input
@@ -175,25 +176,22 @@ export function useSearchFilter(initialValue = '') {
  * );
  * ```
  */
-export function useDateRangeFilter(
-  initialFrom?: string,
-  initialTo?: string
-) {
+export function useDateRangeFilter(initialFrom?: string, initialTo?: string) {
   const [from, setFrom] = useState<string | undefined>(initialFrom);
   const [to, setTo] = useState<string | undefined>(initialTo);
-  
+
   const reset = useCallback(() => {
     setFrom(initialFrom);
     setTo(initialTo);
   }, [initialFrom, initialTo]);
-  
+
   const clear = useCallback(() => {
     setFrom(undefined);
     setTo(undefined);
   }, []);
-  
+
   const isActive = from !== initialFrom || to !== initialTo;
-  
+
   return {
     from,
     to,
@@ -207,11 +205,11 @@ export function useDateRangeFilter(
 
 /**
  * データをフィルタリングするヘルパー関数
- * 
+ *
  * @param data - フィルタリング対象のデータ
  * @param filters - フィルター条件
  * @returns フィルタリングされたデータ
- * 
+ *
  * @example
  * ```tsx
  * const filteredData = filterData(lots, {
@@ -220,13 +218,8 @@ export function useDateRangeFilter(
  * });
  * ```
  */
-export function filterData<T>(
-  data: T[],
-  filters: Record<string, (item: T) => boolean>
-): T[] {
-  return data.filter((item) =>
-    Object.values(filters).every((filterFn) => filterFn(item))
-  );
+export function filterData<T>(data: T[], filters: Record<string, (item: T) => boolean>): T[] {
+  return data.filter((item) => Object.values(filters).every((filterFn) => filterFn(item)));
 }
 
 /**
@@ -245,7 +238,7 @@ export function filterData<T>(
 export function searchData<T extends Record<string, unknown>>(
   data: T[],
   searchTerm: string,
-  searchKeys: (keyof T)[]
+  searchKeys: (keyof T)[],
 ): T[] {
   if (!searchTerm) return data;
 
@@ -256,6 +249,6 @@ export function searchData<T extends Record<string, unknown>>(
       const value = item[key];
       if (value == null) return false;
       return String(value).toLowerCase().includes(lowerSearchTerm);
-    })
+    }),
   );
 }

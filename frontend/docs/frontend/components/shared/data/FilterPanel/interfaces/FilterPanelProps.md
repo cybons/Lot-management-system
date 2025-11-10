@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/data/FilterPanel](../README.md) / FilterPanelProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:24](https://github.com/c
 
 子要素(フィルター項目)
 
-***
+---
 
 ### className?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:32](https://github.com/c
 
 クラス名
 
-***
+---
 
 ### collapsible?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:30](https://github.com/c
 
 開閉可能かどうか
 
-***
+---
 
 ### defaultOpen?
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:26](https://github.com/c
 
 初期開閉状態
 
-***
+---
 
 ### onReset()?
 
@@ -62,7 +62,7 @@ Defined in: [src/components/shared/data/FilterPanel.tsx:28](https://github.com/c
 
 `void`
 
-***
+---
 
 ### title?
 

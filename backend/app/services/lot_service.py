@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import date
-from typing import List, Optional, Sequence
 
 from sqlalchemy import Select, select
 from sqlalchemy.orm import Session, joinedload
@@ -20,7 +20,6 @@ class LotRepository:
 
     def find_by_id(self, lot_id: int) -> Lot | None:
         """Return a lot by its primary key."""
-
         stmt: Select[tuple[Lot]] = (
             select(Lot)
             .options(joinedload(Lot.product), joinedload(Lot.warehouse))
@@ -35,7 +34,6 @@ class LotRepository:
         min_quantity: float = 0.0,
     ) -> Sequence[tuple[Lot, LotCurrentStock]]:
         """Fetch lots that have stock remaining for a product."""
-
         stmt: Select[tuple[Lot, LotCurrentStock]] = (
             select(Lot, LotCurrentStock)
             .join(LotCurrentStock, LotCurrentStock.lot_id == Lot.id)
@@ -61,7 +59,6 @@ class LotRepository:
         expiry_date: date | None = None,
     ) -> Lot:
         """Create a lot placeholder using known identifiers."""
-
         warehouse: Warehouse | None = self.db.get(Warehouse, warehouse_id)
         product: Product | None = None
         supplier: Supplier | None = None
@@ -105,7 +102,7 @@ class LotService:
         product_code: str,
         warehouse_code: str | None = None,
         exclude_expired: bool = True,
-    ) -> List[LotCandidate]:
+    ) -> list[LotCandidate]:
         lot_stocks = self.repository.find_available_lots(
             product_code=product_code,
             warehouse_code=warehouse_code,

@@ -3,7 +3,7 @@
  * エラーハンドリングを統合したHTTP通信クライアント
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
 
 import { createApiError, NetworkError } from "@/utils/errors/custom-errors";
 

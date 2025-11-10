@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useAllocationMutations](../README.md) / useCancelAllocation
 
@@ -37,8 +37,8 @@ Mutation オプション
 ```tsx
 const cancelMutation = useCancelAllocation({
   onSuccess: () => {
-    toast.success('引当を取り消しました');
-  }
+    toast.success("引当を取り消しました");
+  },
 });
 
 await cancelMutation.mutateAsync(123);

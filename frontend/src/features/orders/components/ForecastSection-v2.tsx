@@ -83,4 +83,3 @@ export function ForecastSection({ productCode, fullWidth = false }: Props) {
     </div>
   );
 }
-

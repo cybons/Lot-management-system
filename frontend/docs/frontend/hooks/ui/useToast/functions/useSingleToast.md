@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/ui/useToast](../README.md) / useSingleToast
 
@@ -140,10 +140,10 @@ const toast = useSingleToast();
 
 return (
   <div>
-    <button onClick={() => toast.success('成功しました')}>実行</button>
+    <button onClick={() => toast.success("成功しました")}>実行</button>
     {toast.current && (
-      <ToastMessage 
-        message={toast.current.message} 
+      <ToastMessage
+        message={toast.current.message}
         variant={toast.current.variant}
         onClose={toast.dismiss}
       />

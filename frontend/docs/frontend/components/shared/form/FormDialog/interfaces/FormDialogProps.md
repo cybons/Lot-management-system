@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/form/FormDialog](../README.md) / FormDialogProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:43](https://github.com/cy
 
 キャンセルボタンのラベル
 
-***
+---
 
 ### children
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:39](https://github.com/cy
 
 フォームの内容
 
-***
+---
 
 ### description?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:31](https://github.com/cy
 
 ダイアログの説明
 
-***
+---
 
 ### isLoading?
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:45](https://github.com/cy
 
 ローディング状態
 
-***
+---
 
 ### onClose()
 
@@ -62,7 +62,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:35](https://github.com/cy
 
 `void`
 
-***
+---
 
 ### onSubmit()
 
@@ -76,7 +76,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:37](https://github.com/cy
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### open
 
@@ -86,7 +86,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:33](https://github.com/cy
 
 ダイアログの開閉状態
 
-***
+---
 
 ### size?
 
@@ -96,7 +96,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:49](https://github.com/cy
 
 ダイアログのサイズ
 
-***
+---
 
 ### submitDisabled?
 
@@ -106,7 +106,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:47](https://github.com/cy
 
 送信ボタンの無効化
 
-***
+---
 
 ### submitLabel?
 
@@ -116,7 +116,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:41](https://github.com/cy
 
 送信ボタンのラベル
 
-***
+---
 
 ### title
 

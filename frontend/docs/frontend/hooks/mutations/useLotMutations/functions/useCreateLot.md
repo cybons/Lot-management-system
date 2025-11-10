@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [hooks/mutations/useLotMutations](../README.md) / useCreateLot
 
@@ -37,8 +37,8 @@ Mutation オプション
 ```tsx
 const createLotMutation = useCreateLot({
   onSuccess: () => {
-    toast.success('ロットを作成しました');
-  }
+    toast.success("ロットを作成しました");
+  },
 });
 
 await createLotMutation.mutateAsync(newLotData);

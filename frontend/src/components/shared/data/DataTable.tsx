@@ -85,7 +85,7 @@ export function DataTable<T = never>({
   selectable = false,
   selectedIds = [],
   onSelectionChange,
-  getRowId = (row: T) => (row as Record<string, unknown>)['id'] as string | number,
+  getRowId = (row: T) => (row as Record<string, unknown>)["id"] as string | number,
   onRowClick,
   rowActions,
   emptyMessage = "データがありません",
@@ -271,7 +271,10 @@ export function DataTable<T = never>({
 
                 {/* アクションボタン */}
                 {rowActions && (
-                  <td className="px-4 py-3 text-sm text-right" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                  <td
+                    className="px-4 py-3 text-sm text-right"
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                  >
                     {rowActions(row)}
                   </td>
                 )}

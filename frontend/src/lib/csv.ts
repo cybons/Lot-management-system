@@ -30,7 +30,7 @@ export function exportToCSV(data: Record<string, unknown>[], filename: string): 
             }
             return stringValue;
           })
-          .join(",")
+          .join(","),
       )
       .join("\n"),
   ].join("\n");

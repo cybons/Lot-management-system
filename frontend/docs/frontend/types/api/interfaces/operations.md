@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [types/api](../README.md) / operations
 
@@ -10,9 +10,9 @@ Defined in: [src/types/api.d.ts:2451](https://github.com/cybons-lab/Lot-manageme
 
 ## Properties
 
-### activate\_version\_api\_forecast\_activate\_post
+### activate_version_api_forecast_activate_post
 
-> **activate\_version\_api\_forecast\_activate\_post**: `object`
+> **activate_version_api_forecast_activate_post**: `object`
 
 Defined in: [src/types/api.d.ts:4153](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4153)
 
@@ -48,21 +48,21 @@ Defined in: [src/types/api.d.ts:4153](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.deactivate\_others
+##### requestBody.content.application/json.deactivate_others
 
-> **deactivate\_others**: `boolean`
+> **deactivate_others**: `boolean`
 
 Deactivate Others
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### requestBody.content.application/json.version\_no
+##### requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -86,22 +86,22 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.activated\_version
+##### responses.200.content.application/json.activated_version
 
-> **activated\_version**: `number`
+> **activated_version**: `number`
 
 Activated Version
 
-##### responses.200.content.application/json.deactivated\_versions
+##### responses.200.content.application/json.deactivated_versions
 
-> **deactivated\_versions**: `number`[]
+> **deactivated_versions**: `number`[]
 
 Deactivated Versions
 
 ###### Default
 
 ```ts
-[]
+[];
 ```
 
 ##### responses.200.content.application/json.message
@@ -154,11 +154,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### allocate\_order\_api\_allocations\_orders\_\_order\_id\_\_allocate\_post
+### allocate_order_api_allocations_orders\_\_order_id\_\_allocate_post
 
-> **allocate\_order\_api\_allocations\_orders\_\_order\_id\_\_allocate\_post**: `object`
+> **allocate_order_api_allocations_orders\_\_order_id\_\_allocate_post**: `object`
 
 Defined in: [src/types/api.d.ts:3615](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3615)
 
@@ -178,9 +178,9 @@ Defined in: [src/types/api.d.ts:3615](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.order\_id
+##### parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### parameters.query?
 
@@ -210,15 +210,15 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_allocation\_ids?
+##### responses.200.content.application/json.created_allocation_ids?
 
-> `optional` **created\_allocation\_ids**: `number`[]
+> `optional` **created_allocation_ids**: `number`[]
 
 Created Allocation Ids
 
-##### responses.200.content.application/json.order\_id
+##### responses.200.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -232,9 +232,9 @@ Order Id
 
 Lines
 
-##### responses.200.content.application/json.preview.order\_id
+##### responses.200.content.application/json.preview.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -282,11 +282,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### bulk\_import\_forecasts\_api\_forecast\_bulk\_post
+### bulk_import_forecasts_api_forecast_bulk_post
 
-> **bulk\_import\_forecasts\_api\_forecast\_bulk\_post**: `object`
+> **bulk_import_forecasts_api_forecast_bulk_post**: `object`
 
 Defined in: [src/types/api.d.ts:4100](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4100)
 
@@ -322,16 +322,16 @@ Defined in: [src/types/api.d.ts:4100](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.deactivate\_old\_version
+##### requestBody.content.application/json.deactivate_old_version
 
-> **deactivate\_old\_version**: `boolean`
+> **deactivate_old_version**: `boolean`
 
 Deactivate Old Version
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
 ##### requestBody.content.application/json.forecasts
@@ -340,28 +340,28 @@ true
 
 Forecasts
 
-##### requestBody.content.application/json.source\_system
+##### requestBody.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### requestBody.content.application/json.version\_issued\_at
+##### requestBody.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### requestBody.content.application/json.version\_no
+##### requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -385,21 +385,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.error\_count
+##### responses.201.content.application/json.error_count
 
-> **error\_count**: `number`
+> **error_count**: `number`
 
 Error Count
 
-##### responses.201.content.application/json.error\_details?
+##### responses.201.content.application/json.error_details?
 
-> `optional` **error\_details**: `string` \| `null`
+> `optional` **error_details**: `string` \| `null`
 
 Error Details
 
-##### responses.201.content.application/json.imported\_count
+##### responses.201.content.application/json.imported_count
 
-> **imported\_count**: `number`
+> **imported_count**: `number`
 
 Imported Count
 
@@ -409,9 +409,9 @@ Imported Count
 
 Message
 
-##### responses.201.content.application/json.skipped\_count
+##### responses.201.content.application/json.skipped_count
 
-> **skipped\_count**: `number`
+> **skipped_count**: `number`
 
 Skipped Count
 
@@ -421,9 +421,9 @@ Skipped Count
 
 Success
 
-##### responses.201.content.application/json.version\_no
+##### responses.201.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
@@ -465,11 +465,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### bulk\_load\_masters\_api\_masters\_bulk\_load\_post
+### bulk_load_masters_api_masters_bulk_load_post
 
-> **bulk\_load\_masters\_api\_masters\_bulk\_load\_post**: `object`
+> **bulk_load_masters_api_masters_bulk_load_post**: `object`
 
 Defined in: [src/types/api.d.ts:3093](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3093)
 
@@ -603,11 +603,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### cancel\_order\_api\_orders\_\_order\_id\_\_cancel\_delete
+### cancel_order_api_orders\_\_order_id\_\_cancel_delete
 
-> **cancel\_order\_api\_orders\_\_order\_id\_\_cancel\_delete**: `object`
+> **cancel_order_api_orders\_\_order_id\_\_cancel_delete**: `object`
 
 Defined in: [src/types/api.d.ts:3491](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3491)
 
@@ -627,9 +627,9 @@ Defined in: [src/types/api.d.ts:3491](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.order\_id
+##### parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### parameters.query?
 
@@ -693,11 +693,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_customer\_api\_masters\_customers\_post
+### create_customer_api_masters_customers_post
 
-> **create\_customer\_api\_masters\_customers\_post**: `object`
+> **create_customer_api_masters_customers_post**: `object`
 
 Defined in: [src/types/api.d.ts:2645](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2645)
 
@@ -739,15 +739,15 @@ Defined in: [src/types/api.d.ts:2645](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.customer\_code
+##### requestBody.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### requestBody.content.application/json.customer\_name
+##### requestBody.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -777,15 +777,15 @@ Successful Response
 
 Address
 
-##### responses.201.content.application/json.customer\_code
+##### responses.201.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.201.content.application/json.customer\_name
+##### responses.201.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -827,11 +827,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_forecast\_api\_forecast\_post
+### create_forecast_api_forecast_post
 
-> **create\_forecast\_api\_forecast\_post**: `object`
+> **create_forecast_api_forecast_post**: `object`
 
 Defined in: [src/types/api.d.ts:3972](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3972)
 
@@ -867,21 +867,21 @@ Defined in: [src/types/api.d.ts:3972](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.customer\_id
+##### requestBody.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### requestBody.content.application/json.date\_day?
+##### requestBody.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### requestBody.content.application/json.date\_dekad\_start?
+##### requestBody.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
@@ -891,64 +891,64 @@ Date Dekad Start
 
 Granularity
 
-##### requestBody.content.application/json.is\_active
+##### requestBody.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### requestBody.content.application/json.product\_id
+##### requestBody.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### requestBody.content.application/json.qty\_forecast
+##### requestBody.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### requestBody.content.application/json.source\_system
+##### requestBody.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### requestBody.content.application/json.version\_issued\_at
+##### requestBody.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### requestBody.content.application/json.version\_no
+##### requestBody.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### requestBody.content.application/json.year\_month?
+##### requestBody.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -972,34 +972,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.created\_at
+##### responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.201.content.application/json.customer\_id
+##### responses.201.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### responses.201.content.application/json.date\_day?
+##### responses.201.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### responses.201.content.application/json.date\_dekad\_start?
+##### responses.201.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### responses.201.content.application/json.forecast\_id?
+##### responses.201.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -1015,76 +1015,76 @@ Granularity
 
 Id
 
-##### responses.201.content.application/json.is\_active
+##### responses.201.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.201.content.application/json.product\_id
+##### responses.201.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### responses.201.content.application/json.qty\_forecast
+##### responses.201.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### responses.201.content.application/json.source\_system
+##### responses.201.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### responses.201.content.application/json.supplier\_id?
+##### responses.201.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### responses.201.content.application/json.updated\_at?
+##### responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.201.content.application/json.version\_issued\_at
+##### responses.201.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### responses.201.content.application/json.version\_no
+##### responses.201.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.201.content.application/json.year\_month?
+##### responses.201.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -1126,11 +1126,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_lot\_api\_lots\_post
+### create_lot_api_lots_post
 
-> **create\_lot\_api\_lots\_post**: `object`
+> **create_lot_api_lots_post**: `object`
 
 Defined in: [src/types/api.d.ts:3164](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3164)
 
@@ -1166,100 +1166,100 @@ Defined in: [src/types/api.d.ts:3164](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.expiry\_date?
+##### requestBody.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
-##### requestBody.content.application/json.inventory\_unit?
+##### requestBody.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### requestBody.content.application/json.kanban\_class?
+##### requestBody.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### requestBody.content.application/json.lot\_number
+##### requestBody.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### requestBody.content.application/json.lot\_unit?
+##### requestBody.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### requestBody.content.application/json.mfg\_date?
+##### requestBody.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### requestBody.content.application/json.product\_code
+##### requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### requestBody.content.application/json.qc\_certificate\_file?
+##### requestBody.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### requestBody.content.application/json.qc\_certificate\_status?
+##### requestBody.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### requestBody.content.application/json.receipt\_date
+##### requestBody.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### requestBody.content.application/json.received\_by?
+##### requestBody.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### requestBody.content.application/json.sales\_unit?
+##### requestBody.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### requestBody.content.application/json.source\_doc?
+##### requestBody.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### requestBody.content.application/json.supplier\_code
+##### requestBody.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### requestBody.content.application/json.warehouse\_code?
+##### requestBody.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### requestBody.content.application/json.warehouse\_id?
+##### requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -1283,28 +1283,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.created\_at
+##### responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.201.content.application/json.current\_quantity
+##### responses.201.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### responses.201.content.application/json.expiry\_date?
+##### responses.201.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -1314,112 +1314,112 @@ Expiry Date
 
 Id
 
-##### responses.201.content.application/json.inventory\_unit?
+##### responses.201.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### responses.201.content.application/json.kanban\_class?
+##### responses.201.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### responses.201.content.application/json.last\_updated?
+##### responses.201.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### responses.201.content.application/json.lot\_number
+##### responses.201.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### responses.201.content.application/json.lot\_unit?
+##### responses.201.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### responses.201.content.application/json.mfg\_date?
+##### responses.201.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### responses.201.content.application/json.product\_code
+##### responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.201.content.application/json.product\_name?
+##### responses.201.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### responses.201.content.application/json.qc\_certificate\_file?
+##### responses.201.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### responses.201.content.application/json.qc\_certificate\_status?
+##### responses.201.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### responses.201.content.application/json.receipt\_date
+##### responses.201.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### responses.201.content.application/json.received\_by?
+##### responses.201.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### responses.201.content.application/json.sales\_unit?
+##### responses.201.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### responses.201.content.application/json.source\_doc?
+##### responses.201.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### responses.201.content.application/json.supplier\_code
+##### responses.201.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.201.content.application/json.updated\_at?
+##### responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.201.content.application/json.warehouse\_code?
+##### responses.201.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### responses.201.content.application/json.warehouse\_id?
+##### responses.201.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -1461,11 +1461,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_order\_api\_orders\_post
+### create_order_api_orders_post
 
-> **create\_order\_api\_orders\_post**: `object`
+> **create_order_api_orders_post**: `object`
 
 Defined in: [src/types/api.d.ts:3392](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3392)
 
@@ -1501,27 +1501,27 @@ Defined in: [src/types/api.d.ts:3392](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.customer\_code
+##### requestBody.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### requestBody.content.application/json.customer\_order\_no?
+##### requestBody.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### requestBody.content.application/json.customer\_order\_no\_last6?
+##### requestBody.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### requestBody.content.application/json.delivery\_mode?
+##### requestBody.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -1531,40 +1531,40 @@ Delivery Mode
 
 Lines
 
-##### requestBody.content.application/json.order\_date
+##### requestBody.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### requestBody.content.application/json.order\_no
+##### requestBody.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### requestBody.content.application/json.sap\_error\_msg?
+##### requestBody.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### requestBody.content.application/json.sap\_order\_id?
+##### requestBody.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### requestBody.content.application/json.sap\_sent\_at?
+##### requestBody.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### requestBody.content.application/json.sap\_status?
+##### requestBody.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -1577,7 +1577,7 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
 #### responses
@@ -1600,34 +1600,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.created\_at
+##### responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.201.content.application/json.customer\_code
+##### responses.201.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.201.content.application/json.customer\_order\_no?
+##### responses.201.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### responses.201.content.application/json.customer\_order\_no\_last6?
+##### responses.201.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### responses.201.content.application/json.delivery\_mode?
+##### responses.201.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -1643,40 +1643,40 @@ Id
 
 Lines
 
-##### responses.201.content.application/json.order\_date
+##### responses.201.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### responses.201.content.application/json.order\_no
+##### responses.201.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### responses.201.content.application/json.sap\_error\_msg?
+##### responses.201.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### responses.201.content.application/json.sap\_order\_id?
+##### responses.201.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### responses.201.content.application/json.sap\_sent\_at?
+##### responses.201.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### responses.201.content.application/json.sap\_status?
+##### responses.201.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -1689,12 +1689,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### responses.201.content.application/json.updated\_at?
+##### responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -1736,11 +1736,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_product\_api\_masters\_products\_post
+### create_product_api_masters_products_post
 
-> **create\_product\_api\_masters\_products\_post**: `object`
+> **create_product_api_masters_products_post**: `object`
 
 Defined in: [src/types/api.d.ts:2485](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2485)
 
@@ -1776,69 +1776,69 @@ Defined in: [src/types/api.d.ts:2485](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.assemble\_div?
+##### requestBody.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### requestBody.content.application/json.base\_unit
+##### requestBody.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### requestBody.content.application/json.customer\_part\_no?
+##### requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### requestBody.content.application/json.delivery\_place\_id?
+##### requestBody.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### requestBody.content.application/json.delivery\_place\_name?
+##### requestBody.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### requestBody.content.application/json.internal\_unit
+##### requestBody.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### requestBody.content.application/json.ji\_ku\_text?
+##### requestBody.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### requestBody.content.application/json.kumitsuke\_ku\_text?
+##### requestBody.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### requestBody.content.application/json.maker\_item\_code?
+##### requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### requestBody.content.application/json.next\_div?
+##### requestBody.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -1848,63 +1848,63 @@ Next Div
 
 Packaging
 
-##### requestBody.content.application/json.packaging\_qty
+##### requestBody.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string` \| `number`
+> **packaging_qty**: `string` \| `number`
 
 Packaging Qty
 
-##### requestBody.content.application/json.packaging\_unit
+##### requestBody.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### requestBody.content.application/json.product\_code
+##### requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### requestBody.content.application/json.product\_name
+##### requestBody.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### requestBody.content.application/json.requires\_lot\_number
+##### requestBody.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### requestBody.content.application/json.shelf\_life\_days?
+##### requestBody.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### requestBody.content.application/json.shipping\_warehouse\_name?
+##### requestBody.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### requestBody.content.application/json.supplier\_code?
+##### requestBody.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### requestBody.content.application/json.supplier\_item\_code?
+##### requestBody.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -1928,69 +1928,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.assemble\_div?
+##### responses.201.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### responses.201.content.application/json.base\_unit
+##### responses.201.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### responses.201.content.application/json.customer\_part\_no?
+##### responses.201.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### responses.201.content.application/json.delivery\_place\_id?
+##### responses.201.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### responses.201.content.application/json.delivery\_place\_name?
+##### responses.201.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### responses.201.content.application/json.internal\_unit
+##### responses.201.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.201.content.application/json.ji\_ku\_text?
+##### responses.201.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### responses.201.content.application/json.kumitsuke\_ku\_text?
+##### responses.201.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### responses.201.content.application/json.maker\_item\_code?
+##### responses.201.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.201.content.application/json.next\_div?
+##### responses.201.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -2000,63 +2000,63 @@ Next Div
 
 Packaging
 
-##### responses.201.content.application/json.packaging\_qty
+##### responses.201.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### responses.201.content.application/json.packaging\_unit
+##### responses.201.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### responses.201.content.application/json.product\_code
+##### responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.201.content.application/json.product\_name
+##### responses.201.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.201.content.application/json.requires\_lot\_number
+##### responses.201.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.201.content.application/json.shelf\_life\_days?
+##### responses.201.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### responses.201.content.application/json.shipping\_warehouse\_name?
+##### responses.201.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### responses.201.content.application/json.supplier\_code?
+##### responses.201.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### responses.201.content.application/json.supplier\_item\_code?
+##### responses.201.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -2098,11 +2098,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_product\_api\_products\_post
+### create_product_api_products_post
 
-> **create\_product\_api\_products\_post**: `object`
+> **create_product_api_products_post**: `object`
 
 Defined in: [src/types/api.d.ts:4252](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4252)
 
@@ -2138,45 +2138,45 @@ Defined in: [src/types/api.d.ts:4252](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.customer\_part\_no?
+##### requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### requestBody.content.application/json.internal\_unit
+##### requestBody.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### requestBody.content.application/json.is\_active
+##### requestBody.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### requestBody.content.application/json.maker\_item\_code?
+##### requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### requestBody.content.application/json.product\_code
+##### requestBody.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### requestBody.content.application/json.product\_name
+##### requestBody.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
@@ -2200,16 +2200,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.created\_at
+##### responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.201.content.application/json.customer\_part\_no
+##### responses.201.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -2219,39 +2219,39 @@ Customer Part No
 
 Id
 
-##### responses.201.content.application/json.internal\_unit
+##### responses.201.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.201.content.application/json.is\_active
+##### responses.201.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### responses.201.content.application/json.maker\_item\_code
+##### responses.201.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.201.content.application/json.product\_code
+##### responses.201.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.201.content.application/json.product\_name
+##### responses.201.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.201.content.application/json.updated\_at
+##### responses.201.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -2294,11 +2294,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_stock\_movement\_api\_lots\_movements\_post
+### create_stock_movement_api_lots_movements_post
 
-> **create\_stock\_movement\_api\_lots\_movements\_post**: `object`
+> **create_stock_movement_api_lots_movements_post**: `object`
 
 Defined in: [src/types/api.d.ts:3323](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3323)
 
@@ -2334,39 +2334,39 @@ Defined in: [src/types/api.d.ts:3323](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.batch\_id?
+##### requestBody.content.application/json.batch_id?
 
-> `optional` **batch\_id**: `string` \| `null`
+> `optional` **batch_id**: `string` \| `null`
 
 Batch Id
 
-##### requestBody.content.application/json.created\_by
+##### requestBody.content.application/json.created_by
 
-> **created\_by**: `string`
+> **created_by**: `string`
 
 Created By
 
 ###### Default
 
 ```ts
-system
+system;
 ```
 
-##### requestBody.content.application/json.lot\_id?
+##### requestBody.content.application/json.lot_id?
 
-> `optional` **lot\_id**: `number` \| `null`
+> `optional` **lot_id**: `number` \| `null`
 
 Lot Id
 
-##### requestBody.content.application/json.product\_id
+##### requestBody.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### requestBody.content.application/json.quantity\_delta
+##### requestBody.content.application/json.quantity_delta
 
-> **quantity\_delta**: `number`
+> **quantity_delta**: `number`
 
 Quantity Delta
 
@@ -2376,21 +2376,21 @@ Quantity Delta
 
 Reason
 
-##### requestBody.content.application/json.source\_id?
+##### requestBody.content.application/json.source_id?
 
-> `optional` **source\_id**: `number` \| `null`
+> `optional` **source_id**: `number` \| `null`
 
 Source Id
 
-##### requestBody.content.application/json.source\_table?
+##### requestBody.content.application/json.source_table?
 
-> `optional` **source\_table**: `string` \| `null`
+> `optional` **source_table**: `string` \| `null`
 
 Source Table
 
-##### requestBody.content.application/json.warehouse\_id?
+##### requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -2414,29 +2414,29 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.201.content.application/json.batch\_id?
+##### responses.201.content.application/json.batch_id?
 
-> `optional` **batch\_id**: `string` \| `null`
+> `optional` **batch_id**: `string` \| `null`
 
 Batch Id
 
-##### responses.201.content.application/json.created\_at
+##### responses.201.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.201.content.application/json.created\_by
+##### responses.201.content.application/json.created_by
 
-> **created\_by**: `string`
+> **created_by**: `string`
 
 Created By
 
 ###### Default
 
 ```ts
-system
+system;
 ```
 
 ##### responses.201.content.application/json.id
@@ -2445,28 +2445,28 @@ system
 
 Id
 
-##### responses.201.content.application/json.lot\_id?
+##### responses.201.content.application/json.lot_id?
 
-> `optional` **lot\_id**: `number` \| `null`
+> `optional` **lot_id**: `number` \| `null`
 
 Lot Id
 
-##### responses.201.content.application/json.occurred\_at
+##### responses.201.content.application/json.occurred_at
 
-> **occurred\_at**: `string`
+> **occurred_at**: `string`
 
 Occurred At
 Format: date-time
 
-##### responses.201.content.application/json.product\_id
+##### responses.201.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### responses.201.content.application/json.quantity\_delta
+##### responses.201.content.application/json.quantity_delta
 
-> **quantity\_delta**: `number`
+> **quantity_delta**: `number`
 
 Quantity Delta
 
@@ -2476,27 +2476,27 @@ Quantity Delta
 
 Reason
 
-##### responses.201.content.application/json.source\_id?
+##### responses.201.content.application/json.source_id?
 
-> `optional` **source\_id**: `number` \| `null`
+> `optional` **source_id**: `number` \| `null`
 
 Source Id
 
-##### responses.201.content.application/json.source\_table?
+##### responses.201.content.application/json.source_table?
 
-> `optional` **source\_table**: `string` \| `null`
+> `optional` **source_table**: `string` \| `null`
 
 Source Table
 
-##### responses.201.content.application/json.updated\_at?
+##### responses.201.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.201.content.application/json.warehouse\_id?
+##### responses.201.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -2538,11 +2538,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_supplier\_api\_masters\_suppliers\_post
+### create_supplier_api_masters_suppliers_post
 
-> **create\_supplier\_api\_masters\_suppliers\_post**: `object`
+> **create_supplier_api_masters_suppliers_post**: `object`
 
 Defined in: [src/types/api.d.ts:2805](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2805)
 
@@ -2584,15 +2584,15 @@ Defined in: [src/types/api.d.ts:2805](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.supplier\_code
+##### requestBody.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### requestBody.content.application/json.supplier\_name
+##### requestBody.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -2622,15 +2622,15 @@ Successful Response
 
 Address
 
-##### responses.201.content.application/json.supplier\_code
+##### responses.201.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.201.content.application/json.supplier\_name
+##### responses.201.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -2672,11 +2672,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### create\_warehouse\_api\_masters\_warehouses\_post
+### create_warehouse_api_masters_warehouses_post
 
-> **create\_warehouse\_api\_masters\_warehouses\_post**: `object`
+> **create_warehouse_api_masters_warehouses_post**: `object`
 
 Defined in: [src/types/api.d.ts:2965](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2965)
 
@@ -2718,27 +2718,27 @@ Defined in: [src/types/api.d.ts:2965](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.is\_active
+##### requestBody.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### requestBody.content.application/json.warehouse\_code
+##### requestBody.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### requestBody.content.application/json.warehouse\_name
+##### requestBody.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -2768,27 +2768,27 @@ Successful Response
 
 Address
 
-##### responses.201.content.application/json.is\_active
+##### responses.201.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.201.content.application/json.warehouse\_code
+##### responses.201.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### responses.201.content.application/json.warehouse\_name
+##### responses.201.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -2830,11 +2830,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_allocation\_api\_allocations\_\_allocation\_id\_\_delete
+### delete_allocation_api_allocations\_\_allocation_id\_\_delete
 
-> **delete\_allocation\_api\_allocations\_\_allocation\_id\_\_delete**: `object`
+> **delete_allocation_api_allocations\_\_allocation_id\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:3553](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3553)
 
@@ -2854,9 +2854,9 @@ Defined in: [src/types/api.d.ts:3553](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.allocation\_id
+##### parameters.path.allocation_id
 
-> **allocation\_id**: `number`
+> **allocation_id**: `number`
 
 ##### parameters.query?
 
@@ -2920,11 +2920,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_customer\_api\_masters\_customers\_\_customer\_code\_\_delete
+### delete_customer_api_masters_customers\_\_customer_code\_\_delete
 
-> **delete\_customer\_api\_masters\_customers\_\_customer\_code\_\_delete**: `object`
+> **delete_customer_api_masters_customers\_\_customer_code\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:2744](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2744)
 
@@ -2944,9 +2944,9 @@ Defined in: [src/types/api.d.ts:2744](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.customer\_code
+##### parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### parameters.query?
 
@@ -3010,11 +3010,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_forecast\_api\_forecast\_\_forecast\_id\_\_delete
+### delete_forecast_api_forecast\_\_forecast_id\_\_delete
 
-> **delete\_forecast\_api\_forecast\_\_forecast\_id\_\_delete**: `object`
+> **delete_forecast_api_forecast\_\_forecast_id\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:4071](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4071)
 
@@ -3034,9 +3034,9 @@ Defined in: [src/types/api.d.ts:4071](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.forecast\_id
+##### parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### parameters.query?
 
@@ -3100,11 +3100,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_lot\_api\_lots\_\_lot\_id\_\_delete
+### delete_lot_api_lots\_\_lot_id\_\_delete
 
-> **delete\_lot\_api\_lots\_\_lot\_id\_\_delete**: `object`
+> **delete_lot_api_lots\_\_lot_id\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:3263](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3263)
 
@@ -3124,9 +3124,9 @@ Defined in: [src/types/api.d.ts:3263](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.lot\_id
+##### parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### parameters.query?
 
@@ -3190,11 +3190,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_product\_api\_masters\_products\_\_product\_code\_\_delete
+### delete_product_api_masters_products\_\_product_code\_\_delete
 
-> **delete\_product\_api\_masters\_products\_\_product\_code\_\_delete**: `object`
+> **delete_product_api_masters_products\_\_product_code\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:2584](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2584)
 
@@ -3214,9 +3214,9 @@ Defined in: [src/types/api.d.ts:2584](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_code
+##### parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### parameters.query?
 
@@ -3280,11 +3280,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_product\_api\_products\_\_product\_id\_\_delete
+### delete_product_api_products\_\_product_id\_\_delete
 
-> **delete\_product\_api\_products\_\_product\_id\_\_delete**: `object`
+> **delete_product_api_products\_\_product_id\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:4316](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4316)
 
@@ -3304,9 +3304,9 @@ Defined in: [src/types/api.d.ts:4316](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_id
+##### parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### parameters.query?
 
@@ -3370,11 +3370,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_delete
+### delete_supplier_api_masters_suppliers\_\_supplier_code\_\_delete
 
-> **delete\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_delete**: `object`
+> **delete_supplier_api_masters_suppliers\_\_supplier_code\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:2904](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2904)
 
@@ -3394,9 +3394,9 @@ Defined in: [src/types/api.d.ts:2904](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.supplier\_code
+##### parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### parameters.query?
 
@@ -3460,11 +3460,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### delete\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_delete
+### delete_warehouse_api_masters_warehouses\_\_warehouse_code\_\_delete
 
-> **delete\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_delete**: `object`
+> **delete_warehouse_api_masters_warehouses\_\_warehouse_code\_\_delete**: `object`
 
 Defined in: [src/types/api.d.ts:3064](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3064)
 
@@ -3484,9 +3484,9 @@ Defined in: [src/types/api.d.ts:3064](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.warehouse\_code
+##### parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### parameters.query?
 
@@ -3550,11 +3550,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### drag\_assign\_allocation\_api\_allocations\_drag\_assign\_post
+### drag_assign_allocation_api_allocations_drag_assign_post
 
-> **drag\_assign\_allocation\_api\_allocations\_drag\_assign\_post**: `object`
+> **drag_assign_allocation_api_allocations_drag_assign_post**: `object`
 
 Defined in: [src/types/api.d.ts:3520](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3520)
 
@@ -3590,21 +3590,21 @@ Defined in: [src/types/api.d.ts:3520](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.allocate\_qty
+##### requestBody.content.application/json.allocate_qty
 
-> **allocate\_qty**: `number`
+> **allocate_qty**: `number`
 
 Allocate Qty
 
-##### requestBody.content.application/json.lot\_id
+##### requestBody.content.application/json.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 Lot Id
 
-##### requestBody.content.application/json.order\_line\_id
+##### requestBody.content.application/json.order_line_id
 
-> **order\_line\_id**: `number`
+> **order_line_id**: `number`
 
 Order Line Id
 
@@ -3666,11 +3666,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_customer\_api\_masters\_customers\_\_customer\_code\_\_get
+### get_customer_api_masters_customers\_\_customer_code\_\_get
 
-> **get\_customer\_api\_masters\_customers\_\_customer\_code\_\_get**: `object`
+> **get_customer_api_masters_customers\_\_customer_code\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:2678](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2678)
 
@@ -3690,9 +3690,9 @@ Defined in: [src/types/api.d.ts:2678](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.customer\_code
+##### parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### parameters.query?
 
@@ -3728,15 +3728,15 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.customer\_code
+##### responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.200.content.application/json.customer\_name
+##### responses.200.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -3778,11 +3778,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_dashboard\_stats\_api\_admin\_stats\_get
+### get_dashboard_stats_api_admin_stats_get
 
-> **get\_dashboard\_stats\_api\_admin\_stats\_get**: `object`
+> **get_dashboard_stats_api_admin_stats_get**: `object`
 
 Defined in: [src/types/api.d.ts:3776](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3776)
 
@@ -3830,21 +3830,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.total\_orders
+##### responses.200.content.application/json.total_orders
 
-> **total\_orders**: `number`
+> **total_orders**: `number`
 
 Total Orders
 
-##### responses.200.content.application/json.total\_stock
+##### responses.200.content.application/json.total_stock
 
-> **total\_stock**: `number`
+> **total_stock**: `number`
 
 Total Stock
 
-##### responses.200.content.application/json.unallocated\_orders
+##### responses.200.content.application/json.unallocated_orders
 
-> **unallocated\_orders**: `number`
+> **unallocated_orders**: `number`
 
 Unallocated Orders
 
@@ -3856,11 +3856,11 @@ Unallocated Orders
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_forecast\_api\_forecast\_\_forecast\_id\_\_get
+### get_forecast_api_forecast\_\_forecast_id\_\_get
 
-> **get\_forecast\_api\_forecast\_\_forecast\_id\_\_get**: `object`
+> **get_forecast_api_forecast\_\_forecast_id\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:4005](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4005)
 
@@ -3880,9 +3880,9 @@ Defined in: [src/types/api.d.ts:4005](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.forecast\_id
+##### parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### parameters.query?
 
@@ -3912,34 +3912,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_id
+##### responses.200.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### responses.200.content.application/json.date\_day?
+##### responses.200.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### responses.200.content.application/json.date\_dekad\_start?
+##### responses.200.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### responses.200.content.application/json.forecast\_id?
+##### responses.200.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -3955,76 +3955,76 @@ Granularity
 
 Id
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.200.content.application/json.product\_id
+##### responses.200.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### responses.200.content.application/json.qty\_forecast
+##### responses.200.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### responses.200.content.application/json.source\_system
+##### responses.200.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### responses.200.content.application/json.supplier\_id?
+##### responses.200.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.200.content.application/json.version\_issued\_at
+##### responses.200.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### responses.200.content.application/json.version\_no
+##### responses.200.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.200.content.application/json.year\_month?
+##### responses.200.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -4066,11 +4066,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_lot\_api\_lots\_\_lot\_id\_\_get
+### get_lot_api_lots\_\_lot_id\_\_get
 
-> **get\_lot\_api\_lots\_\_lot\_id\_\_get**: `object`
+> **get_lot_api_lots\_\_lot_id\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:3197](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3197)
 
@@ -4090,9 +4090,9 @@ Defined in: [src/types/api.d.ts:3197](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.lot\_id
+##### parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### parameters.query?
 
@@ -4122,28 +4122,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.current\_quantity
+##### responses.200.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### responses.200.content.application/json.expiry\_date?
+##### responses.200.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -4153,112 +4153,112 @@ Expiry Date
 
 Id
 
-##### responses.200.content.application/json.inventory\_unit?
+##### responses.200.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### responses.200.content.application/json.kanban\_class?
+##### responses.200.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### responses.200.content.application/json.last\_updated?
+##### responses.200.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### responses.200.content.application/json.lot\_number
+##### responses.200.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### responses.200.content.application/json.lot\_unit?
+##### responses.200.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### responses.200.content.application/json.mfg\_date?
+##### responses.200.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name?
+##### responses.200.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### responses.200.content.application/json.qc\_certificate\_file?
+##### responses.200.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### responses.200.content.application/json.qc\_certificate\_status?
+##### responses.200.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### responses.200.content.application/json.receipt\_date
+##### responses.200.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### responses.200.content.application/json.received\_by?
+##### responses.200.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### responses.200.content.application/json.sales\_unit?
+##### responses.200.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### responses.200.content.application/json.source\_doc?
+##### responses.200.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### responses.200.content.application/json.supplier\_code
+##### responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.200.content.application/json.warehouse\_code?
+##### responses.200.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### responses.200.content.application/json.warehouse\_id?
+##### responses.200.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -4300,11 +4300,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_order\_api\_orders\_\_order\_id\_\_get
+### get_order_api_orders\_\_order_id\_\_get
 
-> **get\_order\_api\_orders\_\_order\_id\_\_get**: `object`
+> **get_order_api_orders\_\_order_id\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:3425](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3425)
 
@@ -4324,9 +4324,9 @@ Defined in: [src/types/api.d.ts:3425](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.order\_id
+##### parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### parameters.query?
 
@@ -4356,34 +4356,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_code
+##### responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.200.content.application/json.customer\_order\_no?
+##### responses.200.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### responses.200.content.application/json.customer\_order\_no\_last6?
+##### responses.200.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### responses.200.content.application/json.delivery\_mode?
+##### responses.200.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -4399,40 +4399,40 @@ Id
 
 Lines
 
-##### responses.200.content.application/json.order\_date
+##### responses.200.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### responses.200.content.application/json.order\_no
+##### responses.200.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### responses.200.content.application/json.sap\_error\_msg?
+##### responses.200.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### responses.200.content.application/json.sap\_order\_id?
+##### responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### responses.200.content.application/json.sap\_sent\_at?
+##### responses.200.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### responses.200.content.application/json.sap\_status?
+##### responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -4445,12 +4445,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -4492,11 +4492,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_product\_api\_masters\_products\_\_product\_code\_\_get
+### get_product_api_masters_products\_\_product_code\_\_get
 
-> **get\_product\_api\_masters\_products\_\_product\_code\_\_get**: `object`
+> **get_product_api_masters_products\_\_product_code\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:2518](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2518)
 
@@ -4516,9 +4516,9 @@ Defined in: [src/types/api.d.ts:2518](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_code
+##### parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### parameters.query?
 
@@ -4548,69 +4548,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.assemble\_div?
+##### responses.200.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### responses.200.content.application/json.base\_unit
+##### responses.200.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### responses.200.content.application/json.customer\_part\_no?
+##### responses.200.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### responses.200.content.application/json.delivery\_place\_id?
+##### responses.200.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### responses.200.content.application/json.delivery\_place\_name?
+##### responses.200.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### responses.200.content.application/json.internal\_unit
+##### responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.200.content.application/json.ji\_ku\_text?
+##### responses.200.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### responses.200.content.application/json.kumitsuke\_ku\_text?
+##### responses.200.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### responses.200.content.application/json.maker\_item\_code?
+##### responses.200.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.200.content.application/json.next\_div?
+##### responses.200.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -4620,63 +4620,63 @@ Next Div
 
 Packaging
 
-##### responses.200.content.application/json.packaging\_qty
+##### responses.200.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### responses.200.content.application/json.packaging\_unit
+##### responses.200.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name
+##### responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.200.content.application/json.requires\_lot\_number
+##### responses.200.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.200.content.application/json.shelf\_life\_days?
+##### responses.200.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### responses.200.content.application/json.shipping\_warehouse\_name?
+##### responses.200.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### responses.200.content.application/json.supplier\_code?
+##### responses.200.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### responses.200.content.application/json.supplier\_item\_code?
+##### responses.200.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -4718,11 +4718,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_product\_api\_products\_\_product\_id\_\_get
+### get_product_api_products\_\_product_id\_\_get
 
-> **get\_product\_api\_products\_\_product\_id\_\_get**: `object`
+> **get_product_api_products\_\_product_id\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:4285](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4285)
 
@@ -4742,9 +4742,9 @@ Defined in: [src/types/api.d.ts:4285](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_id
+##### parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### parameters.query?
 
@@ -4774,16 +4774,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_part\_no
+##### responses.200.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -4793,39 +4793,39 @@ Customer Part No
 
 Id
 
-##### responses.200.content.application/json.internal\_unit
+##### responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### responses.200.content.application/json.maker\_item\_code
+##### responses.200.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name
+##### responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.200.content.application/json.updated\_at
+##### responses.200.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -4868,11 +4868,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_get
+### get_supplier_api_masters_suppliers\_\_supplier_code\_\_get
 
-> **get\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_get**: `object`
+> **get_supplier_api_masters_suppliers\_\_supplier_code\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:2838](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2838)
 
@@ -4892,9 +4892,9 @@ Defined in: [src/types/api.d.ts:2838](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.supplier\_code
+##### parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### parameters.query?
 
@@ -4930,15 +4930,15 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.supplier\_code
+##### responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.200.content.application/json.supplier\_name
+##### responses.200.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -4980,11 +4980,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### get\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_get
+### get_warehouse_api_masters_warehouses\_\_warehouse_code\_\_get
 
-> **get\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_get**: `object`
+> **get_warehouse_api_masters_warehouses\_\_warehouse_code\_\_get**: `object`
 
 Defined in: [src/types/api.d.ts:2998](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2998)
 
@@ -5004,9 +5004,9 @@ Defined in: [src/types/api.d.ts:2998](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.warehouse\_code
+##### parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### parameters.query?
 
@@ -5042,27 +5042,27 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.200.content.application/json.warehouse\_code
+##### responses.200.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### responses.200.content.application/json.warehouse\_name
+##### responses.200.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -5104,11 +5104,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### health\_api\_health\_get
+### health_api_health_get
 
-> **health\_api\_health\_get**: `object`
+> **health_api_health_get**: `object`
 
 Defined in: [src/types/api.d.ts:4440](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4440)
 
@@ -5164,11 +5164,11 @@ Successful Response
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### healthz\_api\_healthz\_get
+### healthz_api_healthz_get
 
-> **healthz\_api\_healthz\_get**: `object`
+> **healthz_api_healthz_get**: `object`
 
 Defined in: [src/types/api.d.ts:4400](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4400)
 
@@ -5224,11 +5224,11 @@ Successful Response
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_customers\_api\_masters\_customers\_get
+### list_customers_api_masters_customers_get
 
-> **list\_customers\_api\_masters\_customers\_get**: `object`
+> **list_customers_api_masters_customers_get**: `object`
 
 Defined in: [src/types/api.d.ts:2613](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2613)
 
@@ -5322,11 +5322,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_forecast\_summary\_api\_forecast\_list\_get
+### list_forecast_summary_api_forecast_list_get
 
-> **list\_forecast\_summary\_api\_forecast\_list\_get**: `object`
+> **list_forecast_summary_api_forecast_list_get**: `object`
 
 Defined in: [src/types/api.d.ts:3901](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3901)
 
@@ -5350,13 +5350,13 @@ Defined in: [src/types/api.d.ts:3901](https://github.com/cybons-lab/Lot-manageme
 
 > `optional` **query**: `object`
 
-##### parameters.query.product\_code?
+##### parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
-##### parameters.query.supplier\_code?
+##### parameters.query.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 #### requestBody?
 
@@ -5426,11 +5426,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_forecasts\_api\_forecast\_get
+### list_forecasts_api_forecast_get
 
-> **list\_forecasts\_api\_forecast\_get**: `object`
+> **list_forecasts_api_forecast_get**: `object`
 
 Defined in: [src/types/api.d.ts:3933](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3933)
 
@@ -5454,41 +5454,41 @@ Defined in: [src/types/api.d.ts:3933](https://github.com/cybons-lab/Lot-manageme
 
 > `optional` **query**: `object`
 
-##### parameters.query.customer\_code?
+##### parameters.query.customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
-##### parameters.query.customer\_id?
+##### parameters.query.customer_id?
 
-> `optional` **customer\_id**: `string` \| `null`
+> `optional` **customer_id**: `string` \| `null`
 
 ##### parameters.query.granularity?
 
 > `optional` **granularity**: `string` \| `null`
 
-##### parameters.query.is\_active?
+##### parameters.query.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 ##### parameters.query.limit?
 
 > `optional` **limit**: `number`
 
-##### parameters.query.product\_code?
+##### parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
-##### parameters.query.product\_id?
+##### parameters.query.product_id?
 
-> `optional` **product\_id**: `string` \| `null`
+> `optional` **product_id**: `string` \| `null`
 
 ##### parameters.query.skip?
 
 > `optional` **skip**: `number`
 
-##### parameters.query.version\_no?
+##### parameters.query.version_no?
 
-> `optional` **version\_no**: `number` \| `null`
+> `optional` **version_no**: `number` \| `null`
 
 #### requestBody?
 
@@ -5552,11 +5552,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_lot\_movements\_api\_lots\_\_lot\_id\_\_movements\_get
+### list_lot_movements_api_lots\_\_lot_id\_\_movements_get
 
-> **list\_lot\_movements\_api\_lots\_\_lot\_id\_\_movements\_get**: `object`
+> **list_lot_movements_api_lots\_\_lot_id\_\_movements_get**: `object`
 
 Defined in: [src/types/api.d.ts:3292](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3292)
 
@@ -5576,9 +5576,9 @@ Defined in: [src/types/api.d.ts:3292](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.lot\_id
+##### parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### parameters.query?
 
@@ -5646,11 +5646,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_lots\_api\_lots\_get
+### list_lots_api_lots_get
 
-> **list\_lots\_api\_lots\_get**: `object`
+> **list_lots_api_lots_get**: `object`
 
 Defined in: [src/types/api.d.ts:3126](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3126)
 
@@ -5674,37 +5674,37 @@ Defined in: [src/types/api.d.ts:3126](https://github.com/cybons-lab/Lot-manageme
 
 > `optional` **query**: `object`
 
-##### parameters.query.expiry\_from?
+##### parameters.query.expiry_from?
 
-> `optional` **expiry\_from**: `string` \| `null`
+> `optional` **expiry_from**: `string` \| `null`
 
-##### parameters.query.expiry\_to?
+##### parameters.query.expiry_to?
 
-> `optional` **expiry\_to**: `string` \| `null`
+> `optional` **expiry_to**: `string` \| `null`
 
 ##### parameters.query.limit?
 
 > `optional` **limit**: `number`
 
-##### parameters.query.product\_code?
+##### parameters.query.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
 ##### parameters.query.skip?
 
 > `optional` **skip**: `number`
 
-##### parameters.query.supplier\_code?
+##### parameters.query.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
-##### parameters.query.warehouse\_code?
+##### parameters.query.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
-##### parameters.query.with\_stock?
+##### parameters.query.with_stock?
 
-> `optional` **with\_stock**: `boolean`
+> `optional` **with_stock**: `boolean`
 
 #### requestBody?
 
@@ -5768,11 +5768,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_ocr\_submissions\_api\_integration\_ai\_ocr\_submissions\_get
+### list_ocr_submissions_api_integration_ai_ocr_submissions_get
 
-> **list\_ocr\_submissions\_api\_integration\_ai\_ocr\_submissions\_get**: `object`
+> **list_ocr_submissions_api_integration_ai_ocr_submissions_get**: `object`
 
 Defined in: [src/types/api.d.ts:3679](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3679)
 
@@ -5866,11 +5866,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_orders\_api\_orders\_get
+### list_orders_api_orders_get
 
-> **list\_orders\_api\_orders\_get**: `object`
+> **list_orders_api_orders_get**: `object`
 
 Defined in: [src/types/api.d.ts:3356](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3356)
 
@@ -5894,17 +5894,17 @@ Defined in: [src/types/api.d.ts:3356](https://github.com/cybons-lab/Lot-manageme
 
 > `optional` **query**: `object`
 
-##### parameters.query.customer\_code?
+##### parameters.query.customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
-##### parameters.query.date\_from?
+##### parameters.query.date_from?
 
-> `optional` **date\_from**: `string` \| `null`
+> `optional` **date_from**: `string` \| `null`
 
-##### parameters.query.date\_to?
+##### parameters.query.date_to?
 
-> `optional` **date\_to**: `string` \| `null`
+> `optional` **date_to**: `string` \| `null`
 
 ##### parameters.query.limit?
 
@@ -5980,11 +5980,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_presets\_api\_admin\_presets\_get
+### list_presets_api_admin_presets_get
 
-> **list\_presets\_api\_admin\_presets\_get**: `object`
+> **list_presets_api_admin_presets_get**: `object`
 
 Defined in: [src/types/api.d.ts:3849](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3849)
 
@@ -6046,11 +6046,11 @@ Presets
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_products\_api\_masters\_products\_get
+### list_products_api_masters_products_get
 
-> **list\_products\_api\_masters\_products\_get**: `object`
+> **list_products_api_masters_products_get**: `object`
 
 Defined in: [src/types/api.d.ts:2452](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2452)
 
@@ -6148,11 +6148,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_products\_api\_products\_get
+### list_products_api_products_get
 
-> **list\_products\_api\_products\_get**: `object`
+> **list_products_api_products_get**: `object`
 
 Defined in: [src/types/api.d.ts:4219](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4219)
 
@@ -6180,9 +6180,9 @@ Defined in: [src/types/api.d.ts:4219](https://github.com/cybons-lab/Lot-manageme
 
 > `optional` **page**: `number`
 
-##### parameters.query.per\_page?
+##### parameters.query.per_page?
 
-> `optional` **per\_page**: `number`
+> `optional` **per_page**: `number`
 
 ##### parameters.query.q?
 
@@ -6224,9 +6224,9 @@ Items
 
 Page
 
-##### responses.200.content.application/json.per\_page
+##### responses.200.content.application/json.per_page
 
-> **per\_page**: `number`
+> **per_page**: `number`
 
 Per Page
 
@@ -6274,11 +6274,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_sap\_logs\_api\_integration\_sap\_logs\_get
+### list_sap_logs_api_integration_sap_logs_get
 
-> **list\_sap\_logs\_api\_integration\_sap\_logs\_get**: `object`
+> **list_sap_logs_api_integration_sap_logs_get**: `object`
 
 Defined in: [src/types/api.d.ts:3744](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3744)
 
@@ -6372,11 +6372,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_suppliers\_api\_masters\_suppliers\_get
+### list_suppliers_api_masters_suppliers_get
 
-> **list\_suppliers\_api\_masters\_suppliers\_get**: `object`
+> **list_suppliers_api_masters_suppliers_get**: `object`
 
 Defined in: [src/types/api.d.ts:2773](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2773)
 
@@ -6470,11 +6470,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_versions\_api\_forecast\_versions\_get
+### list_versions_api_forecast_versions_get
 
-> **list\_versions\_api\_forecast\_versions\_get**: `object`
+> **list_versions_api_forecast_versions_get**: `object`
 
 Defined in: [src/types/api.d.ts:4133](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4133)
 
@@ -6536,11 +6536,11 @@ Versions
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_warehouses\_api\_masters\_warehouses\_get
+### list_warehouses_api_masters_warehouses_get
 
-> **list\_warehouses\_api\_masters\_warehouses\_get**: `object`
+> **list_warehouses_api_masters_warehouses_get**: `object`
 
 Defined in: [src/types/api.d.ts:2933](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2933)
 
@@ -6634,11 +6634,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### list\_warehouses\_api\_warehouse\_alloc\_warehouses\_get
+### list_warehouses_api_warehouse_alloc_warehouses_get
 
-> **list\_warehouses\_api\_warehouse\_alloc\_warehouses\_get**: `object`
+> **list_warehouses_api_warehouse_alloc_warehouses_get**: `object`
 
 Defined in: [src/types/api.d.ts:4380](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4380)
 
@@ -6700,11 +6700,11 @@ Items
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### load\_full\_sample\_data\_api\_admin\_load\_full\_sample\_data\_post
+### load_full_sample_data_api_admin_load_full_sample_data_post
 
-> **load\_full\_sample\_data\_api\_admin\_load\_full\_sample\_data\_post**: `object`
+> **load_full_sample_data_api_admin_load_full_sample_data_post**: `object`
 
 Defined in: [src/types/api.d.ts:3816](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3816)
 
@@ -6834,11 +6834,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### load\_preset\_api\_admin\_load\_preset\_post
+### load_preset_api_admin_load_preset_post
 
-> **load\_preset\_api\_admin\_load\_preset\_post**: `object`
+> **load_preset_api_admin_load_preset_post**: `object`
 
 Defined in: [src/types/api.d.ts:3869](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3869)
 
@@ -6958,11 +6958,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### match\_forecasts\_api\_forecast\_match\_post
+### match_forecasts_api_forecast_match_post
 
-> **match\_forecasts\_api\_forecast\_match\_post**: `object`
+> **match_forecasts_api_forecast_match_post**: `object`
 
 Defined in: [src/types/api.d.ts:4186](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4186)
 
@@ -6998,39 +6998,39 @@ Defined in: [src/types/api.d.ts:4186](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.date\_from?
+##### requestBody.content.application/json.date_from?
 
-> `optional` **date\_from**: `string` \| `null`
+> `optional` **date_from**: `string` \| `null`
 
 Date From
 
-##### requestBody.content.application/json.date\_to?
+##### requestBody.content.application/json.date_to?
 
-> `optional` **date\_to**: `string` \| `null`
+> `optional` **date_to**: `string` \| `null`
 
 Date To
 
-##### requestBody.content.application/json.force\_rematch
+##### requestBody.content.application/json.force_rematch
 
-> **force\_rematch**: `boolean`
+> **force_rematch**: `boolean`
 
 Force Rematch
 
 ###### Default
 
 ```ts
-false
+false;
 ```
 
-##### requestBody.content.application/json.order\_id?
+##### requestBody.content.application/json.order_id?
 
-> `optional` **order\_id**: `number` \| `null`
+> `optional` **order_id**: `number` \| `null`
 
 Order Id
 
-##### requestBody.content.application/json.order\_ids?
+##### requestBody.content.application/json.order_ids?
 
-> `optional` **order\_ids**: `number`[] \| `null`
+> `optional` **order_ids**: `number`[] \| `null`
 
 Order Ids
 
@@ -7054,9 +7054,9 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.matched\_lines
+##### responses.200.content.application/json.matched_lines
 
-> **matched\_lines**: `number`
+> **matched_lines**: `number`
 
 Matched Lines
 
@@ -7075,7 +7075,7 @@ Results
 ###### Default
 
 ```ts
-[]
+[];
 ```
 
 ##### responses.200.content.application/json.success
@@ -7084,15 +7084,15 @@ Results
 
 Success
 
-##### responses.200.content.application/json.total\_lines
+##### responses.200.content.application/json.total_lines
 
-> **total\_lines**: `number`
+> **total_lines**: `number`
 
 Total Lines
 
-##### responses.200.content.application/json.unmatched\_lines
+##### responses.200.content.application/json.unmatched_lines
 
-> **unmatched\_lines**: `number`
+> **unmatched_lines**: `number`
 
 Unmatched Lines
 
@@ -7134,11 +7134,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### preview\_allocations\_api\_allocations\_preview\_post
+### preview_allocations_api_allocations_preview_post
 
-> **preview\_allocations\_api\_allocations\_preview\_post**: `object`
+> **preview_allocations_api_allocations_preview_post**: `object`
 
 Defined in: [src/types/api.d.ts:3582](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3582)
 
@@ -7174,9 +7174,9 @@ Defined in: [src/types/api.d.ts:3582](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.order\_id
+##### requestBody.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -7206,9 +7206,9 @@ Successful Response
 
 Lines
 
-##### responses.200.content.application/json.order\_id
+##### responses.200.content.application/json.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 Order Id
 
@@ -7256,11 +7256,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### readyz\_api\_readyz\_get
+### readyz_api_readyz_get
 
-> **readyz\_api\_readyz\_get**: `object`
+> **readyz_api_readyz_get**: `object`
 
 Defined in: [src/types/api.d.ts:4420](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4420)
 
@@ -7316,11 +7316,11 @@ Successful Response
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### register\_to\_sap\_api\_integration\_sap\_register\_post
+### register_to_sap_api_integration_sap_register_post
 
-> **register\_to\_sap\_api\_integration\_sap\_register\_post**: `object`
+> **register_to_sap_api_integration_sap_register_post**: `object`
 
 Defined in: [src/types/api.d.ts:3711](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3711)
 
@@ -7411,21 +7411,21 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.error\_message?
+##### responses.200.content.application/json.error_message?
 
-> `optional` **error\_message**: `string` \| `null`
+> `optional` **error_message**: `string` \| `null`
 
 Error Message
 
-##### responses.200.content.application/json.sap\_order\_id?
+##### responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### responses.200.content.application/json.sap\_status?
+##### responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -7479,11 +7479,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### reset\_database\_api\_admin\_reset\_database\_post
+### reset_database_api_admin_reset_database_post
 
-> **reset\_database\_api\_admin\_reset\_database\_post**: `object`
+> **reset_database_api_admin_reset_database_post**: `object`
 
 Defined in: [src/types/api.d.ts:3796](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3796)
 
@@ -7557,7 +7557,7 @@ Success
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
 ### root\_\_get
 
@@ -7617,11 +7617,11 @@ Successful Response
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### submit\_ocr\_data\_api\_integration\_ai\_ocr\_submit\_post
+### submit_ocr_data_api_integration_ai_ocr_submit_post
 
-> **submit\_ocr\_data\_api\_integration\_ai\_ocr\_submit\_post**: `object`
+> **submit_ocr_data_api_integration_ai_ocr_submit_post**: `object`
 
 Defined in: [src/types/api.d.ts:3646](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3646)
 
@@ -7657,9 +7657,9 @@ Defined in: [src/types/api.d.ts:3646](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.file\_name?
+##### requestBody.content.application/json.file_name?
 
-> `optional` **file\_name**: `string` \| `null`
+> `optional` **file_name**: `string` \| `null`
 
 File Name
 
@@ -7675,9 +7675,9 @@ Operator
 
 Records
 
-##### requestBody.content.application/json.schema\_version
+##### requestBody.content.application/json.schema_version
 
-> **schema\_version**: `string`
+> **schema_version**: `string`
 
 Schema Version
 
@@ -7696,7 +7696,7 @@ Source
 ###### Default
 
 ```ts
-PAD
+PAD;
 ```
 
 #### responses
@@ -7719,39 +7719,39 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_lines
+##### responses.200.content.application/json.created_lines
 
-> **created\_lines**: `number`
+> **created_lines**: `number`
 
 Created Lines
 
-##### responses.200.content.application/json.created\_orders
+##### responses.200.content.application/json.created_orders
 
-> **created\_orders**: `number`
+> **created_orders**: `number`
 
 Created Orders
 
-##### responses.200.content.application/json.error\_details?
+##### responses.200.content.application/json.error_details?
 
-> `optional` **error\_details**: `string` \| `null`
+> `optional` **error_details**: `string` \| `null`
 
 Error Details
 
-##### responses.200.content.application/json.failed\_records
+##### responses.200.content.application/json.failed_records
 
-> **failed\_records**: `number`
+> **failed_records**: `number`
 
 Failed Records
 
-##### responses.200.content.application/json.processed\_records
+##### responses.200.content.application/json.processed_records
 
-> **processed\_records**: `number`
+> **processed_records**: `number`
 
 Processed Records
 
-##### responses.200.content.application/json.skipped\_records
+##### responses.200.content.application/json.skipped_records
 
-> **skipped\_records**: `number`
+> **skipped_records**: `number`
 
 Skipped Records
 
@@ -7761,15 +7761,15 @@ Skipped Records
 
 Status
 
-##### responses.200.content.application/json.submission\_id
+##### responses.200.content.application/json.submission_id
 
-> **submission\_id**: `string`
+> **submission_id**: `string`
 
 Submission Id
 
-##### responses.200.content.application/json.total\_records
+##### responses.200.content.application/json.total_records
 
-> **total\_records**: `number`
+> **total_records**: `number`
 
 Total Records
 
@@ -7811,11 +7811,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_customer\_api\_masters\_customers\_\_customer\_code\_\_put
+### update_customer_api_masters_customers\_\_customer_code\_\_put
 
-> **update\_customer\_api\_masters\_customers\_\_customer\_code\_\_put**: `object`
+> **update_customer_api_masters_customers\_\_customer_code\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:2709](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2709)
 
@@ -7835,9 +7835,9 @@ Defined in: [src/types/api.d.ts:2709](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.customer\_code
+##### parameters.path.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 ##### parameters.query?
 
@@ -7861,9 +7861,9 @@ Defined in: [src/types/api.d.ts:2709](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.customer\_name?
+##### requestBody.content.application/json.customer_name?
 
-> `optional` **customer\_name**: `string` \| `null`
+> `optional` **customer_name**: `string` \| `null`
 
 Customer Name
 
@@ -7893,15 +7893,15 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.customer\_code
+##### responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.200.content.application/json.customer\_name
+##### responses.200.content.application/json.customer_name
 
-> **customer\_name**: `string`
+> **customer_name**: `string`
 
 Customer Name
 
@@ -7943,11 +7943,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_forecast\_api\_forecast\_\_forecast\_id\_\_put
+### update_forecast_api_forecast\_\_forecast_id\_\_put
 
-> **update\_forecast\_api\_forecast\_\_forecast\_id\_\_put**: `object`
+> **update_forecast_api_forecast\_\_forecast_id\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:4036](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4036)
 
@@ -7967,9 +7967,9 @@ Defined in: [src/types/api.d.ts:4036](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.forecast\_id
+##### parameters.path.forecast_id
 
-> **forecast\_id**: `number`
+> **forecast_id**: `number`
 
 ##### parameters.query?
 
@@ -7987,15 +7987,15 @@ Defined in: [src/types/api.d.ts:4036](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.is\_active?
+##### requestBody.content.application/json.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 Is Active
 
-##### requestBody.content.application/json.qty\_forecast?
+##### requestBody.content.application/json.qty_forecast?
 
-> `optional` **qty\_forecast**: `number` \| `null`
+> `optional` **qty_forecast**: `number` \| `null`
 
 Qty Forecast
 
@@ -8019,34 +8019,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_id
+##### responses.200.content.application/json.customer_id
 
-> **customer\_id**: `string`
+> **customer_id**: `string`
 
 Customer Id
 
-##### responses.200.content.application/json.date\_day?
+##### responses.200.content.application/json.date_day?
 
-> `optional` **date\_day**: `string` \| `null`
+> `optional` **date_day**: `string` \| `null`
 
 Date Day
 
-##### responses.200.content.application/json.date\_dekad\_start?
+##### responses.200.content.application/json.date_dekad_start?
 
-> `optional` **date\_dekad\_start**: `string` \| `null`
+> `optional` **date_dekad_start**: `string` \| `null`
 
 Date Dekad Start
 
-##### responses.200.content.application/json.forecast\_id?
+##### responses.200.content.application/json.forecast_id?
 
-> `optional` **forecast\_id**: `number` \| `null`
+> `optional` **forecast_id**: `number` \| `null`
 
 Forecast Id
 
@@ -8062,76 +8062,76 @@ Granularity
 
 Id
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.200.content.application/json.product\_id
+##### responses.200.content.application/json.product_id
 
-> **product\_id**: `string`
+> **product_id**: `string`
 
 Product Id
 
-##### responses.200.content.application/json.qty\_forecast
+##### responses.200.content.application/json.qty_forecast
 
-> **qty\_forecast**: `number`
+> **qty_forecast**: `number`
 
 Qty Forecast
 
-##### responses.200.content.application/json.source\_system
+##### responses.200.content.application/json.source_system
 
-> **source\_system**: `string`
+> **source_system**: `string`
 
 Source System
 
 ###### Default
 
 ```ts
-external
+external;
 ```
 
-##### responses.200.content.application/json.supplier\_id?
+##### responses.200.content.application/json.supplier_id?
 
-> `optional` **supplier\_id**: `string` \| `null`
+> `optional` **supplier_id**: `string` \| `null`
 
 Supplier Id
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.200.content.application/json.version\_issued\_at
+##### responses.200.content.application/json.version_issued_at
 
-> **version\_issued\_at**: `string`
+> **version_issued_at**: `string`
 
 Version Issued At
 Format: date-time
 
-##### responses.200.content.application/json.version\_no
+##### responses.200.content.application/json.version_no
 
-> **version\_no**: `number`
+> **version_no**: `number`
 
 Version No
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.200.content.application/json.year\_month?
+##### responses.200.content.application/json.year_month?
 
-> `optional` **year\_month**: `string` \| `null`
+> `optional` **year_month**: `string` \| `null`
 
 Year Month
 
@@ -8173,11 +8173,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_lot\_api\_lots\_\_lot\_id\_\_put
+### update_lot_api_lots\_\_lot_id\_\_put
 
-> **update\_lot\_api\_lots\_\_lot\_id\_\_put**: `object`
+> **update_lot_api_lots\_\_lot_id\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:3228](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3228)
 
@@ -8197,9 +8197,9 @@ Defined in: [src/types/api.d.ts:3228](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.lot\_id
+##### parameters.path.lot_id
 
-> **lot\_id**: `number`
+> **lot_id**: `number`
 
 ##### parameters.query?
 
@@ -8217,45 +8217,45 @@ Defined in: [src/types/api.d.ts:3228](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.expiry\_date?
+##### requestBody.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
-##### requestBody.content.application/json.lot\_unit?
+##### requestBody.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### requestBody.content.application/json.mfg\_date?
+##### requestBody.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### requestBody.content.application/json.qc\_certificate\_file?
+##### requestBody.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### requestBody.content.application/json.qc\_certificate\_status?
+##### requestBody.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### requestBody.content.application/json.warehouse\_code?
+##### requestBody.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### requestBody.content.application/json.warehouse\_id?
+##### requestBody.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -8279,28 +8279,28 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.current\_quantity
+##### responses.200.content.application/json.current_quantity
 
-> **current\_quantity**: `number`
+> **current_quantity**: `number`
 
 Current Quantity
 
 ###### Default
 
 ```ts
-0
+0;
 ```
 
-##### responses.200.content.application/json.expiry\_date?
+##### responses.200.content.application/json.expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Expiry Date
 
@@ -8310,112 +8310,112 @@ Expiry Date
 
 Id
 
-##### responses.200.content.application/json.inventory\_unit?
+##### responses.200.content.application/json.inventory_unit?
 
-> `optional` **inventory\_unit**: `string` \| `null`
+> `optional` **inventory_unit**: `string` \| `null`
 
 Inventory Unit
 
-##### responses.200.content.application/json.kanban\_class?
+##### responses.200.content.application/json.kanban_class?
 
-> `optional` **kanban\_class**: `string` \| `null`
+> `optional` **kanban_class**: `string` \| `null`
 
 Kanban Class
 
-##### responses.200.content.application/json.last\_updated?
+##### responses.200.content.application/json.last_updated?
 
-> `optional` **last\_updated**: `string` \| `null`
+> `optional` **last_updated**: `string` \| `null`
 
 Last Updated
 
-##### responses.200.content.application/json.lot\_number
+##### responses.200.content.application/json.lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Lot Number
 
-##### responses.200.content.application/json.lot\_unit?
+##### responses.200.content.application/json.lot_unit?
 
-> `optional` **lot\_unit**: `string` \| `null`
+> `optional` **lot_unit**: `string` \| `null`
 
 Lot Unit
 
-##### responses.200.content.application/json.mfg\_date?
+##### responses.200.content.application/json.mfg_date?
 
-> `optional` **mfg\_date**: `string` \| `null`
+> `optional` **mfg_date**: `string` \| `null`
 
 Mfg Date
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name?
+##### responses.200.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### responses.200.content.application/json.qc\_certificate\_file?
+##### responses.200.content.application/json.qc_certificate_file?
 
-> `optional` **qc\_certificate\_file**: `string` \| `null`
+> `optional` **qc_certificate_file**: `string` \| `null`
 
 Qc Certificate File
 
-##### responses.200.content.application/json.qc\_certificate\_status?
+##### responses.200.content.application/json.qc_certificate_status?
 
-> `optional` **qc\_certificate\_status**: `string` \| `null`
+> `optional` **qc_certificate_status**: `string` \| `null`
 
 Qc Certificate Status
 
-##### responses.200.content.application/json.receipt\_date
+##### responses.200.content.application/json.receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Receipt Date
 Format: date
 
-##### responses.200.content.application/json.received\_by?
+##### responses.200.content.application/json.received_by?
 
-> `optional` **received\_by**: `string` \| `null`
+> `optional` **received_by**: `string` \| `null`
 
 Received By
 
-##### responses.200.content.application/json.sales\_unit?
+##### responses.200.content.application/json.sales_unit?
 
-> `optional` **sales\_unit**: `string` \| `null`
+> `optional` **sales_unit**: `string` \| `null`
 
 Sales Unit
 
-##### responses.200.content.application/json.source\_doc?
+##### responses.200.content.application/json.source_doc?
 
-> `optional` **source\_doc**: `string` \| `null`
+> `optional` **source_doc**: `string` \| `null`
 
 Source Doc
 
-##### responses.200.content.application/json.supplier\_code
+##### responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
-##### responses.200.content.application/json.warehouse\_code?
+##### responses.200.content.application/json.warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Warehouse Code
 
-##### responses.200.content.application/json.warehouse\_id?
+##### responses.200.content.application/json.warehouse_id?
 
-> `optional` **warehouse\_id**: `number` \| `null`
+> `optional` **warehouse_id**: `number` \| `null`
 
 Warehouse Id
 
@@ -8457,11 +8457,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_order\_status\_api\_orders\_\_order\_id\_\_status\_patch
+### update_order_status_api_orders\_\_order_id\_\_status_patch
 
-> **update\_order\_status\_api\_orders\_\_order\_id\_\_status\_patch**: `object`
+> **update_order_status_api_orders\_\_order_id\_\_status_patch**: `object`
 
 Defined in: [src/types/api.d.ts:3456](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3456)
 
@@ -8481,9 +8481,9 @@ Defined in: [src/types/api.d.ts:3456](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.order\_id
+##### parameters.path.order_id
 
-> **order\_id**: `number`
+> **order_id**: `number`
 
 ##### parameters.query?
 
@@ -8514,11 +8514,11 @@ Status
 ###### Examples
 
 ```ts
-allocated
+allocated;
 ```
 
 ```ts
-shipped
+shipped;
 ```
 
 #### responses
@@ -8541,34 +8541,34 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_code
+##### responses.200.content.application/json.customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 Customer Code
 
-##### responses.200.content.application/json.customer\_order\_no?
+##### responses.200.content.application/json.customer_order_no?
 
-> `optional` **customer\_order\_no**: `string` \| `null`
+> `optional` **customer_order_no**: `string` \| `null`
 
 Customer Order No
 
-##### responses.200.content.application/json.customer\_order\_no\_last6?
+##### responses.200.content.application/json.customer_order_no_last6?
 
-> `optional` **customer\_order\_no\_last6**: `string` \| `null`
+> `optional` **customer_order_no_last6**: `string` \| `null`
 
 Customer Order No Last6
 
-##### responses.200.content.application/json.delivery\_mode?
+##### responses.200.content.application/json.delivery_mode?
 
-> `optional` **delivery\_mode**: `string` \| `null`
+> `optional` **delivery_mode**: `string` \| `null`
 
 Delivery Mode
 
@@ -8578,40 +8578,40 @@ Delivery Mode
 
 Id
 
-##### responses.200.content.application/json.order\_date
+##### responses.200.content.application/json.order_date
 
-> **order\_date**: `string`
+> **order_date**: `string`
 
 Order Date
 Format: date
 
-##### responses.200.content.application/json.order\_no
+##### responses.200.content.application/json.order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
 Order No
 
-##### responses.200.content.application/json.sap\_error\_msg?
+##### responses.200.content.application/json.sap_error_msg?
 
-> `optional` **sap\_error\_msg**: `string` \| `null`
+> `optional` **sap_error_msg**: `string` \| `null`
 
 Sap Error Msg
 
-##### responses.200.content.application/json.sap\_order\_id?
+##### responses.200.content.application/json.sap_order_id?
 
-> `optional` **sap\_order\_id**: `string` \| `null`
+> `optional` **sap_order_id**: `string` \| `null`
 
 Sap Order Id
 
-##### responses.200.content.application/json.sap\_sent\_at?
+##### responses.200.content.application/json.sap_sent_at?
 
-> `optional` **sap\_sent\_at**: `string` \| `null`
+> `optional` **sap_sent_at**: `string` \| `null`
 
 Sap Sent At
 
-##### responses.200.content.application/json.sap\_status?
+##### responses.200.content.application/json.sap_status?
 
-> `optional` **sap\_status**: `string` \| `null`
+> `optional` **sap_status**: `string` \| `null`
 
 Sap Status
 
@@ -8624,12 +8624,12 @@ Status
 ###### Default
 
 ```ts
-open
+open;
 ```
 
-##### responses.200.content.application/json.updated\_at?
+##### responses.200.content.application/json.updated_at?
 
-> `optional` **updated\_at**: `string` \| `null`
+> `optional` **updated_at**: `string` \| `null`
 
 Updated At
 
@@ -8671,11 +8671,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_product\_api\_masters\_products\_\_product\_code\_\_put
+### update_product_api_masters_products\_\_product_code\_\_put
 
-> **update\_product\_api\_masters\_products\_\_product\_code\_\_put**: `object`
+> **update_product_api_masters_products\_\_product_code\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:2549](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2549)
 
@@ -8695,9 +8695,9 @@ Defined in: [src/types/api.d.ts:2549](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_code
+##### parameters.path.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 ##### parameters.query?
 
@@ -8715,63 +8715,63 @@ Defined in: [src/types/api.d.ts:2549](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.assemble\_div?
+##### requestBody.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### requestBody.content.application/json.base\_unit?
+##### requestBody.content.application/json.base_unit?
 
-> `optional` **base\_unit**: `string` \| `null`
+> `optional` **base_unit**: `string` \| `null`
 
 Base Unit
 
-##### requestBody.content.application/json.customer\_part\_no?
+##### requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### requestBody.content.application/json.delivery\_place\_id?
+##### requestBody.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### requestBody.content.application/json.delivery\_place\_name?
+##### requestBody.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### requestBody.content.application/json.internal\_unit?
+##### requestBody.content.application/json.internal_unit?
 
-> `optional` **internal\_unit**: `string` \| `null`
+> `optional` **internal_unit**: `string` \| `null`
 
 Internal Unit
 
-##### requestBody.content.application/json.ji\_ku\_text?
+##### requestBody.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### requestBody.content.application/json.kumitsuke\_ku\_text?
+##### requestBody.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### requestBody.content.application/json.maker\_item\_code?
+##### requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### requestBody.content.application/json.next\_div?
+##### requestBody.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -8781,51 +8781,51 @@ Next Div
 
 Packaging
 
-##### requestBody.content.application/json.packaging\_qty?
+##### requestBody.content.application/json.packaging_qty?
 
-> `optional` **packaging\_qty**: `string` \| `number` \| `null`
+> `optional` **packaging_qty**: `string` \| `number` \| `null`
 
 Packaging Qty
 
-##### requestBody.content.application/json.packaging\_unit?
+##### requestBody.content.application/json.packaging_unit?
 
-> `optional` **packaging\_unit**: `string` \| `null`
+> `optional` **packaging_unit**: `string` \| `null`
 
 Packaging Unit
 
-##### requestBody.content.application/json.product\_name?
+##### requestBody.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
-##### requestBody.content.application/json.requires\_lot\_number?
+##### requestBody.content.application/json.requires_lot_number?
 
-> `optional` **requires\_lot\_number**: `boolean` \| `null`
+> `optional` **requires_lot_number**: `boolean` \| `null`
 
 Requires Lot Number
 
-##### requestBody.content.application/json.shelf\_life\_days?
+##### requestBody.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### requestBody.content.application/json.shipping\_warehouse\_name?
+##### requestBody.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### requestBody.content.application/json.supplier\_code?
+##### requestBody.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### requestBody.content.application/json.supplier\_item\_code?
+##### requestBody.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -8849,69 +8849,69 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.assemble\_div?
+##### responses.200.content.application/json.assemble_div?
 
-> `optional` **assemble\_div**: `string` \| `null`
+> `optional` **assemble_div**: `string` \| `null`
 
 Assemble Div
 
-##### responses.200.content.application/json.base\_unit
+##### responses.200.content.application/json.base_unit
 
-> **base\_unit**: `string`
+> **base_unit**: `string`
 
 Base Unit
 
 ###### Default
 
 ```ts
-EA
+EA;
 ```
 
-##### responses.200.content.application/json.customer\_part\_no?
+##### responses.200.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### responses.200.content.application/json.delivery\_place\_id?
+##### responses.200.content.application/json.delivery_place_id?
 
-> `optional` **delivery\_place\_id**: `number` \| `null`
+> `optional` **delivery_place_id**: `number` \| `null`
 
 Delivery Place Id
 
-##### responses.200.content.application/json.delivery\_place\_name?
+##### responses.200.content.application/json.delivery_place_name?
 
-> `optional` **delivery\_place\_name**: `string` \| `null`
+> `optional` **delivery_place_name**: `string` \| `null`
 
 Delivery Place Name
 
-##### responses.200.content.application/json.internal\_unit
+##### responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.200.content.application/json.ji\_ku\_text?
+##### responses.200.content.application/json.ji_ku_text?
 
-> `optional` **ji\_ku\_text**: `string` \| `null`
+> `optional` **ji_ku_text**: `string` \| `null`
 
 Ji Ku Text
 
-##### responses.200.content.application/json.kumitsuke\_ku\_text?
+##### responses.200.content.application/json.kumitsuke_ku_text?
 
-> `optional` **kumitsuke\_ku\_text**: `string` \| `null`
+> `optional` **kumitsuke_ku_text**: `string` \| `null`
 
 Kumitsuke Ku Text
 
-##### responses.200.content.application/json.maker\_item\_code?
+##### responses.200.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.200.content.application/json.next\_div?
+##### responses.200.content.application/json.next_div?
 
-> `optional` **next\_div**: `string` \| `null`
+> `optional` **next_div**: `string` \| `null`
 
 Next Div
 
@@ -8921,63 +8921,63 @@ Next Div
 
 Packaging
 
-##### responses.200.content.application/json.packaging\_qty
+##### responses.200.content.application/json.packaging_qty
 
-> **packaging\_qty**: `string`
+> **packaging_qty**: `string`
 
 Packaging Qty
 
-##### responses.200.content.application/json.packaging\_unit
+##### responses.200.content.application/json.packaging_unit
 
-> **packaging\_unit**: `string`
+> **packaging_unit**: `string`
 
 Packaging Unit
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name
+##### responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.200.content.application/json.requires\_lot\_number
+##### responses.200.content.application/json.requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
 Requires Lot Number
 
 ###### Default
 
 ```ts
-true
+true;
 ```
 
-##### responses.200.content.application/json.shelf\_life\_days?
+##### responses.200.content.application/json.shelf_life_days?
 
-> `optional` **shelf\_life\_days**: `number` \| `null`
+> `optional` **shelf_life_days**: `number` \| `null`
 
 Shelf Life Days
 
-##### responses.200.content.application/json.shipping\_warehouse\_name?
+##### responses.200.content.application/json.shipping_warehouse_name?
 
-> `optional` **shipping\_warehouse\_name**: `string` \| `null`
+> `optional` **shipping_warehouse_name**: `string` \| `null`
 
 Shipping Warehouse Name
 
-##### responses.200.content.application/json.supplier\_code?
+##### responses.200.content.application/json.supplier_code?
 
-> `optional` **supplier\_code**: `string` \| `null`
+> `optional` **supplier_code**: `string` \| `null`
 
 Supplier Code
 
-##### responses.200.content.application/json.supplier\_item\_code?
+##### responses.200.content.application/json.supplier_item_code?
 
-> `optional` **supplier\_item\_code**: `string` \| `null`
+> `optional` **supplier_item_code**: `string` \| `null`
 
 Supplier Item Code
 
@@ -9019,11 +9019,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_product\_api\_products\_\_product\_id\_\_patch
+### update_product_api_products\_\_product_id\_\_patch
 
-> **update\_product\_api\_products\_\_product\_id\_\_patch**: `object`
+> **update_product_api_products\_\_product_id\_\_patch**: `object`
 
 Defined in: [src/types/api.d.ts:4345](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4345)
 
@@ -9043,9 +9043,9 @@ Defined in: [src/types/api.d.ts:4345](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.product\_id
+##### parameters.path.product_id
 
-> **product\_id**: `number`
+> **product_id**: `number`
 
 ##### parameters.query?
 
@@ -9063,39 +9063,39 @@ Defined in: [src/types/api.d.ts:4345](https://github.com/cybons-lab/Lot-manageme
 
 > **application/json**: `object`
 
-##### requestBody.content.application/json.customer\_part\_no?
+##### requestBody.content.application/json.customer_part_no?
 
-> `optional` **customer\_part\_no**: `string` \| `null`
+> `optional` **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
-##### requestBody.content.application/json.internal\_unit?
+##### requestBody.content.application/json.internal_unit?
 
-> `optional` **internal\_unit**: `string` \| `null`
+> `optional` **internal_unit**: `string` \| `null`
 
 Internal Unit
 
-##### requestBody.content.application/json.is\_active?
+##### requestBody.content.application/json.is_active?
 
-> `optional` **is\_active**: `boolean` \| `null`
+> `optional` **is_active**: `boolean` \| `null`
 
 Is Active
 
-##### requestBody.content.application/json.maker\_item\_code?
+##### requestBody.content.application/json.maker_item_code?
 
-> `optional` **maker\_item\_code**: `string` \| `null`
+> `optional` **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### requestBody.content.application/json.product\_code?
+##### requestBody.content.application/json.product_code?
 
-> `optional` **product\_code**: `string` \| `null`
+> `optional` **product_code**: `string` \| `null`
 
 Product Code
 
-##### requestBody.content.application/json.product\_name?
+##### requestBody.content.application/json.product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
 Product Name
 
@@ -9119,16 +9119,16 @@ Successful Response
 
 > **application/json**: `object`
 
-##### responses.200.content.application/json.created\_at
+##### responses.200.content.application/json.created_at
 
-> **created\_at**: `string`
+> **created_at**: `string`
 
 Created At
 Format: date-time
 
-##### responses.200.content.application/json.customer\_part\_no
+##### responses.200.content.application/json.customer_part_no
 
-> **customer\_part\_no**: `string` \| `null`
+> **customer_part_no**: `string` \| `null`
 
 Customer Part No
 
@@ -9138,39 +9138,39 @@ Customer Part No
 
 Id
 
-##### responses.200.content.application/json.internal\_unit
+##### responses.200.content.application/json.internal_unit
 
-> **internal\_unit**: `string`
+> **internal_unit**: `string`
 
 Internal Unit
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `boolean`
+> **is_active**: `boolean`
 
 Is Active
 
-##### responses.200.content.application/json.maker\_item\_code
+##### responses.200.content.application/json.maker_item_code
 
-> **maker\_item\_code**: `string` \| `null`
+> **maker_item_code**: `string` \| `null`
 
 Maker Item Code
 
-##### responses.200.content.application/json.product\_code
+##### responses.200.content.application/json.product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Product Code
 
-##### responses.200.content.application/json.product\_name
+##### responses.200.content.application/json.product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
 Product Name
 
-##### responses.200.content.application/json.updated\_at
+##### responses.200.content.application/json.updated_at
 
-> **updated\_at**: `string`
+> **updated_at**: `string`
 
 Updated At
 Format: date-time
@@ -9213,11 +9213,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_put
+### update_supplier_api_masters_suppliers\_\_supplier_code\_\_put
 
-> **update\_supplier\_api\_masters\_suppliers\_\_supplier\_code\_\_put**: `object`
+> **update_supplier_api_masters_suppliers\_\_supplier_code\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:2869](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L2869)
 
@@ -9237,9 +9237,9 @@ Defined in: [src/types/api.d.ts:2869](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.supplier\_code
+##### parameters.path.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 ##### parameters.query?
 
@@ -9263,9 +9263,9 @@ Defined in: [src/types/api.d.ts:2869](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.supplier\_name?
+##### requestBody.content.application/json.supplier_name?
 
-> `optional` **supplier\_name**: `string` \| `null`
+> `optional` **supplier_name**: `string` \| `null`
 
 Supplier Name
 
@@ -9295,15 +9295,15 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.supplier\_code
+##### responses.200.content.application/json.supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Supplier Code
 
-##### responses.200.content.application/json.supplier\_name
+##### responses.200.content.application/json.supplier_name
 
-> **supplier\_name**: `string`
+> **supplier_name**: `string`
 
 Supplier Name
 
@@ -9345,11 +9345,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### update\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_put
+### update_warehouse_api_masters_warehouses\_\_warehouse_code\_\_put
 
-> **update\_warehouse\_api\_masters\_warehouses\_\_warehouse\_code\_\_put**: `object`
+> **update_warehouse_api_masters_warehouses\_\_warehouse_code\_\_put**: `object`
 
 Defined in: [src/types/api.d.ts:3029](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L3029)
 
@@ -9369,9 +9369,9 @@ Defined in: [src/types/api.d.ts:3029](https://github.com/cybons-lab/Lot-manageme
 
 > **path**: `object`
 
-##### parameters.path.warehouse\_code
+##### parameters.path.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 ##### parameters.query?
 
@@ -9395,21 +9395,21 @@ Defined in: [src/types/api.d.ts:3029](https://github.com/cybons-lab/Lot-manageme
 
 Address
 
-##### requestBody.content.application/json.is\_active
+##### requestBody.content.application/json.is_active
 
-> **is\_active**: `number` \| `null`
+> **is_active**: `number` \| `null`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### requestBody.content.application/json.warehouse\_name?
+##### requestBody.content.application/json.warehouse_name?
 
-> `optional` **warehouse\_name**: `string` \| `null`
+> `optional` **warehouse_name**: `string` \| `null`
 
 Warehouse Name
 
@@ -9439,27 +9439,27 @@ Successful Response
 
 Address
 
-##### responses.200.content.application/json.is\_active
+##### responses.200.content.application/json.is_active
 
-> **is\_active**: `number`
+> **is_active**: `number`
 
 Is Active
 
 ###### Default
 
 ```ts
-1
+1;
 ```
 
-##### responses.200.content.application/json.warehouse\_code
+##### responses.200.content.application/json.warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
 Warehouse Code
 
-##### responses.200.content.application/json.warehouse\_name
+##### responses.200.content.application/json.warehouse_name
 
-> **warehouse\_name**: `string`
+> **warehouse_name**: `string`
 
 Warehouse Name
 
@@ -9501,11 +9501,11 @@ Detail
 
 \[`name`: `string`\]: `unknown`
 
-***
+---
 
-### validate\_order\_stock\_api\_orders\_validate\_post
+### validate_order_stock_api_orders_validate_post
 
-> **validate\_order\_stock\_api\_orders\_validate\_post**: `object`
+> **validate_order_stock_api_orders_validate_post**: `object`
 
 Defined in: [src/types/api.d.ts:4460](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/types/api.d.ts#L4460)
 
@@ -9547,9 +9547,9 @@ Defined in: [src/types/api.d.ts:4460](https://github.com/cybons-lab/Lot-manageme
 
 Lines
 
-##### requestBody.content.application/json.ship\_date?
+##### requestBody.content.application/json.ship_date?
 
-> `optional` **ship\_date**: `string` \| `null`
+> `optional` **ship_date**: `string` \| `null`
 
 Ship Date
 

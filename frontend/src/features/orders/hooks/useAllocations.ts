@@ -90,7 +90,9 @@ export function useCreateAllocations(orderLineId: number | undefined) {
             return {
               ...old,
               items: old.items.map((lot) => {
-                const allocItem = newAlloc.allocations.find((item: { lot_id: number; qty: number }) => item.lot_id === lot.lot_id);
+                const allocItem = newAlloc.allocations.find(
+                  (item: { lot_id: number; qty: number }) => item.lot_id === lot.lot_id,
+                );
                 if (!allocItem) return lot;
                 const nextAvailable = Math.max(0, lot.available_qty ?? 0 - allocItem.qty);
                 const factor =

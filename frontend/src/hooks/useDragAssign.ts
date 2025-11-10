@@ -29,7 +29,7 @@ export const useDragAssign = () => {
     mutationFn: async (request: DragAssignRequest) => {
       const response = await axios.post<DragAssignResponse>(
         "/api/allocations/drag-assign",
-        request
+        request,
       );
       return response.data;
     },

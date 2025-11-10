@@ -1,17 +1,19 @@
 # app/api/routes/orders_validate.py
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 import logging
 import traceback
 
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
 from app.schemas import (
+    OrderValidationDetails,
+    OrderValidationErrorData,
+    OrderValidationLotAvailability,
     OrderValidationRequest,
     OrderValidationResponse,
-    OrderValidationErrorData,
-    OrderValidationDetails,
-    OrderValidationLotAvailability,
 )
-from app.services.orders.validation import OrderValidationService, OrderLineDemand
+from app.services.orders.validation import OrderLineDemand, OrderValidationService
+
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 logger = logging.getLogger(__name__)
@@ -28,9 +30,7 @@ def get_db():
 
 
 @router.post("/validate", response_model=OrderValidationResponse, summary="受注在庫検証")
-def validate_order_stock(
-    payload: OrderValidationRequest, db: Session = Depends(get_db)
-):
+def validate_order_stock(payload: OrderValidationRequest, db: Session = Depends(get_db)):
     try:
         # Convert request to domain objects
         demands = [
@@ -43,9 +43,7 @@ def validate_order_stock(
         ]
 
         # Call service
-        result = OrderValidationService.validate(
-            db=db, demands=demands, date=payload.ship_date
-        )
+        result = OrderValidationService.validate(db=db, demands=demands, date=payload.ship_date)
 
         # Convert domain result to API schema
         if result.ok:

@@ -1,5 +1,5 @@
 // frontend/src/lib/http.ts
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
 
 /** 基底URL: .env がなければ /api/ にフォールバック */
 const RAW_BASE = import.meta.env.VITE_API_BASE ?? "/api/";

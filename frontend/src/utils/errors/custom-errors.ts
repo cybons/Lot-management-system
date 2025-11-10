@@ -11,10 +11,10 @@ export class ApiError extends Error {
     message: string,
     public status: number,
     public code?: string,
-    public details?: unknown
+    public details?: unknown,
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
@@ -24,8 +24,8 @@ export class ApiError extends Error {
  */
 export class ValidationError extends ApiError {
   constructor(message: string, details?: unknown) {
-    super(message, 400, 'VALIDATION_ERROR', details);
-    this.name = 'ValidationError';
+    super(message, 400, "VALIDATION_ERROR", details);
+    this.name = "ValidationError";
     Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
@@ -34,9 +34,9 @@ export class ValidationError extends ApiError {
  * 認証エラー
  */
 export class AuthenticationError extends ApiError {
-  constructor(message: string = '認証に失敗しました') {
-    super(message, 401, 'AUTHENTICATION_ERROR');
-    this.name = 'AuthenticationError';
+  constructor(message: string = "認証に失敗しました") {
+    super(message, 401, "AUTHENTICATION_ERROR");
+    this.name = "AuthenticationError";
     Object.setPrototypeOf(this, AuthenticationError.prototype);
   }
 }
@@ -45,9 +45,9 @@ export class AuthenticationError extends ApiError {
  * 認可エラー
  */
 export class AuthorizationError extends ApiError {
-  constructor(message: string = 'この操作を実行する権限がありません') {
-    super(message, 403, 'AUTHORIZATION_ERROR');
-    this.name = 'AuthorizationError';
+  constructor(message: string = "この操作を実行する権限がありません") {
+    super(message, 403, "AUTHORIZATION_ERROR");
+    this.name = "AuthorizationError";
     Object.setPrototypeOf(this, AuthorizationError.prototype);
   }
 }
@@ -56,9 +56,9 @@ export class AuthorizationError extends ApiError {
  * リソースが見つからない
  */
 export class NotFoundError extends ApiError {
-  constructor(message: string = 'リソースが見つかりません') {
-    super(message, 404, 'NOT_FOUND');
-    this.name = 'NotFoundError';
+  constructor(message: string = "リソースが見つかりません") {
+    super(message, 404, "NOT_FOUND");
+    this.name = "NotFoundError";
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
@@ -67,9 +67,9 @@ export class NotFoundError extends ApiError {
  * サーバーエラー
  */
 export class ServerError extends ApiError {
-  constructor(message: string = 'サーバーエラーが発生しました') {
-    super(message, 500, 'SERVER_ERROR');
-    this.name = 'ServerError';
+  constructor(message: string = "サーバーエラーが発生しました") {
+    super(message, 500, "SERVER_ERROR");
+    this.name = "ServerError";
     Object.setPrototypeOf(this, ServerError.prototype);
   }
 }
@@ -78,9 +78,9 @@ export class ServerError extends ApiError {
  * ネットワークエラー
  */
 export class NetworkError extends Error {
-  constructor(message: string = 'ネットワークエラーが発生しました') {
+  constructor(message: string = "ネットワークエラーが発生しました") {
     super(message);
-    this.name = 'NetworkError';
+    this.name = "NetworkError";
     Object.setPrototypeOf(this, NetworkError.prototype);
   }
 }
@@ -89,7 +89,7 @@ export class NetworkError extends Error {
  * HTTPレスポンスからApiErrorを生成
  */
 export function createApiError(status: number, message?: string, details?: unknown): ApiError {
-  const errorMessage = message || 'エラーが発生しました';
+  const errorMessage = message || "エラーが発生しました";
 
   switch (true) {
     case status === 400:

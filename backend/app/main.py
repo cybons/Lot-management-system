@@ -1,7 +1,5 @@
 # backend/app/main.py
-"""
-FastAPI メインアプリケーション（グローバルハンドラ登録版）
-"""
+"""FastAPI メインアプリケーション（グローバルハンドラ登録版）."""
 
 import logging
 from contextlib import asynccontextmanager
@@ -12,9 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routes import (
+    admin_healthcheck_router,
     admin_presets_router,
     admin_router,
-    admin_healthcheck_router,
+    admin_seeds_router,
     allocations_router,
     forecast_router,
     health_router,
@@ -22,10 +21,9 @@ from app.api.routes import (
     lots_router,
     masters_router,
     orders_router,
+    orders_validate_router,
     products_router,
     warehouse_alloc_router,
-    orders_validate_router,
-    admin_seeds_router
 )
 from app.core import errors
 from app.core.config import settings
@@ -33,13 +31,14 @@ from app.core.database import init_db
 from app.core.logging import setup_json_logging
 from app.domain.errors import DomainError
 
+
 logger = logging.getLogger(__name__)
 setup_json_logging()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """アプリケーションのライフサイクル管理"""
+    """アプリケーションのライフサイクル管理."""
     logger.info(f"🚀 {settings.APP_NAME} v{settings.APP_VERSION} を起動しています...")
     logger.info(f"📦 環境: {settings.ENVIRONMENT}")
     logger.info(f"💾 データベース: {settings.DATABASE_URL}")
@@ -69,6 +68,7 @@ app.add_exception_handler(Exception, errors.generic_exception_handler)
 # ミドルウェア登録
 from app.middleware.request_id import RequestIdMiddleware
 
+
 app.add_middleware(RequestIdMiddleware)
 app.add_middleware(
     CORSMiddleware,
@@ -97,7 +97,7 @@ app.include_router(admin_seeds_router, prefix=settings.API_PREFIX)
 
 @app.get("/")
 def root():
-    """ルートエンドポイント"""
+    """ルートエンドポイント."""
     return {
         "message": "Lot Management API",
         "version": settings.APP_VERSION,

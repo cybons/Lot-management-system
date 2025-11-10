@@ -1,19 +1,19 @@
-"""
-データベース接続設定 / SQLAlchemyセッション管理
-"""
+"""データベース接続設定 / SQLAlchemyセッション管理."""
 
 import logging
 import os
 import subprocess
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import Session, sessionmaker
 
 # モデル登録（init_db内でimportするが、型参照のためここにも置いて問題なし）
-from app.models.base_model import Base, set_sqlite_pragma
+from app.models.base_model import set_sqlite_pragma
+
 from .config import settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db() -> Generator[Session, None, None]:
-    """FastAPI 依存性注入用のDBセッション"""
+    """FastAPI 依存性注入用のDBセッション."""
     db = SessionLocal()
     try:
         yield db
@@ -43,7 +43,7 @@ def get_db() -> Generator[Session, None, None]:
 def init_db() -> None:
     """
     DB初期化（テーブル作成はAlembicに委譲）
-    Alembicマイグレーションを実行してテーブルを作成します
+    Alembicマイグレーションを実行してテーブルを作成します.
     """
     import app.models  # noqa: F401  モデルのメタデータを読み込むための副作用import
 
@@ -58,7 +58,7 @@ def init_db() -> None:
             cwd=backend_dir,
             capture_output=True,
             text=True,
-            check=True
+            check=True,
         )
         logger.info("✅ Alembic migrations completed successfully")
         if result.stdout:
@@ -76,7 +76,7 @@ def init_db() -> None:
 def _drop_dependent_views() -> None:
     """
     テーブル依存のVIEWを先にDROPする。
-    依存で落ちる代表VIEWをここへ列挙。存在しない場合はスキップ。
+    依存で落ちる代表VIEWをここへ列挙。存在しない場合はスキップ。.
     """
     if "sqlite" in settings.DATABASE_URL:
         return
@@ -91,7 +91,7 @@ def _drop_dependent_views() -> None:
     with engine.begin() as conn:
         for view_name in dependent_views:
             try:
-                conn.execute(text(f'DROP VIEW IF EXISTS {view_name} CASCADE'))
+                conn.execute(text(f"DROP VIEW IF EXISTS {view_name} CASCADE"))
                 logger.info(f"🗑️ Dropped view: {view_name}")
             except Exception as e:
                 logger.warning(f"⚠️ VIEW削除に失敗しました ({view_name}): {e}")
@@ -102,7 +102,7 @@ def truncate_all_tables() -> None:
     全テーブルのデータを削除（開発/検証用途）
     - テーブル構造は保持
     - alembic_versionは除外してマイグレーション履歴を保持
-    - TRUNCATE ... RESTART IDENTITY CASCADEで外部キー制約を無視
+    - TRUNCATE ... RESTART IDENTITY CASCADEで外部キー制約を無視.
     """
     if settings.ENVIRONMENT == "production":
         raise ValueError("本番環境ではデータの削除はできません")
@@ -117,13 +117,15 @@ def truncate_all_tables() -> None:
     logger.info("🗑️ Truncating all tables in schema 'public'...")
     with engine.begin() as conn:
         # public配下の全テーブル名を取得（alembic_versionを除く）
-        result = conn.execute(text("""
+        result = conn.execute(
+            text("""
             SELECT tablename
             FROM pg_tables
             WHERE schemaname = 'public'
             AND tablename != 'alembic_version'
             ORDER BY tablename
-        """))
+        """)
+        )
         tables = [row[0] for row in result]
 
         if not tables:
@@ -144,7 +146,7 @@ def drop_db() -> None:
     """
     データベースの削除（開発/検証用途）
     - SQLite: 物理ファイル削除
-    - PostgreSQL: スキーマ public を CASCADE で落として再作成
+    - PostgreSQL: スキーマ public を CASCADE で落として再作成.
 
     ⚠️ 推奨: データのみをリセットする場合は truncate_all_tables() を使用してください
     """

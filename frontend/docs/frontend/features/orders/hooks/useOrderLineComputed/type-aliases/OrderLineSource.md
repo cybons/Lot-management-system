@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [features/orders/hooks/useOrderLineComputed](../README.md) / OrderLineSource
 
@@ -12,33 +12,33 @@ Defined in: [src/features/orders/hooks/useOrderLineComputed.ts:13](https://githu
 
 ## Type Declaration
 
-### customer\_code?
+### customer_code?
 
-> `optional` **customer\_code**: `string` \| `null`
+> `optional` **customer_code**: `string` \| `null`
 
-### customer\_name?
+### customer_name?
 
-> `optional` **customer\_name**: `string` \| `null`
+> `optional` **customer_name**: `string` \| `null`
 
-### order\_date?
+### order_date?
 
-> `optional` **order\_date**: `string` \| `null`
+> `optional` **order_date**: `string` \| `null`
 
-### order\_id?
+### order_id?
 
-> `optional` **order\_id**: `number`
+> `optional` **order_id**: `number`
 
-### planned\_ship\_date?
+### planned_ship_date?
 
-> `optional` **planned\_ship\_date**: `string` \| `null`
+> `optional` **planned_ship_date**: `string` \| `null`
 
-### product\_name?
+### product_name?
 
-> `optional` **product\_name**: `string` \| `null`
+> `optional` **product_name**: `string` \| `null`
 
-### ship\_date?
+### ship_date?
 
-> `optional` **ship\_date**: `string` \| `null`
+> `optional` **ship_date**: `string` \| `null`
 
 ### warehouses?
 

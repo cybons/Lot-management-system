@@ -1,7 +1,5 @@
 # backend/app/domain/allocation/__init__.py
-"""
-Allocation Domain Layer
-"""
+"""Allocation Domain Layer."""
 
 from .exceptions import (
     AlreadyAllocatedError,
@@ -13,6 +11,7 @@ from .exceptions import (
 )
 from .rounding import RoundingMode, RoundingPolicy
 from .state_machine import AllocationStateMachine, AllocationStatus
+
 
 __all__ = [
     # Exceptions

@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../../README.md) / [components/shared/form/FormDialog](../README.md) / ConfirmDialogProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:141](https://github.com/c
 
 キャンセルボタンのラベル
 
-***
+---
 
 ### confirmLabel?
 
@@ -28,7 +28,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:139](https://github.com/c
 
 確認ボタンのラベル
 
-***
+---
 
 ### confirmVariant?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:143](https://github.com/c
 
 確認ボタンのバリアント
 
-***
+---
 
 ### description
 
@@ -48,7 +48,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:131](https://github.com/c
 
 ダイアログの説明
 
-***
+---
 
 ### isLoading?
 
@@ -58,7 +58,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:145](https://github.com/c
 
 ローディング状態
 
-***
+---
 
 ### onClose()
 
@@ -72,7 +72,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:135](https://github.com/c
 
 `void`
 
-***
+---
 
 ### onConfirm()
 
@@ -86,7 +86,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:137](https://github.com/c
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### open
 
@@ -96,7 +96,7 @@ Defined in: [src/components/shared/form/FormDialog.tsx:133](https://github.com/c
 
 ダイアログの開閉状態
 
-***
+---
 
 ### title
 

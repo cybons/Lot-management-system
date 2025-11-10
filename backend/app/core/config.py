@@ -1,19 +1,18 @@
 # backend/app/core/config.py
 """
 アプリケーション設定
-環境変数と定数の管理
+環境変数と定数の管理.
 """
 
 import os
 from pathlib import Path
-from typing import Union
 
 from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """アプリケーション設定クラス"""
+    """アプリケーション設定クラス."""
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -48,7 +47,7 @@ class Settings(BaseSettings):
     # CORS設定 - 修正版
     # 環境変数が設定されていない場合はデフォルト値を使用
     # 環境変数がある場合はカンマ区切り文字列として受け取る
-    CORS_ORIGINS: Union[list[str], str] = Field(
+    CORS_ORIGINS: list[str] | str = Field(
         default=[
             "http://localhost:5173",  # Vite default port
             "http://localhost:3000",  # React default port
@@ -60,7 +59,7 @@ class Settings(BaseSettings):
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def parse_cors_origins(cls, v):
-        """CORS_ORIGINSを適切にパース"""
+        """CORS_ORIGINSを適切にパース."""
         if isinstance(v, str):
             # カンマ区切り文字列の場合
             if v.strip():

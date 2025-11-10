@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../../README.md) / [utils/validators/lot-schemas](../README.md) / LotCreate
 
@@ -12,29 +12,29 @@ Defined in: [src/utils/validators/lot-schemas.ts:53](https://github.com/cybons-l
 
 ## Properties
 
-### expiry\_date?
+### expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
 Defined in: [src/utils/validators/lot-schemas.ts:59](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L59)
 
-***
+---
 
-### lot\_number
+### lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:56](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L56)
 
-***
+---
 
-### product\_code
+### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:55](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L55)
 
-***
+---
 
 ### quantity?
 
@@ -42,26 +42,26 @@ Defined in: [src/utils/validators/lot-schemas.ts:55](https://github.com/cybons-l
 
 Defined in: [src/utils/validators/lot-schemas.ts:60](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L60)
 
-***
+---
 
-### receipt\_date
+### receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:57](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L57)
 
-***
+---
 
-### supplier\_code
+### supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
 Defined in: [src/utils/validators/lot-schemas.ts:54](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L54)
 
-***
+---
 
-### warehouse\_code?
+### warehouse_code?
 
-> `optional` **warehouse\_code**: `string` \| `null`
+> `optional` **warehouse_code**: `string` \| `null`
 
 Defined in: [src/utils/validators/lot-schemas.ts:58](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/utils/validators/lot-schemas.ts#L58)

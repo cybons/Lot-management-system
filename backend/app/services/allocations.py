@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import Dict, List, Tuple
 
 from sqlalchemy import Select, func, nulls_last, select
 from sqlalchemy.orm import Session, joinedload, selectinload
@@ -34,22 +33,22 @@ class FefoLinePlan:
     product_code: str
     required_qty: float
     already_allocated_qty: float
-    allocations: List[FefoLotPlan] = field(default_factory=list)
+    allocations: list[FefoLotPlan] = field(default_factory=list)
     next_div: str | None = None
-    warnings: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
 @dataclass
 class FefoPreviewResult:
     order_id: int
-    lines: List[FefoLinePlan]
-    warnings: List[str] = field(default_factory=list)
+    lines: list[FefoLinePlan]
+    warnings: list[str] = field(default_factory=list)
 
 
 @dataclass
 class FefoCommitResult:
     preview: FefoPreviewResult
-    created_allocations: List[Allocation]
+    created_allocations: list[Allocation]
 
 
 class AllocationCommitError(RuntimeError):
@@ -92,7 +91,7 @@ def _existing_allocated_qty(line: OrderLine) -> float:
     )
 
 
-def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> Tuple[str | None, str | None]:
+def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> tuple[str | None, str | None]:
     product = getattr(line, "product", None)
     if product is None and getattr(line, "product_id", None):
         stmt = select(Product).where(Product.id == line.product_id)
@@ -108,14 +107,11 @@ def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> Tuple[str |
     product_code = getattr(line, "product_code", None)
     if not product_code and product:
         product_code = product.product_code
-    warning = (
-        "次区が未設定: customer="
-        f"{order.customer_code}, product={product_code or 'unknown'}"
-    )
+    warning = f"次区が未設定: customer={order.customer_code}, product={product_code or 'unknown'}"
     return None, warning
 
 
-def _lot_candidates(db: Session, product_code: str) -> List[Tuple[Lot, float]]:
+def _lot_candidates(db: Session, product_code: str) -> list[tuple[Lot, float]]:
     stmt: Select[tuple[Lot, float]] = (
         select(Lot, LotCurrentStock.current_quantity)
         .join(LotCurrentStock, LotCurrentStock.lot_id == Lot.id)
@@ -139,9 +135,9 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
     if order.status not in {"open", "part_allocated"}:
         raise ValueError("Order status does not allow allocation")
 
-    available_per_lot: Dict[int, float] = {}
-    preview_lines: List[FefoLinePlan] = []
-    warnings: List[str] = []
+    available_per_lot: dict[int, float] = {}
+    preview_lines: list[FefoLinePlan] = []
+    warnings: list[str] = []
 
     sorted_lines = sorted(order.order_lines, key=lambda l: (l.line_no, l.id))
     for line in sorted_lines:
@@ -154,7 +150,7 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
         product_code = getattr(line, "product_code", None)
         if not product_code and getattr(line, "product", None):
             product_code = line.product.product_code
-            setattr(line, "product_code", product_code)
+            line.product_code = product_code
         if not product_code:
             warning = f"製品コード未設定: order_line={line.id}"
             warnings.append(warning)
@@ -218,7 +214,7 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
 def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
     preview = preview_fefo_allocation(db, order_id)
 
-    created: List[Allocation] = []
+    created: list[Allocation] = []
     try:
         EPSILON = 1e-6
         for line_plan in preview.lines:
@@ -235,7 +231,7 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 raise AllocationCommitError(f"OrderLine {line_plan.order_line_id} not found")
 
             if line_plan.next_div and not getattr(line, "next_div", None):
-                setattr(line, "next_div", line_plan.next_div)
+                line.next_div = line_plan.next_div
 
             for alloc_plan in line_plan.allocations:
                 lot_stmt = select(Lot).where(Lot.id == alloc_plan.lot_id)
@@ -254,9 +250,7 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 )
                 current_stock = db.execute(stock_stmt).scalar_one_or_none()
                 if not current_stock:
-                    raise AllocationCommitError(
-                        f"Current stock not found for lot {lot.id}"
-                    )
+                    raise AllocationCommitError(f"Current stock not found for lot {lot.id}")
 
                 available = float(current_stock.current_quantity or 0.0)
                 if available + EPSILON < alloc_plan.allocate_qty:
@@ -319,15 +313,11 @@ def cancel_allocation(db: Session, allocation_id: int) -> None:
         raise AllocationNotFoundError(f"Allocation {allocation_id} not found")
 
     lot_stock_stmt = (
-        select(LotCurrentStock)
-        .where(LotCurrentStock.lot_id == allocation.lot_id)
-        .with_for_update()
+        select(LotCurrentStock).where(LotCurrentStock.lot_id == allocation.lot_id).with_for_update()
     )
     lot_stock = db.execute(lot_stock_stmt).scalar_one_or_none()
     if not lot_stock:
-        raise AllocationCommitError(
-            f"Lot current stock not found for lot {allocation.lot_id}"
-        )
+        raise AllocationCommitError(f"Lot current stock not found for lot {allocation.lot_id}")
 
     lot_stock.current_quantity += allocation.allocated_qty
     lot_stock.last_updated = datetime.utcnow()

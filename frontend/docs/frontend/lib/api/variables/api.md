@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [lib/api](../README.md) / api
 
@@ -31,7 +31,7 @@ Deactivate Old Version
 **Default**
 
 ```ts
-true
+true;
 ```
 
 ###### forecasts
@@ -49,7 +49,7 @@ Source System
 **Default**
 
 ```ts
-external
+external;
 ```
 
 ###### version_issued_at
@@ -261,6 +261,7 @@ Warehouse Id
 予測データ取得（生データ、ページネーション対応）
 
 利用可能なパラメータ:
+
 - skip, limit: ページネーション
 - product_id, customer_id: ID検索
 - product_code, customer_code: コード検索
@@ -340,6 +341,7 @@ Use getForecast() with params instead
 予測サマリー一覧取得（フロント表示用）
 
 利用可能なパラメータ:
+
 - product_code: 製品コードフィルタ
 - supplier_code: 仕入先コードフィルタ
 
@@ -448,6 +450,7 @@ Use getForecast() with params instead
 受注一覧取得
 
 利用可能なパラメータ:
+
 - skip, limit: ページネーション
 - status: ステータスフィルタ
 - customer_code: 得意先コードフィルタ

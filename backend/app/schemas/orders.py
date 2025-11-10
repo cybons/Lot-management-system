@@ -1,10 +1,10 @@
 # backend/app/schemas/orders.py
-"""受注関連のPydanticスキーマ（拡張版）"""
+"""受注関連のPydanticスキーマ（拡張版）."""
 
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import Field, PositiveInt, constr
 
@@ -17,37 +17,38 @@ class OrderBase(BaseSchema):
     customer_code: str
     order_date: date
     status: str = "open"
-    customer_order_no: Optional[str] = None
-    customer_order_no_last6: Optional[str] = None
-    delivery_mode: Optional[str] = None
-    sap_order_id: Optional[str] = None
-    sap_status: Optional[str] = None
-    sap_sent_at: Optional[datetime] = None
-    sap_error_msg: Optional[str] = None
+    customer_order_no: str | None = None
+    customer_order_no_last6: str | None = None
+    delivery_mode: str | None = None
+    sap_order_id: str | None = None
+    sap_status: str | None = None
+    sap_sent_at: datetime | None = None
+    sap_error_msg: str | None = None
 
 
 class OrderCreate(OrderBase):
-    lines: List["OrderLineCreate"] = Field(default_factory=list)
+    lines: list[OrderLineCreate] = Field(default_factory=list)
 
 
 class OrderUpdate(BaseSchema):
-    status: Optional[str] = None
-    customer_order_no: Optional[str] = None
-    delivery_mode: Optional[str] = None
-    sap_status: Optional[str] = None
+    status: str | None = None
+    customer_order_no: str | None = None
+    delivery_mode: str | None = None
+    sap_status: str | None = None
 
 
 class OrderStatusUpdate(BaseSchema):
     """
-    受注ステータス更新用スキーマ
-    
+    受注ステータス更新用スキーマ.
+
     Note:
         constrを使用してstatusが空文字でないことを保証
     """
+
     status: constr(min_length=1) = Field(
         ...,
         description="新しいステータス（open, allocated, shipped, closed, cancelled）",
-        examples=["allocated", "shipped"]
+        examples=["allocated", "shipped"],
     )
 
 
@@ -56,7 +57,7 @@ class OrderResponse(OrderBase, TimestampMixin):
 
 
 class OrderWithLinesResponse(OrderResponse):
-    lines: List["OrderLineOut"] = Field(default_factory=list)
+    lines: list[OrderLineOut] = Field(default_factory=list)
 
 
 # --- OrderLine ---
@@ -65,19 +66,19 @@ class OrderLineBase(BaseSchema):
     product_code: str
     quantity: float
     unit: str
-    due_date: Optional[date] = None
-    next_div: Optional[str] = None
-    destination_id: Optional[int] = None
+    due_date: date | None = None
+    next_div: str | None = None
+    destination_id: int | None = None
 
 
 class OrderLineCreate(OrderLineBase):
-    external_unit: Optional[str] = None  # 外部単位（変換用）
+    external_unit: str | None = None  # 外部単位（変換用）
 
 
 class OrderLineResponse(OrderLineBase, TimestampMixin):
     id: int
     order_id: int
-    allocated_qty: Optional[float] = None
+    allocated_qty: float | None = None
 
 
 class WarehouseAllocOut(BaseSchema):
@@ -92,25 +93,25 @@ class WarehouseAllocIn(BaseSchema):
 
 class OrderLineOut(BaseSchema):
     id: int
-    line_no: Optional[int] = None
+    line_no: int | None = None
     product_code: str
     product_name: str
-    customer_code: Optional[str] = None
-    supplier_code: Optional[str] = None
+    customer_code: str | None = None
+    supplier_code: str | None = None
     quantity: float
     unit: str
-    due_date: Optional[date] = None
-    warehouse_allocations: List[WarehouseAllocOut] = Field(default_factory=list)
-    related_lots: List[Dict[str, Any]] = Field(default_factory=list)
-    allocated_lots: List[Dict[str, Any]] = Field(default_factory=list)
-    allocated_qty: Optional[float] = None
-    next_div: Optional[str] = None
+    due_date: date | None = None
+    warehouse_allocations: list[WarehouseAllocOut] = Field(default_factory=list)
+    related_lots: list[dict[str, Any]] = Field(default_factory=list)
+    allocated_lots: list[dict[str, Any]] = Field(default_factory=list)
+    allocated_qty: float | None = None
+    next_div: str | None = None
 
 
 class AllocationWarning(BaseSchema):
     code: str
     message: str
-    meta: Optional[Dict[str, Any]] = None
+    meta: dict[str, Any] | None = None
 
 
 class LotCandidateOut(BaseSchema):
@@ -118,27 +119,27 @@ class LotCandidateOut(BaseSchema):
     lot_code: str
     lot_number: str
     product_code: str
-    warehouse_code: Optional[str] = None
+    warehouse_code: str | None = None
     available_qty: float
     base_unit: str
-    lot_unit_qty: Optional[float] = None
-    lot_unit: Optional[str] = None
-    conversion_factor: Optional[float] = None
-    expiry_date: Optional[str] = None
-    mfg_date: Optional[str] = None
+    lot_unit_qty: float | None = None
+    lot_unit: str | None = None
+    conversion_factor: float | None = None
+    expiry_date: str | None = None
+    mfg_date: str | None = None
 
 
 class LotCandidateListResponse(BaseSchema):
-    items: List[LotCandidateOut] = Field(default_factory=list)
-    warnings: List[AllocationWarning] = Field(default_factory=list)
+    items: list[LotCandidateOut] = Field(default_factory=list)
+    warnings: list[AllocationWarning] = Field(default_factory=list)
 
 
 class SaveAllocationsRequest(BaseSchema):
-    allocations: List[WarehouseAllocIn] = Field(default_factory=list)
+    allocations: list[WarehouseAllocIn] = Field(default_factory=list)
 
 
 class OrdersWithAllocResponse(BaseSchema):
-    items: List[OrderLineOut] = Field(default_factory=list)
+    items: list[OrderLineOut] = Field(default_factory=list)
 
 
 class OrderValidationLotAvailability(BaseSchema):
@@ -148,8 +149,8 @@ class OrderValidationLotAvailability(BaseSchema):
 
 class OrderValidationDetails(BaseSchema):
     warehouse_code: str
-    per_lot: List[OrderValidationLotAvailability] = Field(default_factory=list)
-    ship_date: Optional[date] = None
+    per_lot: list[OrderValidationLotAvailability] = Field(default_factory=list)
+    ship_date: date | None = None
 
 
 class OrderValidationErrorData(BaseSchema):
@@ -166,14 +167,14 @@ class OrderLineDemandSchema(BaseSchema):
 
 
 class OrderValidationRequest(BaseSchema):
-    lines: List[OrderLineDemandSchema]
-    ship_date: Optional[date] = None
+    lines: list[OrderLineDemandSchema]
+    ship_date: date | None = None
 
 
 class OrderValidationResponse(BaseSchema):
     ok: bool
     message: str
-    data: Optional[OrderValidationErrorData] = None
+    data: OrderValidationErrorData | None = None
 
 
 # Pydantic v2のforward reference解決

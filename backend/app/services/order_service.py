@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import List, Optional
 
 from sqlalchemy import Select, select
 from sqlalchemy.orm import Session, selectinload
@@ -33,11 +32,11 @@ class OrderService:
         self,
         skip: int = 0,
         limit: int = 100,
-        status: Optional[str] = None,
-        customer_code: Optional[str] = None,
-        date_from: Optional[date] = None,
-        date_to: Optional[date] = None,
-    ) -> List[OrderResponse]:
+        status: str | None = None,
+        customer_code: str | None = None,
+        date_from: date | None = None,
+        date_to: date | None = None,
+    ) -> list[OrderResponse]:
         stmt: Select[Order] = select(Order)
 
         if status:
@@ -63,7 +62,7 @@ class OrderService:
         if not order:
             raise OrderNotFoundError(order_id)
 
-        setattr(order, "lines", list(order.order_lines))
+        order.lines = list(order.order_lines)
         return OrderWithLinesResponse.model_validate(order)
 
     def create_order(self, order_data: OrderCreate) -> OrderWithLinesResponse:
@@ -74,14 +73,10 @@ class OrderService:
         if existing:
             raise DuplicateOrderError(order_data.order_no)
 
-        customer_stmt = select(Customer).where(
-            Customer.customer_code == order_data.customer_code
-        )
+        customer_stmt = select(Customer).where(Customer.customer_code == order_data.customer_code)
         customer = self.db.execute(customer_stmt).scalar_one_or_none()
         if not customer:
-            raise OrderValidationError(
-                f"Customer not found for code {order_data.customer_code}"
-            )
+            raise OrderValidationError(f"Customer not found for code {order_data.customer_code}")
 
         order = Order(
             order_no=order_data.order_no,
@@ -104,9 +99,7 @@ class OrderService:
             if line_data.due_date:
                 OrderBusinessRules.validate_due_date(line_data.due_date, order.order_date)
 
-            product_stmt = select(Product).where(
-                Product.product_code == line_data.product_code
-            )
+            product_stmt = select(Product).where(Product.product_code == line_data.product_code)
             product = self.db.execute(product_stmt).scalar_one_or_none()
             if not product:
                 raise ProductNotFoundError(line_data.product_code)
@@ -132,12 +125,12 @@ class OrderService:
                 unit=product.internal_unit,
             )
             if hasattr(line, "due_date"):
-                setattr(line, "due_date", line_data.due_date)
+                line.due_date = line_data.due_date
             self.db.add(line)
 
         self.db.flush()
         self.db.refresh(order)
-        setattr(order, "lines", list(order.order_lines))
+        order.lines = list(order.order_lines)
 
         return OrderWithLinesResponse.model_validate(order)
 

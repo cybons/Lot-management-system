@@ -1,6 +1,6 @@
 [**lot-management-frontend v1.0.0**](../../../README.md)
 
-***
+---
 
 [lot-management-frontend](../../../README.md) / [lib/admin-api](../README.md) / FullSampleDataRequest
 
@@ -16,31 +16,31 @@ Defined in: [src/lib/admin-api.ts:24](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/lib/admin-api.ts:30](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L30)
 
-#### expiry\_date?
+#### expiry_date?
 
-> `optional` **expiry\_date**: `string` \| `null`
+> `optional` **expiry_date**: `string` \| `null`
 
-#### lot\_number
+#### lot_number
 
-> **lot\_number**: `string`
+> **lot_number**: `string`
 
-#### product\_code
+#### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
-#### receipt\_date
+#### receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
-#### supplier\_code
+#### supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
-#### warehouse\_code
+#### warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
 
-***
+---
 
 ### orders?
 
@@ -48,23 +48,23 @@ Defined in: [src/lib/admin-api.ts:30](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/lib/admin-api.ts:52](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L52)
 
-#### customer\_code
+#### customer_code
 
-> **customer\_code**: `string`
+> **customer_code**: `string`
 
 #### lines
 
 > **lines**: `object`[]
 
-#### order\_date?
+#### order_date?
 
-> `optional` **order\_date**: `string` \| `null`
+> `optional` **order_date**: `string` \| `null`
 
-#### order\_no
+#### order_no
 
-> **order\_no**: `string`
+> **order_no**: `string`
 
-***
+---
 
 ### products?
 
@@ -72,19 +72,19 @@ Defined in: [src/lib/admin-api.ts:52](https://github.com/cybons-lab/Lot-manageme
 
 Defined in: [src/lib/admin-api.ts:25](https://github.com/cybons-lab/Lot-management-system/blob/27136a70bad131ce7a63fc3b65b7329cb546f591/frontend/src/lib/admin-api.ts#L25)
 
-#### product\_code
+#### product_code
 
-> **product\_code**: `string`
+> **product_code**: `string`
 
-#### product\_name
+#### product_name
 
-> **product\_name**: `string`
+> **product_name**: `string`
 
-#### requires\_lot\_number
+#### requires_lot_number
 
-> **requires\_lot\_number**: `boolean`
+> **requires_lot_number**: `boolean`
 
-***
+---
 
 ### receipts?
 
@@ -96,18 +96,18 @@ Defined in: [src/lib/admin-api.ts:38](https://github.com/cybons-lab/Lot-manageme
 
 > **lines**: `object`[]
 
-#### receipt\_date
+#### receipt_date
 
-> **receipt\_date**: `string`
+> **receipt_date**: `string`
 
-#### receipt\_no
+#### receipt_no
 
-> **receipt\_no**: `string`
+> **receipt_no**: `string`
 
-#### supplier\_code
+#### supplier_code
 
-> **supplier\_code**: `string`
+> **supplier_code**: `string`
 
-#### warehouse\_code
+#### warehouse_code
 
-> **warehouse\_code**: `string`
+> **warehouse_code**: `string`
