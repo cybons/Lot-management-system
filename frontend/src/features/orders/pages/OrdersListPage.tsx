@@ -312,17 +312,15 @@ export function OrdersListPage() {
           isLoading={isLoading}
           emptyMessage="受注がありません"
         />
-        {!isLoading &&
-          !error &&
-          sortedOrders.length > 0 &&
-          (() => {
-            const paginationProps = {
-              ...pagination,
-              onPageChange: table.setPage,
-              onPageSizeChange: table.setPageSize,
-            } as unknown as React.ComponentProps<typeof TablePagination>;
-            return <TablePagination {...paginationProps} />;
-          })()}
+        {!isLoading && !error && sortedOrders.length > 0 && (
+          <TablePagination
+            currentPage={pagination.page}
+            pageSize={pagination.pageSize}
+            totalCount={pagination.totalItems}
+            onPageChange={table.setPage}
+            onPageSizeChange={table.setPageSize}
+          />
+        )}
       </Section>
 
       {/* 新規登録ダイアログ */}

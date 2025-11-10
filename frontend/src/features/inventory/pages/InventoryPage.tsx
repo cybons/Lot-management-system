@@ -304,17 +304,15 @@ export function InventoryPage() {
           emptyMessage="ロットがありません。新規登録ボタンから最初のロットを作成してください。"
         />
 
-        {!isLoading &&
-          !error &&
-          sortedLots.length > 0 &&
-          (() => {
-            const paginationProps = {
-              ...pagination,
-              onPageChange: table.setPage,
-              onPageSizeChange: table.setPageSize,
-            } as unknown as React.ComponentProps<typeof TablePagination>;
-            return <TablePagination {...paginationProps} />;
-          })()}
+        {!isLoading && !error && sortedLots.length > 0 && (
+          <TablePagination
+            currentPage={pagination.page}
+            pageSize={pagination.pageSize}
+            totalCount={pagination.totalItems}
+            onPageChange={table.setPage}
+            onPageSizeChange={table.setPageSize}
+          />
+        )}
       </Section>
 
       {/* 新規登録ダイアログ */}
