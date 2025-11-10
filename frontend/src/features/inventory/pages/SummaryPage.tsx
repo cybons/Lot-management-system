@@ -146,15 +146,32 @@ interface StatCardProps {
 function StatCard({ title, value, description, highlight }: StatCardProps) {
   return (
     <div
-      className={`rounded-lg border bg-white p-6 shadow-sm ${
-        highlight ? "border-blue-200 bg-blue-50/50" : "border-gray-200"
+      className={`group relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:shadow-lg ${
+        highlight
+          ? "border-transparent bg-gradient-to-br from-blue-50 to-purple-50"
+          : "border-gray-200 bg-white hover:border-gray-300"
       }`}
     >
-      <div className="text-sm font-medium text-gray-600">{title}</div>
-      <div className={`mt-2 text-3xl font-bold ${highlight ? "text-blue-600" : "text-gray-900"}`}>
-        {value}
+      {/* 装飾的な円（ポップ要素） */}
+      {highlight && (
+        <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-2xl" />
+      )}
+
+      <div className="relative">
+        <div className="text-sm font-semibold text-gray-600">{title}</div>
+        <div
+          className={`mt-3 text-4xl font-bold transition-colors ${
+            highlight
+              ? "bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+              : "text-gray-900 group-hover:text-gray-700"
+          }`}
+        >
+          {value}
+        </div>
+        {description && (
+          <div className="mt-2 text-xs font-medium text-gray-500">{description}</div>
+        )}
       </div>
-      {description && <div className="mt-1 text-xs text-gray-500">{description}</div>}
     </div>
   );
 }
