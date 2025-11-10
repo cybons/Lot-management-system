@@ -26,6 +26,9 @@ import {
 
 import { getOrders, getOrder } from "@/features/orders/api";
 import { useLotsQuery, type Lot as CandidateLot } from "@/hooks/useLotsQuery";
+import { normalizeOrder } from "@/shared/libs/normalize";
+import type { OrderResponse } from "@/shared/types/aliases";
+import type { Order } from "../types";
 
 // queryKeyの安定化のため、オブジェクトリテラルを定数化
 const QUERY_FILTERS = {
@@ -44,9 +47,11 @@ export function LotAllocationPage() {
   const { snackbar, showSuccess, showError } = useSnackbar();
 
   // 受注一覧を取得
-  const ordersQuery = useQuery({
+  const ordersQuery = useQuery<OrderResponse[], Error, Order[]>({
     queryKey: ["orders", QUERY_FILTERS.ORDERS_OPEN],
     queryFn: () => getOrders(QUERY_FILTERS.ORDERS_OPEN),
+    initialData: [],
+    select: (data) => (data ?? []).map(normalizeOrder) as Order[],
   });
 
   // 受注カードデータを作成(フィルタリングとソート)
@@ -72,7 +77,7 @@ export function LotAllocationPage() {
   const selectedLine = orderDetailQuery.data?.lines?.find((line) => line.id === selectedLineId);
 
   // ロット候補を取得
-  const lotsQuery = useLotsQuery(selectedLine?.product_code);
+  const lotsQuery = useLotsQuery(selectedLine?.product_code || undefined);
   const candidateLots: CandidateLot[] = lotsQuery.data ?? [];
 
   // 倉庫別配分の状態管理

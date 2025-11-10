@@ -3,6 +3,10 @@
  * 受注関連のテストデータ生成ファクトリー
  */
 
+// Utility to convert null to undefined
+const nullToUndefined = <T>(value: T | null | undefined): T | undefined =>
+  value === null ? undefined : value;
+
 import { faker } from "@faker-js/faker/locale/ja";
 
 import type { OrderLine, OrderResponse, OrderWithLinesResponse } from "@/shared/types/aliases";
@@ -121,14 +125,15 @@ export function createOrderWithLines(
       ...line,
       customer_code:
         "customer_code" in line
-          ? ((line.customer_code as string | null | undefined) ?? undefined)
-          : (overrides?.customer_code ?? order.customer_code),
+          ? nullToUndefined(line.customer_code as string | null | undefined)
+          : nullToUndefined(overrides?.customer_code ?? order.customer_code),
       customer_name:
         "customer_name" in line
-          ? ((line.customer_name as string | null | undefined) ?? undefined)
-          : ((overrides as { customer_name?: string | null })?.customer_name ??
-            (order as { customer_name?: string | null }).customer_name ??
-            undefined),
+          ? nullToUndefined(line.customer_name as string | null | undefined)
+          : nullToUndefined(
+              (overrides as { customer_name?: string | null })?.customer_name ??
+              (order as { customer_name?: string | null }).customer_name
+            ),
     }),
   );
 
