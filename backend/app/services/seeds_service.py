@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.schemas.admin_seeds import SeedRequest, SeedResponse, SeedSummary, ActualCounts
-from app.models.masters import Customer, Product, Warehouse, Supplier
+from app.models.masters import Customer, Product, Warehouse, Supplier, DeliveryPlace
 from app.models.inventory import Lot, StockMovement
 from app.models.orders import Order, OrderLine, Allocation
 
@@ -42,6 +42,7 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
     created_customers: List[Customer] = []
     created_suppliers: List[Supplier] = []
+    created_delivery_places: List[DeliveryPlace] = []
     created_products: List[Product] = []
     created_warehouses: List[Warehouse] = []
     created_lots: List[Lot] = []
@@ -90,18 +91,50 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
             db.flush()
         created_suppliers = [Supplier(**row) for row in supplier_rows]
 
+    # --- DeliveryPlace ---
+    if req.delivery_places > 0:
+        existing_dp_codes = {c for (c,) in db.execute(select(DeliveryPlace.delivery_place_code)).all()} if not req.dry_run else set()
+        delivery_place_rows = [
+            {
+                "delivery_place_code": _next_code("D", 3, rng, existing_dp_codes),
+                "delivery_place_name": f"{faker.city()}配送センター",
+                "address": faker.address(),
+                "postal_code": faker.postcode(),
+                "created_at": datetime.utcnow(),
+            }
+            for _ in range(req.delivery_places)
+        ]
+        if not req.dry_run:
+            stmt = pg_insert(DeliveryPlace).values(delivery_place_rows)
+            stmt = stmt.on_conflict_do_nothing(index_elements=[DeliveryPlace.delivery_place_code])
+            db.execute(stmt)
+            db.flush()
+        created_delivery_places = [DeliveryPlace(**row) for row in delivery_place_rows]
+
     # --- Product ---
     if req.products > 0:
+        # 既存のdelivery_placesを取得（Product生成時に参照するため）
+        existing_dps = []
+        if not req.dry_run:
+            existing_dps = db.execute(select(DeliveryPlace)).scalars().all()
+        elif created_delivery_places:
+            existing_dps = created_delivery_places
+
         existing_product_codes = {c for (c,) in db.execute(select(Product.product_code)).all()} if not req.dry_run else set()
-        product_rows = [
-            {
+        product_rows = []
+        for _ in range(req.products):
+            row = {
                 "product_code": _next_code("P", 5, rng, existing_product_codes),
                 "product_name": faker.bs().title(),
                 "internal_unit": "PCS",
                 "created_at": datetime.utcnow(),
             }
-            for _ in range(req.products)
-        ]
+            # delivery_place_idをランダムに設定（存在する場合）
+            if existing_dps:
+                dp = _choose(rng, existing_dps)
+                row["delivery_place_id"] = dp.id if not req.dry_run else None
+            product_rows.append(row)
+
         if not req.dry_run:
             stmt = pg_insert(Product).values(product_rows)
             stmt = stmt.on_conflict_do_nothing(index_elements=[Product.product_code])
@@ -131,12 +164,14 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
     if not req.dry_run:
         all_customers: List[Customer] = db.execute(select(Customer)).scalars().all()
         all_suppliers: List[Supplier] = db.execute(select(Supplier)).scalars().all()
+        all_delivery_places: List[DeliveryPlace] = db.execute(select(DeliveryPlace)).scalars().all()
         all_products: List[Product] = db.execute(select(Product)).scalars().all()
         all_warehouses: List[Warehouse] = db.execute(select(Warehouse)).scalars().all()
     else:
         # dry_run時は作成予定のデータを使って疑似的に進める（idはNone）
         all_customers = created_customers
         all_suppliers = created_suppliers
+        all_delivery_places = created_delivery_places
         all_products = created_products
         all_warehouses = created_warehouses
 
@@ -236,12 +271,17 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
             alloc_qty = rng.randint(int(line.quantity * 0.5), int(line.quantity))
             alloc_qty = max(1, min(alloc_qty, line.quantity))
 
+            # destination_idをランダムに設定（delivery_placesが存在する場合）
+            destination_id = None
+            if all_delivery_places:
+                destination_id = _choose(rng, all_delivery_places).id
+
             # Allocation作成
             allocation = Allocation(
                 order_line_id=line.id,
                 lot_id=selected_lot.id,
                 allocated_qty=alloc_qty,
-                allocation_date=datetime.utcnow().date(),
+                destination_id=destination_id,
                 created_at=datetime.utcnow(),
             )
             created_allocs.append(allocation)
@@ -272,9 +312,10 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
 
         actual_counts = ActualCounts(
             customers=db.scalar(select(func.count()).select_from(Customer)) or 0,
+            suppliers=db.scalar(select(func.count()).select_from(Supplier)) or 0,
+            delivery_places=db.scalar(select(func.count()).select_from(DeliveryPlace)) or 0,
             products=db.scalar(select(func.count()).select_from(Product)) or 0,
             warehouses=db.scalar(select(func.count()).select_from(Warehouse)) or 0,
-            suppliers=db.scalar(select(func.count()).select_from(Supplier)) or 0,
             lots=db.scalar(select(func.count()).select_from(Lot)) or 0,
             stock_movements=db.scalar(select(func.count()).select_from(StockMovement)) or 0,
             orders=db.scalar(select(func.count()).select_from(Order)) or 0,
@@ -288,6 +329,7 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
         summary=SeedSummary(
             customers=len(created_customers),
             suppliers=len(created_suppliers),
+            delivery_places=len(created_delivery_places),
             products=len(created_products),
             warehouses=len(created_warehouses),
             lots=len(created_lots),

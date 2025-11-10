@@ -7,7 +7,8 @@ class SeedRequest(BaseModel):
     seed: Optional[int] = Field(default=42, description="Random seed for reproducibility")
     dry_run: bool = Field(default=False)
     customers: conint(ge=0) = 10
-    suppliers: conint(ge=0) = 5  # 🆕 仕入先を追加
+    suppliers: conint(ge=0) = 5
+    delivery_places: conint(ge=0) = 5
     products: conint(ge=0) = 20
     warehouses: conint(ge=0) = 3
     lots: conint(ge=0) = 80
@@ -16,7 +17,8 @@ class SeedRequest(BaseModel):
 class SeedSummary(BaseModel):
     """作成しようとした件数（UPSERT前）"""
     customers: int
-    suppliers: int  # 🆕 追加
+    suppliers: int
+    delivery_places: int
     products: int
     warehouses: int
     lots: int
@@ -27,9 +29,10 @@ class SeedSummary(BaseModel):
 class ActualCounts(BaseModel):
     """実際のDB件数（投入後）"""
     customers: int
+    suppliers: int
+    delivery_places: int
     products: int
     warehouses: int
-    suppliers: int
     lots: int
     stock_movements: int
     orders: int
