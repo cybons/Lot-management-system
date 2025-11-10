@@ -50,7 +50,9 @@ export function LotAllocationPage() {
   const ordersQuery = useQuery<OrderResponse[], Error, Order[]>({
     queryKey: ["orders", QUERY_FILTERS.ORDERS_OPEN],
     queryFn: () => getOrders(QUERY_FILTERS.ORDERS_OPEN),
-    initialData: [],
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    staleTime: 30_000,
     select: (data) => (data ?? []).map(normalizeOrder) as Order[],
   });
 

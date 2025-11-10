@@ -12,6 +12,7 @@ export const useOrdersQuery = (params?: OrdersQuery) =>
     queryKey: ["orders", params],
     queryFn: () => getOrders(params),
     staleTime: 30_000,
-    initialData: [],
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
     select: (data) => (data ?? []).map(normalizeOrder),
   });

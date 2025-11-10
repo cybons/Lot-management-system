@@ -237,24 +237,21 @@ export function LotsPage() {
 
       {/* 統計情報 */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg">
-          <div className="text-sm font-semibold text-gray-600">総ロット数</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 transition-colors group-hover:text-gray-700">
+        <div className="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">総ロット数</div>
+          <div className="mt-2 text-3xl font-bold text-gray-900">
             {fmt(stats.totalLots)}
           </div>
         </div>
-        <div className="group relative overflow-hidden rounded-2xl border-transparent bg-gradient-to-br from-blue-50 to-purple-50 p-5 shadow-sm transition-all duration-200 hover:shadow-lg">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-2xl" />
-          <div className="relative">
-            <div className="text-sm font-semibold text-gray-600">有効ロット数</div>
-            <div className="mt-2 text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {fmt(stats.activeLots)}
-            </div>
+        <div className="group rounded-xl border-l-4 border-l-blue-500 border-t border-r border-b border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">有効ロット数</div>
+          <div className="mt-2 text-3xl font-bold text-blue-600">
+            {fmt(stats.activeLots)}
           </div>
         </div>
-        <div className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg">
-          <div className="text-sm font-semibold text-gray-600">総在庫数</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 transition-colors group-hover:text-gray-700">
+        <div className="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">総在庫数</div>
+          <div className="mt-2 text-3xl font-bold text-gray-900">
             {fmt(stats.totalQuantity)}
           </div>
         </div>

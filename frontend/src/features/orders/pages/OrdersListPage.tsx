@@ -227,37 +227,28 @@ export function OrdersListPage() {
 
       {/* 統計情報 */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg">
-          <div className="text-sm font-semibold text-gray-600">総受注数</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 transition-colors group-hover:text-gray-700">
+        <div className="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">総受注数</div>
+          <div className="mt-2 text-3xl font-bold text-gray-900">
             {stats.totalOrders}
           </div>
         </div>
-        <div className="group relative overflow-hidden rounded-2xl border-transparent bg-gradient-to-br from-yellow-50 to-orange-50 p-5 shadow-sm transition-all duration-200 hover:shadow-lg">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-yellow-400/20 to-orange-400/20 blur-2xl" />
-          <div className="relative">
-            <div className="text-sm font-semibold text-gray-600">未処理</div>
-            <div className="mt-2 text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
-              {stats.openOrders}
-            </div>
+        <div className="group rounded-xl border-l-4 border-l-yellow-500 border-t border-r border-b border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">未処理</div>
+          <div className="mt-2 text-3xl font-bold text-yellow-600">
+            {stats.openOrders}
           </div>
         </div>
-        <div className="group relative overflow-hidden rounded-2xl border-transparent bg-gradient-to-br from-blue-50 to-cyan-50 p-5 shadow-sm transition-all duration-200 hover:shadow-lg">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-cyan-400/20 blur-2xl" />
-          <div className="relative">
-            <div className="text-sm font-semibold text-gray-600">引当済</div>
-            <div className="mt-2 text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              {stats.allocatedOrders}
-            </div>
+        <div className="group rounded-xl border-l-4 border-l-blue-500 border-t border-r border-b border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">引当済</div>
+          <div className="mt-2 text-3xl font-bold text-blue-600">
+            {stats.allocatedOrders}
           </div>
         </div>
-        <div className="group relative overflow-hidden rounded-2xl border-transparent bg-gradient-to-br from-green-50 to-emerald-50 p-5 shadow-sm transition-all duration-200 hover:shadow-lg">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-green-400/20 to-emerald-400/20 blur-2xl" />
-          <div className="relative">
-            <div className="text-sm font-semibold text-gray-600">引当率</div>
-            <div className="mt-2 text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              {stats.allocationRate.toFixed(1)}%
-            </div>
+        <div className="group rounded-xl border-l-4 border-l-green-500 border-t border-r border-b border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+          <div className="text-sm font-medium text-gray-600">引当率</div>
+          <div className="mt-2 text-3xl font-bold text-green-600">
+            {stats.allocationRate.toFixed(1)}%
           </div>
         </div>
       </div>
