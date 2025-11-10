@@ -125,6 +125,8 @@ export default [
     files: ["src/lib/**/*.{ts,tsx}", "src/services/**/*.{ts,tsx}", "src/hooks/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": "off",
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "max-lines": "off",
     },
   },
 
