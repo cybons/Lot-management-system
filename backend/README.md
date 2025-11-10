@@ -84,6 +84,38 @@ python -m app.main
 
 アプリケーションは http://localhost:8000 で起動します。
 
+## コード品質チェック
+
+### Lint チェック (Ruff)
+
+```bash
+# コードのチェック
+ruff check app/
+
+# 統計情報付きチェック
+ruff check app/ --statistics
+
+# 自動修正
+ruff check app/ --fix
+```
+
+### フォーマットチェック
+
+```bash
+# フォーマットチェック
+ruff format --check app/
+
+# 自動フォーマット
+ruff format app/
+```
+
+### CI での実行
+
+```bash
+# Lint + フォーマットの完全チェック（CI用）
+ruff check app/ && ruff format --check app/
+```
+
 ## API ドキュメント
 
 - **Swagger UI**: http://localhost:8000/api/docs

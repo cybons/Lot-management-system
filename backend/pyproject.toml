@@ -3,17 +3,35 @@ line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
+# E: pycodestyle errors
+# F: Pyflakes (unused imports F401, unused variables F841)
+# I: isort (import sorting I001)
+# D: pydocstyle (docstring conventions)
+# UP: pyupgrade (Python version upgrades)
+# B: flake8-bugbear (likely bugs and design problems)
 select = ["E", "F", "I", "D", "UP", "B"]
+
 ignore = [
-  "D203","D212",        # スタイル衝突回避（お好みで）
-  "D100","D101","D102","D103",  # ★ docstringが無い系は一旦無視
+  "D203",  # one-blank-line-before-class (conflicts with D211)
+  "D212",  # multi-line-summary-first-line (conflicts with D213)
+  "D100",  # Missing docstring in public module
+  "D101",  # Missing docstring in public class
+  "D102",  # Missing docstring in public method
+  "D103",  # Missing docstring in public function
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.isort]
+# Import sorting configuration
+force-single-line = false
+lines-after-imports = 2
+known-first-party = ["app"]
+
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["D"]      # テストはD全体を緩める場合
+"tests/**" = ["D"]  # Relax all docstring rules in tests
+"alembic/**" = ["D", "F401"]  # Relax in migrations
 
 [tool.docformatter]
 recursive = true

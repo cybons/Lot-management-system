@@ -41,13 +41,23 @@ export default [
       react: { version: "detect" },
     },
     rules: {
+      // TypeScript strict rules
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { prefer: "type-imports", fixStyle: "inline-type-imports" },
+      ],
+
+      // React rules
       "react/react-in-jsx-scope": "off",
+
+      // Import organization
       "import/order": [
-        "warn",
+        "error",
         {
           groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
           "newlines-between": "always",
