@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.models.forecast_models import Forecast
 from app.models.inventory_models import Lot, StockMovement
 from app.models.masters_models import Customer, Product, Supplier, Warehouse
 from app.models.orders_models import Allocation, Order, OrderLine
@@ -29,6 +30,9 @@ def get_db_counts(db: Session = Depends(get_db)):
     counts["products"] = db.scalar(select(func.count()).select_from(Product)) or 0
     counts["warehouses"] = db.scalar(select(func.count()).select_from(Warehouse)) or 0
     counts["suppliers"] = db.scalar(select(func.count()).select_from(Supplier)) or 0
+
+    # 需要予測テーブル
+    counts["forecasts"] = db.scalar(select(func.count()).select_from(Forecast)) or 0
 
     # 在庫テーブル
     counts["lots"] = db.scalar(select(func.count()).select_from(Lot)) or 0

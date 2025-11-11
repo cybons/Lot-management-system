@@ -101,6 +101,7 @@ class SimulateResultSummary(BaseModel):
     """テストデータシミュレーション結果サマリ."""
 
     warehouses: int
+    forecasts: int = Field(default=0, description="需要予測データ件数")
     orders: int
     order_lines: int
     lots: int
