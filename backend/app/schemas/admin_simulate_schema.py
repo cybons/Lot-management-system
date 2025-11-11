@@ -47,6 +47,10 @@ class SimulateSeedRequest(BaseModel):
         default=False,
         description="最後のスナップショットを使用するか",
     )
+    forecasts: conint(ge=0, le=1) | None = Field(  # 0/1, None はプロファイル既定を使う
+        default=None,
+        description="需要予測データを生成するか（0=無効, 1=有効、Noneはプロファイル既定）",
+    )
     case_mix: dict[str, float] | None = Field(
         default=None,
         description="ケースミックス比率（API上書き用、合計<=1.0）",
