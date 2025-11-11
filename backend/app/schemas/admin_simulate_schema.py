@@ -37,7 +37,7 @@ class SimulateSeedRequest(BaseModel):
     )
     forecasts: conint(ge=0, le=1) | None = Field(  # type: ignore
         default=0,
-        description="需要予測データ生成（0=無効, 1=有効）",
+        description="需要予測データ生成（0=無効, 1=有効, Noneはプロファイル既定）",
     )
     save_snapshot: bool = Field(
         default=True,
@@ -50,10 +50,6 @@ class SimulateSeedRequest(BaseModel):
     use_last_snapshot: bool = Field(
         default=False,
         description="最後のスナップショットを使用するか",
-    )
-    forecasts: conint(ge=0, le=1) | None = Field(  # 0/1, None はプロファイル既定を使う
-        default=None,
-        description="需要予測データを生成するか（0=無効, 1=有効、Noneはプロファイル既定）",
     )
     case_mix: dict[str, float] | None = Field(
         default=None,

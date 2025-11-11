@@ -95,6 +95,9 @@ def _expand_params(req: SimulateSeedRequest) -> dict[str, Any]:
     # ★ forecasts（API指定があれば上書き。0=無効, 1=有効）
     if req.forecasts is not None:
         params["forecasts"] = int(req.forecasts)
+        logger.info(f"Forecasts param set from API: {req.forecasts} -> {params['forecasts']}")
+    else:
+        logger.info(f"Forecasts param from profile: {params.get('forecasts', 'not set')}")
 
     return params
 
@@ -259,6 +262,14 @@ def run_seed_simulation(
         # forecasts: YAMLまたはデフォルト（0=無効）
         generate_forecasts = params.get("forecasts", 0) > 0
         forecast_count = 0
+
+        # デバッグログ: 条件チェック
+        tracker.add_log(
+            task_id,
+            f"→ Forecast check: params.forecasts={params.get('forecasts', 0)}, "
+            f"generate={generate_forecasts}, customers={len(all_customers)}, products={len(all_products)}"
+        )
+
         if generate_forecasts and all_customers and all_products:
             from datetime import timezone
 
@@ -355,16 +366,25 @@ def run_seed_simulation(
 
             # bulk insert
             if forecast_rows:
+                tracker.add_log(task_id, f"→ Inserting {len(forecast_rows)} forecast rows...")
                 db.bulk_insert_mappings(Forecast, forecast_rows)
                 db.flush()
                 forecast_count = len(forecast_rows)
-
-            tracker.add_log(task_id, f"✓ Created {forecast_count} forecasts (daily/dekad/monthly)")
+                tracker.add_log(task_id, f"✓ Created {forecast_count} forecasts (daily/dekad/monthly)")
+            else:
+                tracker.add_log(task_id, "→ No forecast rows to insert (all duplicates or empty)")
         else:
-            tracker.add_log(task_id, "→ Forecast generation skipped (forecasts=0 or no masters)")
+            reasons = []
+            if not generate_forecasts:
+                reasons.append(f"forecasts={params.get('forecasts', 0)}")
+            if not all_customers:
+                reasons.append("no customers")
+            if not all_products:
+                reasons.append("no products")
+            tracker.add_log(task_id, f"→ Forecast generation skipped: {', '.join(reasons)}")
 
         db.commit()
-        tracker.add_log(task_id, "✓ Forecast data committed to DB")
+        tracker.add_log(task_id, f"✓ Forecast data committed to DB (total={forecast_count})")
 
         # Phase 3: Stock (Lots + Inbound)
         tracker.add_log(task_id, "Phase 3: Creating lots and inbound stock movements")
