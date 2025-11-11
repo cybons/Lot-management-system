@@ -150,7 +150,7 @@ def run_seed_simulation(
         logging.getLogger("sqlalchemy.engine"),
         logging.getLogger("sqlalchemy.engine.Engine"),
     ]
-    previous_levels = [logger.level for logger in engine_loggers]
+    previous_levels = [lg.level for lg in engine_loggers]
 
     for logger_instance in engine_loggers:
         logger_instance.setLevel(logging.ERROR)
@@ -713,9 +713,7 @@ def run_seed_simulation(
         total_customers = db.scalar(select(func.count()).select_from(Customer)) or 0
         total_suppliers = db.scalar(select(func.count()).select_from(Supplier)) or 0
         total_products = db.scalar(select(func.count()).select_from(Product)) or 0
-        total_delivery_places = (
-            db.scalar(select(func.count()).select_from(DeliveryPlace)) or 0
-        )
+        total_delivery_places = db.scalar(select(func.count()).select_from(DeliveryPlace)) or 0
 
         totals_message = (
             "Totals => customers={customers}, suppliers={suppliers}, products={products}, "
@@ -768,5 +766,5 @@ def run_seed_simulation(
         db.rollback()
         raise
     finally:
-        for logger_instance, level in zip(engine_loggers, previous_levels):
-            logger_instance.setLevel(level)
+        for lg, level in zip(engine_loggers, previous_levels):
+            lg.setLevel(level)

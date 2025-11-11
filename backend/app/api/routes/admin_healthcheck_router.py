@@ -1,4 +1,4 @@
-# backend/app/api/routes/admin_healthcheck.py
+# backend/app/api/routes/admin_healthcheck_router.py
 """ヘルスチェックAPI - 各テーブルのデータ件数を確認."""
 
 from fastapi import APIRouter, Depends
@@ -47,10 +47,7 @@ def get_db_counts(db: Session = Depends(get_db)):
     # counts["lot_current_stock"] = ...
 
     masters_total = (
-        counts["customers"]
-        + counts["products"]
-        + counts["warehouses"]
-        + counts["suppliers"]
+        counts["customers"] + counts["products"] + counts["warehouses"] + counts["suppliers"]
     )
     inventory_total = counts["lots"] + counts["stock_movements"]
     orders_total = counts["orders"] + counts["order_lines"] + counts["allocations"]
