@@ -55,6 +55,7 @@ class OrderStatusUpdate(BaseSchema):
 
 class OrderResponse(OrderBase, TimestampMixin):
     id: int
+    customer_id: int | None = None
 
 
 class OrderWithLinesResponse(OrderResponse):
@@ -104,7 +105,11 @@ class OrderLineOut(BaseSchema):
     product_id: int | None = None  # 追加: product_id基準の引当に必要
     product_code: str | None = None
     product_name: str | None = None
+    warehouse_id: int | None = None
+    warehouse_code: str | None = None
+    customer_id: int | None = None
     customer_code: str | None = None
+    supplier_id: int | None = None
     supplier_code: str | None = None
     quantity: float
     unit: str | None = None

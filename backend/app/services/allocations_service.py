@@ -30,7 +30,10 @@ class FefoLotPlan:
 @dataclass
 class FefoLinePlan:
     order_line_id: int
+    product_id: int | None
     product_code: str
+    warehouse_id: int | None
+    warehouse_code: str | None
     required_qty: float
     already_allocated_qty: float
     allocations: list[FefoLotPlan] = field(default_factory=list)
@@ -185,11 +188,20 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
             continue
 
         product_id = getattr(line, "product_id", None)
+        warehouse_id = getattr(line, "warehouse_id", None)
         product_code = None
+        warehouse_code = None
         if product_id:
             product = db.query(Product).filter(Product.id == product_id).first()
             if product:
                 product_code = product.product_code
+
+        # Get warehouse_code from warehouse_id if needed
+        if warehouse_id and not warehouse_code:
+            from app.models import Warehouse
+            warehouse = db.query(Warehouse).filter(Warehouse.id == warehouse_id).first()
+            if warehouse:
+                warehouse_code = warehouse.warehouse_code
 
         if not product_id:
             warning = f"製品ID未設定: order_line={line.id}"
@@ -197,7 +209,10 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
             preview_lines.append(
                 FefoLinePlan(
                     order_line_id=line.id,
+                    product_id=None,
                     product_code="",
+                    warehouse_id=warehouse_id,
+                    warehouse_code=warehouse_code,
                     required_qty=required_qty,
                     already_allocated_qty=already_allocated,
                     warnings=[warning],
@@ -208,7 +223,10 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
         next_div_value, next_div_warning = _resolve_next_div(db, order, line)
         line_plan = FefoLinePlan(
             order_line_id=line.id,
+            product_id=product_id,
             product_code=product_code or "",
+            warehouse_id=warehouse_id,
+            warehouse_code=warehouse_code,
             required_qty=required_qty,
             already_allocated_qty=already_allocated,
             next_div=next_div_value,

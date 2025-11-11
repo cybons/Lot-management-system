@@ -45,10 +45,15 @@ class LotUpdate(BaseSchema):
 
 class LotResponse(LotBase, TimestampMixin):
     id: int
+    product_id: int | None = None
+    product_code: str | None = None  # 後方互換性のため（非推奨: product_idを使用推奨）
+    warehouse_id: int | None = None
+    warehouse_code: str | None = None
+    supplier_id: int | None = None
+    supplier_code: str | None = None
     current_quantity: float = 0.0
     last_updated: datetime | None = None
     product_name: str | None = None
-    product_code: str | None = None  # 後方互換性のため（非推奨: product_idを使用推奨）
     lot_status: str = "available"
 
 
