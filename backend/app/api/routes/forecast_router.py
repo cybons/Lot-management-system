@@ -3,7 +3,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_db
 from app.models import Customer, Forecast, Order, OrderLine, Product
@@ -327,7 +327,11 @@ def match_forecasts(request: ForecastMatchRequest, db: Session = Depends(get_db)
     """フォーキャストと受注明細の手動マッチング."""
     matcher = ForecastMatcher(db)
 
-    query = db.query(OrderLine).join(Order)
+    query = (
+        db.query(OrderLine)
+        .join(Order)
+        .options(selectinload(OrderLine.order).selectinload(Order.delivery_place))
+    )
 
     if request.order_id:
         query = query.filter(OrderLine.order_id == request.order_id)
@@ -384,6 +388,12 @@ def match_forecasts(request: ForecastMatchRequest, db: Session = Depends(get_db)
                 forecast_granularity=line.forecast_granularity,
                 forecast_match_status=line.forecast_match_status,
                 forecast_qty=line.forecast_qty,
+                delivery_place_id=order.delivery_place_id,
+                delivery_place_code=(
+                    order.delivery_place.delivery_place_code
+                    if getattr(order, "delivery_place", None)
+                    else None
+                ),
             )
         )
 

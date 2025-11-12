@@ -1436,6 +1436,10 @@ export interface components {
       forecast_match_status?: string | null;
       /** Forecast Qty */
       forecast_qty?: number | null;
+      /** Delivery Place Id */
+      delivery_place_id?: number | null;
+      /** Delivery Place Code */
+      delivery_place_code?: string | null;
     };
     /**
      * ForecastResponse
@@ -1776,6 +1780,8 @@ export interface components {
       sap_sent_at?: string | null;
       /** Sap Error Msg */
       sap_error_msg?: string | null;
+      /** Delivery Place Id */
+      delivery_place_id?: number | null;
       /** Lines */
       lines?: components["schemas"]["OrderLineCreate"][];
     };
@@ -1851,6 +1857,10 @@ export interface components {
       order_no: string;
       /** Customer Code */
       customer_code?: string | null;
+      /** Delivery Place Id */
+      delivery_place_id?: number | null;
+      /** Delivery Place Code */
+      delivery_place_code?: string | null;
       /**
        * Order Date
        * Format: date

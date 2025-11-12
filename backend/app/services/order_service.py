@@ -37,7 +37,7 @@ class OrderService:
         date_from: date | None = None,
         date_to: date | None = None,
     ) -> list[OrderResponse]:
-        stmt: Select[Order] = select(Order)
+        stmt: Select[Order] = select(Order).options(selectinload(Order.delivery_place))
 
         if status:
             stmt = stmt.where(Order.status == status)
@@ -50,18 +50,30 @@ class OrderService:
 
         stmt = stmt.order_by(Order.order_date.desc()).offset(skip).limit(limit)
         orders = self.db.execute(stmt).scalars().all()
+        for order in orders:
+            delivery_place = getattr(order, "delivery_place", None)
+            order.delivery_place_code = (
+                delivery_place.delivery_place_code if delivery_place else None
+            )
         return [OrderResponse.model_validate(order) for order in orders]
 
     def get_order_detail(self, order_id: int) -> OrderWithLinesResponse:
         stmt: Select[Order] = (
             select(Order)
-            .options(selectinload(Order.order_lines).selectinload(OrderLine.product))
+            .options(
+                selectinload(Order.order_lines).selectinload(OrderLine.product),
+                selectinload(Order.delivery_place),
+            )
             .where(Order.id == order_id)
         )
         order = self.db.execute(stmt).scalar_one_or_none()
         if not order:
             raise OrderNotFoundError(order_id)
 
+        delivery_place = getattr(order, "delivery_place", None)
+        order.delivery_place_code = (
+            delivery_place.delivery_place_code if delivery_place else None
+        )
         order.lines = list(order.order_lines)
         return OrderWithLinesResponse.model_validate(order)
 
@@ -90,6 +102,7 @@ class OrderService:
             sap_status=order_data.sap_status,
             sap_sent_at=order_data.sap_sent_at,
             sap_error_msg=order_data.sap_error_msg,
+            delivery_place_id=order_data.delivery_place_id,
         )
         self.db.add(order)
         self.db.flush()
@@ -130,6 +143,10 @@ class OrderService:
 
         self.db.flush()
         self.db.refresh(order)
+        delivery_place = getattr(order, "delivery_place", None)
+        order.delivery_place_code = (
+            delivery_place.delivery_place_code if delivery_place else None
+        )
         order.lines = list(order.order_lines)
 
         return OrderWithLinesResponse.model_validate(order)
@@ -142,12 +159,20 @@ class OrderService:
 
         # 冪等化: 同一状態の場合は変更しない
         if order.status == new_status:
+            delivery_place = getattr(order, "delivery_place", None)
+            order.delivery_place_code = (
+                delivery_place.delivery_place_code if delivery_place else None
+            )
             return OrderResponse.model_validate(order)
 
         OrderStateMachine.validate_transition(order.status, new_status)
         order.status = new_status
 
         self.db.flush()
+        delivery_place = getattr(order, "delivery_place", None)
+        order.delivery_place_code = (
+            delivery_place.delivery_place_code if delivery_place else None
+        )
         return OrderResponse.model_validate(order)
 
     def cancel_order(self, order_id: int) -> None:

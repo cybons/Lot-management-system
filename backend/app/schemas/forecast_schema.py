@@ -93,6 +93,8 @@ class ForecastMatchResult(BaseSchema):
     forecast_granularity: str | None = None
     forecast_match_status: str | None = None
     forecast_qty: float | None = None
+    delivery_place_id: int | None = None
+    delivery_place_code: str | None = None
 
 
 class ForecastMatchResponse(BaseSchema):

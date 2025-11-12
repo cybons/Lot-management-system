@@ -25,6 +25,8 @@ export interface OrderUI extends Record<string, unknown> {
   order_no: string;
   customer_code: string;
   customer_name: string;
+  delivery_place_id: number | null;
+  delivery_place_code: string;
   order_date: string;
   status: string;
   customer_order_no: string;
@@ -113,6 +115,8 @@ export function normalizeOrder(order: OrderResponse): OrderUI {
     order_no: S(order.order_no),
     customer_code: S(order.customer_code),
     customer_name: S(order.customer_name),
+    delivery_place_id: order.delivery_place_id ?? null,
+    delivery_place_code: S(order.delivery_place_code, ""),
     order_date: S(order.order_date),
     status: S(order.status, "open"),
     customer_order_no: S(order.customer_order_no),

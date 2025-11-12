@@ -24,6 +24,8 @@ class OrderBase(BaseSchema):
     sap_status: str | None = None
     sap_sent_at: datetime | None = None
     sap_error_msg: str | None = None
+    delivery_place_id: int | None = None
+    delivery_place_code: str | None = None
 
 
 class OrderCreate(OrderBase):

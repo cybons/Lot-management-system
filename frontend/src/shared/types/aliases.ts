@@ -181,6 +181,8 @@ export type OrderResponse = {
   customer_id?: number | null;
   customer_code?: string | null;
   customer_name?: string | null;
+  delivery_place_id?: number | null;
+  delivery_place_code?: string | null;
   order_date: string;
   status: string;
   customer_order_no?: string | null;

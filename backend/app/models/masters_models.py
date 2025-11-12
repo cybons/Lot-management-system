@@ -163,6 +163,7 @@ class DeliveryPlace(Base):
 
     allocations: Mapped[list[Allocation]] = relationship("Allocation", back_populates="destination")
     products: Mapped[list[Product]] = relationship("Product", back_populates="delivery_place")
+    orders: Mapped[list[Order]] = relationship("Order", back_populates="delivery_place")
 
 
 class Product(Base):

@@ -61,6 +61,9 @@ class Order(Base):
     customer_order_no_last6: Mapped[str | None] = mapped_column(
         String(6), Computed("right(customer_order_no, 6)", persisted=True)
     )
+    delivery_place_id: Mapped[int | None] = mapped_column(
+        ForeignKey("delivery_places.id", ondelete="RESTRICT"), nullable=True
+    )
 
     __table_args__ = (
         UniqueConstraint("order_no", name="orders_order_no_key"),
@@ -84,6 +87,9 @@ class Order(Base):
     )
 
     customer: Mapped[Customer | None] = relationship("Customer", back_populates="orders")
+    delivery_place: Mapped[DeliveryPlace | None] = relationship(
+        "DeliveryPlace", back_populates="orders"
+    )
     order_lines: Mapped[list[OrderLine]] = relationship(
         "OrderLine", back_populates="order", cascade="all, delete-orphan"
     )
