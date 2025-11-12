@@ -182,7 +182,7 @@ export type OrderResponse = {
   id: number;
   order_no: string;
   customer_id?: number | null;
-  customer_code?: string | null;
+  customer_code?: string | null | undefined; // undefined を追加
   customer_name?: string | null;
   order_date: string;
   status: string;

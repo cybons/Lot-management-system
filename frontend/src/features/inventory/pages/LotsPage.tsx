@@ -96,7 +96,7 @@ export function LotsPage() {
       {
         id: "warehouse_code",
         header: "倉庫",
-        cell: (lot: LotUI) => lot.warehouse_code,
+        cell: (lot: LotUI) => lot.warehouse_id, // warehouse_code → warehouse_id
         sortable: true,
       },
       {

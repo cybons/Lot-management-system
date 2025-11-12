@@ -68,7 +68,6 @@ export function InventoryPage() {
     refetch,
   } = useLotsQuery({
     product_code: filters.values.product_code || undefined,
-    delivery_place_code: filters.values.delivery_place_code || undefined, // warehouse_code → delivery_place_code
     with_stock: filters.values.hasStock,
   });
 
