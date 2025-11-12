@@ -1,11 +1,11 @@
 # backend/app/domain/order/state_machine.py
 """受注状態遷移マシン."""
 
-import functools
 import logging
 from enum import Enum
 
 from .exceptions import InvalidOrderStatusError
+
 
 logger = logging.getLogger(__name__)
 

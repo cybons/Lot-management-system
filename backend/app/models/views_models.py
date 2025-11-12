@@ -1,9 +1,9 @@
 """Database view models (read-only)."""
 
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 
-from sqlalchemy import Column, Date, Integer, Numeric, String, Table
+from sqlalchemy import Date, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .base_model import Base
