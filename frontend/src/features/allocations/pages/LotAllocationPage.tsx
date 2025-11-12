@@ -55,10 +55,11 @@ export function LotAllocationPage() {
   const orderCards = useOrderCards(ordersQuery.data);
 
   // 選択された受注の詳細を取得
-  const orderDetailQuery = useQuery({
+  const orderDetailQuery = useQuery<OrderResponse, Error, Order>({
     queryKey: ["order-detail", selectedOrderId],
     queryFn: () => getOrder(selectedOrderId!),
     enabled: !!selectedOrderId,
+    select: (data) => normalizeOrder(data) as Order,
   });
 
   // 自動選択ロジック

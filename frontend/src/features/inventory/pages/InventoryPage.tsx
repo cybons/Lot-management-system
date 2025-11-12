@@ -103,10 +103,24 @@ export function InventoryPage() {
         cell: (lot: LotUI) => lot.product_name,
       },
       {
-        id: "delivery_place", // warehouse_code → delivery_place
-        header: "納品先", // 倉庫 → 納品先
-        cell: (lot: LotUI) =>
-          formatCodeAndName(lot.delivery_place_code, lot.delivery_place_name) || "—",
+        id: "delivery_place",
+        header: "納品先",
+        cell: (lot: LotUI) => {
+          // LotUI から delivery_place_* を段階的に外しているため、存在時のみ安全にナローイング
+          const codeUnknown = (lot as unknown as { delivery_place_code?: unknown })
+            .delivery_place_code;
+          const nameUnknown = (lot as unknown as { delivery_place_name?: unknown })
+            .delivery_place_name;
+          const code =
+            typeof codeUnknown === "string" || codeUnknown == null
+              ? (codeUnknown as string | null | undefined)
+              : undefined;
+          const name =
+            typeof nameUnknown === "string" || nameUnknown == null
+              ? (nameUnknown as string | null | undefined)
+              : undefined;
+          return formatCodeAndName(code, name) || "—";
+        },
         sortable: true,
       },
       {
