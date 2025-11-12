@@ -158,7 +158,7 @@ class OrderService:
 
         if order.status in {"shipped", "closed"}:
             raise InvalidOrderStatusError(
-                f"ステータスが '{order.status}' の受注はキャンセルできません"
+                f"Status が '{order.status}' の受注はキャンセルできません"
             )
 
         order.status = "cancelled"
