@@ -23,7 +23,7 @@ from app.services.uow_service import UnitOfWork
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
-@router.get("", response_model=list[OrderResponse])
+@router.get("", response_model=list[OrderWithLinesResponse])
 def list_orders(
     skip: int = 0,
     limit: int = 100,
