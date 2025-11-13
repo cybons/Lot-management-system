@@ -168,7 +168,7 @@ export function LotAllocationPane({
                             const maxAllocation = Math.min(remainingNeeded, availableQty);
                             onLotAllocationChange(lotId, maxAllocation);
                           }}
-                          className="whitespace-nowrap rounded border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                          className="rounded border border-gray-300 bg-white px-3 py-2 text-xs font-medium whitespace-nowrap text-gray-700 transition hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
                         >
                           全量
                         </button>
