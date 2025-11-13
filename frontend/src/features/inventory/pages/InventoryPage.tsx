@@ -7,6 +7,7 @@
  * - UI状態管理: useDialog, useToast, useTable, useFilters
  * - 共通コンポーネント: PageHeader, Section, DataTable, etc.
  */
+/* eslint-disable max-lines */
 
 import { format } from "date-fns";
 import { Plus, RefreshCw } from "lucide-react";

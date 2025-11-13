@@ -1,10 +1,10 @@
 // frontend/src/features/orders/hooks/useOrderLineComputed.ts
 import React from "react";
 
+import { coerceAllocatedLots } from "@/shared/libs/allocations";
 import { formatCodeAndName } from "@/shared/libs/utils";
 import { diffDays, isValidDate } from "@/shared/libs/utils/date";
 import type { OrderLine, OrderLineComputed, OrderResponse } from "@/shared/types/aliases";
-import { coerceAllocatedLots } from "@/shared/libs/allocations";
 
 export type OrderLineSource = Partial<OrderLine> & {
   order_id?: number;

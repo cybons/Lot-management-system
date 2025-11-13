@@ -36,8 +36,8 @@ import { TablePagination } from "@/shared/components/data/TablePagination";
 import { FormDialog } from "@/shared/components/form";
 import { PageHeader, PageContainer, Section } from "@/shared/components/layout";
 // 既存の型とコンポーネント
-import type { OrderUI } from "@/shared/libs/normalize";
 import { coerceAllocatedLots } from "@/shared/libs/allocations";
+import type { OrderUI } from "@/shared/libs/normalize";
 import type { OrderLine } from "@/shared/types/aliases";
 import { formatDate } from "@/shared/utils/date";
 import type { OrderCreate } from "@/utils/validators";

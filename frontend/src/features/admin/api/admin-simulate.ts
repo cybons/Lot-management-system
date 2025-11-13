@@ -65,7 +65,9 @@ export type SeedSnapshotListItem = {
   id: number;
   name: string;
   created_at: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params_json: Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   summary_json?: Record<string, any> | null;
 };
 

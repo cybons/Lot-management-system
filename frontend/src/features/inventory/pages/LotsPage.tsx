@@ -6,6 +6,9 @@
  * - URLにクエリパラメータは出さない
  * - with_stock=true でAPI呼び出し
  */
+/* eslint-disable max-lines-per-function */
+/* eslint-disable complexity */
+/* eslint-disable max-lines */
 
 import { format } from "date-fns";
 import { useAtom } from "jotai";

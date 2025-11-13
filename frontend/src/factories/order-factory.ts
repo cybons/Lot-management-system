@@ -9,8 +9,8 @@ const nullToUndefined = <T>(value: T | null | undefined): T | undefined =>
 
 import { faker } from "@faker-js/faker/locale/ja";
 
-import type { OrderLine, OrderResponse, OrderWithLinesResponse } from "@/shared/types/aliases";
 import { coerceAllocatedLots } from "@/shared/libs/allocations";
+import type { OrderLine, OrderResponse, OrderWithLinesResponse } from "@/shared/types/aliases";
 
 type OrderLineFactoryExtras = {
   product_name?: string | null;
