@@ -20,6 +20,7 @@ export function createLot(overrides?: Partial<LotResponse>): LotResponse {
     supplier_code: `SUP-${faker.string.alphanumeric(3).toUpperCase()}`,
     product_code: `PRD-${faker.string.alphanumeric(4).toUpperCase()}`,
     lot_number: `LOT-${faker.string.alphanumeric(8).toUpperCase()}`,
+    lot_status: overrides?.lot_status ?? "available",
     receipt_date: receiptDate.toISOString().split("T")[0],
     expiry_date: expiryDate.toISOString().split("T")[0],
     delivery_place_code: faker.helpers.arrayElement(["DP-001", "DP-002", "DP-003", null]),

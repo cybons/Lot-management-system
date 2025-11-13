@@ -3,12 +3,8 @@ import React from "react";
 
 import { formatCodeAndName } from "@/shared/libs/utils";
 import { diffDays, isValidDate } from "@/shared/libs/utils/date";
-import type {
-  AllocatedLot,
-  OrderLine,
-  OrderLineComputed,
-  OrderResponse,
-} from "@/shared/types/aliases";
+import type { OrderLine, OrderLineComputed, OrderResponse } from "@/shared/types/aliases";
+import { coerceAllocatedLots } from "@/shared/libs/allocations";
 
 export type OrderLineSource = Partial<OrderLine> & {
   order_id?: number;
@@ -47,9 +43,7 @@ export function useOrderLineComputed(
 
     const totalQty = Number(line?.quantity ?? 0);
     const unit = line?.unit ?? "EA";
-    const allocatedLots: AllocatedLot[] = Array.isArray(line?.allocated_lots)
-      ? line.allocated_lots
-      : [];
+    const allocatedLots = coerceAllocatedLots(line?.allocated_lots);
     const allocatedTotal = allocatedLots.reduce(
       (sum, allocated) => sum + Number(allocated.allocated_qty ?? 0),
       0,

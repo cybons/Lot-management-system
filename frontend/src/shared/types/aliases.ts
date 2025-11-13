@@ -1,3 +1,5 @@
+import type { components } from "@/types/api";
+
 // src/types/aliases.ts
 // ---- Core masters ----
 export type Product = {
@@ -29,27 +31,13 @@ export type Warehouse = {
 };
 export type OldWarehouse = Warehouse; // 旧名の受け皿
 
+type ApiLotResponse = components["schemas"]["LotResponse"];
+
 // ---- Inventory/Lot ----
-export type LotResponse = {
-  id: number;
-  lot_number: string;
-  product_id?: number | null;
-  product_code: string | null;
-  product_name?: string | null;
-  supplier_id?: number | null;
-  supplier_code: string | null;
+export type LotResponse = ApiLotResponse & {
   delivery_place_id?: number | null;
-  delivery_place_code: string | null;
-  delivery_place_name: string | null;
-  lot_unit?: string | null;
-  receipt_date: string;
-  mfg_date?: string | null;
-  expiry_date?: string | null;
-  current_quantity: number;
-  last_updated?: string | null;
-  created_at: string;
-  updated_at?: string | null;
-  // Backwards compatibility
+  delivery_place_code?: string | null;
+  delivery_place_name?: string | null;
   lot_no?: string | null;
   unit?: string | null;
   status?: string | null;
@@ -155,55 +143,41 @@ export const ORDER_STATUS_DISPLAY: Record<OrderStatus, { label: string; variant:
   [OrderStatus.CANCELLED]: { label: "キャンセル", variant: "bg-red-100 text-red-800" },
 };
 
-export type OrderLine = {
-  id: number;
-  order_id?: number;
-  line_no?: number;
-  product_id?: number | null; // product_id基準の引当に必要
-  product_code?: string | null; // Optional化(表示用のみ)
-  product_name?: string;
-  delivery_place_id?: number | null;
-  customer_id?: number | null;
-  customer_code?: string | null;
-  supplier_id?: number | null;
-  supplier_code?: string | null;
-  delivery_place_code?: string | null;
-  delivery_place_name?: string | null;
-  quantity: number;
-  unit: string;
-  status?: string;
-  due_date?: string | null;
-  allocated_qty?: number | null;
+type ApiOrderLine = components["schemas"]["OrderLineOut"];
+type ApiOrderLineBase = Omit<ApiOrderLine, "allocated_lots">;
+
+export type OrderLine = ApiOrderLineBase & {
+  allocated_lots?: ApiOrderLine["allocated_lots"] | AllocatedLot[];
   delivery_place_allocations?: Array<{ delivery_place_code: string; quantity: number }>;
-  related_lots?: Array<Record<string, unknown>>;
-  allocated_lots?: AllocatedLot[];
-  next_div?: string | null;
   forecast_qty?: number | null;
   forecast_version_no?: number | null;
+  status?: string | null;
 };
-export type OrderResponse = {
-  id: number;
-  order_no: string;
-  customer_id?: number | null;
-  customer_code?: string | null | undefined; // undefined を追加
+
+type ApiOrderResponse = components["schemas"]["OrderResponse"];
+type ApiOrderWithLinesResponse = components["schemas"]["OrderWithLinesResponse"];
+
+export type OrderResponse = Omit<ApiOrderResponse, "lines"> & {
   customer_name?: string | null;
-  order_date: string;
-  status: string;
-  customer_order_no?: string | null;
-  customer_order_no_last6?: string | null;
-  delivery_mode?: string | null;
-  sap_order_id?: string | null;
-  sap_status?: string | null;
-  sap_sent_at?: string | null;
-  sap_error_msg?: string | null;
-  created_at?: string;
-  updated_at?: string | null;
-  // Backwards compatibility
+  delivery_place?: string | null;
+  delivery_place_code?: string | null;
+  delivery_place_name?: string | null;
+  total_quantity?: number | null;
   due_date?: string | null;
   remarks?: string | null;
   lines?: OrderLine[];
 };
-export type OrderWithLinesResponse = OrderResponse;
+
+export type OrderWithLinesResponse = Omit<ApiOrderWithLinesResponse, "lines"> & {
+  customer_name?: string | null;
+  delivery_place?: string | null;
+  delivery_place_code?: string | null;
+  delivery_place_name?: string | null;
+  total_quantity?: number | null;
+  due_date?: string | null;
+  remarks?: string | null;
+  lines?: OrderLine[];
+};
 
 // ---- Computed (UI-only) ----
 export type OrderLineComputed = {

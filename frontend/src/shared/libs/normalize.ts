@@ -130,6 +130,10 @@ export function normalizeOrder(order: OrderResponse): OrderUI {
     remarks: S(order.remarks),
     created_at: S(order.created_at),
     updated_at: S(order.updated_at),
+    delivery_place: (order as Record<string, unknown>).delivery_place ?? null,
+    delivery_place_code: (order as Record<string, unknown>).delivery_place_code ?? null,
+    delivery_place_name: (order as Record<string, unknown>).delivery_place_name ?? null,
+    total_quantity: (order as Record<string, unknown>).total_quantity ?? null,
     lines: order.lines,
   };
 }

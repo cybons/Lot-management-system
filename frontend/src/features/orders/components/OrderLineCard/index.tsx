@@ -14,6 +14,7 @@ import {
   type OrderSource,
 } from "@/features/orders/hooks/useOrderLineComputed";
 import { useToast } from "@/hooks/use-toast";
+import { coerceAllocatedLots } from "@/shared/libs/allocations";
 import { formatCodeAndName } from "@/shared/libs/utils";
 import { formatYmd } from "@/shared/libs/utils/date";
 import type { AllocatedLot, LotCandidateResponse } from "@/shared/types/aliases";
@@ -34,14 +35,10 @@ export function OrderLineCard({ order, line, onRematch }: Props) {
     computed.productId ?? undefined,
   );
 
-  const allocatedLots = React.useMemo<AllocatedLot[]>(() => {
-    if (!line || !Array.isArray(line.allocated_lots)) {
-      return [];
-    }
-    return line.allocated_lots.filter(
-      (allocation): allocation is AllocatedLot => typeof allocation?.lot_id === "number",
-    );
-  }, [line]);
+  const allocatedLots = React.useMemo<AllocatedLot[]>(
+    () => coerceAllocatedLots(line?.allocated_lots),
+    [line?.allocated_lots],
+  );
 
   const canRematch = Boolean(onRematch && computed.ids?.orderId);
 

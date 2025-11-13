@@ -2,14 +2,105 @@
  * Utility functions for priority calculation and color mapping
  */
 
-import type { Order, OrderCardData, PriorityLevel } from "../types";
+import type { Order, OrderCardData, OrderLine, PriorityLevel } from "../types";
+
+const sanitizeDateValue = (value?: string | null) => {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "-" || trimmed === "―") {
+    return null;
+  }
+  return trimmed;
+};
+
+const sumUnallocatedQuantity = (lines: OrderLine[] | undefined): number => {
+  return (lines ?? []).reduce((sum, line) => {
+    const allocated =
+      line.allocated_lots?.reduce((acc, alloc) => acc + (alloc.allocated_qty || 0), 0) ?? 0;
+    const quantity = line.quantity ?? 0;
+    return sum + (quantity - allocated);
+  }, 0);
+};
+
+const computeDaysUntilDue = (orderDueDate?: string | null, lineDueDate?: string | null): number | null => {
+  const dueDateSource = sanitizeDateValue(orderDueDate) ?? sanitizeDateValue(lineDueDate);
+  if (!dueDateSource) {
+    return null;
+  }
+
+  const dueDate = new Date(dueDateSource);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  dueDate.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  return Number.isNaN(diffDays) ? null : diffDays;
+};
+
+const hasMissingRequiredFields = (lines: OrderLine[] | undefined, hasLineData: boolean): boolean => {
+  if (!hasLineData) return false;
+  const safeLines = lines ?? [];
+  if (safeLines.length === 0) return true;
+  return safeLines.every((line) => !line.product_code || !line.quantity || line.quantity === 0);
+};
+
+const computeTotalOrderQuantity = (lines: OrderLine[] | undefined): number => {
+  return (lines ?? []).reduce((sum, line) => sum + (Number(line.quantity) || 0), 0);
+};
+
+const resolvePrimaryDeliveryPlace = (order: Order, primaryLine?: OrderLine): string | null => {
+  return (
+    order.delivery_place_name ??
+    order.delivery_place ??
+    order.delivery_place_code ??
+    primaryLine?.delivery_place_name ??
+    primaryLine?.delivery_place_code ??
+    order.ship_to ??
+    null
+  );
+};
+
+const normalizeLines = (lines: Order["lines"]): { items: OrderLine[]; hasLineData: boolean } => {
+  if (Array.isArray(lines)) {
+    return { items: lines, hasLineData: true };
+  }
+  return { items: [], hasLineData: false };
+};
+
+const resolveDueDateValue = (order: Order, primaryLine?: OrderLine): string | null => {
+  return sanitizeDateValue(order.due_date) ?? sanitizeDateValue(primaryLine?.due_date ?? null);
+};
+
+const buildOrderCardMetrics = (
+  order: Order,
+  lines: OrderLine[],
+  hasLineData: boolean,
+): {
+  primaryLine: OrderLine | undefined;
+  unallocatedQty: number;
+  daysTodue: number | null;
+  hasMissingFields: boolean;
+  totalQuantity: number;
+  primaryDeliveryPlace: string | null;
+  normalizedDueDate: string | null;
+} => {
+  const primaryLine = lines[0];
+
+  return {
+    primaryLine,
+    unallocatedQty: sumUnallocatedQuantity(lines),
+    daysTodue: computeDaysUntilDue(order.due_date ?? null, primaryLine?.due_date ?? null),
+    hasMissingFields: hasMissingRequiredFields(lines, hasLineData),
+    totalQuantity: computeTotalOrderQuantity(lines),
+    primaryDeliveryPlace: resolvePrimaryDeliveryPlace(order, primaryLine),
+    normalizedDueDate: resolveDueDateValue(order, primaryLine),
+  };
+};
 
 /**
  * 優先度レベルを計算
  */
 export function calculatePriority(order: Order): PriorityLevel {
-  const lines = order.lines || [];
-
   // 発注待ちステータス
   if (order.status === "PENDING_PROCUREMENT") {
     return "inactive";
@@ -21,12 +112,7 @@ export function calculatePriority(order: Order): PriorityLevel {
   }
 
   // 未引当数量の計算(allocated_lotsを使用)
-  const unallocatedQty = lines.reduce((sum, line) => {
-    const allocated =
-      line.allocated_lots?.reduce((a, alloc) => a + (alloc.allocated_qty || 0), 0) || 0;
-    const quantity = line.quantity ?? 0; // null/undefined対策
-    return sum + (quantity - allocated);
-  }, 0);
+  const unallocatedQty = sumUnallocatedQuantity(order.lines);
 
   // 引当済み(未引当なし)
   if (unallocatedQty <= 0) {
@@ -34,20 +120,10 @@ export function calculatePriority(order: Order): PriorityLevel {
   }
 
   // 納期までの日数を計算
-  if (!order.due_date) {
+  const daysTodue = computeDaysUntilDue(order.due_date ?? null, null);
+
+  if (daysTodue == null) {
     return "attention"; // 納期未設定の場合は注意レベル
-  }
-
-  const dueDate = new Date(order.due_date);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  dueDate.setHours(0, 0, 0, 0);
-
-  const daysTodue = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-
-  // 無効な日付の場合はNaNになるので注意レベル
-  if (isNaN(daysTodue)) {
-    return "attention";
   }
 
   // 優先度判定
@@ -68,41 +144,30 @@ export function calculatePriority(order: Order): PriorityLevel {
  * 受注カードデータを作成
  */
 export function createOrderCardData(order: Order): OrderCardData {
-  const hasLineData = Array.isArray(order.lines);
-  const lines = hasLineData ? (order.lines ?? []) : [];
+  const { items: lines, hasLineData } = normalizeLines(order.lines);
   const priority = calculatePriority(order);
-
-  // 未引当数量(allocated_lotsを使用)
-  const unallocatedQty = lines.reduce((sum, line) => {
-    const allocated =
-      line.allocated_lots?.reduce((a, alloc) => a + (alloc.allocated_qty || 0), 0) || 0;
-    const quantity = line.quantity ?? 0; // null/undefined対策
-    return sum + (quantity - allocated);
-  }, 0);
-
-  // 納期までの日数
-  let daysTodue: number | null = null;
-  if (order.due_date) {
-    const dueDate = new Date(order.due_date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    dueDate.setHours(0, 0, 0, 0);
-    const calculatedDays = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    // 無効な日付の場合はNaNになるのでnullのままにする
-    daysTodue = isNaN(calculatedDays) ? null : calculatedDays;
-  }
-
-  // 必須フィールド欠落チェック(緩和版: 明細データが提供されている場合のみ判定)
-  const hasMissingFields = hasLineData
-    ? lines.length === 0 || lines.every((l) => !l.product_code || !l.quantity || l.quantity === 0)
-    : false;
+  const {
+    primaryLine,
+    unallocatedQty,
+    daysTodue,
+    hasMissingFields,
+    totalQuantity,
+    primaryDeliveryPlace,
+    normalizedDueDate,
+  } = buildOrderCardMetrics(order, lines, hasLineData);
 
   return {
     ...order,
+    due_date: normalizedDueDate,
+    total_quantity: order.total_quantity ?? totalQuantity,
+    delivery_place_name: order.delivery_place_name ?? primaryLine?.delivery_place_name ?? null,
+    delivery_place_code: order.delivery_place_code ?? primaryLine?.delivery_place_code ?? null,
     priority,
     unallocatedQty,
     daysTodue,
     hasMissingFields,
+    totalQuantity,
+    primaryDeliveryPlace,
   };
 }
 

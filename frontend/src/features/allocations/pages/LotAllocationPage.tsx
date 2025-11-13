@@ -15,16 +15,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LotAllocationPane } from "../components/LotAllocationPane";
 import { OrderDetailPane } from "../components/OrderDetailPane";
 import { OrderListPane } from "../components/OrderListPane";
-import {
-  useWarehouseAllocations,
-  useOrderSelection,
-  useAutoSelection,
-  useAllocationMutation,
-  useSnackbar,
-  useOrderCards,
-} from "../hooks";
+import { useOrderSelection, useAutoSelection, useAllocationMutation, useSnackbar, useOrderCards } from "../hooks";
 import type { Order } from "../types";
+import { toQty } from "../utils/qty";
 
+import type { AllocationInputItem } from "@/features/allocations/api";
 import { getOrders, getOrder } from "@/features/orders/api";
 import { useLotsQuery, type Lot as CandidateLot } from "@/hooks/useLotsQuery";
 import { normalizeOrder } from "@/shared/libs/normalize";
@@ -101,14 +96,81 @@ export function LotAllocationPage() {
 
   const candidateLots: CandidateLot[] = useMemo(() => lotsQuery.data ?? [], [lotsQuery.data]);
 
-  // 倉庫別配分の状態管理
-  const {
-    warehouseAllocations,
-    setWarehouseAllocations,
-    warehouseSummaries, // ← Hookの戻り値
-    allocationList,
-    allocationTotalAll,
-  } = useWarehouseAllocations(candidateLots, selectedLineId);
+  // ロット単位の配分状態
+  const [lotAllocations, setLotAllocations] = useState<Record<number, number>>({});
+  const lastSelectedLineIdRef = useRef<number | null>(null);
+
+  // 明細が切り替わったら入力をリセット
+  useEffect(() => {
+    if (!selectedLineId) {
+      setLotAllocations({});
+      lastSelectedLineIdRef.current = null;
+      return;
+    }
+
+    if (lastSelectedLineIdRef.current !== Number(selectedLineId)) {
+      setLotAllocations({});
+      lastSelectedLineIdRef.current = Number(selectedLineId);
+    }
+  }, [selectedLineId]);
+
+  // 候補ロットの変化に応じて存在しないロットの入力を除去&上限クリップ
+  useEffect(() => {
+    if (!candidateLots.length) {
+      setLotAllocations((prev) => (Object.keys(prev).length ? {} : prev));
+      return;
+    }
+
+    setLotAllocations((prev) => {
+      const next: Record<number, number> = {};
+      let changed = false;
+
+      for (const lot of candidateLots) {
+        const lotId = (lot.id ?? lot.lot_id) as number | undefined;
+        if (!lotId) continue;
+
+        const maxQty = toQty(lot.free_qty ?? lot.current_stock?.current_quantity ?? lot.current_quantity);
+        const prevQty = prev[lotId] ?? 0;
+        const clampedQty = Math.min(Math.max(prevQty, 0), maxQty);
+
+        next[lotId] = clampedQty;
+        if (clampedQty !== prevQty) {
+          changed = true;
+        }
+      }
+
+      if (Object.keys(prev).length !== Object.keys(next).length) {
+        changed = true;
+      }
+
+      return changed ? next : prev;
+    });
+  }, [candidateLots]);
+
+  const allocationList: AllocationInputItem[] = useMemo(() => {
+    return candidateLots
+      .map<AllocationInputItem | null>((lot) => {
+        const lotId = (lot.id ?? lot.lot_id) as number | undefined;
+        if (!lotId) return null;
+
+        const quantity = Number(lotAllocations[lotId] ?? 0);
+        if (!Number.isFinite(quantity) || quantity <= 0) return null;
+
+        return {
+          lotId,
+          lot: null,
+          delivery_place_id: lot.delivery_place_id ?? null,
+          delivery_place_code: lot.delivery_place_code ?? null,
+          quantity,
+        };
+      })
+      .filter((item): item is AllocationInputItem => item !== null);
+  }, [candidateLots, lotAllocations]);
+
+  const allocationTotalAll = useMemo(
+    () => allocationList.reduce((sum, allocation) => sum + allocation.quantity, 0),
+    [allocationList],
+  );
 
   // 引当保存の処理
   const { handleSaveAllocations, canSave } = useAllocationMutation(
@@ -120,15 +182,28 @@ export function LotAllocationPage() {
     showError,
   );
 
-  // 倉庫配分変更ハンドラー
-  const handleWarehouseAllocationChange = useCallback(
-    (key: string, value: number) => {
-      setWarehouseAllocations((prev: Record<string, number>) => ({
-        ...prev,
-        [key]: value,
-      }));
+  // ロット配分変更ハンドラー
+  const handleLotAllocationChange = useCallback(
+    (lotId: number, value: number) => {
+      const targetLot = candidateLots.find((lot) => (lot.id ?? lot.lot_id) === lotId);
+      const maxQty = targetLot
+        ? toQty(targetLot.free_qty ?? targetLot.current_stock?.current_quantity ?? targetLot.current_quantity)
+        : Number.POSITIVE_INFINITY;
+
+      const clampedValue = Math.max(0, Math.min(maxQty, Number.isFinite(value) ? value : 0));
+
+      setLotAllocations((prev) => {
+        if (clampedValue === 0) {
+          if (!(lotId in prev)) return prev;
+          const { [lotId]: _omit, ...rest } = prev;
+          return rest;
+        }
+
+        if (prev[lotId] === clampedValue) return prev;
+        return { ...prev, [lotId]: clampedValue };
+      });
     },
-    [setWarehouseAllocations],
+    [candidateLots],
   );
 
   // スクロール位置の保存
@@ -172,11 +247,10 @@ export function LotAllocationPage() {
         selectedLine={selectedLine}
         lotsQuery={lotsQuery}
         candidateLots={candidateLots}
-        warehouseSummaries={warehouseSummaries}
-        warehouseAllocations={warehouseAllocations}
+        lotAllocations={lotAllocations}
         allocationTotalAll={allocationTotalAll}
         canSave={canSave}
-        onWarehouseAllocationChange={handleWarehouseAllocationChange}
+        onLotAllocationChange={handleLotAllocationChange}
         onSaveAllocations={handleSaveAllocations}
       />
 

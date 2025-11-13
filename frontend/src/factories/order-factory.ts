@@ -10,6 +10,7 @@ const nullToUndefined = <T>(value: T | null | undefined): T | undefined =>
 import { faker } from "@faker-js/faker/locale/ja";
 
 import type { OrderLine, OrderResponse, OrderWithLinesResponse } from "@/shared/types/aliases";
+import { coerceAllocatedLots } from "@/shared/libs/allocations";
 
 type OrderLineFactoryExtras = {
   product_name?: string | null;
@@ -45,12 +46,13 @@ export function createOrderLine(
   overrides?: Partial<OrderLineFactoryResult>,
 ): OrderLineFactoryResult {
   const quantity = overrides?.quantity ?? faker.number.int({ min: 1, max: 100 });
-  const allocatedFromLots = Array.isArray(overrides?.allocated_lots)
-    ? (overrides?.allocated_lots.reduce(
-        (sum, allocation) => sum + (allocation.allocated_qty ?? 0),
-        0,
-      ) ?? 0)
-    : 0;
+
+  const allocatedLots = coerceAllocatedLots(overrides?.allocated_lots);
+
+  const allocatedFromLots = allocatedLots.reduce(
+    (sum, allocation) => sum + (allocation.allocated_qty ?? 0),
+    0,
+  );
   const defaultAllocated = Math.min(
     quantity,
     allocatedFromLots > 0 ? allocatedFromLots : faker.number.int({ min: 0, max: quantity }),
@@ -60,13 +62,6 @@ export function createOrderLine(
   const explicitLineNo = overrides?.line_no ?? (overrides as { line_number?: number })?.line_number;
   const lineNo = explicitLineNo ?? faker.number.int({ min: 1, max: 999 });
   const unit = overrides?.unit ?? faker.helpers.arrayElement(["EA", "CASE", "BOX"]);
-
-  const allocatedLots = Array.isArray(overrides?.allocated_lots)
-    ? overrides.allocated_lots.map((lot) => ({
-        ...lot,
-        allocated_qty: lot.allocated_qty ?? 0,
-      }))
-    : [];
 
   const dueDate =
     overrides && "due_date" in overrides
@@ -177,7 +172,7 @@ export function createAllocatedOrder(
   order.lines = (order.lines ?? []).map((line) => ({
     ...line,
     allocated_qty: line.quantity,
-    allocated_lots: (line.allocated_lots ?? []).map((lot) => ({
+    allocated_lots: coerceAllocatedLots(line.allocated_lots).map((lot) => ({
       ...lot,
       allocated_qty: lot.allocated_qty ?? line.quantity,
     })),

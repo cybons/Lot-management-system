@@ -3,12 +3,12 @@
  */
 
 import type { UseQueryResult } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
 
 import type { Order, OrderLine } from "../types";
 
 import { OrderLineCard } from "./OrderLineCard";
+
+import { formatDate } from "@/shared/utils/date";
 
 interface OrderDetailPaneProps {
   selectedOrderId: number | null;
@@ -43,14 +43,15 @@ export function OrderDetailPane({
           受注明細: {orderDetailQuery.data?.order_no || `#${selectedOrderId}`}
         </h2>
         {orderDetailQuery.data && (
-          <div className="mt-2 flex gap-4 text-sm text-gray-600">
-            <span>得意先: {orderDetailQuery.data.customer_code || "—"}</span>
-            <span>
-              受注日:{" "}
-              {format(new Date(orderDetailQuery.data.order_date), "yyyy/MM/dd", {
-                locale: ja,
-              })}
-            </span>
+          <div className="mt-3 space-y-1 text-sm text-gray-600">
+            <div className="flex flex-wrap gap-x-6 gap-y-1">
+              <span>得意先: {orderDetailQuery.data.customer_name || orderDetailQuery.data.customer_code || "—"}</span>
+              <span>納品先: {orderDetailQuery.data.delivery_place_name || orderDetailQuery.data.delivery_place_code || "—"}</span>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-1">
+              <span>受注日: {formatDate(orderDetailQuery.data.order_date, { fallback: "—" })}</span>
+              <span>納期: {formatDate(orderDetailQuery.data.due_date ?? undefined, { fallback: "—" })}</span>
+            </div>
           </div>
         )}
       </div>
