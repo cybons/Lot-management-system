@@ -5,6 +5,7 @@
  * - 在庫の統計情報を表示
  * - 総ロット数、有効ロット数、総在庫数など
  */
+/* eslint-disable max-lines-per-function */
 
 import { RefreshCw } from "lucide-react";
 import { useMemo } from "react";

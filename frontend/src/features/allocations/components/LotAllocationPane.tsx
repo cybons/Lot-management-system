@@ -146,18 +146,33 @@ export function LotAllocationPane({
                       >
                         このロットから引当
                       </label>
-                      <input
-                        id={`lot-allocation-${lotId}`}
-                        type="number"
-                        min={0}
-                        max={availableQty}
-                        value={allocatedQty}
-                        onChange={(event) => {
-                          const parsed = Number(event.target.value);
-                          onLotAllocationChange(lotId, Number.isFinite(parsed) ? parsed : 0);
-                        }}
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                      />
+                      <div className="mt-1 flex gap-2">
+                        <input
+                          id={`lot-allocation-${lotId}`}
+                          type="number"
+                          min={0}
+                          max={availableQty}
+                          value={allocatedQty}
+                          onChange={(event) => {
+                            const parsed = Number(event.target.value);
+                            onLotAllocationChange(lotId, Number.isFinite(parsed) ? parsed : 0);
+                          }}
+                          className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const totalNeeded = selectedLine?.quantity ?? 0;
+                            const otherLotsTotal = allocationTotalAll - allocatedQty;
+                            const remainingNeeded = Math.max(0, totalNeeded - otherLotsTotal);
+                            const maxAllocation = Math.min(remainingNeeded, availableQty);
+                            onLotAllocationChange(lotId, maxAllocation);
+                          }}
+                          className="rounded border border-gray-300 bg-white px-3 py-2 text-xs font-medium whitespace-nowrap text-gray-700 transition hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
+                        >
+                          全量
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );

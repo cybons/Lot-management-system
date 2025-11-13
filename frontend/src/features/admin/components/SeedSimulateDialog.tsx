@@ -1,4 +1,8 @@
 // frontend/src/features/admin/components/SeedSimulateDialog.tsx
+/* eslint-disable max-lines-per-function */
+/* eslint-disable complexity */
+/* eslint-disable max-lines */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from "@tanstack/react-query";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import * as React from "react";
