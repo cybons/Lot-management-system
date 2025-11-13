@@ -37,7 +37,8 @@ import { FormDialog } from "@/shared/components/form";
 import { PageHeader, PageContainer, Section } from "@/shared/components/layout";
 // 既存の型とコンポーネント
 import type { OrderUI } from "@/shared/libs/normalize";
-import type { OrderLine, AllocatedLot } from "@/shared/types/aliases";
+import { coerceAllocatedLots } from "@/shared/libs/allocations";
+import type { OrderLine } from "@/shared/types/aliases";
 import { formatDate } from "@/shared/utils/date";
 import type { OrderCreate } from "@/utils/validators";
 
@@ -131,11 +132,11 @@ export function OrdersListPage() {
           const lines = order.lines || [];
           const totalQty = lines.reduce<number>((sum, line: OrderLine) => sum + line.quantity, 0);
           const allocatedQty = lines.reduce<number>((sum, line: OrderLine) => {
-            const allocated =
-              line.allocated_lots?.reduce<number>(
-                (a, alloc: AllocatedLot) => a + (alloc.allocated_qty || 0),
-                0,
-              ) || 0;
+            const lots = coerceAllocatedLots(line.allocated_lots);
+            const allocated = lots.reduce(
+              (acc, alloc) => acc + Number(alloc.allocated_qty ?? 0),
+              0,
+            );
             return sum + allocated;
           }, 0);
 

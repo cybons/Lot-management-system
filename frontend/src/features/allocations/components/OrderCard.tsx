@@ -18,18 +18,20 @@ export function OrderCard({ order, isSelected, onClick }: OrderCardProps) {
   const badgeColor = getBadgeColor(order.priority);
   const primaryLine = order.lines?.[0];
 
-  // 納品先表示のフォールバック（優先順: delivery_place_name → delivery_place_code → ship_to → "―"）
-  const deliveryDestination =
-    (primaryLine as any)?.delivery_place_name ||
-    (primaryLine as any)?.delivery_place_code ||
-    order.ship_to ||
-    "―";
+  const deliveryDestination = order.primaryDeliveryPlace || "―";
 
-  const quantityText =
-    primaryLine?.quantity != null
-      ? `${primaryLine.quantity.toLocaleString()}${primaryLine.unit ? ` ${primaryLine.unit}` : ""}`
-      : "―";
-  const dueDateSource = primaryLine?.due_date ?? order.due_date ?? null;
+  const quantityText = (() => {
+    if (order.totalQuantity != null && order.totalQuantity > 0) {
+      const unit = primaryLine?.unit ? ` ${primaryLine.unit}` : "";
+      return `${order.totalQuantity.toLocaleString()}${unit}`;
+    }
+    if (primaryLine?.quantity != null) {
+      return `${primaryLine.quantity.toLocaleString()}${primaryLine.unit ? ` ${primaryLine.unit}` : ""}`;
+    }
+    return "―";
+  })();
+
+  const dueDateSource = order.due_date ?? primaryLine?.due_date ?? null;
   const dueDateText = formatDate(dueDateSource, { formatString: "MM/dd", fallback: "―" });
 
   return (

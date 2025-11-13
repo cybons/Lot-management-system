@@ -14,7 +14,11 @@ export interface Order {
   customer_code: string | null;
   customer_name?: string;
   order_date: string;
-  due_date?: string;
+  due_date?: string | null;
+  delivery_place_code?: string | null;
+  delivery_place_name?: string | null;
+  delivery_place?: string | null;
+  total_quantity?: number | null;
   ship_to?: string;
   status: string;
   lines?: OrderLine[];
@@ -25,6 +29,8 @@ export interface OrderCardData extends Order {
   unallocatedQty: number;
   daysTodue: number | null;
   hasMissingFields: boolean;
+  totalQuantity: number;
+  primaryDeliveryPlace?: string | null;
 }
 
 export type WarehouseSummary = {

@@ -4,6 +4,8 @@
 
 import type { OrderLine } from "../types";
 
+import { formatDate } from "@/shared/utils/date";
+
 interface OrderLineCardProps {
   line: OrderLine;
   isSelected: boolean;
@@ -28,6 +30,9 @@ export function OrderLineCard({
   const pendingApplied = Math.max(0, displayedAllocated - allocatedQty);
   const remainingQty = Math.max(0, totalQuantity - displayedAllocated);
   const progress = totalQuantity > 0 ? (displayedAllocated / totalQuantity) * 100 : 0;
+  const productCode = line.product_code || "—";
+  const showProductName = Boolean(line.product_name && line.product_name !== line.product_code);
+  const unitLabel = line.unit ?? "";
 
   return (
     <button
@@ -41,15 +46,15 @@ export function OrderLineCard({
     >
       <div className="mb-2 flex items-start justify-between">
         <div>
-          <div className="font-medium">{line.product_code || line.product_name || "—"}</div>
-          {line.product_name && <div className="text-xs text-gray-500">{line.product_name}</div>}
+          <div className="font-medium">{productCode}</div>
+          {showProductName && <div className="text-xs text-gray-500">{line.product_name}</div>}
           <div className="text-xs text-gray-400">明細 #{line.line_no}</div>
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold">
             {displayedAllocated.toLocaleString()} / {totalQuantity.toLocaleString()}
           </div>
-          <div className="text-xs text-gray-500">{line.unit}</div>
+          <div className="text-xs text-gray-500">{unitLabel}</div>
           {pendingApplied > 0 && (
             <div className="text-[11px] text-blue-600">
               確定 {allocatedQty.toLocaleString()} + 配分 {pendingApplied.toLocaleString()}
@@ -68,11 +73,22 @@ export function OrderLineCard({
         />
       </div>
 
-      <div className="flex justify-between text-xs">
-        <span className="text-gray-600">{progress.toFixed(0)}% 引当済</span>
-        {remainingQty > 0 && (
+      <div className="flex justify-between text-xs text-gray-600">
+        <span>
+          受注数量: {totalQuantity.toLocaleString()} {unitLabel}
+        </span>
+        <span>{progress.toFixed(0)}% 引当済</span>
+      </div>
+
+      <div className="mt-1 flex justify-between text-xs text-gray-600">
+        {remainingQty > 0 ? (
           <span className="font-medium text-orange-600">残り {remainingQty.toLocaleString()}</span>
+        ) : (
+          <span className="invisible">-</span>
         )}
+        <span className="text-gray-500">
+          納期: {formatDate(line.due_date, { fallback: "—", formatString: "MM/dd" })}
+        </span>
       </div>
 
       {/* 引当詳細(あれば表示) */}
