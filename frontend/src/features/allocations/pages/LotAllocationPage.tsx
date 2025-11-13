@@ -99,10 +99,7 @@ export function LotAllocationPage() {
 
   const lotsQuery = useLotsQuery(lotsQueryInput);
 
-  const candidateLots: CandidateLot[] = useMemo(
-    () => lotsQuery.data ?? [],
-    [lotsQuery.data],
-  );
+  const candidateLots: CandidateLot[] = useMemo(() => lotsQuery.data ?? [], [lotsQuery.data]);
 
   // 倉庫別配分の状態管理
   const {
