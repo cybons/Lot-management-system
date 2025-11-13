@@ -76,15 +76,27 @@ export function OrderDetailPane({
 
         {orderDetailQuery.data?.lines && orderDetailQuery.data.lines.length > 0 && (
           <div className="space-y-2">
-            {orderDetailQuery.data.lines.map((line: OrderLine) => (
-              <OrderLineCard
-                key={line.id}
-                line={line}
-                isSelected={line.id === selectedLineId}
-                onClick={() => onSelectLine(line.id)}
-                pendingAllocatedQty={line.id === selectedLineId ? allocationTotalAll : 0}
-              />
-            ))}
+            {orderDetailQuery.data.lines.map((line: OrderLine) => {
+              const lineId = Number(line.id);
+
+              return (
+                <OrderLineCard
+                  key={line.id}
+                  line={line}
+                  isSelected={
+                    Number.isFinite(lineId) && selectedLineId != null
+                      ? lineId === Number(selectedLineId)
+                      : line.id === selectedLineId
+                  }
+                  onClick={() => onSelectLine(Number.isFinite(lineId) ? lineId : line.id)}
+                  pendingAllocatedQty={
+                    Number.isFinite(lineId) && selectedLineId != null && lineId === Number(selectedLineId)
+                      ? allocationTotalAll
+                      : 0
+                  }
+                />
+              );
+            })}
           </div>
         )}
 

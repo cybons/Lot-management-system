@@ -73,7 +73,14 @@ export function LotAllocationPage() {
   );
 
   // 選択された明細行
-  const selectedLine = orderDetailQuery.data?.lines?.find((line) => line.id === selectedLineId);
+  const normalizedSelectedLineId =
+    selectedLineId != null && Number.isFinite(Number(selectedLineId))
+      ? Number(selectedLineId)
+      : null;
+  const selectedLine =
+    normalizedSelectedLineId != null
+      ? orderDetailQuery.data?.lines?.find((line) => Number(line.id) === normalizedSelectedLineId)
+      : undefined;
 
   // ロット候補を取得
   // product_codeがnullの場合はproduct_idでフィルタする
