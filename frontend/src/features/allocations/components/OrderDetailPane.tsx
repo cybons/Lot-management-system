@@ -90,7 +90,9 @@ export function OrderDetailPane({
                   }
                   onClick={() => onSelectLine(Number.isFinite(lineId) ? lineId : line.id)}
                   pendingAllocatedQty={
-                    Number.isFinite(lineId) && selectedLineId != null && lineId === Number(selectedLineId)
+                    Number.isFinite(lineId) &&
+                    selectedLineId != null &&
+                    lineId === Number(selectedLineId)
                       ? allocationTotalAll
                       : 0
                   }

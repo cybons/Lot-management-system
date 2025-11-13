@@ -22,8 +22,7 @@ export const getLots = (params?: LotsGetParams) => {
 
   if (params?.skip !== undefined) searchParams.append("skip", params.skip.toString());
   if (params?.limit !== undefined) searchParams.append("limit", params.limit.toString());
-  if (params?.product_id != null)
-    searchParams.append("product_id", params.product_id.toString());
+  if (params?.product_id != null) searchParams.append("product_id", params.product_id.toString());
   if (params?.product_code) searchParams.append("product_code", params.product_code);
   if (params?.supplier_code) searchParams.append("supplier_code", params.supplier_code);
   if (params?.delivery_place_code)

@@ -54,7 +54,10 @@ function normalizeLots(res: unknown): CandidateLotItem[] {
 export function useLotsQuery(params?: UseLotsQueryParams) {
   const hasLookupKey = Boolean(
     params &&
-      (params.productId != null || params.productCode || params.deliveryPlaceCode || params.supplierCode),
+      (params.productId != null ||
+        params.productCode ||
+        params.deliveryPlaceCode ||
+        params.supplierCode),
   );
 
   return useQuery<Lot[], Error>({
