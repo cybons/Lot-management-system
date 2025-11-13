@@ -37,7 +37,7 @@ class OrderService:
         date_from: date | None = None,
         date_to: date | None = None,
     ) -> list[OrderResponse]:
-        stmt: Select[Order] = select(Order)
+        stmt: Select[Order] = select(Order).options(selectinload(Order.order_lines))
 
         if status:
             stmt = stmt.where(Order.status == status)
@@ -50,7 +50,7 @@ class OrderService:
 
         stmt = stmt.order_by(Order.order_date.desc()).offset(skip).limit(limit)
         orders = self.db.execute(stmt).scalars().all()
-        return [OrderResponse.model_validate(order) for order in orders]
+        return [OrderWithLinesResponse.model_validate(order) for order in orders]
 
     def get_order_detail(self, order_id: int) -> OrderWithLinesResponse:
         from app.schemas import OrderLineOut
