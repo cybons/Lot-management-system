@@ -99,7 +99,7 @@ export function LotAllocationPage() {
   const {
     warehouseAllocations,
     setWarehouseAllocations,
-    warehouseSummaries,
+    warehouseSummaries, // ← Hookの戻り値
     allocationList,
     allocationTotalAll,
   } = useWarehouseAllocations(candidateLots, selectedLineId);
@@ -117,7 +117,7 @@ export function LotAllocationPage() {
   // 倉庫配分変更ハンドラー
   const handleWarehouseAllocationChange = useCallback(
     (key: string, value: number) => {
-      setWarehouseAllocations((prev) => ({
+      setWarehouseAllocations((prev: Record<string, number>) => ({
         ...prev,
         [key]: value,
       }));

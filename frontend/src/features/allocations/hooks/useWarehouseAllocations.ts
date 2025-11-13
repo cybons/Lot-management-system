@@ -1,102 +1,76 @@
 /**
- * Custom hook for managing warehouse allocation state
- * 倉庫ごとの在庫集計・配分管理（物理的な在庫所在の管理用）
+ * 倉庫別配分（= 今は delivery_place 単位）の管理フック
+ * - サマリ集計キー: delivery_place_code -> delivery_place_id -> lot.id
+ * - 数値化は toQty に統一
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-
+import { toQty } from "../utils/qty";
 import type { WarehouseSummary } from "../types";
-
 import type { AllocationInputItem } from "@/features/allocations/api";
 import type { Lot as CandidateLot } from "@/hooks/useLotsQuery";
 
 export function useWarehouseAllocations(
-  candidateLots: CandidateLot[],
+  candidateLots: CandidateLot[] = [],
   selectedLineId: number | null,
 ) {
   const [warehouseAllocations, setWarehouseAllocations] = useState<Record<string, number>>({});
   const lastSelectedLineIdRef = useRef<number | null>(null);
 
-  // 倉庫サマリーの計算（delivery_place_idで集計）
+  // delivery_place 単位でサマリ集計
   const warehouseSummaries: WarehouseSummary[] = useMemo(() => {
     const map = new Map<string, WarehouseSummary>();
-    candidateLots.forEach((lot) => {
-      // delivery_place_idをキーとして使用（在庫所在の物理的な管理）
-      const key = String(lot.delivery_place_id ?? lot.id);
-      const existing = map.get(key) ?? {
-        key,
-        warehouseId: lot.delivery_place_id ?? undefined,
-        warehouseCode: null, // delivery_place_codeは廃止
-        warehouseName: lot.warehouse_name ?? null,
-        totalStock: 0,
-      };
+    for (const lot of candidateLots ?? []) {
+      const key = String(lot.delivery_place_code ?? (lot as any).delivery_place_id ?? lot.id);
+      const existing =
+        map.get(key) ??
+        ({
+          key,
+          warehouseId: (lot as any).delivery_place_id ?? undefined,
+          warehouseCode: lot.delivery_place_code ?? null,
+          warehouseName: lot.delivery_place_name ?? lot.warehouse_name ?? null,
+          totalStock: 0,
+        } as WarehouseSummary);
 
-      existing.totalStock += Number(lot.current_stock?.current_quantity ?? 0);
+      existing.totalStock += toQty(lot.free_qty ?? lot.current_quantity);
       map.set(key, existing);
-    });
-
+    }
     return Array.from(map.values());
   }, [candidateLots]);
 
-  // 倉庫配分の初期化(明細が変わったときのみリセット)
+  // 明細切替時は配分初期化／同一なら維持
   useEffect(() => {
-    // 明細が変わったかチェック
     const lineChanged = lastSelectedLineIdRef.current !== (selectedLineId ?? null);
-
-    if (warehouseSummaries.length === 0) {
-      if (lineChanged) {
-        setWarehouseAllocations({});
-        lastSelectedLineIdRef.current = selectedLineId ?? null;
-      }
-      return;
-    }
-
-    // 倉庫のキー一覧を取得
-    const newKeys = warehouseSummaries.map((w) => w.key).sort();
-
     setWarehouseAllocations((prev) => {
-      const prevKeys = Object.keys(prev).sort();
-
-      // キーが同じで、明細も変わっていない場合は更新しない（無限ループ防止）
-      const keysMatch =
-        newKeys.length === prevKeys.length && newKeys.every((key, i) => key === prevKeys[i]);
-      if (!lineChanged && keysMatch) {
-        return prev;
-      }
-
-      // 新しい配分オブジェクトを作成
       const next: Record<string, number> = {};
-      warehouseSummaries.forEach((warehouse) => {
-        next[warehouse.key] = lineChanged ? 0 : (prev[warehouse.key] ?? 0);
-      });
+      for (const w of warehouseSummaries) {
+        next[w.key] = lineChanged ? 0 : (prev[w.key] ?? 0);
+      }
       return next;
     });
-
-    if (lineChanged) {
-      lastSelectedLineIdRef.current = selectedLineId ?? null;
-    }
+    if (lineChanged) lastSelectedLineIdRef.current = selectedLineId ?? null;
   }, [selectedLineId, warehouseSummaries]);
 
-  // 配分リスト(保存用)
+  // 保存用の配分リスト
   const allocationList: AllocationInputItem[] = useMemo(() => {
     return warehouseSummaries
-      .map((warehouse) => ({
-        lotId: 0, // TODO: ロット選択機能実装時に適切なlot_idを設定
-        lot: null, // TODO: ロット選択機能実装時に適切なlotオブジェクトを設定
-        delivery_place_id: warehouse.warehouseId ?? null,
-        delivery_place_code: null, // delivery_place_codeは廃止
-        quantity: Number(warehouseAllocations[warehouse.key] ?? 0),
+      .map((w) => ({
+        lotId: 0, // TODO: ロット選択実装時に差し替え
+        lot: null,
+        delivery_place_id: w.warehouseId ?? null,
+        delivery_place_code: w.warehouseCode,
+        quantity: Number(warehouseAllocations[w.key] ?? 0),
       }))
-      .filter((item) => item.quantity > 0);
+      .filter((x) => x.quantity > 0);
   }, [warehouseSummaries, warehouseAllocations]);
 
-  // 配分合計
+  // 合計
   const allocationTotalAll = useMemo(() => {
-    return warehouseSummaries.reduce(
-      (sum, warehouse) => sum + Number(warehouseAllocations[warehouse.key] ?? 0),
+    return Object.values(warehouseAllocations).reduce(
+      (a, b) => a + (Number.isFinite(b) ? Number(b) : 0),
       0,
     );
-  }, [warehouseSummaries, warehouseAllocations]);
+  }, [warehouseAllocations]);
 
   return {
     warehouseAllocations,

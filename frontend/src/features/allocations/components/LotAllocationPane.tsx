@@ -1,11 +1,13 @@
 /**
  * LotAllocationPane - Right pane for lot candidates and warehouse allocations
+ * - 倉庫サマリを Pane 内で確実に計算（propsが来ていればそれを優先）
+ * - 在庫表示は free_qty ?? current_quantity を数値化
  */
 
+import { useMemo } from "react";
 import type { UseQueryResult } from "@tanstack/react-query";
-
 import type { OrderLine, WarehouseSummary } from "../types";
-
+import { toQty } from "../utils/qty";
 import type { Lot as CandidateLot } from "@/hooks/useLotsQuery";
 import { formatCodeAndName } from "@/shared/libs/utils";
 
@@ -14,12 +16,35 @@ interface LotAllocationPaneProps {
   selectedLine: OrderLine | undefined;
   lotsQuery: UseQueryResult<CandidateLot[], Error>;
   candidateLots: CandidateLot[];
-  warehouseSummaries: WarehouseSummary[];
+  /** 渡されなければ Pane 内で計算したものを使用 */
+  warehouseSummaries?: WarehouseSummary[];
   warehouseAllocations: Record<string, number>;
   allocationTotalAll: number;
   canSave: boolean;
   onWarehouseAllocationChange: (key: string, value: number) => void;
   onSaveAllocations: () => void;
+}
+
+/** 倉庫サマリを candidateLots から計算（delivery_place 基準で集計） */
+function computeWarehouseSummaries(lots: CandidateLot[]): WarehouseSummary[] {
+  const map = new Map<string, WarehouseSummary>();
+  for (const lot of lots ?? []) {
+    const key = String(lot.delivery_place_code ?? (lot as any).delivery_place_id ?? lot.id);
+    const existing =
+      map.get(key) ??
+      ({
+        key,
+        warehouseId: (lot as any).delivery_place_id ?? undefined, // いまは delivery_place を倉庫代替
+        warehouseCode: lot.delivery_place_code ?? null,
+        warehouseName: lot.delivery_place_name ?? lot.warehouse_name ?? null,
+        totalStock: 0,
+      } as WarehouseSummary);
+
+    // free_qty が優先。なければ current_quantity
+    existing.totalStock += toQty(lot.free_qty ?? lot.current_quantity);
+    map.set(key, existing);
+  }
+  return Array.from(map.values());
 }
 
 export function LotAllocationPane({
@@ -43,6 +68,11 @@ export function LotAllocationPane({
       </div>
     );
   }
+
+  // 渡されていなければ Pane 内で計算する
+  const computedWarehouseSummaries =
+    warehouseSummaries ??
+    useMemo(() => computeWarehouseSummaries(candidateLots ?? []), [candidateLots]);
 
   return (
     <div className="w-[420px] overflow-y-auto border-l bg-white">
@@ -69,7 +99,7 @@ export function LotAllocationPane({
                 : "サーバーエラーが発生しました"}
             </p>
           </div>
-        ) : candidateLots.length === 0 ? (
+        ) : (candidateLots?.length ?? 0) === 0 ? (
           <div className="rounded-lg border border-gray-200 bg-white p-6 text-center">
             <p className="text-sm font-medium text-gray-600">候補ロットがありません</p>
             <p className="mt-1 text-xs text-gray-400">この製品の在庫が存在しません</p>
@@ -94,13 +124,14 @@ export function LotAllocationPane({
                       </div>
                     )}
                   </div>
+
                   <div className="text-right">
                     <div className="text-xs text-gray-500">利用可能</div>
                     <div className="mt-1 text-lg font-bold text-blue-600">
-                      {Number(lot.current_stock?.current_quantity ?? lot.free_qty ?? 0).toLocaleString()}
+                      {toQty(lot.free_qty ?? lot.current_quantity).toLocaleString()}
                     </div>
                     <div className="text-xs text-gray-400">
-                      総在庫: {Number(lot.current_quantity ?? 0).toLocaleString()}
+                      総在庫: {toQty(lot.current_quantity).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -109,29 +140,27 @@ export function LotAllocationPane({
           </div>
         )}
 
-        {/* 倉庫別配分入力 */}
+        {/* 倉庫別配分 */}
         <div>
           <h3 className="mb-3 text-lg font-semibold">倉庫別配分</h3>
-          {warehouseSummaries.length === 0 ? (
+
+          {computedWarehouseSummaries.length === 0 ? (
             <div className="py-4 text-sm text-gray-500">配分可能な倉庫がありません</div>
           ) : (
             <div className="space-y-3">
-              {warehouseSummaries.map((warehouse) => {
-                const currentValue = warehouseAllocations[warehouse.key] ?? 0;
-                const warehouseName = formatCodeAndName(
-                  warehouse.warehouseCode,
-                  warehouse.warehouseName,
-                );
+              {computedWarehouseSummaries.map((w) => {
+                const currentValue = warehouseAllocations[w.key] ?? 0;
+                const warehouseName = formatCodeAndName(w.warehouseCode, w.warehouseName);
 
                 return (
                   <div
-                    key={warehouse.key}
+                    key={w.key}
                     className="rounded-lg border p-3 transition hover:border-gray-300"
                   >
                     <div className="mb-2 flex items-center justify-between">
                       <div className="text-sm font-medium">{warehouseName}</div>
                       <div className="text-xs text-gray-500">
-                        在庫: {warehouse.totalStock.toLocaleString()}
+                        在庫: {w.totalStock.toLocaleString()}
                       </div>
                     </div>
 
@@ -139,14 +168,14 @@ export function LotAllocationPane({
                       <input
                         type="number"
                         min="0"
-                        max={warehouse.totalStock}
+                        max={w.totalStock}
                         value={currentValue}
                         onChange={(e) => {
                           const value = Math.max(
                             0,
-                            Math.min(warehouse.totalStock, Number(e.target.value) || 0),
+                            Math.min(w.totalStock, Number(e.target.value) || 0),
                           );
-                          onWarehouseAllocationChange(warehouse.key, value);
+                          onWarehouseAllocationChange(w.key, value);
                         }}
                         className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                       />
@@ -154,11 +183,8 @@ export function LotAllocationPane({
                         className="rounded bg-gray-100 px-3 py-2 text-xs font-medium transition hover:bg-gray-200"
                         onClick={() => {
                           const remaining = selectedLine.quantity - allocationTotalAll;
-                          const allocatable = Math.min(
-                            remaining + currentValue,
-                            warehouse.totalStock,
-                          );
-                          onWarehouseAllocationChange(warehouse.key, allocatable);
+                          const allocatable = Math.min(remaining + currentValue, w.totalStock);
+                          onWarehouseAllocationChange(w.key, allocatable);
                         }}
                       >
                         最大
