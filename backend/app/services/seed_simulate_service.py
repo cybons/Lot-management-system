@@ -7,6 +7,7 @@ import logging
 import traceback
 from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 from random import Random
 from typing import Any
 
@@ -16,7 +17,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.core.database import truncate_all_tables
-from app.models.forecast_models import Forecast
+from app.models.forecast_models import ForecastHeader, ForecastLine
 from app.models.inventory_models import Lot, StockMovement
 from app.models.masters_models import Customer, DeliveryPlace, Product, Supplier, Warehouse
 from app.models.orders_models import Allocation, Order, OrderLine
@@ -315,109 +316,75 @@ def run_seed_simulation(
             f"generate={generate_forecasts}, customers={len(all_customers)}, products={len(all_products)}",
         )
 
-        if generate_forecasts and all_customers and all_products:
-            # 既存のforecast_idを取得（重複防止）
-            existing_forecast_ids = {
-                fid for (fid,) in db.execute(select(Forecast.forecast_id)).all()
-            }
-
-            forecast_rows = []
+        if generate_forecasts and all_customers and all_products and all_delivery_places:
             now = datetime.now(UTC)
             today = now.date()
+            existing_numbers = {
+                number
+                for (number,) in db.execute(select(ForecastHeader.forecast_number)).all()
+            }
 
-            # 各customer × product ペアに対して forecasts を生成
-            for cust in all_customers:
-                for prod in all_products:
-                    # daily: 今日±7日
-                    for day_offset in range(-7, 8):
-                        target_date = today + timedelta(days=day_offset)
-                        forecast_id = f"seed-{cust.id}-{prod.id}-daily-{target_date}"
-                        if forecast_id in existing_forecast_ids:
-                            continue
-                        forecast_rows.append(
-                            {
-                                "forecast_id": forecast_id,
-                                "granularity": "daily",
-                                "date_day": target_date,
-                                "date_dekad_start": None,
-                                "year_month": None,
-                                "qty_forecast": rng.randint(10, 1000),
-                                "version_no": 1,
-                                "version_issued_at": now,
-                                "source_system": "seed",
-                                "is_active": True,
-                                "product_id": prod.id,
-                                "customer_id": cust.id,
-                                "created_at": now,
-                                "updated_at": now,
-                            }
+            forecast_headers: list[ForecastHeader] = []
+            for delivery_place in all_delivery_places:
+                start_date = today - timedelta(days=7)
+                end_date = today + timedelta(days=7)
+                base_number = f"SEED-{delivery_place.delivery_place_code}-{start_date:%Y%m%d}"
+                forecast_number = base_number
+                suffix = 1
+                while forecast_number in existing_numbers:
+                    forecast_number = f"{base_number}-{suffix}"
+                    suffix += 1
+                existing_numbers.add(forecast_number)
+
+                header = ForecastHeader(
+                    customer_id=delivery_place.customer_id,
+                    delivery_place_id=delivery_place.id,
+                    forecast_number=forecast_number,
+                    forecast_start_date=start_date,
+                    forecast_end_date=end_date,
+                    status="active",
+                    created_at=now,
+                    updated_at=now,
+                )
+                db.add(header)
+                forecast_headers.append(header)
+
+            db.flush()
+
+            forecast_lines: list[ForecastLine] = []
+            for header in forecast_headers:
+                # 各ヘッダーにつき最大5製品の予測を生成
+                if len(all_products) <= 5:
+                    products_for_header = all_products
+                else:
+                    products_for_header = rng.sample(all_products, 5)
+
+                days = (header.forecast_end_date - header.forecast_start_date).days + 1
+                for prod in products_for_header:
+                    for day_offset in range(days):
+                        delivery_date = header.forecast_start_date + timedelta(days=day_offset)
+                        forecast_lines.append(
+                            ForecastLine(
+                                forecast_id=header.id,
+                                product_id=prod.id,
+                                delivery_date=delivery_date,
+                                forecast_quantity=Decimal(rng.randint(10, 1000)),
+                                unit=prod.base_unit or "PCS",
+                                created_at=now,
+                                updated_at=now,
+                            )
                         )
-                        existing_forecast_ids.add(forecast_id)
 
-                    # dekad: 当月の3区間（1日, 11日, 21日）
-                    for dekad_start_day in [1, 11, 21]:
-                        dekad_start = today.replace(day=dekad_start_day)
-                        forecast_id = f"seed-{cust.id}-{prod.id}-dekad-{dekad_start}"
-                        if forecast_id in existing_forecast_ids:
-                            continue
-                        forecast_rows.append(
-                            {
-                                "forecast_id": forecast_id,
-                                "granularity": "dekad",
-                                "date_day": None,
-                                "date_dekad_start": dekad_start,
-                                "year_month": None,
-                                "qty_forecast": rng.randint(10, 1000),
-                                "version_no": 1,
-                                "version_issued_at": now,
-                                "source_system": "seed",
-                                "is_active": True,
-                                "product_id": prod.id,
-                                "customer_id": cust.id,
-                                "created_at": now,
-                                "updated_at": now,
-                            }
-                        )
-                        existing_forecast_ids.add(forecast_id)
-
-                    # monthly: 当月〜+2ヶ月
-                    for month_offset in range(0, 3):
-                        target_month_date = today.replace(day=1) + timedelta(days=31 * month_offset)
-                        year_month = target_month_date.strftime("%Y-%m")
-                        forecast_id = f"seed-{cust.id}-{prod.id}-monthly-{year_month}"
-                        if forecast_id in existing_forecast_ids:
-                            continue
-                        forecast_rows.append(
-                            {
-                                "forecast_id": forecast_id,
-                                "granularity": "monthly",
-                                "date_day": None,
-                                "date_dekad_start": None,
-                                "year_month": year_month,
-                                "qty_forecast": rng.randint(10, 1000),
-                                "version_no": 1,
-                                "version_issued_at": now,
-                                "source_system": "seed",
-                                "is_active": True,
-                                "product_id": prod.id,
-                                "customer_id": cust.id,
-                                "created_at": now,
-                                "updated_at": now,
-                            }
-                        )
-                        existing_forecast_ids.add(forecast_id)
-
-            # bulk insert
-            if forecast_rows:
-                tracker.add_log(task_id, f"→ Inserting {len(forecast_rows)} forecast rows...")
-                db.bulk_insert_mappings(Forecast, forecast_rows)
+            if forecast_lines:
+                tracker.add_log(task_id, f"→ Inserting {len(forecast_lines)} forecast lines...")
+                db.bulk_save_objects(forecast_lines)
                 db.flush()
-                forecast_count = len(forecast_rows)
+                forecast_count = len(forecast_lines)
                 tracker.add_log(
-                    task_id, f"✓ Created {forecast_count} forecasts (daily/dekad/monthly)"
+                    task_id, f"✓ Created {forecast_count} forecast line entries"
                 )
             else:
-                tracker.add_log(task_id, "→ No forecast rows to insert (all duplicates or empty)")
+                tracker.add_log(task_id, "→ No forecast lines generated for headers")
         else:
             reasons = []
             if not generate_forecasts:
@@ -426,6 +393,8 @@ def run_seed_simulation(
                 reasons.append("no customers")
             if not all_products:
                 reasons.append("no products")
+            if not all_delivery_places:
+                reasons.append("no delivery places")
             tracker.add_log(task_id, f"→ Forecast generation skipped: {', '.join(reasons)}")
 
         db.commit()
