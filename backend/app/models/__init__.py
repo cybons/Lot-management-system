@@ -1,8 +1,18 @@
 """Models Package."""
 
 from .base_model import Base
-from .forecast_models import Forecast
-from .inventory_models import ExpiryRule, Lot, LotCurrentStock, StockMovement, StockMovementReason
+from .forecast_models import Forecast, ForecastHeader, ForecastLine, ForecastStatus
+from .inbound_models import ExpectedLot, InboundPlan, InboundPlanLine, InboundPlanStatus
+from .inventory_models import (
+    Adjustment,
+    AdjustmentType,
+    InventoryItem,
+    Lot,
+    LotCurrentStock,
+    StockMovement,
+    StockMovementReason,
+    StockTransactionType,
+)
 from .logs_models import InboundSubmission, OcrSubmission, SapSyncLog
 from .masters_models import Customer, DeliveryPlace, Product, Supplier, UnitConversion, Warehouse
 from .orders_models import (
@@ -26,9 +36,20 @@ __all__ = [
     "UnitConversion",
     "Lot",
     "StockMovement",
+    "StockTransactionType",
     "StockMovementReason",
     "LotCurrentStock",
-    "ExpiryRule",
+    "InventoryItem",
+    "Adjustment",
+    "AdjustmentType",
+    "ExpectedLot",
+    "InboundPlan",
+    "InboundPlanLine",
+    "InboundPlanStatus",
+    "ForecastHeader",
+    "ForecastLine",
+    "ForecastStatus",
+    "Forecast",
     "Order",
     "OrderLine",
     "OrderLineWarehouseAllocation",
@@ -37,7 +58,6 @@ __all__ = [
     "InboundSubmission",
     "OcrSubmission",
     "SapSyncLog",
-    "Forecast",
     "SeedSnapshot",
     # Views (read-only)
     "VLotAvailableQty",

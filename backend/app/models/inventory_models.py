@@ -1,5 +1,3 @@
-"""Inventory-related models aligned with the PostgreSQL schema."""
-
 from __future__ import annotations
 
 from datetime import date, datetime
@@ -8,15 +6,16 @@ from enum import Enum as PyEnum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
-    Boolean,
+    BigInteger,
+    CheckConstraint,
     Date,
     DateTime,
     ForeignKey,
     Index,
-    Integer,
     Numeric,
     String,
     Text,
+    UniqueConstraint,
     func,
     text,
 )
@@ -26,174 +25,254 @@ from .base_model import Base
 
 
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
+    from .inbound_models import ExpectedLot
     from .masters_models import Product, Supplier, Warehouse
     from .orders_models import Allocation
 
 
-class StockMovementReason(str, PyEnum):
+class StockTransactionType(str, PyEnum):
+    """Enumerates valid stock transaction types."""
+
     INBOUND = "inbound"
-    OUTBOUND = "outbound"
-    TRANSFER = "transfer"
+    ALLOCATION = "allocation"
+    SHIPMENT = "shipment"
     ADJUSTMENT = "adjustment"
-    SCRAP = "scrap"
+    RETURN = "return"
 
 
 class Lot(Base):
-    """Lot master records."""
+    """Represents physical inventory lots."""
 
     __tablename__ = "lots"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    lot_number: Mapped[str] = mapped_column(Text, nullable=False)
-    receipt_date: Mapped[date] = mapped_column(Date, nullable=False)
-    mfg_date: Mapped[date | None] = mapped_column(Date)
-    expiry_date: Mapped[date | None] = mapped_column(Date)
-    kanban_class: Mapped[str | None] = mapped_column(Text)
-    sales_unit: Mapped[str | None] = mapped_column(Text)
-    inventory_unit: Mapped[str | None] = mapped_column(Text)
-    received_by: Mapped[str | None] = mapped_column(Text)
-    source_doc: Mapped[str | None] = mapped_column(Text)
-    qc_certificate_status: Mapped[str | None] = mapped_column(Text)
-    qc_certificate_file: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime | None] = mapped_column(DateTime)
-    updated_at: Mapped[datetime | None] = mapped_column(DateTime)
-    created_by: Mapped[str | None] = mapped_column(String(50))
-    updated_by: Mapped[str | None] = mapped_column(String(50))
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
-    warehouse_code_old: Mapped[str | None] = mapped_column(Text)
-    lot_unit: Mapped[str | None] = mapped_column(String(10))
-    is_locked: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
-    lock_reason: Mapped[str | None] = mapped_column(Text)
-    inspection_date: Mapped[date | None] = mapped_column(Date)
-    inspection_result: Mapped[str | None] = mapped_column(Text)
-    warehouse_id: Mapped[int | None] = mapped_column(
-        ForeignKey("warehouses.id", ondelete="RESTRICT"), nullable=True
+    id: Mapped[int] = mapped_column("lot_id", BigInteger, primary_key=True)
+    lot_number: Mapped[str] = mapped_column(String(100), nullable=False)
+    product_id: Mapped[int] = mapped_column(
+        "product_id",
+        BigInteger,
+        ForeignKey("products.product_id", ondelete="RESTRICT"),
+        nullable=False,
     )
-    product_id: Mapped[int | None] = mapped_column(
-        ForeignKey("products.id", ondelete="RESTRICT"), nullable=True
+    warehouse_id: Mapped[int] = mapped_column(
+        "warehouse_id",
+        BigInteger,
+        ForeignKey("warehouses.warehouse_id", ondelete="RESTRICT"),
+        nullable=False,
     )
     supplier_id: Mapped[int | None] = mapped_column(
-        ForeignKey("suppliers.id", ondelete="RESTRICT"), nullable=True
+        "supplier_id",
+        BigInteger,
+        ForeignKey("suppliers.supplier_id", ondelete="SET NULL"),
+        nullable=True,
     )
-    supplier_code: Mapped[str | None] = mapped_column(Text)
-    warehouse_code: Mapped[str | None] = mapped_column(Text)
-    lot_status: Mapped[str] = mapped_column(
-        String(32), nullable=False, server_default=text("'available'")
+    expected_lot_id: Mapped[int | None] = mapped_column(
+        "expected_lot_id",
+        BigInteger,
+        ForeignKey("expected_lots.expected_lot_id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    received_date: Mapped[date] = mapped_column(Date, nullable=False)
+    expiry_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    current_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False, server_default=text("0")
+    )
+    allocated_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False, server_default=text("0")
+    )
+    unit: Mapped[str] = mapped_column(String(20), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default=text("'active'")
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
     )
 
     __table_args__ = (
-        Index("ix_lots_warehouse_id", "warehouse_id"),
-        Index("ix_lots_supplier_code", "supplier_code"),
-        Index("ix_lots_warehouse_code", "warehouse_code"),
+        CheckConstraint("current_quantity >= 0", name="chk_lots_current_quantity"),
+        CheckConstraint("allocated_quantity >= 0", name="chk_lots_allocated_quantity"),
+        CheckConstraint(
+            "allocated_quantity <= current_quantity",
+            name="chk_lots_allocation_limit",
+        ),
+        CheckConstraint(
+            "status IN ('active','depleted','expired','quarantine')",
+            name="chk_lots_status",
+        ),
+        Index("idx_lots_number", "lot_number"),
+        Index("idx_lots_product_warehouse", "product_id", "warehouse_id"),
+        Index("idx_lots_status", "status"),
+        Index("idx_lots_supplier", "supplier_id"),
+        Index("idx_lots_warehouse", "warehouse_id"),
+        Index(
+            "idx_lots_expiry_date",
+            "expiry_date",
+            postgresql_where=text("expiry_date IS NOT NULL"),
+        ),
     )
 
-    warehouse: Mapped[Warehouse | None] = relationship("Warehouse", back_populates="lots")
-    product: Mapped[Product | None] = relationship("Product", back_populates="lots")
-    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="lots")
-    stock_movements: Mapped[list[StockMovement]] = relationship(
-        "StockMovement",
-        back_populates="lot",
-        cascade="all, delete-orphan",
+    product: Mapped[Product] = relationship("Product", back_populates="lots")
+    warehouse: Mapped[Warehouse] = relationship("Warehouse", back_populates="lots")
+    supplier: Mapped[Supplier | None] = relationship(
+        "Supplier", back_populates="lots"
+    )
+    expected_lot: Mapped[ExpectedLot | None] = relationship(
+        "ExpectedLot", back_populates="lot", uselist=False
     )
     allocations: Mapped[list[Allocation]] = relationship(
-        "Allocation",
-        back_populates="lot",
-        cascade="all, delete-orphan",
+        "Allocation", back_populates="lot", cascade="all, delete-orphan"
     )
-    current_stock: Mapped[LotCurrentStock | None] = relationship(
-        "LotCurrentStock",
-        foreign_keys="[LotCurrentStock.lot_id]",
-        primaryjoin="Lot.id == LotCurrentStock.lot_id",
-        uselist=False,
-        viewonly=True,  # VIEWなので読み取り専用
+    stock_history: Mapped[list[StockHistory]] = relationship(
+        "StockHistory", back_populates="lot", cascade="all, delete-orphan"
+    )
+    adjustments: Mapped[list[Adjustment]] = relationship(
+        "Adjustment", back_populates="lot", cascade="all, delete-orphan"
     )
 
 
-class LotCurrentStock(Base):
-    """Current stock aggregated per lot (VIEW)."""
+class StockHistory(Base):
+    """Tracks all stock transactions against lots."""
 
-    __tablename__ = "lot_current_stock"
-    __table_args__ = {"info": {"is_view": True}}
+    __tablename__ = "stock_history"
 
-    # VIEWをSELECT可能にするため複合主キー相当で指定
-    lot_id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    product_id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    warehouse_id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    current_quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False)
-    last_updated: Mapped[datetime | None] = mapped_column(DateTime)
-
-    # VIEWなので書き込み用カラム/監査系カラム/relationshipは不要
-
-
-class StockMovement(Base):
-    """Stock movement history."""
-
-    __tablename__ = "stock_movements"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    lot_id: Mapped[int | None] = mapped_column(ForeignKey("lots.id"))
-    reason: Mapped[str] = mapped_column(Text, nullable=False)
-    quantity_delta: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False)
-    occurred_at: Mapped[datetime | None] = mapped_column(DateTime)
-    created_at: Mapped[datetime] = mapped_column(
+    id: Mapped[int] = mapped_column("history_id", BigInteger, primary_key=True)
+    lot_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("lots.lot_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    transaction_type: Mapped[StockTransactionType] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+    quantity_change: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False
+    )
+    quantity_after: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False
+    )
+    reference_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    reference_id: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    transaction_date: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime, nullable=False, server_default=func.now()
-    )
-    created_by: Mapped[str | None] = mapped_column(String(50))
-    updated_by: Mapped[str | None] = mapped_column(String(50))
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
-    warehouse_id: Mapped[int] = mapped_column(
-        ForeignKey("warehouses.id", ondelete="RESTRICT"), nullable=False
-    )
-    source_table: Mapped[str | None] = mapped_column(String(50))
-    source_id: Mapped[int | None] = mapped_column(Integer)
-    batch_id: Mapped[str | None] = mapped_column(String(100))
-    product_id: Mapped[int] = mapped_column(
-        ForeignKey("products.id", ondelete="RESTRICT"), nullable=False
     )
 
     __table_args__ = (
-        Index("idx_stock_movements_occurred_at", "occurred_at"),
-        Index("idx_stock_movements_product_warehouse", "product_id", "warehouse_id"),
-        Index("ix_stock_movements_lot", "lot_id"),
+        CheckConstraint(
+            "transaction_type IN ('inbound','allocation','shipment','adjustment','return')",
+            name="chk_stock_history_type",
+        ),
+        Index("idx_stock_history_lot", "lot_id"),
+        Index("idx_stock_history_date", "transaction_date"),
     )
 
-    lot: Mapped[Lot | None] = relationship("Lot", back_populates="stock_movements")
-    warehouse: Mapped[Warehouse] = relationship("Warehouse", back_populates="stock_movements")
-    product: Mapped[Product] = relationship("Product", back_populates="stock_movements")
+    lot: Mapped[Lot] = relationship("Lot", back_populates="stock_history")
 
 
-class ExpiryRule(Base):
-    """Shelf-life calculation rules."""
+class AdjustmentType(str, PyEnum):
+    """Enumerates allowed adjustment reasons."""
 
-    __tablename__ = "expiry_rules"
+    PHYSICAL_COUNT = "physical_count"
+    DAMAGE = "damage"
+    LOSS = "loss"
+    FOUND = "found"
+    OTHER = "other"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    rule_type: Mapped[str] = mapped_column(Text, nullable=False)
-    days: Mapped[int | None] = mapped_column(Integer)
-    fixed_date: Mapped[date | None] = mapped_column(Date)
-    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
-    priority: Mapped[int] = mapped_column(Integer, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(
+
+class Adjustment(Base):
+    """Inventory adjustments linked to a lot."""
+
+    __tablename__ = "adjustments"
+
+    id: Mapped[int] = mapped_column(
+        "adjustment_id", BigInteger, primary_key=True
+    )
+    lot_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("lots.lot_id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    adjustment_type: Mapped[AdjustmentType] = mapped_column(
+        String(20), nullable=False
+    )
+    adjusted_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    adjusted_by: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("users.user_id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    adjusted_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
     )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime, nullable=False, server_default=func.now()
-    )
-    created_by: Mapped[str | None] = mapped_column(String(50))
-    updated_by: Mapped[str | None] = mapped_column(String(50))
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
-    product_id: Mapped[int | None] = mapped_column(
-        ForeignKey("products.id", ondelete="SET NULL"), nullable=True
-    )
-    supplier_id: Mapped[int | None] = mapped_column(
-        ForeignKey("suppliers.id", ondelete="SET NULL"), nullable=True
+
+    __table_args__ = (
+        CheckConstraint(
+            "adjustment_type IN ('physical_count','damage','loss','found','other')",
+            name="chk_adjustments_type",
+        ),
+        Index("idx_adjustments_lot", "lot_id"),
+        Index("idx_adjustments_date", "adjusted_at"),
     )
 
-    product: Mapped[Product | None] = relationship("Product", back_populates="expiry_rules")
-    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="expiry_rules")
+    lot: Mapped[Lot] = relationship("Lot", back_populates="adjustments")
+
+
+class InventoryItem(Base):
+    """Aggregated inventory quantities per product and warehouse."""
+
+    __tablename__ = "inventory_items"
+
+    id: Mapped[int] = mapped_column(
+        "inventory_item_id", BigInteger, primary_key=True
+    )
+    product_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("products.product_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    warehouse_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("warehouses.warehouse_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    total_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False, server_default=text("0")
+    )
+    allocated_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False, server_default=text("0")
+    )
+    available_quantity: Mapped[Decimal] = mapped_column(
+        Numeric(15, 3), nullable=False, server_default=text("0")
+    )
+    last_updated: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "product_id", "warehouse_id", name="uq_inventory_items_product_warehouse"
+        ),
+        Index("idx_inventory_items_product", "product_id"),
+        Index("idx_inventory_items_warehouse", "warehouse_id"),
+    )
+
+    product: Mapped[Product] = relationship(
+        "Product", back_populates="inventory_items"
+    )
+    warehouse: Mapped[Warehouse] = relationship(
+        "Warehouse", back_populates="inventory_items"
+    )
+
+
+# Backward compatibility aliases (to be removed in later refactors)
+StockMovement = StockHistory
+StockMovementReason = StockTransactionType
+LotCurrentStock = InventoryItem

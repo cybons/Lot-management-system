@@ -1,45 +1,150 @@
-# backend/app/schemas/forecast.py
-"""フォーキャスト関連のPydanticスキーマ."""
+"""Pydantic schemas for forecast headers and lines."""
+
+from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Literal  # 🔽 [追加] Dict
+from decimal import Decimal
+from enum import Enum
+
+from pydantic import Field
 
 from .base import BaseSchema, TimestampMixin
 
 
-# --- Forecast Basic ---
-class ForecastBase(BaseSchema):
-    """フォーキャスト基本スキーマ (共通項目)."""
+class ForecastStatus(str, Enum):
+    """Lifecycle states for :class:`ForecastHeader`."""
+
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+
+
+class ForecastHeaderBase(BaseSchema):
+    """Common attributes shared by create/update operations."""
+
+    customer_id: int
+    delivery_place_id: int
+    forecast_number: str
+    forecast_start_date: date
+    forecast_end_date: date
+    status: ForecastStatus = ForecastStatus.ACTIVE
+
+
+class ForecastHeaderCreate(ForecastHeaderBase):
+    """Payload for creating a new forecast header."""
+
+    lines: list["ForecastLineCreate"] | None = Field(
+        default=None,
+        description="Optional collection of forecast lines created together with the header.",
+    )
+
+
+class ForecastHeaderUpdate(BaseSchema):
+    """Mutable fields on a forecast header."""
+
+    delivery_place_id: int | None = None
+    forecast_number: str | None = None
+    forecast_start_date: date | None = None
+    forecast_end_date: date | None = None
+    status: ForecastStatus | None = None
+
+
+class ForecastHeaderResponse(ForecastHeaderBase, TimestampMixin):
+    """API response model for forecast headers."""
+
+    id: int = Field(serialization_alias="forecast_id")
+
+
+class ForecastHeaderDetailResponse(ForecastHeaderResponse):
+    """Header representation bundled with its lines."""
+
+    lines: list["ForecastLineResponse"] = Field(default_factory=list)
+
+
+class ForecastLineBase(BaseSchema):
+    """Shared fields for forecast line payloads."""
+
+    product_id: int
+    delivery_date: date
+    forecast_quantity: Decimal = Field(serialization_alias="quantity")
+    unit: str
+
+
+class ForecastLineCreate(ForecastLineBase):
+    """Payload for adding a forecast line."""
+
+    pass
+
+
+class ForecastLineUpdate(BaseSchema):
+    """Mutable fields for forecast lines."""
+
+    delivery_date: date | None = None
+    forecast_quantity: Decimal | None = None
+    unit: str | None = None
+
+
+class ForecastLineResponse(ForecastLineBase, TimestampMixin):
+    """API response model for forecast lines."""
+
+    id: int = Field(serialization_alias="forecast_line_id")
+    forecast_id: int
+
+
+class ForecastBulkImportResult(BaseSchema):
+    """Result entry for bulk import operations."""
+
+    header: ForecastHeaderResponse
+    created_lines: list[ForecastLineResponse]
+
+
+class ForecastBulkImportSummary(BaseSchema):
+    """Aggregated summary of bulk import outcomes."""
+
+    imported_headers: int
+    imported_lines: int
+    skipped_headers: int = 0
+    skipped_lines: int = 0
+
+
+# ---------------------------------------------------------------------------
+# Legacy (deprecated) schemas kept temporarily for backward compatibility.
+# These will be removed once the forecast API is fully migrated to the new
+# header/line structure. They intentionally mirror the former single-table
+# forecast schema so existing routes keep type hints until refactored.
+# ---------------------------------------------------------------------------
+
+
+class LegacyForecastBase(BaseSchema):
+    """Deprecated: historical schema for the single-table forecast model."""
 
     product_id: str
     customer_id: str
-    granularity: Literal["daily", "dekad", "monthly"]
+    granularity: str
     qty_forecast: int
     version_no: int = 1
     source_system: str = "external"
     is_active: bool = True
-
-    # 粒度別の期間フィールド（排他的）
     date_day: date | None = None
     date_dekad_start: date | None = None
-    year_month: str | None = None  # 'YYYY-MM'
+    year_month: str | None = None
 
 
-class ForecastCreate(ForecastBase):
-    """フォーキャスト作成リクエスト."""
+class LegacyForecastCreate(LegacyForecastBase):
+    """Deprecated create payload for legacy forecasts."""
 
     version_issued_at: datetime
 
 
-class ForecastUpdate(BaseSchema):
-    """フォーキャスト更新リクエスト."""
+class LegacyForecastUpdate(BaseSchema):
+    """Deprecated update payload for legacy forecasts."""
 
     qty_forecast: int | None = None
     is_active: bool | None = None
 
 
-class ForecastResponse(ForecastBase, TimestampMixin):
-    """フォーキャストレスポンス."""
+class LegacyForecastResponse(LegacyForecastBase, TimestampMixin):
+    """Deprecated response schema for legacy forecasts."""
 
     id: int
     forecast_id: int | None = None
@@ -47,19 +152,18 @@ class ForecastResponse(ForecastBase, TimestampMixin):
     version_issued_at: datetime
 
 
-# --- Bulk Import ---
-class ForecastBulkImportRequest(BaseSchema):
-    """一括インポートリクエスト."""
+class LegacyForecastBulkImportRequest(BaseSchema):
+    """Deprecated bulk import request for legacy forecasts."""
 
     version_no: int
     version_issued_at: datetime
     source_system: str = "external"
-    deactivate_old_version: bool = True  # 旧バージョンを自動的に非アクティブ化
-    forecasts: list[ForecastCreate]
+    deactivate_old_version: bool = True
+    forecasts: list[LegacyForecastCreate]
 
 
-class ForecastBulkImportResponse(BaseSchema):
-    """一括インポートレスポンス."""
+class LegacyForecastBulkImportResponse(BaseSchema):
+    """Deprecated bulk import response for legacy forecasts."""
 
     success: bool
     message: str
@@ -70,19 +174,18 @@ class ForecastBulkImportResponse(BaseSchema):
     error_details: str | None = None
 
 
-# --- Matching ---
-class ForecastMatchRequest(BaseSchema):
-    """マッチングリクエスト."""
+class LegacyForecastMatchRequest(BaseSchema):
+    """Deprecated match request for legacy forecasts."""
 
-    order_id: int | None = None  # 特定受注のみ
-    order_ids: list[int] | None = None  # 複数受注
-    date_from: date | None = None  # 期間指定
+    order_id: int | None = None
+    order_ids: list[int] | None = None
+    date_from: date | None = None
     date_to: date | None = None
-    force_rematch: bool = False  # 既にマッチ済みでも再マッチング
+    force_rematch: bool = False
 
 
-class ForecastMatchResult(BaseSchema):
-    """個別マッチング結果."""
+class LegacyForecastMatchResult(BaseSchema):
+    """Deprecated match result for legacy forecasts."""
 
     order_line_id: int
     order_no: str
@@ -95,20 +198,19 @@ class ForecastMatchResult(BaseSchema):
     forecast_qty: float | None = None
 
 
-class ForecastMatchResponse(BaseSchema):
-    """マッチングレスポンス."""
+class LegacyForecastMatchResponse(BaseSchema):
+    """Deprecated match response for legacy forecasts."""
 
     success: bool
     message: str
     total_lines: int
     matched_lines: int
     unmatched_lines: int
-    results: list[ForecastMatchResult] = []
+    results: list[LegacyForecastMatchResult] = []
 
 
-# --- Version Management ---
-class ForecastVersionInfo(BaseSchema):
-    """バージョン情報."""
+class LegacyForecastVersionInfo(BaseSchema):
+    """Deprecated version information schema."""
 
     version_no: int
     version_issued_at: datetime
@@ -117,21 +219,21 @@ class ForecastVersionInfo(BaseSchema):
     source_system: str
 
 
-class ForecastVersionListResponse(BaseSchema):
-    """バージョン一覧レスポンス."""
+class LegacyForecastVersionListResponse(BaseSchema):
+    """Deprecated version listing schema."""
 
-    versions: list[ForecastVersionInfo]
+    versions: list[LegacyForecastVersionInfo]
 
 
-class ForecastActivateRequest(BaseSchema):
-    """バージョンアクティブ化リクエスト."""
+class LegacyForecastActivateRequest(BaseSchema):
+    """Deprecated activation request for legacy forecasts."""
 
     version_no: int
-    deactivate_others: bool = True  # 他のバージョンを非アクティブ化
+    deactivate_others: bool = True
 
 
-class ForecastActivateResponse(BaseSchema):
-    """バージョンアクティブ化レスポンス."""
+class LegacyForecastActivateResponse(BaseSchema):
+    """Deprecated activation response for legacy forecasts."""
 
     success: bool
     message: str
@@ -139,13 +241,8 @@ class ForecastActivateResponse(BaseSchema):
     deactivated_versions: list[int] = []
 
 
-# ---
-# 🔽 [ここから今回の機能追加分]
-# ---
-
-
-class ForecastItemOut(BaseSchema):
-    """Forecast一覧（フロント表示用）."""
+class LegacyForecastItemOut(BaseSchema):
+    """Deprecated list item schema used by legacy UI mocks."""
 
     id: int
     product_code: str
@@ -154,21 +251,37 @@ class ForecastItemOut(BaseSchema):
     supplier_code: str | None = None
     granularity: str
     version_no: int
-    updated_at: datetime  # 変更検知のため
-
-    # フロントのモックデータに合わせたダミーフィールド
-    # MVPでは固定値またはNoneを返す
+    updated_at: datetime
     daily_data: dict[str, float] | None = None
     dekad_data: dict[str, float] | None = None
     monthly_data: dict[str, float] | None = None
     dekad_summary: dict[str, float] | None = None
-
-    # フロントのモックデータに合わせたダミーフィールド (スキーマのみ)
     customer_name: str | None = "得意先A (ダミー)"
     supplier_name: str | None = "サプライヤーB (ダミー)"
     unit: str = "EA"
     version_history: list[dict] = []
 
 
-class ForecastListResponse(BaseSchema):
-    items: list[ForecastItemOut]
+class LegacyForecastListResponse(BaseSchema):
+    """Deprecated list response for legacy forecasts."""
+
+    items: list[LegacyForecastItemOut]
+
+
+# Backwards-compatible aliases for legacy imports. New code should use the
+# ForecastHeader*/ForecastLine* schemas defined above.
+ForecastBase = LegacyForecastBase
+ForecastCreate = LegacyForecastCreate
+ForecastUpdate = LegacyForecastUpdate
+ForecastResponse = LegacyForecastResponse
+ForecastBulkImportRequest = LegacyForecastBulkImportRequest
+ForecastBulkImportResponse = LegacyForecastBulkImportResponse
+ForecastMatchRequest = LegacyForecastMatchRequest
+ForecastMatchResult = LegacyForecastMatchResult
+ForecastMatchResponse = LegacyForecastMatchResponse
+ForecastVersionInfo = LegacyForecastVersionInfo
+ForecastVersionListResponse = LegacyForecastVersionListResponse
+ForecastActivateRequest = LegacyForecastActivateRequest
+ForecastActivateResponse = LegacyForecastActivateResponse
+ForecastItemOut = LegacyForecastItemOut
+ForecastListResponse = LegacyForecastListResponse
