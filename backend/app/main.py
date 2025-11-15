@@ -16,6 +16,7 @@ from app.api.routes import (
     admin_simulate_router,
     allocations_router,
     customer_items_router,
+    customers_router,
     forecast_router,
     forecasts_router,
     health_router,
@@ -26,9 +27,12 @@ from app.api.routes import (
     masters_router,
     orders_router,
     orders_validate_router,
+    products_router,
     roles_router,
+    suppliers_router,
     users_router,
     warehouse_alloc_router,
+    warehouses_router,
 )
 from app.core import errors
 from app.core.config import settings
@@ -82,7 +86,7 @@ app.add_middleware(
 )
 
 # ルーター登録
-app.include_router(masters_router, prefix=settings.API_PREFIX)
+app.include_router(masters_router, prefix=settings.API_PREFIX)  # Legacy: /api/masters/*
 app.include_router(lots_router, prefix=settings.API_PREFIX)
 app.include_router(orders_router, prefix=settings.API_PREFIX)
 app.include_router(allocations_router, prefix=settings.API_PREFIX)
@@ -97,6 +101,11 @@ app.include_router(inventory_items_router, prefix=settings.API_PREFIX)  # NEW: P
 app.include_router(customer_items_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-1
 app.include_router(users_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-2
 app.include_router(roles_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-2
+# Phase 3-3: Standalone master routers (simplified paths)
+app.include_router(warehouses_router, prefix=settings.API_PREFIX)  # NEW: /api/warehouses
+app.include_router(suppliers_router, prefix=settings.API_PREFIX)  # NEW: /api/suppliers
+app.include_router(customers_router, prefix=settings.API_PREFIX)  # NEW: /api/customers
+app.include_router(products_router, prefix=settings.API_PREFIX)  # NEW: /api/products
 app.include_router(warehouse_alloc_router, prefix=settings.API_PREFIX)
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(orders_validate_router, prefix=settings.API_PREFIX)
