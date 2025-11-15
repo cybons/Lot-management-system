@@ -15,6 +15,7 @@ from app.api.routes import (
     admin_router,
     admin_simulate_router,
     allocations_router,
+    customer_items_router,
     forecast_router,
     forecasts_router,
     health_router,
@@ -25,6 +26,8 @@ from app.api.routes import (
     masters_router,
     orders_router,
     orders_validate_router,
+    roles_router,
+    users_router,
     warehouse_alloc_router,
 )
 from app.core import errors
@@ -91,6 +94,9 @@ app.include_router(forecasts_router, prefix=settings.API_PREFIX)  # NEW: Phase 2
 app.include_router(inbound_plans_router, prefix=settings.API_PREFIX)  # NEW: Phase 2-2
 app.include_router(adjustments_router, prefix=settings.API_PREFIX)  # NEW: Phase 2-3
 app.include_router(inventory_items_router, prefix=settings.API_PREFIX)  # NEW: Phase 2-3
+app.include_router(customer_items_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-1
+app.include_router(users_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-2
+app.include_router(roles_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-2
 app.include_router(warehouse_alloc_router, prefix=settings.API_PREFIX)
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(orders_validate_router, prefix=settings.API_PREFIX)
