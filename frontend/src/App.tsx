@@ -5,6 +5,8 @@ import { ROUTES, LEGACY_ROUTES } from "@/constants/routes";
 
 // Pages - all imported from features (Phase A cleanup)
 import { AdminPage } from "@/features/admin/pages/AdminPage";
+import { AdjustmentCreatePage } from "@/features/adjustments/pages/AdjustmentCreatePage";
+import { AdjustmentsListPage } from "@/features/adjustments/pages/AdjustmentsListPage";
 import { LotAllocationPage } from "@/features/allocations/pages/LotAllocationPage";
 import { DashboardPage } from "@/features/dashboard/pages/DashboardPage";
 import { ForecastDetailPage } from "@/features/forecasts/pages/ForecastDetailPage";
@@ -12,6 +14,7 @@ import { ForecastImportPage } from "@/features/forecasts/pages/ForecastImportPag
 import { ForecastListPage } from "@/features/forecasts/pages/ForecastListPage";
 import { InboundPlanDetailPage } from "@/features/inbound-plans/pages/InboundPlanDetailPage";
 import { InboundPlansListPage } from "@/features/inbound-plans/pages/InboundPlansListPage";
+import { InventoryItemDetailPage } from "@/features/inventory/pages/InventoryItemDetailPage";
 import { InventoryLayout } from "@/features/inventory/pages/InventoryLayout";
 import { LotsPage } from "@/features/inventory/pages/LotsPage";
 import { MovesPage } from "@/features/inventory/pages/MovesPage";
@@ -58,7 +61,15 @@ function App() {
           <Route path="summary" element={<SummaryPage />} />
           <Route path="lots" element={<LotsPage />} />
           <Route path="moves" element={<MovesPage />} />
+          <Route path="adjustments" element={<AdjustmentsListPage />} />
+          <Route path="adjustments/new" element={<AdjustmentCreatePage />} />
         </Route>
+
+        {/* Inventory Item Detail (outside nested routes) - Phase D-7 */}
+        <Route
+          path="/inventory/items/:productId/:warehouseId"
+          element={<InventoryItemDetailPage />}
+        />
 
         {/* Admin */}
         <Route path={ROUTES.ADMIN.INDEX} element={<AdminPage />} />

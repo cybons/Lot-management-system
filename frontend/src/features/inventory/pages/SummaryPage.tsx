@@ -1,44 +1,62 @@
 /**
- * SummaryPage.tsx
+ * SummaryPage.tsx (v2.2 - Phase D-6 Updated)
  *
  * 在庫サマリページ
- * - 在庫の統計情報を表示
- * - 総ロット数、有効ロット数、総在庫数など
+ * - 在庫アイテムの統計情報を表示（製品×倉庫単位）
+ * - 総在庫数、利用可能在庫数、引当済在庫数など
  */
 /* eslint-disable max-lines-per-function */
 
 import { RefreshCw } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { useLotsQuery } from "@/hooks/api";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useInventoryItems } from "../hooks";
 import { Section } from "@/shared/components/layout";
 import { fmt } from "@/shared/utils/number";
+import { ROUTES } from "@/constants/routes";
 
 // ============================================
 // メインコンポーネント
 // ============================================
 
 export function SummaryPage() {
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState({
+    product_id: "",
+    warehouse_id: "",
+  });
+
+  // Build query params
+  const queryParams = {
+    product_id: filters.product_id ? Number(filters.product_id) : undefined,
+    warehouse_id: filters.warehouse_id ? Number(filters.warehouse_id) : undefined,
+  };
+
   // データ取得
-  const { data: allLots = [], isLoading, error, refetch } = useLotsQuery({});
+  const { data: inventoryItems = [], isLoading, error, refetch } = useInventoryItems(queryParams);
 
   // 統計情報の計算
   const stats = useMemo(() => {
-    const totalLots = allLots.length;
-    const activeLots = allLots.filter((lot) => lot.current_quantity > 0).length;
-    const totalQuantity = allLots.reduce((sum, lot) => sum + lot.current_quantity, 0);
-    const uniqueProducts = new Set(allLots.map((lot) => lot.product_code)).size;
-    const uniqueDeliveryPlaces = new Set(allLots.map((lot) => lot.delivery_place_code)).size;
+    const totalItems = inventoryItems.length;
+    const totalQuantity = inventoryItems.reduce((sum, item) => sum + item.total_quantity, 0);
+    const totalAllocated = inventoryItems.reduce((sum, item) => sum + item.allocated_quantity, 0);
+    const totalAvailable = inventoryItems.reduce((sum, item) => sum + item.available_quantity, 0);
+    const uniqueProducts = new Set(inventoryItems.map((item) => item.product_id)).size;
+    const uniqueWarehouses = new Set(inventoryItems.map((item) => item.warehouse_id)).size;
 
     return {
-      totalLots,
-      activeLots,
+      totalItems,
       totalQuantity,
+      totalAllocated,
+      totalAvailable,
       uniqueProducts,
-      uniqueDeliveryPlaces,
+      uniqueWarehouses,
     };
-  }, [allLots]);
+  }, [inventoryItems]);
 
   if (isLoading) {
     return (
@@ -70,57 +88,148 @@ export function SummaryPage() {
     );
   }
 
+  const handleViewDetail = (productId: number, warehouseId: number) => {
+    navigate(ROUTES.INVENTORY.ITEMS.DETAIL(productId, warehouseId));
+  };
+
   return (
     <div className="space-y-6">
       {/* 統計カード */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* 総ロット数 */}
+        {/* 在庫アイテム数 */}
         <StatCard
-          title="総ロット数"
-          value={fmt(stats.totalLots)}
-          description="登録されているロットの総数"
-        />
-
-        {/* 有効ロット数 */}
-        <StatCard
-          title="有効ロット数"
-          value={fmt(stats.activeLots)}
-          description="在庫が残っているロット"
-          highlight
+          title="在庫アイテム数"
+          value={fmt(stats.totalItems)}
+          description="製品×倉庫の組み合わせ数"
         />
 
         {/* 総在庫数 */}
         <StatCard
           title="総在庫数"
           value={fmt(stats.totalQuantity)}
-          description="すべてのロットの合計在庫"
+          description="すべての在庫の合計数量"
+          highlight
         />
 
-        {/* ユニーク製品数 */}
+        {/* 利用可能在庫数 */}
+        <StatCard
+          title="利用可能在庫数"
+          value={fmt(stats.totalAvailable)}
+          description="引当可能な在庫数"
+          highlight
+        />
+
+        {/* 引当済在庫数 */}
+        <StatCard
+          title="引当済在庫数"
+          value={fmt(stats.totalAllocated)}
+          description="既に引当済の在庫数"
+        />
+
+        {/* 製品種類数 */}
         <StatCard
           title="製品種類数"
           value={fmt(stats.uniqueProducts)}
-          description="登録されている製品の種類"
+          description="在庫がある製品の種類"
         />
 
-        {/* ユニーク納品場所数 */}
+        {/* 倉庫数 */}
         <StatCard
-          title="納品場所数"
-          value={fmt(stats.uniqueDeliveryPlaces)}
-          description="在庫がある納品場所の数"
-        />
-
-        {/* 在庫利用率 */}
-        <StatCard
-          title="在庫利用率"
-          value={
-            stats.totalLots > 0
-              ? `${Math.round((stats.activeLots / stats.totalLots) * 100)}%`
-              : "0%"
-          }
-          description="有効ロット / 総ロット"
+          title="倉庫数"
+          value={fmt(stats.uniqueWarehouses)}
+          description="在庫がある倉庫の数"
         />
       </div>
+
+      {/* Filters */}
+      <div className="rounded-lg border bg-white p-4">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <Label className="mb-2 block text-sm font-medium">製品ID</Label>
+            <Input
+              type="number"
+              value={filters.product_id}
+              onChange={(e) => setFilters({ ...filters, product_id: e.target.value })}
+              placeholder="製品IDで絞り込み"
+            />
+          </div>
+          <div>
+            <Label className="mb-2 block text-sm font-medium">倉庫ID</Label>
+            <Input
+              type="number"
+              value={filters.warehouse_id}
+              onChange={(e) => setFilters({ ...filters, warehouse_id: e.target.value })}
+              placeholder="倉庫IDで絞り込み"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Inventory Items Table */}
+      {inventoryItems.length > 0 && (
+        <div className="space-y-4">
+          <div className="text-sm text-gray-600">{inventoryItems.length} 件の在庫アイテム</div>
+
+          <div className="overflow-x-auto rounded-lg border bg-white">
+            <table className="w-full">
+              <thead className="border-b bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">製品</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">倉庫</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                    総在庫数
+                  </th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                    引当済
+                  </th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                    利用可能
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                    最終更新
+                  </th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                    アクション
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {inventoryItems.map((item) => (
+                  <tr key={item.inventory_item_id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm">
+                      {item.product_name || item.product_code || `ID: ${item.product_id}`}
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      {item.warehouse_name || `ID: ${item.warehouse_id}`}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm font-medium">
+                      {fmt(item.total_quantity)}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm text-yellow-600">
+                      {fmt(item.allocated_quantity)}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm font-medium text-green-600">
+                      {fmt(item.available_quantity)}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-600">
+                      {new Date(item.last_updated).toLocaleString("ja-JP")}
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewDetail(item.product_id, item.warehouse_id)}
+                      >
+                        詳細
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* 更新ボタン */}
       <div className="flex justify-end">
