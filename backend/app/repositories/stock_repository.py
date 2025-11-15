@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from datetime import date
 
 from sqlalchemy import Select, or_, select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 from app.models import Lot, Warehouse
 

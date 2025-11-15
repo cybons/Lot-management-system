@@ -28,7 +28,7 @@ from .inventory_models import ExpiryRule
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
     from .forecast_models import ForecastHeader, ForecastLine
     from .inbound_models import InboundPlan, InboundPlanLine
-    from .inventory_models import InventoryItem, Lot, StockMovement
+    from .inventory_models import InventoryItem, Lot
     from .orders_models import (
         Allocation,
         Order,
