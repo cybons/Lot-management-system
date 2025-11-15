@@ -544,7 +544,7 @@ def run_seed_simulation(
                 allocation = Allocation(
                     order_line_id=line.id,
                     lot_id=lot.id,
-                    allocated_qty=alloc_qty,
+                    allocated_quantity=alloc_qty,
                     destination_id=dest.id if dest else None,
                     created_at=datetime.utcnow(),
                 )

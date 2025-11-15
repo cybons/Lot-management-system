@@ -22,7 +22,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, synonym
 
 from .base_model import Base
 
@@ -176,7 +176,10 @@ class Allocation(Base):
         ForeignKey("order_lines.id", ondelete="CASCADE"), nullable=False
     )
     lot_id: Mapped[int] = mapped_column(ForeignKey("lots.id", ondelete="CASCADE"), nullable=False)
-    allocated_qty: Mapped[float] = mapped_column(Float, nullable=False)
+    allocated_quantity: Mapped[float] = mapped_column(
+        Numeric(15, 3, asdecimal=False), nullable=False
+    )
+    allocated_qty = synonym("allocated_quantity")
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
     )

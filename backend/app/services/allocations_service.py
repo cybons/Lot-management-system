@@ -111,7 +111,7 @@ def _load_order(db: Session, order_id: int | None = None, order_no: str | None =
 
 def _existing_allocated_qty(line: OrderLine) -> float:
     return sum(
-        alloc.allocated_qty
+        alloc.allocated_quantity
         for alloc in line.allocations
         if getattr(alloc, "status", "reserved") != "cancelled"
     )
@@ -352,7 +352,7 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 allocation = Allocation(
                     order_line_id=line.id,
                     lot_id=lot.id,
-                    allocated_qty=alloc_plan.allocate_qty,
+                    allocated_quantity=alloc_plan.allocate_qty,
                     status="reserved",
                     created_at=datetime.utcnow(),
                 )
@@ -363,7 +363,7 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
         totals_stmt = (
             select(
                 OrderLine.id,
-                func.coalesce(func.sum(Allocation.allocated_qty), 0.0),
+                func.coalesce(func.sum(Allocation.allocated_quantity), 0.0),
                 OrderLine.quantity,
             )
             .outerjoin(Allocation, Allocation.order_line_id == OrderLine.id)
@@ -423,7 +423,7 @@ def cancel_allocation(db: Session, allocation_id: int) -> None:
         raise AllocationCommitError(f"Lot {allocation.lot_id} not found")
 
     # 引当数量を解放
-    lot.allocated_quantity -= allocation.allocated_qty
+    lot.allocated_quantity -= allocation.allocated_quantity
     lot.updated_at = datetime.utcnow()
 
     db.delete(allocation)

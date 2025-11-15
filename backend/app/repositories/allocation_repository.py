@@ -74,7 +74,11 @@ class AllocationRepository:
         return list(self.db.execute(stmt).scalars().all())
 
     def create(
-        self, order_line_id: int, lot_id: int, allocated_qty: float, status: str = "reserved"
+        self,
+        order_line_id: int,
+        lot_id: int,
+        allocated_quantity: float,
+        status: str = "reserved",
     ) -> Allocation:
         """
         引当を作成.
@@ -82,7 +86,7 @@ class AllocationRepository:
         Args:
             order_line_id: 受注明細ID
             lot_id: ロットID
-            allocated_qty: 引当数量
+            allocated_quantity: 引当数量
             status: ステータス（デフォルト: 'reserved'）
 
         Returns:
@@ -91,7 +95,7 @@ class AllocationRepository:
         allocation = Allocation(
             order_line_id=order_line_id,
             lot_id=lot_id,
-            allocated_qty=allocated_qty,
+            allocated_quantity=allocated_quantity,
             status=status,
             created_at=datetime.now(),
         )

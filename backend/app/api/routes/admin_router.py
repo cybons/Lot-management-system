@@ -61,7 +61,7 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         .outerjoin(Allocation, Allocation.order_line_id == OrderLine.id)
         .group_by(OrderLine.id, OrderLine.order_id, OrderLine.quantity)
         .having(
-            func.coalesce(func.sum(Allocation.actual_quantity), 0)
+            func.coalesce(func.sum(Allocation.allocated_quantity), 0)
             < func.coalesce(OrderLine.quantity, 0)
         )
         .subquery()

@@ -417,7 +417,7 @@ def create_seed_data(db: Session, req: SeedRequest) -> SeedResponse:
             allocation = Allocation(
                 order_line_id=line.id,
                 lot_id=selected_lot.id,
-                allocated_qty=alloc_qty,
+                allocated_quantity=alloc_qty,
                 destination_id=destination_id,
                 created_at=datetime.utcnow(),
             )
