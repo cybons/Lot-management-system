@@ -7,6 +7,7 @@ import { ROUTES, LEGACY_ROUTES } from "@/constants/routes";
 import { AdminPage } from "@/features/admin/pages/AdminPage";
 import { LotAllocationPage } from "@/features/allocations/pages/LotAllocationPage";
 import { DashboardPage } from "@/features/dashboard/pages/DashboardPage";
+import { ForecastDetailPage } from "@/features/forecasts/pages/ForecastDetailPage";
 import { ForecastImportPage } from "@/features/forecasts/pages/ForecastImportPage";
 import { ForecastListPage } from "@/features/forecasts/pages/ForecastListPage";
 import { InventoryLayout } from "@/features/inventory/pages/InventoryLayout";
@@ -30,8 +31,9 @@ function App() {
         {/* Allocations */}
         <Route path={ROUTES.ALLOCATIONS.INDEX} element={<LotAllocationPage />} />
 
-        {/* Forecasts - New structure (v2.2) */}
+        {/* Forecasts - New structure (v2.2 - Phase B) */}
         <Route path={ROUTES.FORECASTS.LIST} element={<ForecastListPage />} />
+        <Route path="/forecasts/:id" element={<ForecastDetailPage />} />
         <Route path={ROUTES.FORECASTS.IMPORT} element={<ForecastImportPage />} />
 
         {/* Legacy forecast routes - Redirect to new structure */}
