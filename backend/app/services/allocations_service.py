@@ -1,4 +1,8 @@
-"""FEFO allocation service (excluding locked lots)."""
+"""
+FEFO allocation service (excluding locked lots).
+
+v2.2: lot_current_stock 依存を削除。Lot モデルを直接使用。
+"""
 
 from __future__ import annotations
 
@@ -11,7 +15,6 @@ from sqlalchemy.orm import Session, joinedload, selectinload
 from app.models import (
     Allocation,
     Lot,
-    LotCurrentStock,
     Order,
     OrderLine,
     Product,
@@ -110,7 +113,7 @@ def _existing_allocated_qty(line: OrderLine) -> float:
     return sum(
         alloc.allocated_qty
         for alloc in line.allocations
-        if getattr(alloc, "status", "active") != "cancelled"
+        if getattr(alloc, "status", "reserved") != "cancelled"
     )
 
 
@@ -135,17 +138,24 @@ def _resolve_next_div(db: Session, order: Order, line: OrderLine) -> tuple[str |
 
 
 def _lot_candidates(db: Session, product_id: int) -> list[tuple[Lot, float]]:
+    """
+    FEFO候補ロットを取得.
+
+    v2.2: Lot モデルから直接利用可能在庫を計算。
+
+    Returns:
+        List of (Lot, available_quantity) tuples sorted by FEFO order
+    """
     stmt: Select[tuple[Lot, float]] = (
-        select(Lot, LotCurrentStock.current_quantity)
-        .join(LotCurrentStock, LotCurrentStock.lot_id == Lot.id)
+        select(Lot, (Lot.current_quantity - Lot.allocated_quantity).label("available_qty"))
         .where(
             Lot.product_id == product_id,
-            LotCurrentStock.current_quantity > 0,
-            Lot.is_locked.is_(False),
+            (Lot.current_quantity - Lot.allocated_quantity) > 0,
+            Lot.status == "active",
         )
         .order_by(
             nulls_last(Lot.expiry_date.asc()),
-            Lot.receipt_date.asc(),
+            Lot.received_date.asc(),
             Lot.id.asc(),
         )
     )
@@ -236,8 +246,8 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
             line_plan.warnings.append(next_div_warning)
             warnings.append(next_div_warning)
 
-        for lot, current_qty in _lot_candidates(db, product_id):
-            available = available_per_lot.get(lot.id, float(current_qty or 0.0))
+        for lot, available_qty in _lot_candidates(db, product_id):
+            available = available_per_lot.get(lot.id, float(available_qty or 0.0))
             if available <= 0:
                 continue
 
@@ -250,7 +260,7 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
                     lot_id=lot.id,
                     allocate_qty=float(allocate_qty),
                     expiry_date=lot.expiry_date,
-                    receipt_date=lot.receipt_date,
+                    receipt_date=lot.received_date,
                     lot_number=lot.lot_number,
                 )
             )
@@ -273,6 +283,8 @@ def preview_fefo_allocation(db: Session, order_id: int) -> FefoPreviewResult:
 def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
     """
     FEFO引当確定（状態: open|part_allocated のみ許容）.
+
+    v2.2: Lot.allocated_quantity を直接更新。
 
     Args:
         db: データベースセッション
@@ -314,41 +326,40 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
                 line.next_div = line_plan.next_div
 
             for alloc_plan in line_plan.allocations:
-                lot_stmt = select(Lot).where(Lot.id == alloc_plan.lot_id)
+                # ロックをかけてロットを取得
+                lot_stmt = select(Lot).where(Lot.id == alloc_plan.lot_id).with_for_update()
                 lot = db.execute(lot_stmt).scalar_one_or_none()
                 if not lot:
                     raise AllocationCommitError(f"Lot {alloc_plan.lot_id} not found")
-                if lot.is_locked:
+                if lot.status != "active":
                     raise AllocationCommitError(
-                        f"Lot {alloc_plan.lot_id} is locked and cannot be allocated"
+                        f"Lot {alloc_plan.lot_id} status '{lot.status}' is not active"
                     )
 
-                stock_stmt = (
-                    select(LotCurrentStock)
-                    .where(LotCurrentStock.lot_id == lot.id)
-                    .with_for_update()
-                )
-                current_stock = db.execute(stock_stmt).scalar_one_or_none()
-                if not current_stock:
-                    raise AllocationCommitError(f"Current stock not found for lot {lot.id}")
-
-                available = float(current_stock.current_quantity or 0.0)
+                # 利用可能在庫チェック
+                available = float(lot.current_quantity - lot.allocated_quantity)
                 if available + EPSILON < alloc_plan.allocate_qty:
                     raise AllocationCommitError(
-                        f"Insufficient stock for lot {lot.id}: required {alloc_plan.allocate_qty}, available {available}"
+                        f"Insufficient stock for lot {lot.id}: "
+                        f"required {alloc_plan.allocate_qty}, available {available}"
                     )
 
-                current_stock.current_quantity = available - alloc_plan.allocate_qty
-                current_stock.last_updated = datetime.utcnow()
+                # 引当数量を更新
+                lot.allocated_quantity += alloc_plan.allocate_qty
+                lot.updated_at = datetime.utcnow()
 
+                # 引当レコード作成
                 allocation = Allocation(
                     order_line_id=line.id,
                     lot_id=lot.id,
                     allocated_qty=alloc_plan.allocate_qty,
+                    status="reserved",
+                    created_at=datetime.utcnow(),
                 )
                 db.add(allocation)
                 created.append(allocation)
 
+        # 注文ステータス更新
         totals_stmt = (
             select(
                 OrderLine.id,
@@ -383,6 +394,19 @@ def commit_fefo_allocation(db: Session, order_id: int) -> FefoCommitResult:
 
 
 def cancel_allocation(db: Session, allocation_id: int) -> None:
+    """
+    引当をキャンセル.
+
+    v2.2: Lot.allocated_quantity を直接更新。
+
+    Args:
+        db: データベースセッション
+        allocation_id: 引当ID
+
+    Raises:
+        AllocationNotFoundError: 引当が見つからない場合
+        AllocationCommitError: ロットが見つからない場合
+    """
     allocation_stmt = (
         select(Allocation)
         .options(joinedload(Allocation.lot), joinedload(Allocation.order_line))
@@ -392,15 +416,15 @@ def cancel_allocation(db: Session, allocation_id: int) -> None:
     if not allocation:
         raise AllocationNotFoundError(f"Allocation {allocation_id} not found")
 
-    lot_stock_stmt = (
-        select(LotCurrentStock).where(LotCurrentStock.lot_id == allocation.lot_id).with_for_update()
-    )
-    lot_stock = db.execute(lot_stock_stmt).scalar_one_or_none()
-    if not lot_stock:
-        raise AllocationCommitError(f"Lot current stock not found for lot {allocation.lot_id}")
+    # ロックをかけてロットを取得
+    lot_stmt = select(Lot).where(Lot.id == allocation.lot_id).with_for_update()
+    lot = db.execute(lot_stmt).scalar_one_or_none()
+    if not lot:
+        raise AllocationCommitError(f"Lot {allocation.lot_id} not found")
 
-    lot_stock.current_quantity += allocation.allocated_qty
-    lot_stock.last_updated = datetime.utcnow()
+    # 引当数量を解放
+    lot.allocated_quantity -= allocation.allocated_qty
+    lot.updated_at = datetime.utcnow()
 
     db.delete(allocation)
     db.commit()

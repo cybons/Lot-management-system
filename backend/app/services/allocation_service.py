@@ -2,6 +2,8 @@
 """
 引当サービス
 ユースケース実装とトランザクション管理を担当.
+
+v2.2: lot_current_stock 依存を削除。Lot モデルを直接使用。
 """
 
 from sqlalchemy.orm import Session
@@ -42,6 +44,8 @@ class AllocationService:
         """
         ロットを引当.
 
+        v2.2: Lot モデルから直接在庫を確認。
+
         Args:
             order_line_id: 受注明細ID
             lot_id: ロットID
@@ -52,18 +56,21 @@ class AllocationService:
 
         Raises:
             InsufficientStockError: 在庫不足の場合
+            NotFoundError: ロットが存在しない場合
         """
         # 数量を丸める
         allocate_qty = RoundingPolicy.round_allocation_qty(allocate_qty)
 
-        # 在庫確認
-        current_stock = self.repository.get_lot_current_stock(lot_id)
-        if not current_stock:
-            raise NotFoundError("LotCurrentStock", lot_id)
+        # ロット在庫確認
+        lot = self.repository.get_lot(lot_id)
+        if not lot:
+            raise NotFoundError("Lot", lot_id)
 
-        if current_stock.current_quantity < allocate_qty:
+        # 利用可能在庫 = 現在在庫 - 引当済み在庫
+        available_quantity = lot.current_quantity - lot.allocated_quantity
+        if available_quantity < allocate_qty:
             raise InsufficientStockError(
-                lot_id=lot_id, required=allocate_qty, available=current_stock.current_quantity
+                lot_id=lot_id, required=allocate_qty, available=available_quantity
             )
 
         # トランザクション開始
@@ -73,15 +80,14 @@ class AllocationService:
                 order_line_id=order_line_id,
                 lot_id=lot_id,
                 allocated_qty=allocate_qty,
-                status="active",
+                status="reserved",
             )
             self.db.flush()  # IDを取得するためflush
 
             # 2. 在庫変動記録
-            lot_ref = current_stock.lot if hasattr(current_stock, "lot") else None
             movement = StockMovement(
-                product_id=lot_ref.product_id if lot_ref else None,
-                warehouse_id=self._resolve_warehouse_id(lot_ref),
+                product_id=lot.product_id,
+                warehouse_id=self._resolve_warehouse_id(lot),
                 lot_id=lot_id,
                 quantity_delta=-allocate_qty,
                 reason=StockMovementReason.ALLOCATION_HOLD,
@@ -92,14 +98,16 @@ class AllocationService:
             )
             self.db.add(movement)
 
-            # 3. 現在在庫更新
-            self.repository.update_lot_current_stock(lot_id, -allocate_qty)
+            # 3. ロットの引当数量を更新
+            self.repository.update_lot_allocated_quantity(lot_id, allocate_qty)
 
         return allocation, movement
 
     def cancel_allocation(self, allocation_id: int) -> tuple[Allocation, StockMovement]:
         """
         引当を取り消し.
+
+        v2.2: Lot モデルの allocated_quantity を直接更新。
 
         Args:
             allocation_id: 引当ID
@@ -136,8 +144,8 @@ class AllocationService:
             )
             self.db.add(movement)
 
-            # 2. 現在在庫更新
-            self.repository.update_lot_current_stock(allocation.lot_id, allocation.allocated_qty)
+            # 2. ロットの引当数量を解放
+            self.repository.update_lot_allocated_quantity(allocation.lot_id, -allocation.allocated_qty)
 
             # 3. 引当ステータス更新
             self.repository.update_status(allocation, "cancelled")
