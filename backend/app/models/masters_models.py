@@ -6,6 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from backend.app.models.inventory_models import ExpiryRule
 from sqlalchemy import (
     Boolean,
     DateTime,
@@ -25,8 +26,9 @@ from .base_model import Base
 
 
 if TYPE_CHECKING:  # pragma: no cover - for type checkers only
-    from .forecast_models import Forecast
-    from .inventory_models import ExpiryRule, Lot, StockMovement
+    from .forecast_models import ForecastHeader, ForecastLine
+    from .inbound_models import InboundPlan, InboundPlanLine
+    from .inventory_models import InventoryItem, Lot, StockMovement
     from .orders_models import (
         Allocation,
         Order,
@@ -66,6 +68,9 @@ class Warehouse(Base):
     stock_movements: Mapped[list[StockMovement]] = relationship(
         "StockMovement", back_populates="warehouse"
     )
+    inventory_items: Mapped[list[InventoryItem]] = relationship(
+        "InventoryItem", back_populates="warehouse"
+    )
     order_lines: Mapped[list[OrderLine]] = relationship("OrderLine", back_populates="warehouse")
     warehouse_allocations: Mapped[list[OrderLineWarehouseAllocation]] = relationship(
         "OrderLineWarehouseAllocation", back_populates="warehouse"
@@ -103,6 +108,9 @@ class Supplier(Base):
     purchase_requests: Mapped[list[PurchaseRequest]] = relationship(
         "PurchaseRequest", back_populates="supplier"
     )
+    inbound_plans: Mapped[list[InboundPlan]] = relationship(
+        "InboundPlan", back_populates="supplier"
+    )
 
 
 class Customer(Base):
@@ -131,7 +139,9 @@ class Customer(Base):
     )
 
     orders: Mapped[list[Order]] = relationship("Order", back_populates="customer")
-    forecasts: Mapped[list[Forecast]] = relationship("Forecast", back_populates="customer")
+    forecast_headers: Mapped[list[ForecastHeader]] = relationship(
+        "ForecastHeader", back_populates="customer"
+    )
 
 
 class DeliveryPlace(Base):
@@ -163,6 +173,9 @@ class DeliveryPlace(Base):
 
     allocations: Mapped[list[Allocation]] = relationship("Allocation", back_populates="destination")
     products: Mapped[list[Product]] = relationship("Product", back_populates="delivery_place")
+    forecast_headers: Mapped[list[ForecastHeader]] = relationship(
+        "ForecastHeader", back_populates="delivery_place"
+    )
 
 
 class Product(Base):
@@ -232,7 +245,15 @@ class Product(Base):
     unit_conversions: Mapped[list[UnitConversion]] = relationship(
         "UnitConversion", back_populates="product"
     )
-    forecasts: Mapped[list[Forecast]] = relationship("Forecast", back_populates="product")
+    forecast_lines: Mapped[list[ForecastLine]] = relationship(
+        "ForecastLine", back_populates="product"
+    )
+    inbound_plan_lines: Mapped[list[InboundPlanLine]] = relationship(
+        "InboundPlanLine", back_populates="product"
+    )
+    inventory_items: Mapped[list[InventoryItem]] = relationship(
+        "InventoryItem", back_populates="product"
+    )
 
 
 class UnitConversion(Base):

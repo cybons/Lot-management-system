@@ -1,101 +1,153 @@
-# backend/app/schemas/inventory.py
-"""在庫関連のPydanticスキーマ."""
+"""Inventory-related Pydantic schemas aligned with the current database schema."""
+
+from __future__ import annotations
 
 from datetime import date, datetime
+from decimal import Decimal
+from enum import Enum
+
+from pydantic import Field
 
 from .base import BaseSchema, TimestampMixin
 
 
-# --- Lot ---
+class LotStatus(str, Enum):
+    """Valid lot lifecycle statuses."""
+
+    ACTIVE = "active"
+    DEPLETED = "depleted"
+    EXPIRED = "expired"
+    QUARANTINE = "quarantine"
+
+
 class LotBase(BaseSchema):
-    supplier_code: str | None = None
+    """Shared attributes for lot payloads."""
+
     lot_number: str
-    receipt_date: date
-    mfg_date: date | None = None
-    expiry_date: date | None = None
-    warehouse_id: int | None = None
-    product_id: int | None = None
+    product_id: int
+    warehouse_id: int
     supplier_id: int | None = None
-    lot_unit: str | None = None
-    kanban_class: str | None = None
-    sales_unit: str | None = None
-    inventory_unit: str | None = None
-    received_by: str | None = None
-    source_doc: str | None = None
-    qc_certificate_status: str | None = None
-    qc_certificate_file: str | None = None
-    lot_status: str | None = "available"
+    expected_lot_id: int | None = None
+    received_date: date
+    expiry_date: date | None = None
+    current_quantity: Decimal = Decimal("0")
+    allocated_quantity: Decimal = Decimal("0")
+    unit: str
+    status: LotStatus = LotStatus.ACTIVE
 
 
 class LotCreate(LotBase):
-    supplier_code: str  # 作成時は必須
-    product_id: int  # 作成時は必須（product_id基準に変更）
+    """Payload for creating lots."""
+
+    pass
 
 
 class LotUpdate(BaseSchema):
-    mfg_date: date | None = None
+    """Mutable fields for lot updates."""
+
+    supplier_id: int | None = None
+    expected_lot_id: int | None = None
+    received_date: date | None = None
     expiry_date: date | None = None
-    warehouse_id: int | None = None
-    lot_unit: str | None = None
-    qc_certificate_status: str | None = None
-    qc_certificate_file: str | None = None
+    current_quantity: Decimal | None = None
+    allocated_quantity: Decimal | None = None
+    unit: str | None = None
+    status: LotStatus | None = None
 
 
 class LotResponse(LotBase, TimestampMixin):
-    id: int
-    product_id: int | None = None
-    product_code: str | None = None  # 後方互換性のため（非推奨: product_idを使用推奨）
-    warehouse_id: int | None = None
-    supplier_id: int | None = None
-    supplier_code: str | None = None
-    current_quantity: float = 0.0
-    last_updated: datetime | None = None
-    product_name: str | None = None
-    lot_status: str = "available"
+    """API response model for lots."""
+
+    id: int = Field(serialization_alias="lot_id")
 
 
-# --- StockMovement ---
-class StockMovementBase(BaseSchema):
-    product_id: str
-    warehouse_id: int | None = None
-    lot_id: int | None = None
-    quantity_delta: float
-    reason: str
-    source_table: str | None = None
-    source_id: int | None = None
-    batch_id: str | None = None
-    created_by: str = "system"
+class StockTransactionType(str, Enum):
+    """Transaction types tracked in stock history."""
+
+    INBOUND = "inbound"
+    ALLOCATION = "allocation"
+    SHIPMENT = "shipment"
+    ADJUSTMENT = "adjustment"
+    RETURN = "return"
 
 
-class StockMovementCreate(StockMovementBase):
-    pass
+class StockHistoryBase(BaseSchema):
+    """Shared attributes for stock history payloads."""
 
-
-class StockMovementResponse(StockMovementBase, TimestampMixin):
-    id: int
-    occurred_at: datetime
-
-
-# --- LotCurrentStock ---
-class LotCurrentStockResponse(BaseSchema):
     lot_id: int
-    current_quantity: float
-    last_updated: datetime | None = None
+    transaction_type: StockTransactionType
+    quantity_change: Decimal
+    quantity_after: Decimal
+    reference_type: str | None = None
+    reference_id: int | None = None
 
 
-# --- ExpiryRule ---
-class ExpiryRuleBase(BaseSchema):
-    product_code: str
-    shelf_life_days: int
+class StockHistoryCreate(StockHistoryBase):
+    """Payload for creating stock history records."""
+
+    transaction_date: datetime | None = None
 
 
-class ExpiryRuleCreate(ExpiryRuleBase):
+class StockHistoryResponse(StockHistoryBase):
+    """API response model for stock history entries."""
+
+    id: int = Field(serialization_alias="history_id")
+    transaction_date: datetime
+
+
+class AdjustmentType(str, Enum):
+    """Allowed adjustment reason codes."""
+
+    PHYSICAL_COUNT = "physical_count"
+    DAMAGE = "damage"
+    LOSS = "loss"
+    FOUND = "found"
+    OTHER = "other"
+
+
+class AdjustmentBase(BaseSchema):
+    """Shared fields for adjustments."""
+
+    lot_id: int
+    adjustment_type: AdjustmentType
+    adjusted_quantity: Decimal
+    reason: str
+    adjusted_by: int
+
+
+class AdjustmentCreate(AdjustmentBase):
+    """Payload for recording adjustments."""
+
     pass
 
 
-class ExpiryRuleUpdate(BaseSchema):
-    shelf_life_days: int
+class AdjustmentResponse(AdjustmentBase):
+    """API response model for adjustments."""
+
+    id: int = Field(serialization_alias="adjustment_id")
+    adjusted_at: datetime
 
 
-class ExpiryRuleResponse(ExpiryRuleBase, TimestampMixin):
-    id: int
+class InventoryItemBase(BaseSchema):
+    """Shared attributes for inventory item payloads."""
+
+    product_id: int
+    warehouse_id: int
+    total_quantity: Decimal
+    allocated_quantity: Decimal
+    available_quantity: Decimal
+
+
+class InventoryItemResponse(InventoryItemBase):
+    """API response model for inventory summary rows."""
+
+    id: int = Field(serialization_alias="inventory_item_id")
+    last_updated: datetime
+
+
+# Backwards compatibility aliases so existing imports continue to work during
+# the migration to the new schema naming.
+StockMovementBase = StockHistoryBase
+StockMovementCreate = StockHistoryCreate
+StockMovementResponse = StockHistoryResponse
+LotCurrentStockResponse = InventoryItemResponse
