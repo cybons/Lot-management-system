@@ -4,20 +4,20 @@
  * - 在庫表示は free_qty ?? current_quantity を数値化
  */
 
-import type { UseQueryResult } from "@tanstack/react-query";
 import { Fragment } from "react";
 
 import type { OrderLine } from "../types";
 import { toQty } from "../utils/qty";
 
-import type { Lot as CandidateLot } from "@/hooks/useLotsQuery";
+import type { CandidateLotItem } from "@/features/allocations/api";
 import { formatDate } from "@/shared/utils/date";
 
 interface LotAllocationPaneProps {
   selectedLineId: number | null;
   selectedLine: OrderLine | undefined;
-  lotsQuery: UseQueryResult<CandidateLot[], Error>;
-  candidateLots: CandidateLot[];
+  isLoading: boolean;
+  error: Error | null;
+  candidateLots: CandidateLotItem[];
   lotAllocations: Record<number, number>;
   allocationTotalAll: number;
   canSave: boolean;
@@ -28,7 +28,8 @@ interface LotAllocationPaneProps {
 export function LotAllocationPane({
   selectedLineId,
   selectedLine,
-  lotsQuery,
+  isLoading,
+  error,
   candidateLots,
   lotAllocations,
   allocationTotalAll,
@@ -64,19 +65,17 @@ export function LotAllocationPane({
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-          {lotsQuery.isLoading ? (
+          {isLoading ? (
             <div className="rounded-lg border border-gray-200 bg-white p-6 text-center text-sm text-gray-500">
               候補ロットを読み込み中...
             </div>
-          ) : lotsQuery.isError ? (
+          ) : error ? (
             <div className="rounded-lg border border-red-200 bg-red-50 p-4">
               <p className="text-center text-sm font-semibold text-red-800">
                 候補ロットの取得に失敗しました
               </p>
               <p className="mt-1 text-center text-xs text-red-600">
-                {lotsQuery.error instanceof Error
-                  ? lotsQuery.error.message
-                  : "サーバーエラーが発生しました"}
+                {error instanceof Error ? error.message : "サーバーエラーが発生しました"}
               </p>
             </div>
           ) : (candidateLots?.length ?? 0) === 0 ? (
@@ -87,24 +86,23 @@ export function LotAllocationPane({
           ) : (
             <div className="space-y-3">
               {candidateLots.map((lot) => {
-                const lotId = (lot.lot_id ?? lot.id) as number | undefined;
-                if (!lotId) return null;
+                // lot_id を正とする
+                const lotId = lot.lot_id;
+                if (lotId == null) return null;
 
-                const availableQty = toQty(
-                  lot.free_qty ?? lot.current_stock?.current_quantity ?? lot.current_quantity,
-                );
-                const totalStock = toQty(
-                  lot.current_stock?.current_quantity ?? lot.current_quantity,
-                );
+                // 在庫数量
+                const availableQty = toQty(lot.free_qty ?? lot.current_quantity);
+                const totalStock = toQty(lot.current_quantity);
+
                 const allocatedQty = lotAllocations[lotId] ?? 0;
                 const lotLabel = lot.lot_number ?? `LOT-${lotId}`;
+
                 const deliveryCode = lot.delivery_place_code ?? null;
-                const deliveryName = lot.delivery_place_name || lot.warehouse_name || null;
-                const deliveryDisplay = deliveryCode
-                  ? deliveryName
+                const deliveryName = lot.delivery_place_name ?? null;
+                const deliveryDisplay =
+                  deliveryCode && deliveryName
                     ? `${deliveryCode} / ${deliveryName}`
-                    : deliveryCode
-                  : deliveryName || "—";
+                    : (deliveryCode ?? deliveryName ?? "-");
 
                 return (
                   <div

@@ -241,9 +241,10 @@ export function LotAllocationPage() {
 
       {/* 右ペイン: 候補ロット & 倉庫別配分 */}
       <LotAllocationPane
-        selectedLineId={selectedLineId}
+        selectedLineId={normalizedSelectedLineId}
         selectedLine={selectedLine}
-        lotsQuery={lotsQuery}
+        isLoading={lotsQuery.isLoading}
+        error={lotsQuery.error ?? null}
         candidateLots={candidateLots}
         lotAllocations={lotAllocations}
         allocationTotalAll={allocationTotalAll}

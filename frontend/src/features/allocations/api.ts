@@ -39,8 +39,9 @@ export interface CandidateLotItem {
   allocated_qty: number;
   product_id?: number;
   product_code?: string;
-  warehouse_id?: number;
-  warehouse_code?: string;
+  delivery_place_id?: number;
+  delivery_place_code?: string;
+  delivery_place_name?: string;
   expiry_date?: string;
   last_updated?: string;
 }
@@ -67,7 +68,7 @@ export interface ManualAllocationResponse {
   available_quantity: number;
   product_id?: number;
   product_code?: string;
-  warehouse_id?: number;
+  delivery_place_id?: number;
   expiry_date?: string;
   status: string;
   message?: string;
@@ -92,7 +93,7 @@ export interface FefoLineAllocation {
   order_line_id: number;
   product_id?: number;
   product_code: string;
-  warehouse_id?: number;
+  delivery_place_id?: number;
   required_qty: number;
   already_allocated_qty: number;
   allocations: FefoLotAllocation[];
@@ -183,12 +184,13 @@ export const cancelAllocation = (allocationId: number) => {
  */
 export const getCandidateLots = (params: {
   product_id: number;
-  warehouse_id?: number;
+  delivery_place_id?: number;
   limit?: number;
 }) => {
   const searchParams = new URLSearchParams();
   searchParams.append("product_id", params.product_id.toString());
-  if (params.warehouse_id) searchParams.append("warehouse_id", params.warehouse_id.toString());
+  if (params.delivery_place_id)
+    searchParams.append("warehouse_id", params.delivery_place_id.toString());
   if (params.limit) searchParams.append("limit", params.limit.toString());
 
   const queryString = searchParams.toString();
