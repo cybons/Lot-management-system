@@ -121,16 +121,34 @@ Key Tables:
 Lot-management-system/
 ├── backend/
 │   ├── app/
-│   │   ├── api/routes/           # 18 router files
-│   │   ├── services/             # Business logic layer
+│   │   ├── api/routes/           # API routes (feature-based subpackages)
+│   │   │   ├── masters/          # Master data routers (11 files)
+│   │   │   ├── orders/           # Order routers (2 files)
+│   │   │   ├── allocations/      # Allocation routers (4 files)
+│   │   │   ├── inventory/        # Inventory routers (4 files)
+│   │   │   ├── forecasts/        # Forecast routers (2 files)
+│   │   │   ├── admin/            # Admin routers (9 files)
+│   │   │   ├── integration/      # Integration routers (2 files)
+│   │   │   └── __init__.py       # Unified router exports
+│   │   ├── services/             # Business logic layer (feature-based subpackages)
+│   │   │   ├── allocation/       # Allocation services
+│   │   │   ├── seed/             # Seed data services
+│   │   │   ├── integration/      # Integration services
+│   │   │   └── ... (20+ services at root level)
 │   │   ├── repositories/         # Data access layer
-│   │   ├── models/               # SQLAlchemy models
+│   │   ├── models/               # SQLAlchemy models (11 files)
 │   │   │   ├── base_model.py
 │   │   │   ├── masters_models.py
 │   │   │   ├── inventory_models.py
 │   │   │   ├── orders_models.py
-│   │   │   └── logs_models.py
-│   │   ├── schemas/              # Pydantic schemas (14 files)
+│   │   │   ├── auth_models.py
+│   │   │   ├── forecast_models.py
+│   │   │   ├── inbound_models.py
+│   │   │   ├── logs_models.py
+│   │   │   ├── seed_snapshot_model.py
+│   │   │   ├── system_config_model.py
+│   │   │   └── views_models.py
+│   │   ├── schemas/              # Pydantic schemas (22 files)
 │   │   ├── domain/               # Pure business rules
 │   │   │   ├── errors.py         # Domain exceptions
 │   │   │   └── warehouse_and_forecast.py
