@@ -1,3 +1,5 @@
+"""Unified re-export of Pydantic schema classes used by the backend API."""
+
 from __future__ import annotations
 
 from .admin_schema import (
@@ -168,6 +170,7 @@ from .warehouses_schema import (
     WarehouseListResponse,
     WarehouseOut,
 )
+
 
 __all__ = [
     "AdminPresetListResponse",

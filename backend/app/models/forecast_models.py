@@ -70,9 +70,7 @@ class ForecastHeader(Base):
     )
 
     __table_args__ = (
-        UniqueConstraint(
-            "forecast_number", name="forecast_headers_forecast_number_key"
-        ),
+        UniqueConstraint("forecast_number", name="forecast_headers_forecast_number_key"),
         CheckConstraint(
             "status IN ('active','completed','cancelled')",
             name="chk_forecast_headers_status",
@@ -89,9 +87,7 @@ class ForecastHeader(Base):
         ),
     )
 
-    customer: Mapped[Customer] = relationship(
-        "Customer", back_populates="forecast_headers"
-    )
+    customer: Mapped[Customer] = relationship("Customer", back_populates="forecast_headers")
     delivery_place: Mapped[DeliveryPlace] = relationship(
         "DeliveryPlace", back_populates="forecast_headers"
     )
@@ -105,9 +101,7 @@ class ForecastLine(Base):
 
     __tablename__ = "forecast_lines"
 
-    id: Mapped[int] = mapped_column(
-        "forecast_line_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("forecast_line_id", BigInteger, primary_key=True)
     forecast_id: Mapped[int] = mapped_column(
         BigInteger,
         ForeignKey("forecast_headers.forecast_id", ondelete="CASCADE"),
@@ -119,9 +113,7 @@ class ForecastLine(Base):
         nullable=False,
     )
     delivery_date: Mapped[date] = mapped_column(Date, nullable=False)
-    forecast_quantity: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
+    forecast_quantity: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
     unit: Mapped[str] = mapped_column(String(20), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
@@ -139,12 +131,8 @@ class ForecastLine(Base):
         Index("idx_forecast_lines_date", "delivery_date"),
     )
 
-    header: Mapped[ForecastHeader] = relationship(
-        "ForecastHeader", back_populates="lines"
-    )
-    product: Mapped[Product] = relationship(
-        "Product", back_populates="forecast_lines"
-    )
+    header: Mapped[ForecastHeader] = relationship("ForecastHeader", back_populates="lines")
+    product: Mapped[Product] = relationship("Product", back_populates="forecast_lines")
 
 
 # Backward compatibility alias until dependent code is refactored.

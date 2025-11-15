@@ -33,7 +33,7 @@ class ForecastHeaderBase(BaseSchema):
 class ForecastHeaderCreate(ForecastHeaderBase):
     """Payload for creating a new forecast header."""
 
-    lines: list["ForecastLineCreate"] | None = Field(
+    lines: list[ForecastLineCreate] | None = Field(
         default=None,
         description="Optional collection of forecast lines created together with the header.",
     )
@@ -58,7 +58,7 @@ class ForecastHeaderResponse(ForecastHeaderBase, TimestampMixin):
 class ForecastHeaderDetailResponse(ForecastHeaderResponse):
     """Header representation bundled with its lines."""
 
-    lines: list["ForecastLineResponse"] = Field(default_factory=list)
+    lines: list[ForecastLineResponse] = Field(default_factory=list)
 
 
 class ForecastLineBase(BaseSchema):

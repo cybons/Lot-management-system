@@ -45,9 +45,7 @@ class InboundPlan(Base):
 
     __tablename__ = "inbound_plans"
 
-    id: Mapped[int] = mapped_column(
-        "inbound_plan_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("inbound_plan_id", BigInteger, primary_key=True)
     plan_number: Mapped[str] = mapped_column(String(50), nullable=False)
     supplier_id: Mapped[int] = mapped_column(
         BigInteger,
@@ -70,9 +68,7 @@ class InboundPlan(Base):
     )
 
     __table_args__ = (
-        UniqueConstraint(
-            "plan_number", name="inbound_plans_plan_number_key"
-        ),
+        UniqueConstraint("plan_number", name="inbound_plans_plan_number_key"),
         CheckConstraint(
             "status IN ('planned','partially_received','received','cancelled')",
             name="chk_inbound_plans_status",
@@ -85,9 +81,7 @@ class InboundPlan(Base):
         Index("idx_inbound_plans_status", "status"),
     )
 
-    supplier: Mapped[Supplier] = relationship(
-        "Supplier", back_populates="inbound_plans"
-    )
+    supplier: Mapped[Supplier] = relationship("Supplier", back_populates="inbound_plans")
     lines: Mapped[list[InboundPlanLine]] = relationship(
         "InboundPlanLine",
         back_populates="inbound_plan",
@@ -100,9 +94,7 @@ class InboundPlanLine(Base):
 
     __tablename__ = "inbound_plan_lines"
 
-    id: Mapped[int] = mapped_column(
-        "inbound_plan_line_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("inbound_plan_line_id", BigInteger, primary_key=True)
     inbound_plan_id: Mapped[int] = mapped_column(
         BigInteger,
         ForeignKey("inbound_plans.inbound_plan_id", ondelete="CASCADE"),
@@ -113,9 +105,7 @@ class InboundPlanLine(Base):
         ForeignKey("products.product_id", ondelete="RESTRICT"),
         nullable=False,
     )
-    planned_quantity: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
+    planned_quantity: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
     unit: Mapped[str] = mapped_column(String(20), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
@@ -132,12 +122,8 @@ class InboundPlanLine(Base):
         Index("idx_inbound_plan_lines_product", "product_id"),
     )
 
-    inbound_plan: Mapped[InboundPlan] = relationship(
-        "InboundPlan", back_populates="lines"
-    )
-    product: Mapped[Product] = relationship(
-        "Product", back_populates="inbound_plan_lines"
-    )
+    inbound_plan: Mapped[InboundPlan] = relationship("InboundPlan", back_populates="lines")
+    product: Mapped[Product] = relationship("Product", back_populates="inbound_plan_lines")
     expected_lots: Mapped[list[ExpectedLot]] = relationship(
         "ExpectedLot", back_populates="inbound_plan_line", cascade="all, delete-orphan"
     )
@@ -148,9 +134,7 @@ class ExpectedLot(Base):
 
     __tablename__ = "expected_lots"
 
-    id: Mapped[int] = mapped_column(
-        "expected_lot_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("expected_lot_id", BigInteger, primary_key=True)
     inbound_plan_line_id: Mapped[int] = mapped_column(
         BigInteger,
         ForeignKey(
@@ -159,12 +143,8 @@ class ExpectedLot(Base):
         ),
         nullable=False,
     )
-    expected_lot_number: Mapped[str | None] = mapped_column(
-        String(100), nullable=True
-    )
-    expected_quantity: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
+    expected_lot_number: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    expected_quantity: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
     expected_expiry_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
@@ -184,7 +164,4 @@ class ExpectedLot(Base):
     inbound_plan_line: Mapped[InboundPlanLine] = relationship(
         "InboundPlanLine", back_populates="expected_lots"
     )
-    lot: Mapped[Lot | None] = relationship(
-        "Lot", back_populates="expected_lot", uselist=False
-    )
-
+    lot: Mapped[Lot | None] = relationship("Lot", back_populates="expected_lot", uselist=False)

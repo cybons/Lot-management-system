@@ -6,6 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from backend.app.models.inventory_models import ExpiryRule
 from sqlalchemy import (
     Boolean,
     DateTime,

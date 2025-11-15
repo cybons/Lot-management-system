@@ -7,11 +7,13 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     CheckConstraint,
     Date,
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     Numeric,
     String,
     Text,
@@ -80,9 +82,7 @@ class Lot(Base):
         Numeric(15, 3), nullable=False, server_default=text("0")
     )
     unit: Mapped[str] = mapped_column(String(20), nullable=False)
-    status: Mapped[str] = mapped_column(
-        String(20), nullable=False, server_default=text("'active'")
-    )
+    status: Mapped[str] = mapped_column(String(20), nullable=False, server_default=text("'active'"))
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now()
     )
@@ -118,9 +118,7 @@ class Lot(Base):
 
     product: Mapped[Product] = relationship("Product", back_populates="lots")
     warehouse: Mapped[Warehouse] = relationship("Warehouse", back_populates="lots")
-    supplier: Mapped[Supplier | None] = relationship(
-        "Supplier", back_populates="lots"
-    )
+    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="lots")
     expected_lot: Mapped[ExpectedLot | None] = relationship(
         "ExpectedLot", back_populates="lot", uselist=False
     )
@@ -150,12 +148,8 @@ class StockHistory(Base):
         String(20),
         nullable=False,
     )
-    quantity_change: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
-    quantity_after: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
+    quantity_change: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
+    quantity_after: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
     reference_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
     reference_id: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     transaction_date: Mapped[datetime] = mapped_column(
@@ -189,20 +183,14 @@ class Adjustment(Base):
 
     __tablename__ = "adjustments"
 
-    id: Mapped[int] = mapped_column(
-        "adjustment_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("adjustment_id", BigInteger, primary_key=True)
     lot_id: Mapped[int] = mapped_column(
         BigInteger,
         ForeignKey("lots.lot_id", ondelete="RESTRICT"),
         nullable=False,
     )
-    adjustment_type: Mapped[AdjustmentType] = mapped_column(
-        String(20), nullable=False
-    )
-    adjusted_quantity: Mapped[Decimal] = mapped_column(
-        Numeric(15, 3), nullable=False
-    )
+    adjustment_type: Mapped[AdjustmentType] = mapped_column(String(20), nullable=False)
+    adjusted_quantity: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
     reason: Mapped[str] = mapped_column(Text, nullable=False)
     adjusted_by: Mapped[int] = mapped_column(
         BigInteger,
@@ -230,9 +218,7 @@ class InventoryItem(Base):
 
     __tablename__ = "inventory_items"
 
-    id: Mapped[int] = mapped_column(
-        "inventory_item_id", BigInteger, primary_key=True
-    )
+    id: Mapped[int] = mapped_column("inventory_item_id", BigInteger, primary_key=True)
     product_id: Mapped[int] = mapped_column(
         BigInteger,
         ForeignKey("products.product_id", ondelete="CASCADE"),
@@ -257,19 +243,45 @@ class InventoryItem(Base):
     )
 
     __table_args__ = (
-        UniqueConstraint(
-            "product_id", "warehouse_id", name="uq_inventory_items_product_warehouse"
-        ),
+        UniqueConstraint("product_id", "warehouse_id", name="uq_inventory_items_product_warehouse"),
         Index("idx_inventory_items_product", "product_id"),
         Index("idx_inventory_items_warehouse", "warehouse_id"),
     )
 
-    product: Mapped[Product] = relationship(
-        "Product", back_populates="inventory_items"
+    product: Mapped[Product] = relationship("Product", back_populates="inventory_items")
+    warehouse: Mapped[Warehouse] = relationship("Warehouse", back_populates="inventory_items")
+
+
+class ExpiryRule(Base):
+    """Shelf-life calculation rules (legacy, kept for backward compatibility)."""
+
+    __tablename__ = "expiry_rules"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    rule_type: Mapped[str] = mapped_column(Text, nullable=False)
+    days: Mapped[int | None] = mapped_column(Integer)
+    fixed_date: Mapped[date | None] = mapped_column(Date)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
+    priority: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
     )
-    warehouse: Mapped[Warehouse] = relationship(
-        "Warehouse", back_populates="inventory_items"
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
     )
+    created_by: Mapped[str | None] = mapped_column(String(50))
+    updated_by: Mapped[str | None] = mapped_column(String(50))
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    product_id: Mapped[int | None] = mapped_column(
+        ForeignKey("products.id", ondelete="SET NULL"), nullable=True
+    )
+    supplier_id: Mapped[int | None] = mapped_column(
+        ForeignKey("suppliers.id", ondelete="SET NULL"), nullable=True
+    )
+
+    product: Mapped[Product | None] = relationship("Product", back_populates="expiry_rules")
+    supplier: Mapped[Supplier | None] = relationship("Supplier", back_populates="expiry_rules")
 
 
 # Backward compatibility aliases (to be removed in later refactors)
