@@ -9,7 +9,7 @@ from datetime import date
 from sqlalchemy import Select, or_, select
 from sqlalchemy.orm import Session, joinedload
 
-from app.models import Lot, LotCurrentStock, Warehouse
+from app.models import Lot, Warehouse
 
 
 class StockRepository:
@@ -25,11 +25,14 @@ class StockRepository:
         ship_date: date | None,
         for_update: bool = True,
     ) -> list[Lot]:
-        """Fetch candidate lots in FIFO order with optional row locking."""
+        """
+        Fetch candidate lots in FIFO order with optional row locking.
+
+        v2.2: Removed joinedload(Lot.current_stock) - no longer needed.
+        """
         stmt: Select[tuple[Lot]] = (
             select(Lot)
             .join(Lot.warehouse)
-            .options(joinedload(Lot.current_stock))
             .where(Lot.product_code == product_code)
             .where(Warehouse.warehouse_code == warehouse_code)
         )
@@ -60,21 +63,13 @@ class StockRepository:
 
     @staticmethod
     def calc_available_qty(lot: Lot) -> int:
-        """Calculate allocatable quantity for a lot."""
-        stock: LotCurrentStock | None = lot.current_stock
-        if stock is None:
-            return 0
+        """
+        Calculate allocatable quantity for a lot.
 
-        on_hand = getattr(stock, "on_hand_qty", None)
-        if on_hand is None:
-            on_hand = getattr(stock, "current_quantity", None)
+        v2.2: Use Lot model directly - current_quantity - allocated_quantity.
+        """
+        current_qty = float(getattr(lot, "current_quantity", 0) or 0)
+        allocated_qty = float(getattr(lot, "allocated_quantity", 0) or 0)
 
-        allocated = getattr(stock, "allocated_qty", None)
-        picked = getattr(stock, "picked_qty", None)
-
-        on_hand_value = float(on_hand or 0)
-        allocated_value = float(allocated or 0)
-        picked_value = float(picked or 0)
-
-        available = on_hand_value - (allocated_value + picked_value)
+        available = current_qty - allocated_qty
         return max(0, int(round(available)))
