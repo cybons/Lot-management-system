@@ -695,6 +695,7 @@ def run_seed_simulation(
             )
         except Exception as e:
             logger.warning(f"Stock equation check failed (view may not exist): {e}")
+            db.rollback()  # 読み取りエラーでトランザクションが中断した場合に備えてクリア
             stock_equation_ok = True  # ビューが存在しない場合はスキップ
             tracker.add_log(task_id, "Stock equation check: SKIPPED (view not found)")
 
