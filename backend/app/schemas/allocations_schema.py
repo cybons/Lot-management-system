@@ -102,3 +102,47 @@ class AllocatableLotsResponse(BaseSchema):
 
     items: list[AllocatableLotItem] = Field(default_factory=list)
     total: int = 0
+
+
+# --- Phase 3-4: v2.2.1 新スキーマ ---
+
+
+class AllocationSuggestionManualRequest(BaseSchema):
+    """手動仮引当リクエスト（v2.2.1）."""
+
+    order_line_id: int
+    lot_id: int
+    quantity: float
+
+
+class AllocationSuggestionManualResponse(BaseSchema):
+    """手動仮引当レスポンス（v2.2.1）."""
+
+    order_line_id: int
+    lot_id: int
+    lot_number: str
+    suggested_quantity: float
+    available_quantity: float
+    product_id: int | None = None
+    product_code: str | None = None
+    warehouse_id: int | None = None
+    expiry_date: date | None = None
+    status: str = "preview"
+    message: str | None = None
+
+
+class AllocationCommitRequest(BaseSchema):
+    """引当確定リクエスト（v2.2.1）."""
+
+    order_id: int
+    # 将来: suggestion_ids のリストでの確定も対応可能
+
+
+class AllocationCommitResponse(BaseSchema):
+    """引当確定レスポンス（v2.2.1）."""
+
+    order_id: int
+    created_allocation_ids: list[int] = Field(default_factory=list)
+    preview: FefoPreviewResponse | None = None
+    status: str = "committed"
+    message: str | None = None

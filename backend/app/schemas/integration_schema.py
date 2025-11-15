@@ -86,3 +86,32 @@ class SapSyncLogResponse(BaseSchema):
     result: str | None = None
     status: str
     executed_at: datetime
+
+
+# --- Phase 3-5: v2.2.1 汎用Submissions ---
+
+
+class SubmissionRequest(BaseSchema):
+    """汎用サブミッションリクエスト（v2.2.1）."""
+
+    source: str  # "ocr", "excel", "api", etc.
+    payload: dict[str, Any]  # 任意のペイロード（OCR結果、Excel取込データなど）
+    meta: dict[str, Any] | None = None  # 任意の付加情報
+    file_name: str | None = None
+    operator: str | None = None
+    schema_version: str = "2.2.1"
+
+
+class SubmissionResponse(BaseSchema):
+    """汎用サブミッションレスポンス（v2.2.1）."""
+
+    status: str  # "success", "partial", "failed"
+    submission_id: str
+    source: str
+    created_records: int = 0
+    total_records: int = 0
+    processed_records: int = 0
+    failed_records: int = 0
+    skipped_records: int = 0
+    error_details: str | None = None
+    submitted_at: datetime | None = None

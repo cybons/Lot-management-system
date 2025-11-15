@@ -8,7 +8,9 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.models import Allocation, Lot, LotCurrentStock, OrderLine
-from app.schemas import (
+from app.schemas.allocations_schema import (
+    AllocationCommitRequest,
+    AllocationCommitResponse,
     CandidateLotsResponse,
     DragAssignRequest,
     FefoCommitResponse,
@@ -31,12 +33,20 @@ router = APIRouter(prefix="/allocations", tags=["allocations"])
 
 
 # --- 追加: 旧 drag-assign 互換API ---
-@router.post("/drag-assign")
+@router.post("/drag-assign", deprecated=True)
 def drag_assign_allocation(request: DragAssignRequest, db: Session = Depends(get_db)):
     """
-    互換エンドポイント: ドラッグ引当
+    互換エンドポイント: ドラッグ引当.
+
+    DEPRECATED: Use POST /api/allocation-suggestions/manual instead.
+    This endpoint will be removed in v3.0.
+
     ※元々 orders.py に存在したものを再実装（URL・I/O変更なし）.
     """
+    logger.warning(
+        "DEPRECATED: POST /allocations/drag-assign called. "
+        "Please migrate to POST /allocation-suggestions/manual."
+    )
     order_line = db.query(OrderLine).filter(OrderLine.id == request.order_line_id).first()
     if not order_line:
         raise HTTPException(status_code=404, detail="受注明細が見つかりません")
@@ -112,11 +122,20 @@ def _to_preview_response(service_result) -> FefoPreviewResponse:
     )
 
 
-@router.post("/preview", response_model=FefoPreviewResponse)
+@router.post("/preview", response_model=FefoPreviewResponse, deprecated=True)
 def preview_allocations(
     request: FefoPreviewRequest, db: Session = Depends(get_db)
 ) -> FefoPreviewResponse:
-    """在庫を変更しない FEFO 引当プレビュー."""
+    """
+    在庫を変更しない FEFO 引当プレビュー.
+
+    DEPRECATED: Use POST /api/allocation-suggestions/fefo instead.
+    This endpoint will be removed in v3.0.
+    """
+    logger.warning(
+        "DEPRECATED: POST /allocations/preview called. "
+        "Please migrate to POST /allocation-suggestions/fefo."
+    )
     try:
         result = preview_fefo_allocation(db, request.order_id)
     except ValueError as exc:
@@ -127,9 +146,18 @@ def preview_allocations(
     return _to_preview_response(result)
 
 
-@router.post("/orders/{order_id}/allocate", response_model=FefoCommitResponse)
+@router.post("/orders/{order_id}/allocate", response_model=FefoCommitResponse, deprecated=True)
 def allocate_order(order_id: int, db: Session = Depends(get_db)) -> FefoCommitResponse:
-    """注文ID単位でのFEFO引当確定."""
+    """
+    注文ID単位でのFEFO引当確定.
+
+    DEPRECATED: Use POST /api/allocations/commit instead.
+    This endpoint will be removed in v3.0.
+    """
+    logger.warning(
+        "DEPRECATED: POST /allocations/orders/{id}/allocate called. "
+        "Please migrate to POST /allocations/commit."
+    )
     try:
         result = commit_fefo_allocation(db, order_id)
     except ValueError as exc:
@@ -148,7 +176,7 @@ def allocate_order(order_id: int, db: Session = Depends(get_db)) -> FefoCommitRe
     )
 
 
-@router.get("/candidate-lots", response_model=CandidateLotsResponse)
+@router.get("/candidate-lots", response_model=CandidateLotsResponse, deprecated=True)
 def get_candidate_lots(
     product_id: int,
     warehouse_id: int | None = None,
@@ -157,6 +185,9 @@ def get_candidate_lots(
 ):
     """
     候補ロット一覧取得（product_id基準）.
+
+    DEPRECATED: Use GET /api/allocation-candidates instead.
+    This endpoint will be removed in v3.0.
 
     Args:
         product_id: 製品ID（必須）
@@ -172,6 +203,11 @@ def get_candidate_lots(
         - ロック済み・期限切れは除外
         - 並び順: expiry_date NULLS FIRST, lot_id
     """
+    logger.warning(
+        "DEPRECATED: GET /allocations/candidate-lots called. "
+        "Please migrate to GET /allocation-candidates."
+    )
+
     try:
         # クエリタイムアウト設定（5秒）
         db.execute(text("SET LOCAL statement_timeout = '5s'"))
@@ -249,3 +285,50 @@ def get_candidate_lots(
     except Exception as e:
         logger.error(f"候補ロット取得エラー (product_id={product_id}): {e}")
         raise HTTPException(status_code=500, detail=f"候補ロット取得エラー: {str(e)}")
+
+
+# --- Phase 3-4: v2.2.1 新エンドポイント ---
+
+
+@router.post("/commit", response_model=AllocationCommitResponse)
+def commit_allocation(request: AllocationCommitRequest, db: Session = Depends(get_db)):
+    """
+    引当確定（v2.2.1準拠）.
+
+    FEFO・手動いずれかで作成された仮引当案を元に、実績の allocations を生成し、在庫を確定させる。
+
+    Args:
+        request: 引当確定リクエスト（order_id）
+        db: データベースセッション
+
+    Returns:
+        AllocationCommitResponse: 確定結果
+
+    Note:
+        - allocations テーブルにレコード作成
+        - lots.quantity から実績数量を減算
+        - stock_history への出庫履歴記録
+    """
+    try:
+        # 既存のFEFO確定サービスを再利用
+        result = commit_fefo_allocation(db, request.order_id)
+    except ValueError as exc:
+        message = str(exc)
+        status_code = 404 if "not found" in message.lower() else 400
+        raise HTTPException(status_code=status_code, detail=message)
+    except AllocationCommitError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+    # プレビュー結果をレスポンススキーマに変換
+    preview_response = _to_preview_response(result.preview)
+    created_ids = [alloc.id for alloc in result.created_allocations]
+
+    logger.info(f"引当確定成功: order_id={request.order_id}, 作成引当数={len(created_ids)}")
+
+    return AllocationCommitResponse(
+        order_id=request.order_id,
+        created_allocation_ids=created_ids,
+        preview=preview_response,
+        status="committed",
+        message=f"引当確定成功。{len(created_ids)}件の引当を作成しました。",
+    )

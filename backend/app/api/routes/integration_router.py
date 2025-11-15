@@ -38,10 +38,13 @@ router = APIRouter(prefix="/integration", tags=["integration"])
 
 
 # ===== OCR Submission =====
-@router.post("/ai-ocr/submit", response_model=OcrSubmissionResponse)
+@router.post("/ai-ocr/submit", response_model=OcrSubmissionResponse, deprecated=True)
 def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_db)):
     """
     AI-OCR受注データ取込.
+
+    DEPRECATED: Use POST /api/submissions instead with source="ocr".
+    This endpoint will be removed in v3.0.
 
     処理フロー:
     1. OCR取込ログ作成
@@ -52,6 +55,10 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
        - (オプション) フォーキャストマッチング
     3. 結果サマリ返却
     """
+    logger.warning(
+        "DEPRECATED: POST /integration/ai-ocr/submit called. "
+        "Please migrate to POST /submissions with source='ocr'."
+    )
     # 取込ID生成
     submission_id = f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{submission.source}"
 
@@ -193,9 +200,18 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
     )
 
 
-@router.get("/ai-ocr/submissions", response_model=list[OcrSubmissionResponse])
+@router.get("/ai-ocr/submissions", response_model=list[OcrSubmissionResponse], deprecated=True)
 def list_ocr_submissions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """OCR取込ログ一覧取得."""
+    """
+    OCR取込ログ一覧取得.
+
+    DEPRECATED: This endpoint will be removed in v3.0.
+    Use dedicated logs API instead.
+    """
+    logger.warning(
+        "DEPRECATED: GET /integration/ai-ocr/submissions called. "
+        "This endpoint will be removed in future versions."
+    )
     submissions = (
         db.query(OcrSubmission)
         .order_by(OcrSubmission.submission_date.desc())
@@ -221,14 +237,20 @@ def list_ocr_submissions(skip: int = 0, limit: int = 100, db: Session = Depends(
 
 
 # ===== SAP Sync =====
-@router.post("/sap/register", response_model=SapRegisterResponse)
+@router.post("/sap/register", response_model=SapRegisterResponse, deprecated=True)
 def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     """
     SAP連携(手動送信).
 
+    DEPRECATED: This endpoint will be moved to /api/sap-sync in v3.0.
+
     注意: 実際のSAP APIは実装されていません。
     これはモック実装です。
     """
+    logger.warning(
+        "DEPRECATED: POST /integration/sap/register called. "
+        "Please migrate to POST /sap-sync in future versions."
+    )
     # 対象受注の取得
     orders = []
 
@@ -297,9 +319,17 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/sap/logs", response_model=list[SapSyncLogResponse])
+@router.get("/sap/logs", response_model=list[SapSyncLogResponse], deprecated=True)
 def list_sap_logs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """SAP連携ログ一覧取得."""
+    """
+    SAP連携ログ一覧取得.
+
+    DEPRECATED: This endpoint will be moved to /api/sap-sync/logs in v3.0.
+    """
+    logger.warning(
+        "DEPRECATED: GET /integration/sap/logs called. "
+        "Please migrate to GET /sap-sync/logs in future versions."
+    )
     logs = (
         db.query(SapSyncLog).order_by(SapSyncLog.executed_at.desc()).offset(skip).limit(limit).all()
     )

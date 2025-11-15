@@ -14,6 +14,8 @@ from app.api.routes import (
     admin_healthcheck_router,
     admin_router,
     admin_simulate_router,
+    allocation_candidates_router,
+    allocation_suggestions_router,
     allocations_router,
     customer_items_router,
     customers_router,
@@ -29,6 +31,7 @@ from app.api.routes import (
     orders_validate_router,
     products_router,
     roles_router,
+    submissions_router,
     suppliers_router,
     users_router,
     warehouse_alloc_router,
@@ -90,7 +93,10 @@ app.include_router(masters_router, prefix=settings.API_PREFIX)  # Legacy: /api/m
 app.include_router(lots_router, prefix=settings.API_PREFIX)
 app.include_router(orders_router, prefix=settings.API_PREFIX)
 app.include_router(allocations_router, prefix=settings.API_PREFIX)
+app.include_router(allocation_candidates_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-4
+app.include_router(allocation_suggestions_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-4
 app.include_router(integration_router, prefix=settings.API_PREFIX)
+app.include_router(submissions_router, prefix=settings.API_PREFIX)  # NEW: Phase 3-5
 app.include_router(admin_router, prefix=settings.API_PREFIX)
 app.include_router(admin_healthcheck_router, prefix=settings.API_PREFIX)
 app.include_router(forecast_router, prefix=settings.API_PREFIX)  # Legacy
