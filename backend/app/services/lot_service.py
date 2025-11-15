@@ -1,4 +1,8 @@
-"""Lot repository and service utilities with FEFO support."""
+"""
+Lot repository and service utilities with FEFO support.
+
+v2.2: lot_current_stock 依存を削除。Lot モデルを直接使用。
+"""
 
 from __future__ import annotations
 
@@ -9,7 +13,7 @@ from sqlalchemy import Select, select
 from sqlalchemy.orm import Session, joinedload
 
 from app.domain.lot import FefoPolicy, LotCandidate, LotNotFoundError, StockValidator
-from app.models import Lot, LotCurrentStock, Product, Supplier, Warehouse
+from app.models import Lot, Product, Supplier, Warehouse
 
 
 class LotRepository:
@@ -32,8 +36,12 @@ class LotRepository:
         product_code: str,
         warehouse_code: str | None = None,
         min_quantity: float = 0.0,
-    ) -> Sequence[tuple[Lot, LotCurrentStock]]:
-        """Fetch lots that have stock remaining for a product."""
+    ) -> Sequence[Lot]:
+        """
+        Fetch lots that have stock remaining for a product.
+
+        v2.2: Uses Lot.current_quantity - Lot.allocated_quantity directly.
+        """
         # product_codeからproduct_idに変換
         from app.models import Product
 
@@ -41,20 +49,19 @@ class LotRepository:
         if not product:
             return []
 
-        stmt: Select[tuple[Lot, LotCurrentStock]] = (
-            select(Lot, LotCurrentStock)
-            .join(LotCurrentStock, LotCurrentStock.lot_id == Lot.id)
+        stmt: Select[tuple[Lot]] = (
+            select(Lot)
             .where(
                 Lot.product_id == product.id,
-                Lot.is_locked.is_(False),
-                LotCurrentStock.current_quantity > min_quantity,
+                Lot.status == "active",
+                (Lot.current_quantity - Lot.allocated_quantity) > min_quantity,
             )
         )
 
         if warehouse_code:
             stmt = stmt.where(Lot.warehouse_code == warehouse_code)
 
-        return self.db.execute(stmt).all()
+        return self.db.execute(stmt).scalars().all()
 
     def create(
         self,
@@ -84,7 +91,7 @@ class LotRepository:
             lot_number=lot_number,
             warehouse_id=warehouse_id,
             warehouse_code=warehouse.warehouse_code if warehouse else None,
-            receipt_date=receipt_date or date.today(),
+            received_date=receipt_date or date.today(),
             expiry_date=expiry_date,
         )
         self.db.add(lot)
@@ -110,7 +117,12 @@ class LotService:
         warehouse_code: str | None = None,
         exclude_expired: bool = True,
     ) -> list[LotCandidate]:
-        lot_stocks = self.repository.find_available_lots(
+        """
+        Get FEFO candidate lots.
+
+        v2.2: Uses Lot.current_quantity - Lot.allocated_quantity for available quantity.
+        """
+        lots = self.repository.find_available_lots(
             product_code=product_code,
             warehouse_code=warehouse_code,
             min_quantity=0.0,
@@ -124,11 +136,11 @@ class LotService:
                 product_code=lot.product.product_code if lot.product else product_code,
                 warehouse_code=lot.warehouse_code
                 or (lot.warehouse.warehouse_code if lot.warehouse else ""),
-                available_qty=float(stock.current_quantity or 0.0),
+                available_qty=float((lot.current_quantity - lot.allocated_quantity) or 0.0),
                 expiry_date=lot.expiry_date,
-                receipt_date=lot.receipt_date,
+                receipt_date=lot.received_date,
             )
-            for lot, stock in lot_stocks
+            for lot in lots
         ]
 
         if exclude_expired:
@@ -137,14 +149,15 @@ class LotService:
         return FefoPolicy.sort_lots_by_fefo(candidates)
 
     def validate_lot_availability(self, lot_id: int, required_qty: float) -> None:
+        """
+        Validate lot availability.
+
+        v2.2: Uses Lot.current_quantity - Lot.allocated_quantity directly.
+        """
         lot = self.get_lot(lot_id)
 
-        stmt = select(LotCurrentStock).where(LotCurrentStock.lot_id == lot_id)
-        current_stock = self.db.execute(stmt).scalar_one_or_none()
+        # 利用可能在庫を計算
+        available_qty = float(lot.current_quantity - lot.allocated_quantity)
 
-        if current_stock:
-            StockValidator.validate_sufficient_stock(
-                lot_id, required_qty, current_stock.current_quantity
-            )
-
+        StockValidator.validate_sufficient_stock(lot_id, required_qty, available_qty)
         StockValidator.validate_not_expired(lot_id, lot.expiry_date)
