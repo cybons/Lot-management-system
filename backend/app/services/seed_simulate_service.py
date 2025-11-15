@@ -13,8 +13,8 @@ from typing import Any
 
 from faker import Faker
 from sqlalchemy import func, select, text
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.database import truncate_all_tables
