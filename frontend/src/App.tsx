@@ -21,6 +21,9 @@ import { LotsPage } from "@/features/inventory/pages/LotsPage";
 import { MovesPage } from "@/features/inventory/pages/MovesPage";
 import { SummaryPage } from "@/features/inventory/pages/SummaryPage";
 import { OrdersListPage } from "@/features/orders/pages/OrdersListPage";
+import { BatchJobsPage } from "@/features/batch-jobs/pages/BatchJobsPage";
+import { BusinessRulesPage } from "@/features/business-rules/pages/BusinessRulesPage";
+import { OperationLogsPage } from "@/features/operation-logs/pages/OperationLogsPage";
 import { RolesListPage } from "@/features/roles/pages/RolesListPage";
 import { UsersListPage } from "@/features/users/pages/UsersListPage";
 import { UserDetailPage } from "@/features/users/pages/UserDetailPage";
@@ -83,8 +86,11 @@ function App() {
         <Route path="/settings/users/:id" element={<UserDetailPage />} />
         <Route path={ROUTES.SETTINGS.ROLES} element={<RolesListPage />} />
 
-        {/* Admin */}
+        {/* Admin - Phase H */}
         <Route path={ROUTES.ADMIN.INDEX} element={<AdminPage />} />
+        <Route path={ROUTES.ADMIN.OPERATION_LOGS} element={<OperationLogsPage />} />
+        <Route path={ROUTES.ADMIN.BUSINESS_RULES} element={<BusinessRulesPage />} />
+        <Route path={ROUTES.ADMIN.BATCH_JOBS} element={<BatchJobsPage />} />
 
         {/* Catch all - redirect to dashboard */}
         <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
