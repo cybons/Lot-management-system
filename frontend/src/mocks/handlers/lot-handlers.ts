@@ -28,8 +28,10 @@ export const lotHandlers = [
     // フィルタリング
     // DDL v2.2: LotResponse has product_id (number), not product_code (string)
     // For mock data, we skip product_code filtering or use legacy field
-    if (productCode && filteredLots[0] && 'product_code' in filteredLots[0]) {
-      filteredLots = filteredLots.filter((lot) => (lot as { product_code?: string }).product_code === productCode);
+    if (productCode && filteredLots[0] && "product_code" in filteredLots[0]) {
+      filteredLots = filteredLots.filter(
+        (lot) => (lot as { product_code?: string }).product_code === productCode,
+      );
     }
 
     if (hasStock === "true") {

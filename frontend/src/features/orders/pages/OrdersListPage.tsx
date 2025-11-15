@@ -131,7 +131,10 @@ export function OrdersListPage() {
         cell: (order: OrderUI) => {
           const lines = order.lines || [];
           // DDL v2.2: prefer order_quantity, fallback to quantity
-          const totalQty = lines.reduce<number>((sum, line: OrderLine) => sum + Number(line.order_quantity ?? line.quantity ?? 0), 0);
+          const totalQty = lines.reduce<number>(
+            (sum, line: OrderLine) => sum + Number(line.order_quantity ?? line.quantity ?? 0),
+            0,
+          );
           const allocatedQty = lines.reduce<number>((sum, line: OrderLine) => {
             const lots = coerceAllocatedLots(line.allocated_lots);
             // DDL v2.2: prefer allocated_quantity, fallback to allocated_qty

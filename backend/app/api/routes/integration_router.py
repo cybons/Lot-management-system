@@ -4,7 +4,6 @@
 OCR取込、SAP連携.
 """
 
-import json
 import logging
 from datetime import datetime
 
@@ -202,7 +201,7 @@ def list_ocr_submissions(skip: int = 0, limit: int = 100, db: Session = Depends(
     )
     raise HTTPException(
         status_code=410,
-        detail="このエンドポイントは削除されました。ocr_submissionsテーブルはDDL v2.2で廃止されました。"
+        detail="このエンドポイントは削除されました。ocr_submissionsテーブルはDDL v2.2で廃止されました。",
     )
 
 
@@ -246,19 +245,6 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     sent = 0
     for order in orders:
         # SAP送信(モック)
-        payload = {
-            "order_number": order.order_number,
-            "customer_id": order.customer_id,
-            "order_date": str(order.order_date) if order.order_date else None,
-            "lines": [
-                {
-                    "product_id": line.product_id,
-                    "order_quantity": float(line.order_quantity),
-                    "unit": line.unit,
-                }
-                for line in getattr(order, "order_lines", [])
-            ],
-        }
 
         # モック: 成功として処理
         sap_order_id = f"SAP-{order.order_number}"
@@ -296,5 +282,5 @@ def list_sap_logs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     )
     raise HTTPException(
         status_code=410,
-        detail="このエンドポイントは削除されました。sap_sync_logsテーブルはDDL v2.2で廃止されました。"
+        detail="このエンドポイントは削除されました。sap_sync_logsテーブルはDDL v2.2で廃止されました。",
     )

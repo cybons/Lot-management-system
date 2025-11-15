@@ -165,8 +165,10 @@ export function normalizeLot(lot: LotResponse): LotUI {
     // Legacy fields (for backward compatibility)
     id: lot.lot_id,
     receipt_date: S(lot.received_date),
-    delivery_place_id: (lot as Record<string, unknown>).delivery_place_id as number | null ?? null,
-    delivery_place_code: (lot as Record<string, unknown>).delivery_place_code as string | null ?? null,
+    delivery_place_id:
+      ((lot as Record<string, unknown>).delivery_place_id as number | null) ?? null,
+    delivery_place_code:
+      ((lot as Record<string, unknown>).delivery_place_code as string | null) ?? null,
     product_name: (lot as Record<string, unknown>).product_name as string | undefined,
   };
 }
@@ -200,8 +202,9 @@ export function normalizeOrderLine(line: OrderLine): OrderLineUI {
     order_quantity: String(line.order_quantity ?? "0"),
     unit: S(line.unit, "EA"),
     delivery_date: S(line.delivery_date),
-    warehouse_allocations: (line as Record<string, unknown>).warehouse_allocations as unknown[] ?? [],
-    related_lots: (line as Record<string, unknown>).related_lots as unknown[] ?? [],
+    warehouse_allocations:
+      ((line as Record<string, unknown>).warehouse_allocations as unknown[]) ?? [],
+    related_lots: ((line as Record<string, unknown>).related_lots as unknown[]) ?? [],
     allocated_lots: line.allocated_lots ?? [],
     // Legacy fields (for backward compatibility)
     line_no: line.line_no ?? undefined,

@@ -41,9 +41,7 @@ class OrderCreate(OrderBase):
 class OrderUpdate(BaseSchema):
     """Update order request."""
 
-    status: str | None = Field(
-        None, pattern="^(pending|allocated|shipped|completed|cancelled)$"
-    )
+    status: str | None = Field(None, pattern="^(pending|allocated|shipped|completed|cancelled)$")
 
 
 class OrderStatusUpdate(BaseSchema):
@@ -126,9 +124,7 @@ class AllocationResponse(BaseSchema):
     order_line_id: int
     lot_id: int
     allocated_quantity: Decimal = Field(..., decimal_places=3)
-    status: str = Field(
-        ..., pattern="^(allocated|shipped|cancelled)$"
-    )
+    status: str = Field(..., pattern="^(allocated|shipped|cancelled)$")
     created_at: datetime
     updated_at: datetime
 
@@ -143,9 +139,7 @@ class OrderLineOut(OrderLineResponse):
 
     # For backward compatibility with existing code
     product_name: str | None = None
-    allocated_qty: Decimal | None = Field(
-        None, description="Deprecated: use allocated_quantity"
-    )
+    allocated_qty: Decimal | None = Field(None, description="Deprecated: use allocated_quantity")
 
 
 # Pydantic v2のforward reference解決

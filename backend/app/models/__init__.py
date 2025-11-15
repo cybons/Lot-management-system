@@ -40,6 +40,7 @@ from .views_models import (
     VOrderLineContext,
 )
 
+
 __all__ = [
     # Base
     "Base",

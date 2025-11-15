@@ -63,9 +63,12 @@ export function createOrderLine(
   );
   const defaultAllocated = Math.min(
     Number(orderQuantity),
-    allocatedFromLots > 0 ? allocatedFromLots : faker.number.int({ min: 0, max: Number(orderQuantity) }),
+    allocatedFromLots > 0
+      ? allocatedFromLots
+      : faker.number.int({ min: 0, max: Number(orderQuantity) }),
   );
-  const allocatedQuantity = overrides?.allocated_quantity ?? overrides?.allocated_qty ?? String(defaultAllocated);
+  const allocatedQuantity =
+    overrides?.allocated_quantity ?? overrides?.allocated_qty ?? String(defaultAllocated);
 
   const unit = overrides?.unit ?? faker.helpers.arrayElement(["EA", "CASE", "BOX"]);
 
@@ -95,11 +98,17 @@ export function createOrderLine(
     created_at: faker.date.past().toISOString(), // DDL v2.2
     updated_at: faker.date.recent().toISOString(), // DDL v2.2
     // Legacy fields for backward compatibility
-    line_no: overrides?.line_no ?? (overrides as { line_number?: number })?.line_number ?? faker.number.int({ min: 1, max: 999 }),
+    line_no:
+      overrides?.line_no ??
+      (overrides as { line_number?: number })?.line_number ??
+      faker.number.int({ min: 1, max: 999 }),
     product_code: overrides?.product_code ?? `PRD-${faker.string.alphanumeric(4).toUpperCase()}`,
     quantity: overrides?.quantity ?? orderQuantity,
     status: overrides?.status ?? faker.helpers.arrayElement(["open", "allocated", "shipped"]),
-    due_date: overrides?.due_date ?? deliveryDate ?? faker.date.soon({ days: 30 }).toISOString().split("T")[0],
+    due_date:
+      overrides?.due_date ??
+      deliveryDate ??
+      faker.date.soon({ days: 30 }).toISOString().split("T")[0],
     allocated_qty: overrides?.allocated_qty ?? allocatedQuantity,
     forecast_qty: overrides?.forecast_qty ?? null,
     forecast_version_no: overrides?.forecast_version_no ?? null,

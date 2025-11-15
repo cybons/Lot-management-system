@@ -23,10 +23,24 @@ export function OrderLineCard({
   const allocatedQty: number = line.allocated_lots
     ? line.allocated_lots.reduce((sum: number, alloc) => {
         // DDL v2.2: prefer allocated_quantity, fallback to allocated_qty
-        const qty = typeof alloc === 'object' && alloc !== null
-          ? Number((alloc as { allocated_quantity?: number | string | null; allocated_qty?: number | null }).allocated_quantity ??
-                   (alloc as { allocated_quantity?: number | string | null; allocated_qty?: number | null }).allocated_qty ?? 0)
-          : 0;
+        const qty =
+          typeof alloc === "object" && alloc !== null
+            ? Number(
+                (
+                  alloc as {
+                    allocated_quantity?: number | string | null;
+                    allocated_qty?: number | null;
+                  }
+                ).allocated_quantity ??
+                  (
+                    alloc as {
+                      allocated_quantity?: number | string | null;
+                      allocated_qty?: number | null;
+                    }
+                  ).allocated_qty ??
+                  0,
+              )
+            : 0;
         return sum + qty;
       }, 0)
     : 0;

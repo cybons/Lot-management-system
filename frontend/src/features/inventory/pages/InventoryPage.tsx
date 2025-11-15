@@ -187,7 +187,9 @@ export function InventoryPage() {
   // 統計情報
   const stats = useMemo(() => {
     const totalLots = allLots?.length ?? 0;
-    const activeLots = (allLots ?? []).filter((lot: LotUI) => Number(lot.current_quantity) > 0).length;
+    const activeLots = (allLots ?? []).filter(
+      (lot: LotUI) => Number(lot.current_quantity) > 0,
+    ).length;
     const totalQuantity = (allLots ?? []).reduce<number>(
       (sum, lot) => sum + Number(lot.current_quantity),
       0,

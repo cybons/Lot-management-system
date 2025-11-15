@@ -168,9 +168,7 @@ class AllocationListResponse(BaseSchema):
 class DragAssignRequest(ManualAllocationRequest):
     """Deprecated: Use ManualAllocationRequest instead."""
 
-    allocate_qty: Decimal | None = Field(
-        None, description="Deprecated: use allocated_quantity"
-    )
+    allocate_qty: Decimal | None = Field(None, description="Deprecated: use allocated_quantity")
 
 
 class DragAssignResponse(BaseSchema):

@@ -65,16 +65,27 @@ export function ForecastSection({ productCode, customerCode, fullWidth = false }
               </div>
               <div className="grid gap-3 text-xs sm:grid-cols-2 md:grid-cols-3">
                 {forecasts.slice(0, 3).map((f, idx) => (
-                  <div key={(f as {id?: number}).id ?? idx} className="rounded border bg-white p-3 shadow-sm">
-                    <div className="text-[11px] text-gray-400 uppercase">{(f.granularity as string) ?? "unknown"}</div>
+                  <div
+                    key={(f as { id?: number }).id ?? idx}
+                    className="rounded border bg-white p-3 shadow-sm"
+                  >
+                    <div className="text-[11px] text-gray-400 uppercase">
+                      {(f.granularity as string) ?? "unknown"}
+                    </div>
                     <div className="text-sm font-semibold text-gray-800">{renderPeriod(f)}</div>
                     <div className="mt-1 text-xs text-gray-500">
-                      予測数量: {((f as unknown as {qty_forecast?: number}).qty_forecast ?? 0).toLocaleString()} EA
+                      予測数量:{" "}
+                      {(
+                        (f as unknown as { qty_forecast?: number }).qty_forecast ?? 0
+                      ).toLocaleString()}{" "}
+                      EA
                     </div>
                     <div className="mt-1 text-[11px] text-gray-400">
-                      v{(f as unknown as {version_no?: number}).version_no ?? 0}・
-                      {(f as unknown as {version_issued_at?: string}).version_issued_at
-                        ? new Date((f as unknown as {version_issued_at?: string}).version_issued_at!).toLocaleDateString()
+                      v{(f as unknown as { version_no?: number }).version_no ?? 0}・
+                      {(f as unknown as { version_issued_at?: string }).version_issued_at
+                        ? new Date(
+                            (f as unknown as { version_issued_at?: string }).version_issued_at!,
+                          ).toLocaleDateString()
                         : "日付不明"}
                     </div>
                   </div>

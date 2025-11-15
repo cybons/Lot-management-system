@@ -107,11 +107,7 @@ export function LotsPage() {
         header: "現在在庫",
         cell: (lot: LotUI) => {
           const qty = Number(lot.current_quantity);
-          return (
-            <span className={qty > 0 ? "font-semibold" : "text-gray-400"}>
-              {fmt(qty)}
-            </span>
-          );
+          return <span className={qty > 0 ? "font-semibold" : "text-gray-400"}>{fmt(qty)}</span>;
         },
         sortable: true,
         align: "right",
@@ -205,7 +201,10 @@ export function LotsPage() {
   const stats = useMemo(() => {
     const totalLots = allLots.length;
     const activeLots = allLots.filter((lot) => Number(lot.current_quantity) > 0).length;
-    const totalQuantity = allLots.reduce<number>((sum, lot) => sum + Number(lot.current_quantity), 0);
+    const totalQuantity = allLots.reduce<number>(
+      (sum, lot) => sum + Number(lot.current_quantity),
+      0,
+    );
 
     return { totalLots, activeLots, totalQuantity };
   }, [allLots]);
