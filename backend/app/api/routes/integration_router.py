@@ -77,7 +77,7 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
     for _idx, record in enumerate(submission.records):
         try:
             # 重複チェック
-            existing = db.query(Order).filter(Order.order_no == record.order_no).first()
+            existing = db.query(Order).filter(Order.order_number == record.order_no).first()
             if existing:
                 skipped_records += 1
                 error_details.append(f"受注番号 {record.order_no} は既に存在します")
@@ -94,10 +94,11 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
 
             # 受注ヘッダ作成
             db_order = Order(
-                order_no=record.order_no,
-                customer_code=record.customer_code,
+                order_number=record.order_no,
+                customer_id=customer.id,
+                delivery_place_id=customer.id,  # TODO: Get from request if available
                 order_date=record.order_date if record.order_date else None,
-                status="open",
+                status="pending",
             )
             db.add(db_order)
             db.flush()
@@ -107,7 +108,7 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
             for line in record.lines:
                 # 製品チェック
                 product = (
-                    db.query(Product).filter(Product.product_code == line.product_code).first()
+                    db.query(Product).filter(Product.maker_part_code == line.product_code).first()
                 )
                 if not product:
                     failed_records += 1
@@ -129,11 +130,10 @@ def submit_ocr_data(submission: OcrSubmissionRequest, db: Session = Depends(get_
 
                 db_line = OrderLine(
                     order_id=db_order.id,
-                    line_no=line.line_no,
-                    product_code=line.product_code,
-                    quantity=float(internal_qty),
-                    unit=product.internal_unit,
-                    due_date=line.due_date,
+                    product_id=product.id,
+                    order_quantity=float(internal_qty),
+                    unit=product.base_unit,
+                    delivery_date=line.due_date,
                 )
                 db.add(db_line)
                 db.flush()
@@ -255,7 +255,7 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     orders = []
 
     if request.target.type == "order_no":
-        order = db.query(Order).filter(Order.order_no == request.target.value).first()
+        order = db.query(Order).filter(Order.order_number == request.target.value).first()
         if order:
             orders.append(order)
     elif request.target.type == "order_id":
@@ -277,27 +277,25 @@ def register_to_sap(request: SapRegisterRequest, db: Session = Depends(get_db)):
     for order in orders:
         # SAP送信(モック)
         payload = {
-            "order_no": order.order_no,
-            "customer_code": order.customer_code,
+            "order_number": order.order_number,
+            "customer_id": order.customer_id,
             "order_date": str(order.order_date) if order.order_date else None,
             "lines": [
                 {
-                    "line_no": line.line_no,
-                    "product_code": line.product_code,
-                    "quantity": line.quantity,
+                    "product_id": line.product_id,
+                    "order_quantity": float(line.order_quantity),
+                    "unit": line.unit,
                 }
                 for line in getattr(order, "order_lines", [])
             ],
         }
 
         # モック: 成功として処理
-        sap_order_id = f"SAP-{order.order_no}"
+        sap_order_id = f"SAP-{order.order_number}"
         sap_status = "posted"
 
-        # 受注更新
-        order.sap_order_id = sap_order_id
-        order.sap_status = sap_status
-        order.sap_sent_at = datetime.now()
+        # Note: DDL v2.2 では sap_order_id, sap_status, sap_sent_at フィールドは削除されました
+        # SAP連携状態は別テーブルで管理する必要があります
 
         # SAP連携ログ作成
         log = SapSyncLog(
