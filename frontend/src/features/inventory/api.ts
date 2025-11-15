@@ -1,6 +1,8 @@
 import { fetchApi } from "@/shared/libs/http";
 import type { paths } from "@/types/api";
 
+// ===== Lots Types =====
+
 // api.d.ts から型を抽出
 type LotsGetParamsBase = paths["/api/lots"]["get"]["parameters"]["query"];
 type LotsGetParams = LotsGetParamsBase & { delivery_place_code?: string | null };
@@ -10,6 +12,34 @@ type LotGetResponse =
 type LotCreateRequest = paths["/api/lots"]["post"]["requestBody"]["content"]["application/json"];
 type LotCreateResponse =
   paths["/api/lots"]["post"]["responses"][201]["content"]["application/json"];
+
+// ===== Inventory Items Types =====
+
+/**
+ * Inventory Item (Summary)
+ */
+export interface InventoryItem {
+  inventory_item_id: number;
+  product_id: number;
+  warehouse_id: number;
+  total_quantity: number;
+  allocated_quantity: number;
+  available_quantity: number;
+  last_updated: string;
+  // Joined data (optional)
+  product_code?: string;
+  product_name?: string;
+  warehouse_name?: string;
+}
+
+export interface InventoryItemsListParams {
+  skip?: number;
+  limit?: number;
+  product_id?: number;
+  warehouse_id?: number;
+}
+
+// ===== Lots API Functions =====
 
 /**
  * ロット一覧取得
@@ -46,3 +76,28 @@ export const getLot = (id: number) => fetchApi.get<LotGetResponse>(`/lots/${id}`
  */
 export const createLot = (data: LotCreateRequest) =>
   fetchApi.post<LotCreateResponse>("/lots", data);
+
+// ===== Inventory Items API Functions =====
+
+/**
+ * Get inventory items (summary) list
+ * @endpoint GET /inventory-items
+ */
+export const getInventoryItems = (params?: InventoryItemsListParams) => {
+  const searchParams = new URLSearchParams();
+  if (params?.skip !== undefined) searchParams.append("skip", params.skip.toString());
+  if (params?.limit !== undefined) searchParams.append("limit", params.limit.toString());
+  if (params?.product_id) searchParams.append("product_id", params.product_id.toString());
+  if (params?.warehouse_id) searchParams.append("warehouse_id", params.warehouse_id.toString());
+
+  const queryString = searchParams.toString();
+  return fetchApi.get<InventoryItem[]>(`/inventory-items${queryString ? "?" + queryString : ""}`);
+};
+
+/**
+ * Get inventory item detail (product + warehouse)
+ * @endpoint GET /inventory-items/{product_id}/{warehouse_id}
+ */
+export const getInventoryItem = (productId: number, warehouseId: number) => {
+  return fetchApi.get<InventoryItem>(`/inventory-items/${productId}/${warehouseId}`);
+};
