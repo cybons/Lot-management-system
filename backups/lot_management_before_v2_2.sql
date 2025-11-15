@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict LEYskYIMvtVT2DO4iKYJHnpgu78IhUNPbWqogEdqKUuzIAuOlyMgG7vIv1WlzKC
+\restrict Pm0AfkfIB6Y5ecwoWPXEiEcnrgZrcnhBOmbY74CuUkVlNQpArUiglGvfcktzHCR
 
--- Dumped from database version 15.14
--- Dumped by pg_dump version 15.14
+-- Dumped from database version 15.15
+-- Dumped by pg_dump version 15.15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2728,6 +2728,766 @@ ALTER TABLE ONLY public.warehouses_history ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+\.
+
+
+--
+-- Data for Name: allocations; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.allocations (id, order_line_id, lot_id, allocated_qty, created_at, updated_at, created_by, updated_by, deleted_at, revision, destination_id, status) FROM stdin;
+1	9	1	20	2025-11-14 05:44:39.678313	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	reserved
+2	8	8	10	2025-11-14 05:44:39.679112	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	reserved
+3	2	4	37	2025-11-14 05:44:39.679451	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	reserved
+\.
+
+
+--
+-- Data for Name: allocations_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.allocations_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "lot_id": 1, "status": "reserved", "revision": 1, "created_at": "2025-11-14T05:44:39.678313", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "allocated_qty": 20, "order_line_id": 9, "destination_id": 1}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "lot_id": 8, "status": "reserved", "revision": 1, "created_at": "2025-11-14T05:44:39.679112", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "allocated_qty": 10, "order_line_id": 8, "destination_id": 2}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "lot_id": 4, "status": "reserved", "revision": 1, "created_at": "2025-11-14T05:44:39.679451", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "allocated_qty": 37, "order_line_id": 2, "destination_id": 2}
+\.
+
+
+--
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.customers (customer_code, customer_name, address, created_at, updated_at, created_by, updated_by, deleted_at, revision, id) FROM stdin;
+C2824	株式会社中島建設	\N	2025-11-14 05:44:39.460242	2025-11-14 14:44:39.457475	\N	\N	\N	1	1
+C1409	株式会社石川運輸	\N	2025-11-14 05:44:39.460305	2025-11-14 14:44:39.457475	\N	\N	\N	1	2
+C5506	合同会社吉田水産	\N	2025-11-14 05:44:39.460344	2025-11-14 14:44:39.457475	\N	\N	\N	1	3
+\.
+
+
+--
+-- Data for Name: customers_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.customers_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "address": null, "revision": 1, "created_at": "2025-11-14T05:44:39.460242", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "customer_code": "C2824", "customer_name": "株式会社中島建設"}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "address": null, "revision": 1, "created_at": "2025-11-14T05:44:39.460305", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "customer_code": "C1409", "customer_name": "株式会社石川運輸"}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "address": null, "revision": 1, "created_at": "2025-11-14T05:44:39.460344", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "customer_code": "C5506", "customer_name": "合同会社吉田水産"}
+\.
+
+
+--
+-- Data for Name: delivery_places; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.delivery_places (id, delivery_place_code, delivery_place_name, address, postal_code, is_active, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+1	D242	西多摩郡檜原村配送センター	大阪府山武郡横芝光町秋葉原38丁目9番1号 コーポ箪笥町423	980-5514	t	2025-11-14 05:44:39.493641	2025-11-14 14:44:39.457475	\N	\N	\N	1
+2	D854	南房総市配送センター	滋賀県富里市明石町23丁目20番9号	826-0711	t	2025-11-14 05:44:39.493721	2025-11-14 14:44:39.457475	\N	\N	\N	1
+\.
+
+
+--
+-- Data for Name: delivery_places_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.delivery_places_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "address": "大阪府山武郡横芝光町秋葉原38丁目9番1号 コーポ箪笥町423", "revision": 1, "is_active": true, "created_at": "2025-11-14T05:44:39.493641", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "postal_code": "980-5514", "delivery_place_code": "D242", "delivery_place_name": "西多摩郡檜原村配送センター"}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "address": "滋賀県富里市明石町23丁目20番9号", "revision": 1, "is_active": true, "created_at": "2025-11-14T05:44:39.493721", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "postal_code": "826-0711", "delivery_place_code": "D854", "delivery_place_name": "南房総市配送センター"}
+\.
+
+
+--
+-- Data for Name: expiry_rules; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.expiry_rules (id, rule_type, days, fixed_date, is_active, priority, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id, supplier_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: expiry_rules_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.expiry_rules_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: forecasts; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.forecasts (id, forecast_id, granularity, date_day, date_dekad_start, year_month, qty_forecast, version_no, version_issued_at, source_system, is_active, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id, customer_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: forecasts_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.forecasts_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: inbound_submissions; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.inbound_submissions (id, submission_id, source_uri, source, operator, submission_date, status, total_records, processed_records, failed_records, skipped_records, error_details, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: inbound_submissions_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.inbound_submissions_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: lot_current_stock_backup; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.lot_current_stock_backup (lot_id, current_quantity, last_updated, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: lot_current_stock_history_backup; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.lot_current_stock_history_backup (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: lots; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.lots (id, lot_number, receipt_date, mfg_date, expiry_date, kanban_class, sales_unit, inventory_unit, received_by, source_doc, qc_certificate_status, qc_certificate_file, created_at, updated_at, created_by, updated_by, deleted_at, revision, warehouse_code_old, lot_unit, is_locked, lock_reason, inspection_date, inspection_result, warehouse_id, product_id, supplier_id, supplier_code, warehouse_code, lot_status) FROM stdin;
+1	LOT-41316475	2025-10-27	\N	2026-03-25	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.54018	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	5	1	\N	\N	available
+2	LOT-25534192	2025-11-06	\N	2026-05-19	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.552248	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	1	1	2	\N	\N	available
+3	LOT-83276483	2025-11-02	\N	2026-09-23	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.566217	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	2	1	\N	\N	available
+4	LOT-50305641	2025-10-22	\N	2026-10-18	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.572068	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	3	2	\N	\N	available
+5	LOT-39537672	2025-10-28	\N	2026-09-30	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.577364	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	1	5	2	\N	\N	available
+6	LOT-42388496	2025-11-12	\N	2025-11-14	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.583292	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	5	1	\N	\N	available
+7	LOT-96532871	2025-10-18	\N	2026-07-13	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.589893	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	2	1	\N	\N	available
+8	LOT-01226916	2025-10-19	\N	2025-12-19	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.595802	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	4	2	\N	\N	available
+9	LOT-69784801	2025-10-24	\N	2026-07-25	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.601304	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	2	2	2	\N	\N	available
+10	LOT-84514627	2025-10-31	\N	2026-08-18	\N	\N	\N	\N	\N	\N	\N	2025-11-14 05:44:39.607212	\N	\N	\N	\N	1	\N	\N	f	\N	\N	\N	1	1	1	\N	\N	available
+\.
+
+
+--
+-- Data for Name: lots_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.lots_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.54018", "created_by": null, "deleted_at": null, "lot_number": "LOT-41316475", "lot_status": "available", "product_id": 5, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-03-25", "lock_reason": null, "received_by": null, "supplier_id": 1, "kanban_class": null, "receipt_date": "2025-10-27", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.552248", "created_by": null, "deleted_at": null, "lot_number": "LOT-25534192", "lot_status": "available", "product_id": 1, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-05-19", "lock_reason": null, "received_by": null, "supplier_id": 2, "kanban_class": null, "receipt_date": "2025-11-06", "warehouse_id": 1, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.566217", "created_by": null, "deleted_at": null, "lot_number": "LOT-83276483", "lot_status": "available", "product_id": 2, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-09-23", "lock_reason": null, "received_by": null, "supplier_id": 1, "kanban_class": null, "receipt_date": "2025-11-02", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+4	I	2025-11-14 14:44:39.457475+09	admin	{"id": 4, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.572068", "created_by": null, "deleted_at": null, "lot_number": "LOT-50305641", "lot_status": "available", "product_id": 3, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-10-18", "lock_reason": null, "received_by": null, "supplier_id": 2, "kanban_class": null, "receipt_date": "2025-10-22", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+5	I	2025-11-14 14:44:39.457475+09	admin	{"id": 5, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.577364", "created_by": null, "deleted_at": null, "lot_number": "LOT-39537672", "lot_status": "available", "product_id": 5, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-09-30", "lock_reason": null, "received_by": null, "supplier_id": 2, "kanban_class": null, "receipt_date": "2025-10-28", "warehouse_id": 1, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+6	I	2025-11-14 14:44:39.457475+09	admin	{"id": 6, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.583292", "created_by": null, "deleted_at": null, "lot_number": "LOT-42388496", "lot_status": "available", "product_id": 5, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2025-11-14", "lock_reason": null, "received_by": null, "supplier_id": 1, "kanban_class": null, "receipt_date": "2025-11-12", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+7	I	2025-11-14 14:44:39.457475+09	admin	{"id": 7, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.589893", "created_by": null, "deleted_at": null, "lot_number": "LOT-96532871", "lot_status": "available", "product_id": 2, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-07-13", "lock_reason": null, "received_by": null, "supplier_id": 1, "kanban_class": null, "receipt_date": "2025-10-18", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+8	I	2025-11-14 14:44:39.457475+09	admin	{"id": 8, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.595802", "created_by": null, "deleted_at": null, "lot_number": "LOT-01226916", "lot_status": "available", "product_id": 4, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2025-12-19", "lock_reason": null, "received_by": null, "supplier_id": 2, "kanban_class": null, "receipt_date": "2025-10-19", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+9	I	2025-11-14 14:44:39.457475+09	admin	{"id": 9, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.601304", "created_by": null, "deleted_at": null, "lot_number": "LOT-69784801", "lot_status": "available", "product_id": 2, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-07-25", "lock_reason": null, "received_by": null, "supplier_id": 2, "kanban_class": null, "receipt_date": "2025-10-24", "warehouse_id": 2, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+10	I	2025-11-14 14:44:39.457475+09	admin	{"id": 10, "lot_unit": null, "mfg_date": null, "revision": 1, "is_locked": false, "created_at": "2025-11-14T05:44:39.607212", "created_by": null, "deleted_at": null, "lot_number": "LOT-84514627", "lot_status": "available", "product_id": 1, "sales_unit": null, "source_doc": null, "updated_at": null, "updated_by": null, "expiry_date": "2026-08-18", "lock_reason": null, "received_by": null, "supplier_id": 1, "kanban_class": null, "receipt_date": "2025-10-31", "warehouse_id": 1, "supplier_code": null, "inventory_unit": null, "warehouse_code": null, "inspection_date": null, "inspection_result": null, "warehouse_code_old": null, "qc_certificate_file": null, "qc_certificate_status": null}
+\.
+
+
+--
+-- Data for Name: next_div_map; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.next_div_map (id, customer_code, ship_to_code, next_div, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: order_line_warehouse_allocation; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.order_line_warehouse_allocation (id, order_line_id, warehouse_id, quantity, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: order_line_warehouse_allocation_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.order_line_warehouse_allocation_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: order_lines; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.order_lines (id, order_id, line_no, quantity, unit, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id, warehouse_id) FROM stdin;
+1	1	1	15.0000	\N	2025-11-14 05:44:39.627155	2025-11-14 14:44:39.457475	\N	\N	\N	1	5	\N
+2	1	2	50.0000	\N	2025-11-14 05:44:39.627395	2025-11-14 14:44:39.457475	\N	\N	\N	1	3	\N
+3	1	3	15.0000	\N	2025-11-14 05:44:39.627488	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	\N
+4	2	1	18.0000	\N	2025-11-14 05:44:39.645317	2025-11-14 14:44:39.457475	\N	\N	\N	1	4	\N
+5	2	2	14.0000	\N	2025-11-14 05:44:39.645415	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	\N
+6	3	1	14.0000	\N	2025-11-14 05:44:39.652049	2025-11-14 14:44:39.457475	\N	\N	\N	1	3	\N
+7	3	2	26.0000	\N	2025-11-14 05:44:39.652203	2025-11-14 14:44:39.457475	\N	\N	\N	1	4	\N
+8	3	3	10.0000	\N	2025-11-14 05:44:39.652283	2025-11-14 14:44:39.457475	\N	\N	\N	1	4	\N
+9	4	1	35.0000	\N	2025-11-14 05:44:39.659989	2025-11-14 14:44:39.457475	\N	\N	\N	1	5	\N
+10	5	1	38.0000	\N	2025-11-14 05:44:39.666318	2025-11-14 14:44:39.457475	\N	\N	\N	1	4	\N
+11	5	2	24.0000	\N	2025-11-14 05:44:39.666421	2025-11-14 14:44:39.457475	\N	\N	\N	1	4	\N
+12	5	3	9.0000	\N	2025-11-14 05:44:39.666479	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N
+\.
+
+
+--
+-- Data for Name: order_lines_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.order_lines_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "unit": null, "line_no": 1, "order_id": 1, "quantity": 15.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.627155", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "unit": null, "line_no": 2, "order_id": 1, "quantity": 50.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.627395", "created_by": null, "deleted_at": null, "product_id": 3, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "unit": null, "line_no": 3, "order_id": 1, "quantity": 15.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.627488", "created_by": null, "deleted_at": null, "product_id": 1, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+4	I	2025-11-14 14:44:39.457475+09	admin	{"id": 4, "unit": null, "line_no": 1, "order_id": 2, "quantity": 18.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.645317", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+5	I	2025-11-14 14:44:39.457475+09	admin	{"id": 5, "unit": null, "line_no": 2, "order_id": 2, "quantity": 14.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.645415", "created_by": null, "deleted_at": null, "product_id": 1, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+6	I	2025-11-14 14:44:39.457475+09	admin	{"id": 6, "unit": null, "line_no": 1, "order_id": 3, "quantity": 14.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.652049", "created_by": null, "deleted_at": null, "product_id": 3, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+7	I	2025-11-14 14:44:39.457475+09	admin	{"id": 7, "unit": null, "line_no": 2, "order_id": 3, "quantity": 26.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.652203", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+8	I	2025-11-14 14:44:39.457475+09	admin	{"id": 8, "unit": null, "line_no": 3, "order_id": 3, "quantity": 10.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.652283", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+9	I	2025-11-14 14:44:39.457475+09	admin	{"id": 9, "unit": null, "line_no": 1, "order_id": 4, "quantity": 35.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.659989", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+10	I	2025-11-14 14:44:39.457475+09	admin	{"id": 10, "unit": null, "line_no": 1, "order_id": 5, "quantity": 38.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.666318", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+11	I	2025-11-14 14:44:39.457475+09	admin	{"id": 11, "unit": null, "line_no": 2, "order_id": 5, "quantity": 24.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.666421", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+12	I	2025-11-14 14:44:39.457475+09	admin	{"id": 12, "unit": null, "line_no": 3, "order_id": 5, "quantity": 9.0000, "revision": 1, "created_at": "2025-11-14T05:44:39.666479", "created_by": null, "deleted_at": null, "product_id": 2, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_id": null}
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.orders (id, order_no, order_date, status, sap_order_id, sap_status, sap_sent_at, sap_error_msg, created_at, updated_at, created_by, updated_by, deleted_at, revision, customer_order_no, delivery_mode, customer_id, customer_code, delivery_place_id) FROM stdin;
+1	SO-04828148	2025-10-31	draft	\N	\N	\N	\N	2025-11-14 05:44:39.616132	\N	\N	\N	\N	1	\N	\N	2	\N	\N
+2	SO-93252880	2025-11-02	draft	\N	\N	\N	\N	2025-11-14 05:44:39.642789	\N	\N	\N	\N	1	\N	\N	1	\N	\N
+3	SO-95701543	2025-10-31	draft	\N	\N	\N	\N	2025-11-14 05:44:39.649498	\N	\N	\N	\N	1	\N	\N	3	\N	\N
+4	SO-03911718	2025-11-12	draft	\N	\N	\N	\N	2025-11-14 05:44:39.657526	\N	\N	\N	\N	1	\N	\N	2	\N	\N
+5	SO-22782489	2025-11-03	draft	\N	\N	\N	\N	2025-11-14 05:44:39.663695	\N	\N	\N	\N	1	\N	\N	2	\N	\N
+\.
+
+
+--
+-- Data for Name: orders_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.orders_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "status": "draft", "order_no": "SO-04828148", "revision": 1, "created_at": "2025-11-14T05:44:39.616132", "created_by": null, "deleted_at": null, "order_date": "2025-10-31", "sap_status": null, "updated_at": null, "updated_by": null, "customer_id": 2, "sap_sent_at": null, "sap_order_id": null, "customer_code": null, "delivery_mode": null, "sap_error_msg": null, "customer_order_no": null, "delivery_place_id": null, "customer_order_no_last6": null}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "status": "draft", "order_no": "SO-93252880", "revision": 1, "created_at": "2025-11-14T05:44:39.642789", "created_by": null, "deleted_at": null, "order_date": "2025-11-02", "sap_status": null, "updated_at": null, "updated_by": null, "customer_id": 1, "sap_sent_at": null, "sap_order_id": null, "customer_code": null, "delivery_mode": null, "sap_error_msg": null, "customer_order_no": null, "delivery_place_id": null, "customer_order_no_last6": null}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "status": "draft", "order_no": "SO-95701543", "revision": 1, "created_at": "2025-11-14T05:44:39.649498", "created_by": null, "deleted_at": null, "order_date": "2025-10-31", "sap_status": null, "updated_at": null, "updated_by": null, "customer_id": 3, "sap_sent_at": null, "sap_order_id": null, "customer_code": null, "delivery_mode": null, "sap_error_msg": null, "customer_order_no": null, "delivery_place_id": null, "customer_order_no_last6": null}
+4	I	2025-11-14 14:44:39.457475+09	admin	{"id": 4, "status": "draft", "order_no": "SO-03911718", "revision": 1, "created_at": "2025-11-14T05:44:39.657526", "created_by": null, "deleted_at": null, "order_date": "2025-11-12", "sap_status": null, "updated_at": null, "updated_by": null, "customer_id": 2, "sap_sent_at": null, "sap_order_id": null, "customer_code": null, "delivery_mode": null, "sap_error_msg": null, "customer_order_no": null, "delivery_place_id": null, "customer_order_no_last6": null}
+5	I	2025-11-14 14:44:39.457475+09	admin	{"id": 5, "status": "draft", "order_no": "SO-22782489", "revision": 1, "created_at": "2025-11-14T05:44:39.663695", "created_by": null, "deleted_at": null, "order_date": "2025-11-03", "sap_status": null, "updated_at": null, "updated_by": null, "customer_id": 2, "sap_sent_at": null, "sap_order_id": null, "customer_code": null, "delivery_mode": null, "sap_error_msg": null, "customer_order_no": null, "delivery_place_id": null, "customer_order_no_last6": null}
+\.
+
+
+--
+-- Data for Name: product_uom_conversions; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.product_uom_conversions (id, source_unit, source_value, internal_unit_value, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.products (product_code, product_name, customer_part_no, maker_item_code, internal_unit, assemble_div, next_div, shelf_life_days, requires_lot_number, created_at, updated_at, created_by, updated_by, deleted_at, revision, base_unit, packaging_qty, packaging_unit, supplier_item_code, delivery_place_id, ji_ku_text, kumitsuke_ku_text, delivery_place_name, shipping_warehouse_name, id, supplier_id) FROM stdin;
+P23434	Drive Ubiquitous Users	\N	\N	PCS	\N	\N	\N	\N	2025-11-14 05:44:39.50617	2025-11-14 14:44:39.457475	\N	\N	\N	1	EA	1.00	EA	\N	1	\N	\N	\N	\N	1	\N
+P87397	Embrace Enterprise Infrastructures	\N	\N	PCS	\N	\N	\N	\N	2025-11-14 05:44:39.506206	2025-11-14 14:44:39.457475	\N	\N	\N	1	EA	1.00	EA	\N	2	\N	\N	\N	\N	2	\N
+P14165	Engage Distributed Functionalities	\N	\N	PCS	\N	\N	\N	\N	2025-11-14 05:44:39.50623	2025-11-14 14:44:39.457475	\N	\N	\N	1	EA	1.00	EA	\N	1	\N	\N	\N	\N	3	\N
+P22280	Re-Intermediate Bricks-And-Clicks Networks	\N	\N	PCS	\N	\N	\N	\N	2025-11-14 05:44:39.506263	2025-11-14 14:44:39.457475	\N	\N	\N	1	EA	1.00	EA	\N	1	\N	\N	\N	\N	4	\N
+P40495	Aggregate Innovative Paradigms	\N	\N	PCS	\N	\N	\N	\N	2025-11-14 05:44:39.506309	2025-11-14 14:44:39.457475	\N	\N	\N	1	EA	1.00	EA	\N	1	\N	\N	\N	\N	5	\N
+\.
+
+
+--
+-- Data for Name: products_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.products_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "next_div": null, "revision": 1, "base_unit": "EA", "created_at": "2025-11-14T05:44:39.50617", "created_by": null, "deleted_at": null, "ji_ku_text": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_id": null, "assemble_div": null, "product_code": "P23434", "product_name": "Drive Ubiquitous Users", "internal_unit": "PCS", "packaging_qty": 1.00, "packaging_unit": "EA", "maker_item_code": null, "shelf_life_days": null, "customer_part_no": null, "delivery_place_id": 1, "kumitsuke_ku_text": null, "supplier_item_code": null, "delivery_place_name": null, "requires_lot_number": null, "shipping_warehouse_name": null}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "next_div": null, "revision": 1, "base_unit": "EA", "created_at": "2025-11-14T05:44:39.506206", "created_by": null, "deleted_at": null, "ji_ku_text": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_id": null, "assemble_div": null, "product_code": "P87397", "product_name": "Embrace Enterprise Infrastructures", "internal_unit": "PCS", "packaging_qty": 1.00, "packaging_unit": "EA", "maker_item_code": null, "shelf_life_days": null, "customer_part_no": null, "delivery_place_id": 2, "kumitsuke_ku_text": null, "supplier_item_code": null, "delivery_place_name": null, "requires_lot_number": null, "shipping_warehouse_name": null}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "next_div": null, "revision": 1, "base_unit": "EA", "created_at": "2025-11-14T05:44:39.50623", "created_by": null, "deleted_at": null, "ji_ku_text": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_id": null, "assemble_div": null, "product_code": "P14165", "product_name": "Engage Distributed Functionalities", "internal_unit": "PCS", "packaging_qty": 1.00, "packaging_unit": "EA", "maker_item_code": null, "shelf_life_days": null, "customer_part_no": null, "delivery_place_id": 1, "kumitsuke_ku_text": null, "supplier_item_code": null, "delivery_place_name": null, "requires_lot_number": null, "shipping_warehouse_name": null}
+4	I	2025-11-14 14:44:39.457475+09	admin	{"id": 4, "next_div": null, "revision": 1, "base_unit": "EA", "created_at": "2025-11-14T05:44:39.506263", "created_by": null, "deleted_at": null, "ji_ku_text": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_id": null, "assemble_div": null, "product_code": "P22280", "product_name": "Re-Intermediate Bricks-And-Clicks Networks", "internal_unit": "PCS", "packaging_qty": 1.00, "packaging_unit": "EA", "maker_item_code": null, "shelf_life_days": null, "customer_part_no": null, "delivery_place_id": 1, "kumitsuke_ku_text": null, "supplier_item_code": null, "delivery_place_name": null, "requires_lot_number": null, "shipping_warehouse_name": null}
+5	I	2025-11-14 14:44:39.457475+09	admin	{"id": 5, "next_div": null, "revision": 1, "base_unit": "EA", "created_at": "2025-11-14T05:44:39.506309", "created_by": null, "deleted_at": null, "ji_ku_text": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_id": null, "assemble_div": null, "product_code": "P40495", "product_name": "Aggregate Innovative Paradigms", "internal_unit": "PCS", "packaging_qty": 1.00, "packaging_unit": "EA", "maker_item_code": null, "shelf_life_days": null, "customer_part_no": null, "delivery_place_id": 1, "kumitsuke_ku_text": null, "supplier_item_code": null, "delivery_place_name": null, "requires_lot_number": null, "shipping_warehouse_name": null}
+\.
+
+
+--
+-- Data for Name: purchase_requests; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.purchase_requests (id, requested_qty, unit, reason_code, src_order_line_id, requested_date, desired_receipt_date, status, sap_po_id, notes, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id, supplier_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: purchase_requests_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.purchase_requests_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: receipt_headers; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.receipt_headers (id, receipt_no, supplier_code, warehouse_id, receipt_date, created_by, notes, created_at, updated_at, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: receipt_lines; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.receipt_lines (id, header_id, line_no, lot_id, quantity, unit, notes, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sap_sync_logs; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.sap_sync_logs (id, order_id, payload, result, status, executed_at, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sap_sync_logs_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.sap_sync_logs_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: seed_snapshots; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.seed_snapshots (id, name, created_at, params_json, profile_json, csv_dir, summary_json) FROM stdin;
+\.
+
+
+--
+-- Data for Name: shipping; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.shipping (id, lot_id, order_line_id, shipped_qty, shipped_date, shipping_address, contact_person, contact_phone, delivery_time_slot, tracking_number, carrier, carrier_service, notes, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stock_movements; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.stock_movements (id, lot_id, reason, quantity_delta, occurred_at, created_at, updated_at, created_by, updated_by, deleted_at, revision, warehouse_id, source_table, source_id, batch_id, product_id, related_order_id, related_allocation_id) FROM stdin;
+1	1	receipt	76.0000	2025-11-14 05:44:39.551847	2025-11-14 05:44:39.551867	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	5	\N	\N
+2	2	receipt	44.0000	2025-11-14 05:44:39.565801	2025-11-14 05:44:39.565815	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	\N	\N	\N	1	\N	\N
+3	3	receipt	29.0000	2025-11-14 05:44:39.571782	2025-11-14 05:44:39.571808	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	2	\N	\N
+4	4	receipt	122.0000	2025-11-14 05:44:39.577139	2025-11-14 05:44:39.577153	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	3	\N	\N
+5	5	receipt	80.0000	2025-11-14 05:44:39.583077	2025-11-14 05:44:39.583087	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	\N	\N	\N	5	\N	\N
+6	6	receipt	16.0000	2025-11-14 05:44:39.589687	2025-11-14 05:44:39.589697	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	5	\N	\N
+7	7	receipt	30.0000	2025-11-14 05:44:39.595536	2025-11-14 05:44:39.595559	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	2	\N	\N
+8	8	receipt	98.0000	2025-11-14 05:44:39.600924	2025-11-14 05:44:39.600947	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	4	\N	\N
+9	9	receipt	73.0000	2025-11-14 05:44:39.606937	2025-11-14 05:44:39.606953	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	2	\N	\N
+10	10	receipt	102.0000	2025-11-14 05:44:39.612421	2025-11-14 05:44:39.612437	2025-11-14 14:44:39.457475	\N	\N	\N	1	1	\N	\N	\N	1	\N	\N
+11	1	outbound	-20.0000	2025-11-14 05:44:39.678688	2025-11-14 05:44:39.67871	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	5	\N	\N
+12	8	outbound	-10.0000	2025-11-14 05:44:39.679233	2025-11-14 05:44:39.679253	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	4	\N	\N
+13	4	outbound	-37.0000	2025-11-14 05:44:39.67956	2025-11-14 05:44:39.679582	2025-11-14 14:44:39.457475	\N	\N	\N	1	2	\N	\N	\N	3	\N	\N
+\.
+
+
+--
+-- Data for Name: stock_movements_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.stock_movements_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "lot_id": 1, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.551867", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.551847", "source_table": null, "warehouse_id": 2, "quantity_delta": 76.0000, "related_order_id": null, "related_allocation_id": null}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "lot_id": 2, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.565815", "created_by": null, "deleted_at": null, "product_id": 1, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.565801", "source_table": null, "warehouse_id": 1, "quantity_delta": 44.0000, "related_order_id": null, "related_allocation_id": null}
+3	I	2025-11-14 14:44:39.457475+09	admin	{"id": 3, "lot_id": 3, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.571808", "created_by": null, "deleted_at": null, "product_id": 2, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.571782", "source_table": null, "warehouse_id": 2, "quantity_delta": 29.0000, "related_order_id": null, "related_allocation_id": null}
+4	I	2025-11-14 14:44:39.457475+09	admin	{"id": 4, "lot_id": 4, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.577153", "created_by": null, "deleted_at": null, "product_id": 3, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.577139", "source_table": null, "warehouse_id": 2, "quantity_delta": 122.0000, "related_order_id": null, "related_allocation_id": null}
+5	I	2025-11-14 14:44:39.457475+09	admin	{"id": 5, "lot_id": 5, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.583087", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.583077", "source_table": null, "warehouse_id": 1, "quantity_delta": 80.0000, "related_order_id": null, "related_allocation_id": null}
+6	I	2025-11-14 14:44:39.457475+09	admin	{"id": 6, "lot_id": 6, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.589697", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.589687", "source_table": null, "warehouse_id": 2, "quantity_delta": 16.0000, "related_order_id": null, "related_allocation_id": null}
+7	I	2025-11-14 14:44:39.457475+09	admin	{"id": 7, "lot_id": 7, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.595559", "created_by": null, "deleted_at": null, "product_id": 2, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.595536", "source_table": null, "warehouse_id": 2, "quantity_delta": 30.0000, "related_order_id": null, "related_allocation_id": null}
+8	I	2025-11-14 14:44:39.457475+09	admin	{"id": 8, "lot_id": 8, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.600947", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.600924", "source_table": null, "warehouse_id": 2, "quantity_delta": 98.0000, "related_order_id": null, "related_allocation_id": null}
+9	I	2025-11-14 14:44:39.457475+09	admin	{"id": 9, "lot_id": 9, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.606953", "created_by": null, "deleted_at": null, "product_id": 2, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.606937", "source_table": null, "warehouse_id": 2, "quantity_delta": 73.0000, "related_order_id": null, "related_allocation_id": null}
+10	I	2025-11-14 14:44:39.457475+09	admin	{"id": 10, "lot_id": 10, "reason": "receipt", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.612437", "created_by": null, "deleted_at": null, "product_id": 1, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.612421", "source_table": null, "warehouse_id": 1, "quantity_delta": 102.0000, "related_order_id": null, "related_allocation_id": null}
+11	I	2025-11-14 14:44:39.457475+09	admin	{"id": 11, "lot_id": 1, "reason": "outbound", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.67871", "created_by": null, "deleted_at": null, "product_id": 5, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.678688", "source_table": null, "warehouse_id": 2, "quantity_delta": -20.0000, "related_order_id": null, "related_allocation_id": null}
+12	I	2025-11-14 14:44:39.457475+09	admin	{"id": 12, "lot_id": 8, "reason": "outbound", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.679253", "created_by": null, "deleted_at": null, "product_id": 4, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.679233", "source_table": null, "warehouse_id": 2, "quantity_delta": -10.0000, "related_order_id": null, "related_allocation_id": null}
+13	I	2025-11-14 14:44:39.457475+09	admin	{"id": 13, "lot_id": 4, "reason": "outbound", "batch_id": null, "revision": 1, "source_id": null, "created_at": "2025-11-14T05:44:39.679582", "created_by": null, "deleted_at": null, "product_id": 3, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "occurred_at": "2025-11-14T05:44:39.67956", "source_table": null, "warehouse_id": 2, "quantity_delta": -37.0000, "related_order_id": null, "related_allocation_id": null}
+\.
+
+
+--
+-- Data for Name: suppliers; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.suppliers (supplier_code, supplier_name, address, created_at, updated_at, created_by, updated_by, deleted_at, revision, id) FROM stdin;
+S5012	株式会社伊藤通信商事	\N	2025-11-14 05:44:39.482561	2025-11-14 14:44:39.457475	\N	\N	\N	1	1
+S4657	合同会社田中運輸商事	\N	2025-11-14 05:44:39.48263	2025-11-14 14:44:39.457475	\N	\N	\N	1	2
+\.
+
+
+--
+-- Data for Name: suppliers_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.suppliers_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "address": null, "revision": 1, "created_at": "2025-11-14T05:44:39.482561", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_code": "S5012", "supplier_name": "株式会社伊藤通信商事"}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "address": null, "revision": 1, "created_at": "2025-11-14T05:44:39.48263", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "supplier_code": "S4657", "supplier_name": "合同会社田中運輸商事"}
+\.
+
+
+--
+-- Data for Name: unit_conversions; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.unit_conversions (id, from_unit, to_unit, factor, created_at, updated_at, created_by, updated_by, deleted_at, revision, product_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: unit_conversions_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.unit_conversions_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: warehouse; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.warehouse (id, warehouse_code, warehouse_name, address, is_active, created_at, updated_at, created_by, updated_by, deleted_at, revision) FROM stdin;
+\.
+
+
+--
+-- Data for Name: warehouses; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.warehouses (warehouse_code, warehouse_name, address, is_active, created_at, updated_at, created_by, updated_by, deleted_at, revision, id) FROM stdin;
+W81	羽村市倉庫	\N	t	2025-11-14 05:44:39.51959	2025-11-14 14:44:39.457475	\N	\N	\N	1	1
+W35	長生郡一宮町倉庫	\N	t	2025-11-14 05:44:39.519615	2025-11-14 14:44:39.457475	\N	\N	\N	1	2
+\.
+
+
+--
+-- Data for Name: warehouses_history; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.warehouses_history (id, op, changed_at, changed_by, row_data) FROM stdin;
+1	I	2025-11-14 14:44:39.457475+09	admin	{"id": 1, "address": null, "revision": 1, "is_active": true, "created_at": "2025-11-14T05:44:39.51959", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_code": "W81", "warehouse_name": "羽村市倉庫"}
+2	I	2025-11-14 14:44:39.457475+09	admin	{"id": 2, "address": null, "revision": 1, "is_active": true, "created_at": "2025-11-14T05:44:39.519615", "created_by": null, "deleted_at": null, "updated_at": "2025-11-14T14:44:39.457475", "updated_by": null, "warehouse_code": "W35", "warehouse_name": "長生郡一宮町倉庫"}
+\.
+
+
+--
+-- Name: allocations_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.allocations_history_id_seq', 3, true);
+
+
+--
+-- Name: allocations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.allocations_id_seq', 3, true);
+
+
+--
+-- Name: customers_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.customers_history_id_seq', 3, true);
+
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.customers_id_seq', 3, true);
+
+
+--
+-- Name: delivery_places_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.delivery_places_history_id_seq', 2, true);
+
+
+--
+-- Name: delivery_places_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.delivery_places_id_seq', 2, true);
+
+
+--
+-- Name: expiry_rules_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.expiry_rules_history_id_seq', 1, false);
+
+
+--
+-- Name: expiry_rules_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.expiry_rules_id_seq', 1, false);
+
+
+--
+-- Name: forecast_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.forecast_id_seq', 1, false);
+
+
+--
+-- Name: forecasts_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.forecasts_history_id_seq', 1, false);
+
+
+--
+-- Name: inbound_submissions_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.inbound_submissions_history_id_seq', 1, false);
+
+
+--
+-- Name: lot_current_stock_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.lot_current_stock_history_id_seq', 1, false);
+
+
+--
+-- Name: lots_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.lots_history_id_seq', 10, true);
+
+
+--
+-- Name: lots_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.lots_id_seq', 10, true);
+
+
+--
+-- Name: next_div_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.next_div_map_id_seq', 1, false);
+
+
+--
+-- Name: ocr_submissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.ocr_submissions_id_seq', 1, false);
+
+
+--
+-- Name: order_line_warehouse_allocation_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.order_line_warehouse_allocation_history_id_seq', 1, false);
+
+
+--
+-- Name: order_line_warehouse_allocation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.order_line_warehouse_allocation_id_seq', 1, false);
+
+
+--
+-- Name: order_lines_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.order_lines_history_id_seq', 12, true);
+
+
+--
+-- Name: order_lines_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.order_lines_id_seq', 12, true);
+
+
+--
+-- Name: orders_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.orders_history_id_seq', 5, true);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.orders_id_seq', 5, true);
+
+
+--
+-- Name: product_uom_conversions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.product_uom_conversions_id_seq', 1, false);
+
+
+--
+-- Name: products_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.products_history_id_seq', 5, true);
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 5, true);
+
+
+--
+-- Name: purchase_requests_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.purchase_requests_history_id_seq', 1, false);
+
+
+--
+-- Name: purchase_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.purchase_requests_id_seq', 1, false);
+
+
+--
+-- Name: receipt_headers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.receipt_headers_id_seq', 1, false);
+
+
+--
+-- Name: receipt_lines_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.receipt_lines_id_seq', 1, false);
+
+
+--
+-- Name: sap_sync_logs_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.sap_sync_logs_history_id_seq', 1, false);
+
+
+--
+-- Name: sap_sync_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.sap_sync_logs_id_seq', 1, false);
+
+
+--
+-- Name: seed_snapshots_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.seed_snapshots_id_seq', 1, false);
+
+
+--
+-- Name: shipping_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.shipping_id_seq', 1, false);
+
+
+--
+-- Name: stock_movements_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.stock_movements_history_id_seq', 13, true);
+
+
+--
+-- Name: stock_movements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.stock_movements_id_seq', 13, true);
+
+
+--
+-- Name: suppliers_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.suppliers_history_id_seq', 2, true);
+
+
+--
+-- Name: suppliers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.suppliers_id_seq', 2, true);
+
+
+--
+-- Name: unit_conversions_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.unit_conversions_history_id_seq', 1, false);
+
+
+--
+-- Name: unit_conversions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.unit_conversions_id_seq', 1, false);
+
+
+--
+-- Name: warehouse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.warehouse_id_seq', 1, false);
+
+
+--
+-- Name: warehouses_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.warehouses_history_id_seq', 2, true);
+
+
+--
+-- Name: warehouses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.warehouses_id_seq', 2, true);
+
+
+--
 -- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -4681,5 +5441,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict LEYskYIMvtVT2DO4iKYJHnpgu78IhUNPbWqogEdqKUuzIAuOlyMgG7vIv1WlzKC
+\unrestrict Pm0AfkfIB6Y5ecwoWPXEiEcnrgZrcnhBOmbY74CuUkVlNQpArUiglGvfcktzHCR
 
