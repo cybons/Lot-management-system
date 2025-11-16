@@ -15,7 +15,7 @@ from app.schemas.inventory.inbound_schema import (
     InboundPlanResponse,
     InboundPlanUpdate,
 )
-from app.services.inbound_service import InboundService
+from app.services.inventory.inbound_service import InboundService
 
 
 router = APIRouter(prefix="/inbound-plans", tags=["inbound-plans"])

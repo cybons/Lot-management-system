@@ -22,8 +22,8 @@ from app.schemas.allocations.allocations_schema import (
     FefoPreviewRequest,
     FefoPreviewResponse,
 )
-from app.services.allocation_suggestions_service import AllocationSuggestionService
-from app.services.allocations_service import preview_fefo_allocation
+from app.services.allocation.allocation_suggestions_service import AllocationSuggestionService
+from app.services.allocation.allocations_service import preview_fefo_allocation
 
 
 logger = logging.getLogger(__name__)

@@ -19,7 +19,7 @@ from app.schemas.allocations.allocations_schema import (
     FefoPreviewRequest,
     FefoPreviewResponse,
 )
-from app.services.allocations_service import (
+from app.services.allocation.allocations_service import (
     AllocationCommitError,
     AllocationNotFoundError,
     cancel_allocation,

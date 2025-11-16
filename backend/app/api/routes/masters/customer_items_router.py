@@ -9,7 +9,7 @@ from app.schemas.masters.customer_items_schema import (
     CustomerItemResponse,
     CustomerItemUpdate,
 )
-from app.services.customer_items_service import CustomerItemsService
+from app.services.masters.customer_items_service import CustomerItemsService
 
 
 router = APIRouter(prefix="/customer-items", tags=["customer-items"])

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.schemas.inventory.inventory_schema import InventoryItemResponse
-from app.services.inventory_service import InventoryService
+from app.services.inventory.inventory_service import InventoryService
 
 
 router = APIRouter(prefix="/inventory-items", tags=["inventory-items"])

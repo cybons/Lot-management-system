@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.domain.lot import LotCandidate
 from app.models import Lot, LotCurrentStock, Product, Supplier, Warehouse
-from app.services.lot_service import LotService
+from app.services.inventory.lot_service import LotService
 
 
 @pytest.fixture

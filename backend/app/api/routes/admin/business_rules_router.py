@@ -10,7 +10,7 @@ from app.schemas.system.business_rules_schema import (
     BusinessRuleResponse,
     BusinessRuleUpdate,
 )
-from app.services.business_rules_service import BusinessRuleService
+from app.services.admin.business_rules_service import BusinessRuleService
 
 
 router = APIRouter(prefix="/business-rules", tags=["business-rules"])

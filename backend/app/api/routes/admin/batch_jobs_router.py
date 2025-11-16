@@ -11,7 +11,7 @@ from app.schemas.system.batch_jobs_schema import (
     BatchJobListResponse,
     BatchJobResponse,
 )
-from app.services.batch_jobs_service import BatchJobService
+from app.services.admin.batch_jobs_service import BatchJobService
 
 
 router = APIRouter(prefix="/batch-jobs", tags=["batch-jobs"])

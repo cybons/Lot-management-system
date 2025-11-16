@@ -13,7 +13,7 @@ from app.schemas.forecasts.forecast_schema import (
     ForecastLineResponse,
     ForecastLineUpdate,
 )
-from app.services.forecast_service import ForecastService
+from app.services.forecasts.forecast_service import ForecastService
 
 
 router = APIRouter(prefix="/forecasts", tags=["forecasts"])

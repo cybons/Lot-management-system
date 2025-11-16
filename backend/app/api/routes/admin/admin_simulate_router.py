@@ -21,7 +21,7 @@ from app.schemas.admin.admin_simulate_schema import (
     SimulateSeedResponse,
 )
 from app.services.job_tracker import get_job_tracker
-from app.services.seed_simulate_service import run_seed_simulation
+from app.services.seed.seed_simulate_service import run_seed_simulation
 
 
 logger = logging.getLogger(__name__)
