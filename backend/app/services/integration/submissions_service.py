@@ -16,7 +16,11 @@ from sqlalchemy.orm import Session
 
 from app.models.masters_models import Customer, Product
 from app.models.orders_models import Order, OrderLine
-from app.schemas.integration_schema import OcrOrderRecord, SubmissionRequest, SubmissionResponse
+from app.schemas.integration.integration_schema import (
+    OcrOrderRecord,
+    SubmissionRequest,
+    SubmissionResponse,
+)
 from app.services.quantity_service import QuantityConversionError, to_internal_qty
 
 

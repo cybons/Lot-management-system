@@ -27,7 +27,7 @@ from app.models.inventory_models import Lot, StockMovement, StockTransactionType
 from app.models.masters_models import Customer, DeliveryPlace, Product, Supplier, Warehouse
 from app.models.orders_models import Allocation, Order, OrderLine
 from app.repositories.seed_snapshot_repo import SeedSnapshotRepository
-from app.schemas.admin_simulate_schema import (
+from app.schemas.admin.admin_simulate_schema import (
     CapCheckResult,
     SimulateResultSummary,
     SimulateSeedRequest,

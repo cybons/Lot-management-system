@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.repositories.seed_snapshot_repo import SeedSnapshotRepository
-from app.schemas.admin_simulate_schema import (
+from app.schemas.admin.admin_simulate_schema import (
     SeedSnapshotCreateRequest,
     SeedSnapshotCreateResponse,
     SeedSnapshotListResponse,

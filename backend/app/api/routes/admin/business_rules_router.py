@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.business_rules_schema import (
+from app.schemas.system.business_rules_schema import (
     BusinessRuleCreate,
     BusinessRuleListResponse,
     BusinessRuleResponse,

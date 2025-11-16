@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.users_schema import (
+from app.schemas.system.users_schema import (
     UserCreate,
     UserResponse,
     UserRoleAssignment,

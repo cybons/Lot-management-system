@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.batch_jobs_schema import (
+from app.schemas.system.batch_jobs_schema import (
     BatchJobCreate,
     BatchJobExecuteRequest,
     BatchJobExecuteResponse,

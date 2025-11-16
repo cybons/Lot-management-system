@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.schemas.integration_schema import SubmissionRequest, SubmissionResponse
+from app.schemas.integration.integration_schema import SubmissionRequest, SubmissionResponse
 from app.services.integration import process_external_submission
 
 
